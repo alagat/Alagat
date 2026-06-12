@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>علاقات</title>
+<style>
+/* ====== SHARED ====== */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI','Helvetica Neue',Tahoma,Arial,sans-serif;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#252d3d;border-radius:3px}
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+
+/* ====== HOME VARS ====== */
+:root{
+  --bg:#090b0f;--s1:#111318;--s2:#181c24;--b:#252d3d;
+  --ac:#0066ff;--ac2:#00aaff;--ac3:#7c3aed;
+  --glow:rgba(0,102,255,.11);--glow3:rgba(124,58,237,.1);
+  --t:#e8ecf5;--t2:#8896b0;--t3:#4a5568;
+  --green:#00d4a0;--orange:#ffaa00;--red:#ff4466;--r:14px;
+}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ====== HOME NAV ====== */
+#home{background:var(--bg);color:var(--t)}
+#home nav{position:fixed;top:0;left:0;right:0;z-index:500;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(9,11,15,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--b)}
+.logo{display:flex;align-items:center;gap:9px;cursor:pointer}
+.logo-t{font-size:1.05rem;font-weight:800;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo-d{font-size:.58rem;color:var(--t3)}
+.nav-mid{display:flex;gap:2px}
+.nl{background:none;border:none;color:var(--t2);padding:6px 11px;border-radius:8px;font-family:inherit;font-size:.8rem;font-weight:500;cursor:pointer;transition:.15s}
+.nl:hover,.nl.on{background:var(--s2);color:var(--t)}
+.nav-r{display:flex;gap:7px;align-items:center}
+.btn-g{background:none;border:1px solid var(--b);color:var(--t2);padding:6px 13px;border-radius:8px;font-family:inherit;font-size:.79rem;cursor:pointer;transition:.15s}
+.btn-g:hover{border-color:var(--ac);color:var(--ac)}
+.btn-b{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;padding:7px 16px;border-radius:8px;font-family:inherit;font-size:.79rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn-b:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(0,102,255,.4)}
+.btn-p{background:linear-gradient(135deg,var(--ac3),#9d60f8);color:#fff;border:none;padding:7px 16px;border-radius:8px;font-family:inherit;font-size:.79rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(124,58,237,.4)}
+.nav-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.8rem;cursor:pointer}
+.app{display:flex;min-height:100vh;padding-top:56px}
+.sidebar{width:220px;min-width:220px;position:fixed;top:56px;bottom:0;right:0;padding:14px 10px;border-left:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--bg)}
+.ss{font-size:.65rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;padding:11px 10px 4px}
+.si{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;color:var(--t2);cursor:pointer;transition:.15s;font-size:.85rem;font-weight:500;border:1px solid transparent}
+.si:hover{background:var(--s2);color:var(--t)}
+.si.on{background:var(--glow);color:var(--ac);border-color:rgba(0,102,255,.18)}
+.si-b{margin-right:auto;background:var(--ac);color:#fff;font-size:.6rem;font-weight:700;padding:2px 6px;border-radius:9px}
+.feed{flex:1;margin-right:220px;margin-left:270px;padding:14px 0 80px;max-width:620px;min-width:0}
+.mini-bar{display:flex;align-items:center;gap:10px;background:var(--s1);border:1px solid var(--b);border-radius:var(--r);padding:10px 14px;margin:0 14px 12px;cursor:pointer;transition:.2s}
+.mini-bar:hover{border-color:rgba(0,102,255,.4);background:var(--s2)}
+.mini-hint{flex:1;font-size:.86rem;color:var(--t3)}
+.mini-btn{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;padding:5px 13px;border-radius:20px;font-size:.76rem;font-weight:700;white-space:nowrap}
+.feed-tabs{display:flex;border-bottom:1px solid var(--b);margin-bottom:11px;padding:0 14px}
+.ftab{padding:8px 12px;font-size:.82rem;font-weight:500;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.15s}
+.ftab:hover{color:var(--t2)}
+.ftab.on{color:var(--ac);border-bottom-color:var(--ac)}
+.filters-row{display:flex;gap:5px;flex-wrap:wrap;margin:0 14px 11px;align-items:center}
+.fc{background:var(--s1);border:1px solid var(--b);color:var(--t2);padding:4px 11px;border-radius:20px;font-size:.74rem;cursor:pointer;white-space:nowrap;transition:.15s;font-family:inherit;outline:none}
+.fc:hover{border-color:var(--ac);color:var(--ac)}
+.fc.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.result-count{font-size:.71rem;color:var(--t3);white-space:nowrap;margin-right:4px}
+.rcard{background:var(--s1);border:1px solid var(--b);border-radius:var(--r);padding:14px;margin:0 14px 9px;cursor:pointer;transition:.2s;animation:fu .3s ease both}
+.rcard:hover{border-color:rgba(0,102,255,.32);background:var(--s2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.85rem;flex-shrink:0}
+.av.sm{width:30px;height:30px;font-size:.76rem}
+.rch{display:flex;gap:9px;align-items:flex-start;margin-bottom:8px}
+.rcm{flex:1}
+.rcn{font-weight:600;font-size:.86rem;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.rck{font-size:.72rem;color:var(--t3);margin-top:1px}
+.rct{font-size:.7rem;color:var(--t3);white-space:nowrap}
+.ubadge{background:rgba(255,68,102,.1);color:var(--red);border:1px solid rgba(255,68,102,.2);font-size:.63rem;font-weight:700;padding:2px 6px;border-radius:5px}
+.nbadge{background:rgba(0,212,160,.1);color:var(--green);border:1px solid rgba(0,212,160,.2);font-size:.63rem;font-weight:700;padding:2px 6px;border-radius:5px}
+.rtitle{font-size:.9rem;font-weight:600;margin-bottom:4px;line-height:1.4}
+.rdesc{font-size:.8rem;color:var(--t2);line-height:1.6;margin-bottom:8px}
+.rtags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.rtag{background:var(--glow);color:var(--ac2);border:1px solid rgba(0,170,255,.14);padding:2px 8px;border-radius:20px;font-size:.68rem;font-weight:500}
+.rtag.g{background:rgba(0,212,160,.07);color:var(--green);border-color:rgba(0,212,160,.15)}
+.rtag.o{background:rgba(255,170,0,.07);color:var(--orange);border-color:rgba(255,170,0,.15)}
+.rtag.r{background:rgba(255,68,102,.07);color:var(--red);border-color:rgba(255,68,102,.15)}
+.rcf{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--b)}
+.bv{font-size:.9rem;font-weight:700;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.bl2{font-size:.65rem;color:var(--t3)}
+.rcf-r{display:flex;gap:6px;align-items:center}
+.ocount{font-size:.72rem;color:var(--t2)}
+.ab{background:none;border:1px solid var(--b);color:var(--t2);padding:5px 10px;border-radius:6px;font-family:inherit;font-size:.73rem;cursor:pointer;transition:.15s}
+.ab:hover{background:var(--s2);color:var(--t);border-color:var(--ac)}
+.ab.p{background:linear-gradient(135deg,var(--ac),var(--ac2));border:none;color:#fff;font-weight:600}
+.ab.saved{color:var(--ac);border-color:var(--ac)}
+.bcta{margin:20px 14px 10px;background:linear-gradient(135deg,rgba(0,102,255,.1),rgba(124,58,237,.08));border:1px solid rgba(0,102,255,.18);border-radius:16px;padding:22px;text-align:center}
+.bcta h3{font-size:1rem;font-weight:800;margin-bottom:7px}
+.bcta p{font-size:.79rem;color:var(--t2);margin-bottom:14px;line-height:1.6}
+.bcta-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.feed-footer{margin:16px 14px 10px;padding:16px;background:var(--s1);border:1px solid var(--b);border-radius:12px}
+.ff-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:14px}
+.ff-col-t{font-size:.7rem;font-weight:700;color:var(--t);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.ff-link{font-size:.77rem;color:var(--t2);cursor:pointer;margin-bottom:5px;display:block}
+.ff-link:hover{color:var(--ac)}
+.ff-bot{border-top:1px solid var(--b);padding-top:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:5px}
+.ff-copy{font-size:.68rem;color:var(--t3)}
+.rpanel{width:270px;min-width:270px;position:fixed;top:56px;bottom:0;left:0;padding:14px 12px;border-right:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
+.pc{background:var(--s1);border:1px solid var(--b);border-radius:var(--r);padding:13px}
+.pt{font-size:.8rem;font-weight:600;margin-bottom:9px}
+.sr-box{display:flex;align-items:center;gap:7px;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:7px 10px;transition:.2s}
+.sr-box:focus-within{border-color:var(--ac)}
+.sr-box input{flex:1;background:none;border:none;outline:none;color:var(--t);font-family:inherit;font-size:.82rem}
+.sr-box input::placeholder{color:var(--t3)}
+.hti{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--b);cursor:pointer}
+.hti:last-child{border-bottom:none}
+.hti:hover .tn{color:var(--ac)}
+.tr2{color:var(--t3);font-size:.74rem;width:16px}
+.tn{font-size:.82rem;font-weight:500;color:var(--t2);flex:1;padding:0 7px}
+.tc{font-size:.69rem;color:var(--t3)}
+.su{display:flex;align-items:center;gap:8px;padding:6px 0}
+.su-i{flex:1}
+.su-n{font-size:.82rem;font-weight:600}
+.su-r{font-size:.71rem;color:var(--t3);margin-top:1px}
+.fbtn{background:none;border:1px solid var(--b);color:var(--t2);padding:4px 10px;border-radius:6px;font-family:inherit;font-size:.7rem;cursor:pointer;transition:.15s}
+.fbtn:hover{border-color:var(--ac);color:var(--ac)}
+.fbtn.fon{background:var(--ac);border-color:var(--ac);color:#fff}
+.fab{position:fixed;bottom:26px;left:26px;z-index:400;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:none;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer;box-shadow:0 6px 22px rgba(0,102,255,.5);transition:.2s;border:none;color:#fff}
+.fab:hover{transform:scale(1.08)}
+.h-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.82);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.22s}
+.h-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--s1);border:1px solid var(--b);border-radius:20px;padding:26px;width:420px;max-width:92vw;max-height:90vh;overflow-y:auto;transform:translateY(14px) scale(.97);transition:.22s;position:relative}
+.h-overlay.open .modal{transform:none}
+.auth-tabs{display:flex;background:var(--s2);border-radius:10px;padding:3px;margin-bottom:16px}
+.at{flex:1;text-align:center;padding:8px;border-radius:8px;font-size:.81rem;font-weight:600;color:var(--t2);cursor:pointer;transition:.2s;border:none;background:none;font-family:inherit}
+.at.on{background:var(--ac);color:#fff}
+.at.on-p{background:var(--ac3);color:#fff}
+.fg{margin-bottom:10px}
+.fgl{font-size:.73rem;font-weight:600;color:var(--t2);margin-bottom:4px;display:block}
+.fi{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:9px;padding:9px 12px;color:var(--t);font-family:inherit;font-size:.85rem;transition:.2s}
+.fi:focus{outline:none;border-color:var(--ac)}
+.fi::placeholder{color:var(--t3)}
+textarea.fi{resize:vertical;min-height:68px}
+.frow{display:flex;gap:8px}
+.frow .fg{flex:1}
+.sk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:5px}
+.sko{background:var(--s2);border:1px solid var(--b);border-radius:7px;padding:7px;text-align:center;cursor:pointer;transition:.15s;font-size:.77rem;font-weight:500;color:var(--t2)}
+.sko:hover,.sko.sel{background:var(--glow3);border-color:rgba(124,58,237,.3);color:#c084fc}
+.ma{display:flex;justify-content:flex-end;gap:7px;margin-top:13px}
+.or-div{display:flex;align-items:center;gap:10px;margin:12px 0}
+.or-line{flex:1;height:1px;background:var(--b)}
+.or-txt{font-size:.73rem;color:var(--t3)}
+.prow{display:flex;gap:7px}
+.pcode{background:var(--s2);border:1px solid var(--b);border-radius:9px;padding:9px 10px;color:var(--t2);font-family:inherit;font-size:.82rem;width:68px;text-align:center}
+.op-box{background:var(--s2);border:1px solid var(--b);border-radius:9px;padding:10px;margin-bottom:12px}
+.op-t{font-size:.84rem;font-weight:600;margin-bottom:2px}
+.op-m{font-size:.73rem;color:var(--t2)}
+.detail-modal{width:580px;max-width:96vw}
+.det-header{display:flex;gap:11px;align-items:flex-start;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--b)}
+.det-title{font-size:1.05rem;font-weight:700;margin-bottom:6px;line-height:1.4}
+.det-desc{font-size:.85rem;color:var(--t2);line-height:1.7;margin-bottom:10px}
+.det-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.det-meta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.det-meta-item{display:flex;flex-direction:column;gap:2px}
+.det-meta-label{font-size:.68rem;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
+.det-meta-val{font-size:.88rem;font-weight:600}
+.offers-section{border-top:1px solid var(--b);padding-top:14px}
+.offers-title{font-size:.85rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.offer-card{background:var(--s2);border:1px solid var(--b);border-radius:11px;padding:13px;margin-bottom:9px;transition:.2s}
+.offer-card:hover{border-color:rgba(0,102,255,.3)}
+.offer-header{display:flex;gap:9px;align-items:flex-start;margin-bottom:8px}
+.offer-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.78rem;flex-shrink:0}
+.offer-name{font-size:.85rem;font-weight:600}
+.offer-role{font-size:.71rem;color:var(--t3);margin-top:1px}
+.offer-time{font-size:.7rem;color:var(--t3);margin-right:auto;white-space:nowrap}
+.offer-stars{color:var(--orange);font-size:.75rem;margin-top:1px}
+.offer-text{font-size:.82rem;color:var(--t2);line-height:1.65;margin-bottom:9px}
+.offer-footer{display:flex;align-items:center;justify-content:space-between}
+.offer-price{font-size:.95rem;font-weight:700;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.offer-dur{font-size:.75rem;color:var(--t3)}
+.offer-contact{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;padding:6px 14px;border-radius:7px;font-family:inherit;font-size:.76rem;font-weight:600;cursor:pointer;transition:.2s}
+.offer-contact:hover{opacity:.88}
+.no-offers{text-align:center;padding:24px;color:var(--t3);font-size:.84rem}
+.det-offer-btn{width:100%;padding:11px;border-radius:10px;margin-top:14px}
+.empty-state{text-align:center;padding:40px 20px;color:var(--t2)}
+@media(max-width:1050px){.rpanel{display:none}.feed{margin-left:0;max-width:100%}}
+@media(max-width:680px){.sidebar{display:none}.feed{margin-right:0}}
+
+/* ====== PROFILE STYLES ====== */
+#profile{background:#f4f6fb;color:#1a1a2e}
+#profile nav{background:#1a56db;padding:10px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+.p-nav-logo{color:#fff;font-size:1.3rem;font-weight:900;margin-right:auto;letter-spacing:-1px}
+.p-nav-search{flex:1;background:rgba(255,255,255,.15);border:none;border-radius:20px;padding:7px 14px;color:#fff;font-family:inherit;font-size:.82rem;outline:none;max-width:260px}
+.p-nav-search::placeholder{color:rgba(255,255,255,.7)}
+.p-nav-av{width:34px;height:34px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;color:#1a56db;font-size:.85rem;flex-shrink:0;cursor:pointer}
+.p-cover{width:100%;height:200px;display:block;background:linear-gradient(135deg,#1a56db,#2563eb,#1d4ed8);position:relative;overflow:hidden}
+.p-cover-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.12) 1px,transparent 1px);background-size:28px 28px}
+.profile-section{background:#fff;padding:0 16px 16px;border-bottom:1px solid #e5e9f0;text-align:center;position:relative}
+.p-av-wrap{display:inline-block;position:relative;margin-top:-44px;margin-bottom:8px}
+.p-av{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#ff6b6b,#ff8e53);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:2rem;border:3px solid #fff;box-shadow:0 2px 12px rgba(0,0,0,.12)}
+.p-av-dot{position:absolute;bottom:5px;left:1px;width:16px;height:16px;background:#22c55e;border:2px solid #fff;border-radius:50%}
+.top-actions{position:absolute;top:10px;right:10px;display:flex;gap:8px}
+.top-actions button{padding:5px 10px;border-radius:20px;background:rgba(0,0,0,.4);border:none;color:#fff;font-size:.78rem;font-weight:600;cursor:pointer;backdrop-filter:blur(4px);display:flex;align-items:center;gap:4px;font-family:inherit}
+.followers-badge{position:absolute;top:20px;left:16px;font-size:.78rem;color:#1a56db;font-weight:600;cursor:pointer}
+.profile-name{font-size:1.2rem;font-weight:800;color:#1a1a2e;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:3px}
+.p-verified{background:#1a56db;border-radius:50%;width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;font-size:.6rem;color:#fff}
+.profile-handle{font-size:.82rem;color:#6b7280;margin-bottom:3px}
+.profile-lastseen{font-size:.78rem;color:#9ca3af;margin-bottom:12px}
+.meta-row{display:flex;justify-content:center;gap:0;margin-bottom:14px;background:#f8faff;border-radius:12px;overflow:hidden;border:1px solid #e5e9f0}
+.meta-item{flex:1;text-align:center;padding:11px 6px;border-left:1px solid #e5e9f0;cursor:pointer}
+.meta-item:last-child{border-left:none}
+.meta-item:hover{background:#f0f4ff}
+.meta-val{font-size:1rem;font-weight:800;color:#1a56db}
+.meta-lbl{font-size:.66rem;color:#9ca3af;margin-top:1px}
+.joined{display:flex;flex-direction:column;align-items:center;gap:3px;margin-bottom:14px}
+.joined-icon{width:36px;height:36px;border-radius:50%;background:#f0f4ff;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.joined-txt{font-size:.75rem;color:#9ca3af}
+.joined-val{font-size:.86rem;font-weight:700;color:#1a1a2e}
+.chat-btn{display:flex;align-items:center;justify-content:center;gap:7px;background:#1a56db;color:#fff;border:none;border-radius:22px;padding:11px 32px;font-family:inherit;font-size:.88rem;font-weight:700;cursor:pointer;transition:.15s;width:100%;max-width:260px;margin:0 auto;box-shadow:0 3px 12px rgba(26,86,219,.3)}
+.chat-btn:hover{background:#1d4ed8;transform:translateY(-1px)}
+.p-tabs{display:flex;background:#fff;border-bottom:2px solid #e5e9f0}
+.ptab{flex:1;text-align:center;padding:13px;font-size:.88rem;font-weight:600;color:#9ca3af;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s}
+.ptab.on{color:#1a56db;border-bottom-color:#1a56db}
+.listings{padding:10px 12px 90px}
+.listing-card{background:#fff;border-radius:12px;margin-bottom:10px;overflow:hidden;display:flex;align-items:stretch;box-shadow:0 1px 4px rgba(0,0,0,.07);cursor:pointer;transition:.15s}
+.listing-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.1);transform:translateY(-1px)}
+.listing-img{width:110px;min-width:110px;height:100px;background:#e5e9f0;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.listing-body{padding:11px 12px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.listing-title{font-size:.88rem;font-weight:700;color:#1a1a2e;line-height:1.4;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.listing-price{font-size:1rem;font-weight:800;color:#1a56db;margin-bottom:6px}
+.listing-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.listing-meta span{font-size:.72rem;color:#9ca3af}
+.req-status{font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.req-status.open{background:rgba(34,197,94,.1);color:#16a34a;border:1px solid rgba(34,197,94,.2)}
+.req-status.done{background:rgba(156,163,175,.1);color:#9ca3af;border:1px solid #e5e9f0}
+.req-status.urgent{background:rgba(239,68,68,.1);color:#dc2626;border:1px solid rgba(239,68,68,.2)}
+
+/* PROFILE SHEET OVERLAY */
+.p-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:.2s}
+.p-overlay.open{opacity:1;pointer-events:all}
+.sheet{background:#fff;border-radius:20px 20px 0 0;padding:20px 18px 32px;width:100%;transform:translateY(30px);transition:.22s}
+.p-overlay.open .sheet{transform:none}
+.sheet-handle{width:40px;height:4px;background:#e5e9f0;border-radius:2px;margin:0 auto 16px}
+.sheet-title{font-size:1rem;font-weight:800;color:#1a1a2e;margin-bottom:16px;text-align:center}
+.stars-row{display:flex;justify-content:center;gap:10px;margin-bottom:16px}
+.star{font-size:2.2rem;cursor:pointer;transition:.15s;filter:grayscale(1);opacity:.4}
+.star.on{filter:none;opacity:1}
+.rate-textarea{width:100%;border:1px solid #e5e9f0;border-radius:10px;padding:10px 12px;font-family:inherit;font-size:.84rem;resize:none;height:80px;outline:none;color:#1a1a2e}
+.rate-textarea:focus{border-color:#1a56db}
+.submit-btn{width:100%;background:#1a56db;color:#fff;border:none;border-radius:22px;padding:12px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;margin-top:12px}
+.share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.share-item{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+.share-icon{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+.share-lbl{font-size:.7rem;color:#6b7280;font-weight:500}
+.copy-row{display:flex;gap:8px;background:#f4f6fb;border-radius:10px;padding:10px 12px;align-items:center}
+.copy-url{flex:1;font-size:.78rem;color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.copy-btn{background:#1a56db;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:.76rem;font-weight:700;cursor:pointer}
+.chat-window{display:flex;flex-direction:column;height:58vh}
+.chat-msgs{flex:1;overflow-y:auto;padding:4px 0 10px;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:78%;padding:9px 13px;border-radius:14px;font-size:.84rem;line-height:1.5}
+.msg.them{background:#f0f4ff;color:#1a1a2e;align-self:flex-start;border-radius:4px 14px 14px 14px}
+.msg.me{background:#1a56db;color:#fff;align-self:flex-end;border-radius:14px 4px 14px 14px}
+.msg-time{font-size:.65rem;margin-top:3px;opacity:.6;text-align:left}
+.chat-input-row{display:flex;gap:8px;padding-top:10px;border-top:1px solid #e5e9f0}
+.chat-input{flex:1;background:#f4f6fb;border:1px solid #e5e9f0;border-radius:22px;padding:10px 16px;font-family:inherit;font-size:.84rem;outline:none;color:#1a1a2e}
+.chat-input:focus{border-color:#1a56db}
+.send-btn{width:42px;height:42px;background:#1a56db;border:none;border-radius:50%;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* BOTTOM NAV (profile) */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e9f0;display:flex;align-items:center;height:64px;padding:0 8px;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,.06)}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:.63rem;font-weight:600;color:#9ca3af;cursor:pointer;padding:6px 4px;border-radius:12px;transition:.15s;border:none;background:none;font-family:inherit;position:relative}
+.bn:hover{color:#1a56db}
+.bn.on{color:#1a56db}
+.bn-iw{width:34px;height:34px;border-radius:50%;background:#f4f6fb;display:flex;align-items:center;justify-content:center;font-size:1.05rem;transition:.15s;margin-bottom:1px}
+.bn.on .bn-iw{background:#dbeafe}
+.bn-dot{position:absolute;top:5px;right:calc(50% - 20px);width:8px;height:8px;background:#ef4444;border-radius:50%;border:2px solid #fff}
+.bn-center{flex:1;display:flex;align-items:center;justify-content:center}
+.p-add-btn{width:48px;height:48px;background:linear-gradient(135deg,#1a56db,#3b82f6);color:#fff;border:none;border-radius:50%;font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(26,86,219,.4);transition:.25s;font-family:inherit}
+.plus-menu{display:none;position:absolute;bottom:62px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid #e5e9f0;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.12);overflow:hidden;width:155px;z-index:200}
+.plus-item{padding:13px 16px;font-size:.86rem;font-weight:600;color:#1a1a2e;cursor:pointer;border-bottom:1px solid #f0f4ff;display:flex;align-items:center;gap:9px}
+.plus-item:last-child{border-bottom:none}
+.plus-item:hover{background:#f0f4ff}
+</style>
+</head>
+<body>
+
+<!-- ==================== HOME PAGE ==================== -->
+<div id="home" class="page active">
+<nav>
+  <div class="logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 52" width="46" height="30"><defs><linearGradient id="nL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1144ff"/><stop offset="100%" stop-color="#00bbff"/></linearGradient><linearGradient id="nR" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0055ff"/><stop offset="100%" stop-color="#00eeff"/></linearGradient><filter id="ng"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="nb"><feGaussianBlur stdDeviation="3"/></filter><clipPath id="nCR"><rect x="40" y="0" width="40" height="52"/></clipPath></defs><rect x="4" y="7" width="38" height="36" rx="18" fill="none" stroke="#1155ff" stroke-width="9" filter="url(#nb)" opacity="0.5"/><rect x="38" y="7" width="38" height="36" rx="18" fill="none" stroke="#0088ff" stroke-width="9" filter="url(#nb)" opacity="0.5"/><rect x="38" y="7" width="38" height="36" rx="18" fill="none" stroke="url(#nR)" stroke-width="5.5" filter="url(#ng)"/><rect x="4" y="7" width="38" height="36" rx="18" fill="none" stroke="url(#nL)" stroke-width="5.5" filter="url(#ng)"/><rect x="38" y="7" width="38" height="36" rx="18" fill="none" stroke="url(#nR)" stroke-width="5.5" clip-path="url(#nCR)" filter="url(#ng)"/></svg>
+    <div><div class="logo-t">علاقات</div><div class="logo-d">alagat.com</div></div>
+  </div>
+  <div class="nav-mid" id="navUserLinks" style="display:none">
+    <button class="nl on">الطلبات</button><button class="nl">اكتشف</button><button class="nl">طلباتي</button>
+  </div>
+  <div class="nav-r">
+    <div id="navGuest" style="display:flex;gap:7px">
+      <button class="btn-g" id="btnLogin">تسجيل الدخول</button>
+      <button class="btn-b" id="btnRegister">إنشاء حساب</button>
+    </div>
+    <div id="navUser" style="display:none;gap:7px;align-items:center" class="nav-r">
+      <button class="btn-b" id="btnNewReq">+ طلب جديد</button>
+      <div class="nav-av" id="userAvatar" onclick="doLogout()" title="اضغط للخروج" style="cursor:pointer" ondblclick="goProfile(0)">أ</div>
+    </div>
+  </div>
+</nav>
+<div class="app">
+  <div class="sidebar">
+    <div class="ss">القائمة</div>
+    <div class="si on" id="si-home">🏠 الرئيسية</div>
+    <div class="si" id="si-discover">🔍 اكتشف</div>
+    <div class="si" id="si-notif">🔔 الإشعارات<span class="si-b">4</span></div>
+    <div class="si" id="si-msgs">💬 رسائلي</div>
+    <div class="si" id="si-myreqs">📋 طلباتي</div>
+    <div class="si" id="si-saved">⭐ المحفوظات</div>
+    <div class="ss" style="margin-top:6px">الفئات</div>
+    <div class="si cat-si" data-cat="برمجة">💻 برمجة</div>
+    <div class="si cat-si" data-cat="تصميم">🎨 تصميم</div>
+    <div class="si cat-si" data-cat="تسويق">📱 تسويق</div>
+    <div class="si cat-si" data-cat="منزلية">🏠 منزلية</div>
+    <div class="si cat-si" data-cat="كتابة">✍️ كتابة</div>
+    <div class="si cat-si" data-cat="تعليم">📚 تعليم</div>
+    <div class="si cat-si" data-cat="نقل">🚗 نقل</div>
+    <div class="si cat-si" data-cat="استشارات">⚖️ استشارات</div>
+  </div>
+  <main class="feed">
+    <div class="mini-bar" id="miniBar" style="display:none">
+      <div class="av" style="width:32px;height:32px;font-size:.76rem;flex-shrink:0">أ</div>
+      <span class="mini-hint">ماذا تحتاج؟</span>
+      <div class="mini-btn">نشر طلب</div>
+    </div>
+    <div class="feed-tabs">
+      <div class="ftab on" data-tab="latest">الأحدث</div>
+      <div class="ftab" data-tab="urgent">عاجل 🔴</div>
+      <div class="ftab" data-tab="nooffers">بدون عروض</div>
+      <div class="ftab" data-tab="nearby">قريب مني</div>
+    </div>
+    <div class="filters-row">
+      <div style="display:flex;align-items:center;gap:7px;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:6px 11px;width:100%;margin-bottom:6px">
+        <span style="color:var(--t3);font-size:.85rem">🔍</span>
+        <input type="text" placeholder="ابحث في الطلبات..." id="searchInput" style="flex:1;background:none;border:none;outline:none;color:var(--t);font-family:inherit;font-size:.82rem" oninput="state.search=this.value;renderFeed()">
+      </div>
+      <button class="fc on" data-cat="all">الكل</button>
+      <button class="fc" data-cat="برمجة">برمجة</button>
+      <button class="fc" data-cat="تصميم">تصميم</button>
+      <button class="fc" data-cat="تسويق">تسويق</button>
+      <button class="fc" data-cat="كتابة">كتابة</button>
+      <button class="fc" data-cat="منزلية">منزلية</button>
+      <button class="fc" data-cat="تعليم">تعليم</button>
+      <button class="fc" data-cat="استشارات">استشارات</button>
+      <button class="fc" data-cat="نقل">نقل</button>
+      <span class="result-count" id="resultCount"></span>
+    </div>
+    <div id="feedContent"></div>
+  </main>
+  <aside class="rpanel">
+    <div class="sr-box"><span style="color:var(--t3)">🔍</span><input type="text" placeholder="ابحث في الطلبات..." id="searchInput2" oninput="state.search=this.value;renderFeed()"></div>
+    <div class="pc">
+      <div class="pt">🔥 الأكثر طلباً</div>
+      <div class="hti"><span class="tr2">1</span><span class="tn">تطوير موقع</span><span class="tc">312</span></div>
+      <div class="hti"><span class="tr2">2</span><span class="tn">تصميم شعار</span><span class="tc">278</span></div>
+      <div class="hti"><span class="tr2">3</span><span class="tn">إدارة سوشيال</span><span class="tc">241</span></div>
+      <div class="hti"><span class="tr2">4</span><span class="tn">دروس رياضيات</span><span class="tc">198</span></div>
+      <div class="hti"><span class="tr2">5</span><span class="tn">تركيب مكيفات</span><span class="tc">187</span></div>
+    </div>
+    <div class="pc" id="rpGuest">
+      <div class="pt" style="color:var(--ac2)">🚀 جديد على علاقات؟</div>
+      <p style="font-size:.79rem;color:var(--t2);line-height:1.6;margin-bottom:12px">انضم وانشر طلبك أو ابدأ كسب دخل إضافي</p>
+      <button class="btn-b" style="width:100%;border-radius:8px;padding:8px;font-size:.79rem;margin-bottom:7px" id="rpRegister">إنشاء حساب مجاناً</button>
+      <button class="btn-g" style="width:100%;border-radius:8px;padding:8px;font-size:.79rem" id="rpLogin">تسجيل الدخول</button>
+    </div>
+    <div class="pc" id="rpUser" style="display:none">
+      <div class="pt">⚡ مزودون متاحون</div>
+      <div class="su"><div class="av sm" style="background:linear-gradient(135deg,#ff6b6b,#ff8e53)">م</div><div class="su-i"><div class="su-n" style="cursor:pointer" onclick="goProfile(0)">محمد الغامدي</div><div class="su-r">مطور · ⭐4.9</div></div><button class="fbtn fon">متابَع</button></div>
+      <div class="su"><div class="av sm" style="background:linear-gradient(135deg,#a18cd1,#fbc2eb)">س</div><div class="su-i"><div class="su-n">سارة الشمري</div><div class="su-r">مصممة · ⭐5.0</div></div><button class="fbtn">تابع</button></div>
+      <div class="su"><div class="av sm" style="background:linear-gradient(135deg,#f7971e,#ffd200)">خ</div><div class="su-i"><div class="su-n">خالد المطيري</div><div class="su-r">كهربائي · ⭐4.7</div></div><button class="fbtn">تابع</button></div>
+    </div>
+    <div class="pc" style="background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(0,102,255,.05));border-color:rgba(124,58,237,.18)">
+      <div class="pt" style="color:#c084fc">💰 عندك مهارة؟</div>
+      <p style="font-size:.78rem;color:var(--t2);line-height:1.6;margin-bottom:10px">حوّل وقتك الحر إلى دخل ثانٍ حقيقي</p>
+      <button class="btn-p" style="width:100%;border-radius:8px;padding:8px;font-size:.79rem" id="btnProvider">ابدأ الكسب الآن</button>
+    </div>
+  </aside>
+</div>
+<button class="fab" id="fab">✏️</button>
+
+<!-- HOME MODALS -->
+<div class="h-overlay" id="detailModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal detail-modal">
+    <button onclick="document.getElementById('detailModal').classList.remove('open')" style="position:absolute;top:16px;left:20px;background:none;border:none;color:var(--t3);font-size:1.1rem;cursor:pointer">✕</button>
+    <div class="det-header"><div class="av sm" id="detAvatar" style="width:38px;height:38px;font-size:.88rem;flex-shrink:0"></div><div style="flex:1"><div id="detName" style="font-size:.88rem;font-weight:600;margin-bottom:1px"></div><div id="detHandle" style="font-size:.73rem;color:var(--t3)"></div></div><div id="detTime" style="font-size:.72rem;color:var(--t3);white-space:nowrap"></div></div>
+    <div class="det-title" id="detTitle"></div><div class="det-desc" id="detDesc"></div><div class="det-tags" id="detTags"></div>
+    <div class="det-meta"><div class="det-meta-item"><span class="det-meta-label">الميزانية</span><span class="det-meta-val bv" id="detBudget"></span></div><div class="det-meta-item"><span class="det-meta-label">المدة</span><span class="det-meta-val" id="detDur"></span></div><div class="det-meta-item"><span class="det-meta-label">نوع الخدمة</span><span class="det-meta-val" id="detType"></span></div></div>
+    <div class="offers-section"><div class="offers-title">العروض المقدمة <span id="offersCount" style="background:var(--glow);color:var(--ac2);border:1px solid rgba(0,102,255,.2);font-size:.7rem;padding:2px 8px;border-radius:10px;font-weight:600"></span></div><div id="offersList"></div></div>
+    <button class="btn-b det-offer-btn" id="detOfferBtn">قدّم عرضك على هذا الطلب ←</button>
+  </div>
+</div>
+<div class="h-overlay" id="authModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div style="text-align:center;margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 52" width="56" height="36" style="margin-bottom:6px"><defs><linearGradient id="mL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1144ff"/><stop offset="100%" stop-color="#00bbff"/></linearGradient><linearGradient id="mR" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0055ff"/><stop offset="100%" stop-color="#00eeff"/></linearGradient><filter id="mg"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="mb"><feGaussianBlur stdDeviation="3"/></filter><clipPath id="mCR"><rect x="40" y="0" width="40" height="52"/></clipPath></defs><rect x="4" y="7" width="38" height="36" rx="18" fill="none" stroke="#1155ff" stroke-width="9" filter="url(#mb)" opacity="0.5"/><rect x="38" y="7" width="38" height="36" rx="18" fill="none" stroke="#0088ff" stroke-width="9" filter="url(#mb)" opacity="0.5"/><rect x="38" y="7" width="38" height="36" rx="18" fill="none" stroke="url(#mR)" stroke-width="5.5" filter="url(#mg)"/><rect x="4" y="7" width="38" height="36" rx="18" fill="none" stroke="url(#mL)" stroke-width="5.5" filter="url(#mg)"/><rect x="38" y="7" width="38" height="36" rx="18" fill="none" stroke="url(#mR)" stroke-width="5.5" clip-path="url(#mCR)" filter="url(#mg)"/></svg><div style="font-size:1.25rem;font-weight:800;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent">علاقات</div></div>
+    <div class="auth-tabs"><button class="at on" id="at-login">تسجيل الدخول</button><button class="at" id="at-register">إنشاء حساب</button><button class="at" id="at-provider">مزود خدمة</button></div>
+    <div id="f-login"><div class="fg"><label class="fgl">البريد الإلكتروني</label><input class="fi" type="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl">كلمة المرور</label><input class="fi" type="password" placeholder="••••••••" id="loginPass"></div><div style="text-align:left;margin-bottom:12px"><span style="font-size:.74rem;color:var(--ac);cursor:pointer">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister">إنشاء حساب جديد</button></div>
+    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك"></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username"></div></div><div class="fg"><label class="fgl">البريد الإلكتروني *</label><input class="fi" type="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px">💰 الاثنين</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px">بالتسجيل توافق على <span style="color:var(--ac);cursor:pointer">شروط الاستخدام</span></p></div>
+    <div id="f-provider" style="display:none"><div class="frow"><div class="fg"><label class="fgl">الاسم *</label><input class="fi" type="text" placeholder="اسمك"></div><div class="fg"><label class="fgl">الجوال *</label><div class="prow" style="gap:5px"><input class="pcode" value="+966" readonly style="width:58px"><input class="fi" type="tel" placeholder="05xxxxxxxx" style="flex:1"></div></div></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username"></div><div class="fg"><label class="fgl">مهاراتك *</label><div class="sk-grid"><div class="sko">💻 برمجة</div><div class="sko">🎨 تصميم</div><div class="sko">📱 تسويق</div><div class="sko">✍️ كتابة</div><div class="sko">📚 تدريس</div><div class="sko">⚡ كهرباء</div><div class="sko">🔧 صيانة</div><div class="sko">🚿 سباكة</div><div class="sko">📸 تصوير</div></div></div><div class="frow"><div class="fg"><label class="fgl">المدينة</label><select class="fi"><option>الرياض</option><option>جدة</option><option>الدمام</option><option>مكة</option><option>أخرى</option></select></div><div class="fg"><label class="fgl">نوع العمل</label><select class="fi"><option>عن بُعد</option><option>حضوري</option><option>كلاهما</option></select></div></div><div class="fg"><label class="fgl">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><button class="btn-p" style="width:100%;padding:11px;border-radius:10px" id="doProvider">انضم كمزود ←</button></div>
+  </div>
+</div>
+<div class="h-overlay" id="compModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..."></textarea></div><div class="frow"><div class="fg"><label class="fgl">الفئة</label><select class="fi" id="reqCat"><option value="برمجة">💻 برمجة</option><option value="تصميم">🎨 تصميم</option><option value="تسويق">📱 تسويق</option><option value="منزلية">🏠 منزلية</option><option value="كتابة">✍️ كتابة</option><option value="تعليم">📚 تعليم</option><option value="نقل">🚗 نقل</option><option value="استشارات">⚖️ استشارات</option></select></div><div class="fg"><label class="fgl">المدة</label><select class="fi" id="reqDur"><option>24 ساعة</option><option>3 أيام</option><option>أسبوع</option><option>أسبوعان</option><option>مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500"></div><div class="fg"><label class="fgl">نوع الخدمة</label><select class="fi" id="reqType"><option>عن بُعد</option><option>حضوري</option><option>كلاهما</option></select></div></div><div class="ma"><button class="btn-g" id="cancelComp">إلغاء</button><button class="btn-b" id="submitReq">نشر الطلب ←</button></div></div>
+</div>
+<div class="h-overlay" id="offerModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px">💼 قدّم عرضك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px">أخبر العميل لماذا أنت الأنسب</div><div class="op-box"><div class="op-t" id="offerTitle">—</div><div class="op-m" id="offerMeta">—</div></div><div class="fg"><label class="fgl">عرضك *</label><textarea class="fi" id="offerText" placeholder="خبرتك وكيف ستنجز الطلب..."></textarea></div><div class="frow"><div class="fg"><label class="fgl">سعرك (ريال) *</label><input class="fi" id="offerPrice" type="number" placeholder="أدخل سعرك"></div><div class="fg"><label class="fgl">المدة</label><select class="fi" id="offerDur"><option>24 ساعة</option><option>3 أيام</option><option>أسبوع</option></select></div></div><div class="ma"><button class="btn-g" id="cancelOffer">إلغاء</button><button class="btn-b" id="submitOffer">إرسال العرض ←</button></div></div>
+</div>
+</div><!-- end #home -->
+
+
+<!-- ==================== PROFILE PAGE ==================== -->
+<div id="profile" class="page">
+<nav>
+  <div class="p-nav-av">م</div>
+  <input class="p-nav-search" placeholder="ابحث عن خدمة..">
+  <div class="p-nav-logo">علاقات</div>
+</nav>
+<div class="p-cover"><div class="p-cover-dots"></div></div>
+<div class="profile-section">
+  <div class="top-actions">
+    <button onclick="openPModal('ratingModal')">★ تقييم</button>
+    <button onclick="openPModal('shareModal')">⤴ مشاركة</button>
+  </div>
+  <div class="followers-badge">28 متابعة</div>
+  <div class="p-av-wrap"><div class="p-av">م</div><div class="p-av-dot"></div></div>
+  <div class="profile-name">محمد الغامدي <span class="p-verified">✓</span></div>
+  <div class="profile-handle">@mohammed_g</div>
+  <div class="profile-lastseen">آخر ظهور قبل ٢٢ دقيقة</div>
+  <div class="meta-row">
+    <div class="meta-item"><div class="meta-val">127</div><div class="meta-lbl">صفقة</div></div>
+    <div class="meta-item"><div class="meta-val">4.9 ⭐</div><div class="meta-lbl">تقييم</div></div>
+    <div class="meta-item"><div class="meta-val">382</div><div class="meta-lbl">متابع</div></div>
+  </div>
+  <div class="joined"><div class="joined-icon">📅</div><div class="joined-txt">انضم</div><div class="joined-val">قبل سنة</div></div>
+  <button class="chat-btn" onclick="openPModal('chatModal')">💬 محادثة</button>
+</div>
+<div class="p-tabs">
+  <div class="ptab on" onclick="switchPTab(this,'offers')">العروض</div>
+  <div class="ptab" onclick="switchPTab(this,'requests')">الطلبات</div>
+</div>
+<div class="listings" id="p-offers">
+  <div class="listing-card"><div class="listing-img">💻</div><div class="listing-body"><div class="listing-title">تطوير تطبيق ويب متكامل React + Node.js</div><div class="listing-price">٣٠٠٠ ريال</div><div class="listing-meta"><span>📍 الرياض</span><span>🕐 قبل ٣ ساعات</span></div></div></div>
+  <div class="listing-card"><div class="listing-img">📊</div><div class="listing-body"><div class="listing-title">لوحة تحكم وتحليل بيانات احترافية</div><div class="listing-price">١٨٠٠ ريال</div><div class="listing-meta"><span>📍 الرياض</span><span>🕐 قبل يوم</span></div></div></div>
+  <div class="listing-card"><div class="listing-img">🤖</div><div class="listing-body"><div class="listing-title">دمج الذكاء الاصطناعي في موقعك أو تطبيقك</div><div class="listing-price">٢٥٠٠ ريال</div><div class="listing-meta"><span>📍 الرياض</span><span>🕐 قبل يومين</span></div></div></div>
+</div>
+<div class="listings" id="p-requests" style="display:none">
+  <div class="listing-card"><div class="listing-img" style="background:#fff0f0">🙋</div><div class="listing-body"><div class="listing-title">أحتاج مطور React لبناء لوحة تحكم إدارية</div><div class="listing-price">٢٠٠٠–٤٠٠٠ ريال</div><div class="listing-meta"><span>📍 الرياض</span><span>🕐 قبل ٣ دقائق</span><span class="req-status open">مفتوح</span></div></div></div>
+  <div class="listing-card"><div class="listing-img" style="background:#fff7ed">🐍</div><div class="listing-body"><div class="listing-title">مطور Python لتحليل بيانات المبيعات</div><div class="listing-price">١٨٠٠ ريال</div><div class="listing-meta"><span>📍 الرياض</span><span>🕐 قبل يوم</span><span class="req-status open">مفتوح</span></div></div></div>
+  <div class="listing-card"><div class="listing-img" style="background:#f0fdf4">✅</div><div class="listing-body"><div class="listing-title">تصميم واجهة لتطبيق جوال</div><div class="listing-price">١٢٠٠ ريال</div><div class="listing-meta"><span>📍 الرياض</span><span>🕐 مارس 2025</span><span class="req-status done">مكتمل</span></div></div></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="bn" onclick="goHome()"><div class="bn-iw">🏠</div>الرئيسية</button>
+  <div class="bn-center" style="position:relative">
+    <div class="plus-menu" id="plusMenu">
+      <div class="plus-item" onclick="closePlusMenu();hToast('📋 نشر طلب جديد')">📋 طلب جديد</div>
+      <div class="plus-item" onclick="closePlusMenu();hToast('💼 إضافة عرض جديد')">💼 عرض جديد</div>
+    </div>
+    <button class="p-add-btn" id="pAddBtn" onclick="togglePlusMenu()">＋</button>
+  </div>
+  <button class="bn" onclick="goMessages()"><div class="bn-iw">✉️</div>الرسائل<div class="bn-dot"></div></button>
+  <button class="bn" onclick="goNotifs()"><div class="bn-iw">🔔</div>الإشعارات<div class="bn-dot"></div></button>
+</div>
+
+<!-- PROFILE MODALS -->
+<div class="p-overlay" id="ratingModal" onclick="if(event.target===this)closePModal('ratingModal')">
+  <div class="sheet"><div class="sheet-handle"></div><div class="sheet-title">⭐ تقييم محمد الغامدي</div>
+    <div class="stars-row" id="starsRow"><span class="star" data-v="1">★</span><span class="star" data-v="2">★</span><span class="star" data-v="3">★</span><span class="star" data-v="4">★</span><span class="star" data-v="5">★</span></div>
+    <div style="text-align:center;font-size:.82rem;color:#9ca3af;margin-bottom:12px" id="ratingLbl">اختر تقييمك</div>
+    <textarea class="rate-textarea" placeholder="أضف تعليقك (اختياري)..." id="ratingComment"></textarea>
+    <button class="submit-btn" onclick="submitRating()">إرسال التقييم</button>
+  </div>
+</div>
+<div class="p-overlay" id="shareModal" onclick="if(event.target===this)closePModal('shareModal')">
+  <div class="sheet"><div class="sheet-handle"></div><div class="sheet-title">مشاركة الملف</div>
+    <div class="share-grid">
+      <div class="share-item" onclick="shareVia('واتساب')"><div class="share-icon" style="background:#dcfce7">💬</div><span class="share-lbl">واتساب</span></div>
+      <div class="share-item" onclick="shareVia('تويتر')"><div class="share-icon" style="background:#dbeafe">🐦</div><span class="share-lbl">تويتر</span></div>
+      <div class="share-item" onclick="shareVia('سناب')"><div class="share-icon" style="background:#fef9c3">👻</div><span class="share-lbl">سناب</span></div>
+      <div class="share-item" onclick="shareVia('تيليغرام')"><div class="share-icon" style="background:#e0f2fe">✈️</div><span class="share-lbl">تيليغرام</span></div>
+    </div>
+    <div class="copy-row"><span class="copy-url">alagat.com/u/mohammed_g</span><button class="copy-btn" onclick="copyLink()">نسخ الرابط</button></div>
+  </div>
+</div>
+<div class="p-overlay" id="chatModal" onclick="if(event.target===this)closePModal('chatModal')">
+  <div class="sheet" style="padding-bottom:16px"><div class="sheet-handle"></div><div class="sheet-title" style="margin-bottom:10px">💬 محادثة مع محمد</div>
+    <div class="chat-window">
+      <div class="chat-msgs" id="chatMsgs">
+        <div class="msg them">السلام عليكم، كيف أقدر أساعدك؟<div class="msg-time">١٠:٣٢ ص</div></div>
+        <div class="msg me">وعليكم السلام، أبي أستفسر عن خدمة تطوير الموقع<div class="msg-time">١٠:٣٣ ص</div></div>
+        <div class="msg them">تفضل، أنا متاح الآن 😊<div class="msg-time">١٠:٣٣ ص</div></div>
+      </div>
+      <div class="chat-input-row">
+        <button class="send-btn" onclick="sendMsg()">➤</button>
+        <input class="chat-input" id="chatInput" placeholder="اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendMsg()">
+      </div>
+    </div>
+  </div>
+</div>
+</div><!-- end #profile -->
+
+<!-- ==================== MESSAGES PAGE ==================== -->
+<div id="messages" class="page">
+<style>
+#messages{background:#f4f6fb;color:#1a1a2e;display:none;min-height:100vh}
+#messages.active{display:block}
+#messages nav{background:#1a56db;padding:0 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;height:54px}
+.m-nav-title{color:#fff;font-size:1rem;font-weight:800;flex:1;text-align:center}
+.m-nav-back{background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:6px;width:36px;font-family:inherit}
+.m-nav-edit{background:none;border:none;color:#fff;font-size:1rem;cursor:pointer;padding:6px;width:36px;font-family:inherit}
+.msg-search{padding:10px 12px;background:#fff;border-bottom:1px solid #e5e9f0}
+.msg-search input{width:100%;background:#f4f6fb;border:1px solid #e5e9f0;border-radius:22px;padding:9px 16px;font-family:inherit;font-size:.84rem;outline:none;color:#1a1a2e}
+.msg-search input:focus{border-color:#1a56db}
+.conv-item{display:flex;align-items:center;gap:12px;padding:13px 16px;background:#fff;border-bottom:1px solid #f0f4f8;cursor:pointer;transition:.15s}
+.conv-item:hover{background:#f8faff}
+.conv-av{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:1.1rem;flex-shrink:0;position:relative}
+.conv-online{position:absolute;bottom:2px;left:2px;width:12px;height:12px;background:#22c55e;border:2px solid #fff;border-radius:50%}
+.conv-body{flex:1;min-width:0}
+.conv-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.conv-name{font-size:.9rem;font-weight:700;color:#1a1a2e}
+.conv-time{font-size:.7rem;color:#9ca3af}
+.conv-preview{font-size:.8rem;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-preview.unread-txt{color:#1a1a2e;font-weight:600}
+.conv-badge{background:#1a56db;color:#fff;font-size:.65rem;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 5px;flex-shrink:0}
+.conv-tag{font-size:.67rem;color:#1a56db;background:#eff6ff;border:1px solid #dbeafe;padding:1px 7px;border-radius:10px;margin-top:3px;display:inline-block}
+.ch-header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border-bottom:1px solid #e5e9f0;position:sticky;top:54px;z-index:5}
+.ch-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.95rem;flex-shrink:0;position:relative}
+.ch-av-dot{position:absolute;bottom:1px;left:1px;width:11px;height:11px;background:#22c55e;border:2px solid #fff;border-radius:50%}
+.ch-info{flex:1}
+.ch-name{font-size:.92rem;font-weight:700;color:#1a1a2e}
+.ch-status{font-size:.72rem;color:#22c55e;font-weight:600}
+.ch-btns{display:flex;gap:6px}
+.ch-btn{width:34px;height:34px;border-radius:50%;background:#f4f6fb;border:1px solid #e5e9f0;display:flex;align-items:center;justify-content:center;font-size:.88rem;cursor:pointer}
+.ch-ref{background:#f0f4ff;border-right:3px solid #1a56db;padding:9px 16px;font-size:.78rem;border-bottom:1px solid #dbeafe}
+.ch-ref b{display:block;color:#1a56db;font-weight:700;margin-bottom:2px}
+.ch-ref span{color:#6b7280}
+.ch-body{overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;background:#f4f6fb;padding-bottom:80px}
+.day-lbl{text-align:center;font-size:.69rem;color:#9ca3af;display:flex;align-items:center;gap:8px;margin:4px 0}
+.day-lbl::before,.day-lbl::after{content:'';flex:1;height:1px;background:#e5e9f0}
+.bbl{max-width:76%;display:flex;flex-direction:column}
+.bbl.me{align-self:flex-end;align-items:flex-end}
+.bbl.them{align-self:flex-start;align-items:flex-start}
+.bbl-txt{padding:10px 14px;border-radius:18px;font-size:.86rem;line-height:1.55;word-break:break-word}
+.bbl.me .bbl-txt{background:#1a56db;color:#fff;border-radius:18px 4px 18px 18px}
+.bbl.them .bbl-txt{background:#fff;color:#1a1a2e;border-radius:4px 18px 18px 18px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.bbl-meta{font-size:.65rem;color:#9ca3af;margin-top:3px;display:flex;align-items:center;gap:3px}
+.bbl.me .bbl-meta{color:rgba(26,86,219,.55)}
+.ch-input-area{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e9f0;padding:10px 12px;display:flex;gap:8px;align-items:flex-end;z-index:10}
+.ch-attach{width:38px;height:38px;border-radius:50%;background:#f4f6fb;border:1px solid #e5e9f0;display:flex;align-items:center;justify-content:center;font-size:.95rem;cursor:pointer;flex-shrink:0}
+.ch-txt-in{flex:1;background:#f4f6fb;border:1px solid #e5e9f0;border-radius:22px;padding:9px 16px;font-family:inherit;font-size:.85rem;outline:none;color:#1a1a2e;resize:none;max-height:100px;line-height:1.4}
+.ch-txt-in:focus{border-color:#1a56db}
+.ch-send{width:40px;height:40px;border-radius:50%;background:#1a56db;border:none;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(26,86,219,.3);transition:.15s}
+.ch-send:hover{background:#1d4ed8}
+</style>
+
+<nav>
+  <button class="m-nav-back" id="mNavBack" onclick="msgsBack()">←</button>
+  <div class="m-nav-title" id="mNavTitle">الرسائل</div>
+  <button class="m-nav-edit" onclick="hToast('قريباً ✍️')">✏️</button>
+</nav>
+
+<!-- LIST -->
+<div id="convList">
+  <div class="msg-search"><input placeholder="🔍  ابحث في الرسائل..." id="convSearch" oninput="filterConvs(this.value)"></div>
+  <div id="convItems">
+    <div class="conv-item" data-idx="0" onclick="openChat(0)">
+      <div class="conv-av" style="background:linear-gradient(135deg,#f953c6,#b91d73)">ن<div class="conv-online"></div></div>
+      <div class="conv-body">
+        <div class="conv-top"><span class="conv-name">نورة السبيعي</span><span class="conv-time">٢:٤٥ م</span></div>
+        <div class="conv-preview unread-txt">ممتاز! متى تقدر تبدأ؟</div>
+        <span class="conv-tag">تصميم هوية بصرية</span>
+      </div>
+      <div class="conv-badge">2</div>
+    </div>
+    <div class="conv-item" data-idx="1" onclick="openChat(1)">
+      <div class="conv-av" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">أ</div>
+      <div class="conv-body">
+        <div class="conv-top"><span class="conv-name">أحمد الغامدي</span><span class="conv-time">أمس</span></div>
+        <div class="conv-preview">تمام، شكراً على التوضيح 👍</div>
+        <span class="conv-tag">لوحة تحكم React</span>
+      </div>
+    </div>
+    <div class="conv-item" data-idx="2" onclick="openChat(2)">
+      <div class="conv-av" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">م<div class="conv-online"></div></div>
+      <div class="conv-body">
+        <div class="conv-top"><span class="conv-name">منى القحطاني</span><span class="conv-time">أمس</span></div>
+        <div class="conv-preview unread-txt">هل تقدر تحضر يوم الثلاثاء؟</div>
+        <span class="conv-tag">تدريب Excel</span>
+      </div>
+      <div class="conv-badge">1</div>
+    </div>
+    <div class="conv-item" data-idx="3" onclick="openChat(3)">
+      <div class="conv-av" style="background:linear-gradient(135deg,#667eea,#764ba2)">ع</div>
+      <div class="conv-body">
+        <div class="conv-top"><span class="conv-name">عبدالرحمن الحربي</span><span class="conv-time">الأحد</span></div>
+        <div class="conv-preview">أنت: سأرسل لك المقال الأول غداً</div>
+        <span class="conv-tag">كاتب محتوى تقني</span>
+      </div>
+    </div>
+    <div class="conv-item" data-idx="4" onclick="openChat(4)">
+      <div class="conv-av" style="background:linear-gradient(135deg,#f7971e,#ffd200)">ف</div>
+      <div class="conv-body">
+        <div class="conv-top"><span class="conv-name">فيصل الدوسري</span><span class="conv-time">السبت</span></div>
+        <div class="conv-preview">تم الإصلاح، شكراً جزيلاً ✅</div>
+        <span class="conv-tag">سباكة عاجل</span>
+      </div>
+    </div>
+    <div class="conv-item" data-idx="5" onclick="openChat(5)">
+      <div class="conv-av" style="background:linear-gradient(135deg,#ff9a9e,#fecfef)">ل</div>
+      <div class="conv-body">
+        <div class="conv-top"><span class="conv-name">ليلى العنزي</span><span class="conv-time">الجمعة</span></div>
+        <div class="conv-preview">أنت: هل يناسبك السبت الساعة ٥ مساءً؟</div>
+        <span class="conv-tag">دروس رياضيات</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div id="chatView" style="display:none">
+  <div class="ch-header">
+    <div class="ch-av" id="chAv"><div class="ch-av-dot"></div></div>
+    <div class="ch-info">
+      <div class="ch-name" id="chName"></div>
+      <div class="ch-status" id="chStat">متصل الآن</div>
+    </div>
+    <div class="ch-btns">
+      <div class="ch-btn" onclick="hToast('مكالمة صوتية قريباً')">📞</div>
+      <div class="ch-btn" id="chProfBtn">👤</div>
+    </div>
+  </div>
+  <div class="ch-ref" id="chRef"><b id="chRefT"></b><span id="chRefS"></span></div>
+  <div class="ch-body" id="chBody"></div>
+  <div class="ch-input-area">
+    <div class="ch-attach" onclick="hToast('إرفاق ملف قريباً')">📎</div>
+    <textarea class="ch-txt-in" id="chIn" placeholder="اكتب رسالتك..." rows="1"
+      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMsg();}"></textarea>
+    <button class="ch-send" onclick="sendChatMsg()">➤</button>
+  </div>
+</div>
+
+</div><!-- end #messages -->
+
+<!-- ==================== NOTIFICATIONS PAGE ==================== -->
+<div id="notifs" class="page">
+<style>
+#notifs{background:#f4f6fb;color:#1a1a2e}
+#notifs nav{background:#1a56db;padding:0 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;height:54px}
+.n-back{background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;width:36px;font-family:inherit}
+.n-title{color:#fff;font-size:1rem;font-weight:800;flex:1;text-align:center}
+.n-mark{background:none;border:none;color:rgba(255,255,255,.8);font-size:.75rem;cursor:pointer;font-family:inherit;white-space:nowrap}
+.n-mark:hover{color:#fff}
+.n-tabs{display:flex;background:#fff;border-bottom:2px solid #e5e9f0}
+.n-tab{flex:1;text-align:center;padding:12px;font-size:.85rem;font-weight:600;color:#9ca3af;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s}
+.n-tab.on{color:#1a56db;border-bottom-color:#1a56db}
+.n-list{padding-bottom:20px}
+.n-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:#fff;border-bottom:1px solid #f0f4f8;cursor:pointer;transition:.15s;position:relative}
+.n-item:hover{background:#f8faff}
+.n-item.unread{background:#f0f6ff}
+.n-item.unread::before{content:'';position:absolute;right:0;top:0;bottom:0;width:3px;background:#1a56db;border-radius:0 3px 3px 0}
+.n-icon-wrap{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.n-body{flex:1;min-width:0}
+.n-text{font-size:.84rem;color:#1a1a2e;line-height:1.5;margin-bottom:3px}
+.n-text b{font-weight:700}
+.n-time{font-size:.7rem;color:#9ca3af}
+.n-action{margin-top:8px;display:flex;gap:6px}
+.n-btn-yes{background:#1a56db;color:#fff;border:none;border-radius:8px;padding:5px 14px;font-family:inherit;font-size:.76rem;font-weight:600;cursor:pointer}
+.n-btn-no{background:none;border:1px solid #e5e9f0;color:#6b7280;border-radius:8px;padding:5px 14px;font-family:inherit;font-size:.76rem;cursor:pointer}
+.n-empty{text-align:center;padding:60px 20px;color:#9ca3af}
+.n-empty-icon{font-size:3rem;margin-bottom:12px}
+.n-section{font-size:.72rem;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;padding:12px 16px 6px;background:#f4f6fb}
+</style>
+
+<nav>
+  <button class="n-back" onclick="goHome()">←</button>
+  <div class="n-title">الإشعارات</div>
+  <button class="n-mark" id="markAllBtn" onclick="markAllRead()">قراءة الكل</button>
+</nav>
+
+<div class="n-tabs">
+  <div class="n-tab on" onclick="switchNTab(this,'all')">الكل</div>
+  <div class="n-tab" onclick="switchNTab(this,'offers')">عروض</div>
+  <div class="n-tab" onclick="switchNTab(this,'msgs')">رسائل</div>
+  <div class="n-tab" onclick="switchNTab(this,'system')">النظام</div>
+</div>
+
+<div class="n-list" id="nList"></div>
+
+</div><!-- end #notifs -->
+
+
+
+<script>
+(function(){
+'use strict';
+
+/* ===== NAV BETWEEN PAGES ===== */
+window.goHome = function(){ showPage('home'); };
+window.goProfile = function(reqId){
+  // إذا مررنا id الطلب، نجيب بيانات صاحبه
+  if(reqId !== undefined){
+    var r = reqs.find(function(x){ return x.id === reqId; });
+    if(r) populateProfile(r);
+  }
+  showPage('profile');
+};
+function populateProfile(r){
+  // الصورة الرمزية
+  var avEl = document.querySelector('#profile .p-av');
+  if(avEl){ avEl.textContent = r.av; avEl.style.background = r.grad; }
+  // nav avatar
+  var navAv = document.querySelector('#profile .p-nav-av');
+  if(navAv){ navAv.textContent = r.av; navAv.style.background = r.grad; navAv.style.color = '#fff'; }
+  // الاسم والهاندل
+  var nameEl = document.querySelector('#profile .profile-name');
+  if(nameEl){
+    nameEl.innerHTML = r.name + ' <span class="p-verified">✓</span>';
+  }
+  var handleEl = document.querySelector('#profile .profile-handle');
+  if(handleEl) handleEl.textContent = r.handle;
+  // آخر ظهور
+  var lastEl = document.querySelector('#profile .profile-lastseen');
+  if(lastEl) lastEl.textContent = 'نشط ' + r.time;
+  // عنوان نشاطه في تبويب الطلبات
+  var firstReqTitle = document.querySelector('#p-requests .listing-title');
+  if(firstReqTitle) firstReqTitle.textContent = r.title;
+  var firstReqPrice = document.querySelector('#p-requests .listing-price');
+  if(firstReqPrice) firstReqPrice.textContent = r.budget;
+  // رسالة المحادثة
+  var chatTitle = document.querySelector('#chatModal .sheet-title');
+  if(chatTitle) chatTitle.textContent = '💬 محادثة مع ' + r.name.split(' ')[0];
+  // تقييم
+  var ratingTitle = document.querySelector('#ratingModal .sheet-title');
+  if(ratingTitle) ratingTitle.textContent = '⭐ تقييم ' + r.name;
+}
+window.showPage = function showPage(id){
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ===== HOME LOGIC ===== */
+var state = { loggedIn:false, activeTab:'latest', activeFilter:'all', search:'', saved:[], currentOfferId:null };
+var ALL_REQS = [
+  {id:0,name:'أحمد الغامدي',handle:'@ahmed_g',av:'أ',grad:'linear-gradient(135deg,#4facfe,#00f2fe)',time:'منذ 3 دقائق',urgent:true,isNew:false,title:'أحتاج مطور React لبناء لوحة تحكم إدارية',desc:'أبحث عن مطور React لبناء dashboard لمنصة تعليمية. يشمل جداول بيانات ورسوم بيانية.',tags:['React','TypeScript','Dashboard'],cat:'برمجة',tc:'',budget:'٢٠٠٠–٤٠٠٠ ريال',dur:'أسبوع',type:'عن بُعد',offers:0,ts:30},
+  {id:1,name:'نورة السبيعي',handle:'@noura_s',av:'ن',grad:'linear-gradient(135deg,#f953c6,#b91d73)',time:'منذ 8 دقائق',urgent:false,isNew:true,title:'تصميم هوية بصرية لمطعم عربي راقٍ',desc:'أحتاج هوية بصرية شاملة: شعار، ألوان، قوائم طعام، وعبوات تغليف.',tags:['Branding','شعار','Figma'],cat:'تصميم',tc:'g',budget:'١٥٠٠ ريال',dur:'١٠ أيام',type:'عن بُعد',offers:3,ts:29},
+  {id:2,name:'فيصل الدوسري',handle:'@faisal_d',av:'ف',grad:'linear-gradient(135deg,#f7971e,#ffd200)',time:'منذ 20 دقيقة',urgent:true,isNew:false,title:'سباك عاجل — تسرب مياه في الحمام',desc:'تسرب مياه في الحمام، أحتاج سباك متاح اليوم في الرياض حي العليا.',tags:['سباكة','عاجل','الرياض'],cat:'منزلية',tc:'r',budget:'٣٠٠–٦٠٠ ريال',dur:'اليوم',type:'حضوري',offers:2,ts:28},
+  {id:3,name:'منى القحطاني',handle:'@mona_q',av:'م',grad:'linear-gradient(135deg,#43e97b,#38f9d7)',time:'منذ 35 دقيقة',urgent:false,isNew:false,title:'محاضر Excel متقدم لتدريب فريق',desc:'أحتاج محاضر متخصص في Excel المتقدم. الجلسة ٣ ساعات.',tags:['Excel','تدريب','Power Query'],cat:'تعليم',tc:'o',budget:'١٢٠٠ ريال',dur:'يوم واحد',type:'حضوري/أونلاين',offers:5,ts:27},
+  {id:4,name:'عبدالرحمن الحربي',handle:'@abdo_h',av:'ع',grad:'linear-gradient(135deg,#667eea,#764ba2)',time:'منذ ساعة',urgent:false,isNew:false,title:'كاتب محتوى تقني للنشر الأسبوعي',desc:'مقالتان أسبوعياً في الذكاء الاصطناعي. مطلوب خبرة SEO وأسلوب سلس.',tags:['كتابة','SEO','AI'],cat:'كتابة',tc:'',budget:'٤٠٠ ريال/مقال',dur:'مستمر',type:'عن بُعد',offers:7,ts:26},
+  {id:5,name:'ليلى العنزي',handle:'@layla_a',av:'ل',grad:'linear-gradient(135deg,#ff9a9e,#fecfef)',time:'منذ ساعتين',urgent:false,isNew:false,title:'مدرّس رياضيات للمرحلة المتوسطة',desc:'أبحث عن مدرس رياضيات لابني. جلستان أسبوعياً في جدة أو أونلاين.',tags:['رياضيات','متوسطة','جدة'],cat:'تعليم',tc:'g',budget:'١٠٠–١٥٠ ريال/ساعة',dur:'مستمر',type:'حضوري/أونلاين',offers:4,ts:25},
+  {id:6,name:'سالم المالكي',handle:'@salem_m',av:'س',grad:'linear-gradient(135deg,#11998e,#38ef7d)',time:'منذ ٣ ساعات',urgent:false,isNew:false,title:'مصمم UI لتطبيق جوال iOS وAndroid',desc:'نحتاج مصمم UI/UX لتطبيق توصيل طلبات. مطلوب تجربة مستخدم سلسة.',tags:['UI/UX','Figma','موبايل'],cat:'تصميم',tc:'',budget:'٣٠٠٠ ريال',dur:'أسبوعان',type:'عن بُعد',offers:6,ts:24},
+  {id:7,name:'ريم الحمدان',handle:'@reem_h',av:'ر',grad:'linear-gradient(135deg,#f093fb,#f5576c)',time:'منذ ٤ ساعات',urgent:false,isNew:false,title:'مصوّر منتجات لمتجر إلكتروني',desc:'متجر ملابس نسائي يحتاج تصوير ٥٠ منتج. الإضاءة والخلفية مهمة.',tags:['تصوير','منتجات','جدة'],cat:'تصميم',tc:'g',budget:'٨٠٠ ريال',dur:'يوم واحد',type:'حضوري',offers:4,ts:23},
+  {id:8,name:'بندر العصيمي',handle:'@bandar_a',av:'ب',grad:'linear-gradient(135deg,#4776e6,#8e54e9)',time:'منذ ٥ ساعات',urgent:false,isNew:false,title:'مدير إعلانات Google Ads لمتجر إلكتروني',desc:'متجر إلكترونيات يحتاج إدارة حملات Google Ads بميزانية ٥٠٠٠ ريال شهرياً.',tags:['Google Ads','SEM','تسويق'],cat:'تسويق',tc:'o',budget:'٢٠٠٠ ريال/شهر',dur:'مستمر',type:'عن بُعد',offers:3,ts:22},
+  {id:9,name:'هند الشهراني',handle:'@hind_s',av:'ه',grad:'linear-gradient(135deg,#f7797d,#fbd786)',time:'منذ ٦ ساعات',urgent:true,isNew:false,title:'مترجم عربي-إنجليزي عاجل لعقد تجاري',desc:'عقد تجاري ٢٠ صفحة يحتاج ترجمة احترافية خلال ٢٤ ساعة.',tags:['ترجمة','عاجل','قانوني'],cat:'كتابة',tc:'r',budget:'٦٠٠ ريال',dur:'٢٤ ساعة',type:'عن بُعد',offers:8,ts:21},
+  {id:10,name:'طارق الزهراني',handle:'@tariq_z',av:'ط',grad:'linear-gradient(135deg,#2980b9,#6dd5fa)',time:'منذ ٧ ساعات',urgent:false,isNew:false,title:'مقاول دهانات لشقة سكنية في الرياض',desc:'شقة ١٥٠ م² تحتاج دهان كامل داخلي.',tags:['دهانات','صيانة','الرياض'],cat:'منزلية',tc:'',budget:'٢٥٠٠ ريال',dur:'٣ أيام',type:'حضوري',offers:5,ts:20},
+  {id:11,name:'نواف القرني',handle:'@nawaf_q',av:'ن',grad:'linear-gradient(135deg,#1a1a2e,#4776e6)',time:'منذ ٨ ساعات',urgent:false,isNew:false,title:'مطور Python لتحليل بيانات المبيعات',desc:'شركة تجارية تحتاج سكريبت Python لتحليل ٣ سنوات من بيانات المبيعات.',tags:['Python','Data','تحليل'],cat:'برمجة',tc:'',budget:'١٨٠٠ ريال',dur:'أسبوع',type:'عن بُعد',offers:2,ts:19},
+  {id:12,name:'خالد الشمري',handle:'@khalid_sh',av:'خ',grad:'linear-gradient(135deg,#f857a6,#ff5858)',time:'منذ ٩ ساعات',urgent:false,isNew:false,title:'مصمم إعلانات سوشيال ميديا أسبوعي',desc:'نشاط تجاري يحتاج ١٠ تصاميم أسبوعياً لـ Instagram وSnapchat.',tags:['سوشيال','Photoshop','إعلانات'],cat:'تصميم',tc:'',budget:'١٠٠٠ ريال/شهر',dur:'مستمر',type:'عن بُعد',offers:9,ts:18},
+  {id:13,name:'سارة المطيري',handle:'@sara_m',av:'س',grad:'linear-gradient(135deg,#8360c3,#2ebf91)',time:'منذ ١٠ ساعات',urgent:false,isNew:false,title:'محامية لمراجعة عقد إيجار تجاري',desc:'عقد إيجار محل تجاري يحتاج مراجعة قانونية ومطابقة مع أنظمة التجارة.',tags:['محاماة','عقود','قانوني'],cat:'استشارات',tc:'g',budget:'٥٠٠ ريال',dur:'٢٤ ساعة',type:'عن بُعد',offers:2,ts:17},
+  {id:14,name:'فهد الدوسري',handle:'@fahad_d',av:'ف',grad:'linear-gradient(135deg,#e96c1a,#f7dc6f)',time:'منذ ١١ ساعة',urgent:false,isNew:false,title:'سائق نقل لتوصيل أثاث داخل الرياض',desc:'محتاج سيارة نقل كبيرة لنقل أثاث شقة من حي العليا إلى حي الملقا.',tags:['نقل','أثاث','الرياض'],cat:'نقل',tc:'o',budget:'٣٥٠ ريال',dur:'يوم واحد',type:'حضوري',offers:6,ts:16},
+  {id:15,name:'عمر البلوي',handle:'@omar_b',av:'ع',grad:'linear-gradient(135deg,#00b09b,#96c93d)',time:'منذ ١٢ ساعة',urgent:false,isNew:false,title:'مطور Flutter لتطبيق تسوق متكامل',desc:'نحتاج مطور Flutter لبناء تطبيق تسوق يدعم iOS وAndroid مع ربط API.',tags:['Flutter','Dart','Mobile'],cat:'برمجة',tc:'',budget:'٥٠٠٠–٨٠٠٠ ريال',dur:'شهر',type:'عن بُعد',offers:4,ts:15},
+  {id:16,name:'دانة الحربي',handle:'@dana_h',av:'د',grad:'linear-gradient(135deg,#fc5c7d,#6a3093)',time:'منذ ١٣ ساعة',urgent:false,isNew:false,title:'مصممة أزياء لتصميم مجموعة ملابس',desc:'مشروع ملابس نسائية يحتاج مصممة أزياء لتصميم ١٥ قطعة للموسم القادم.',tags:['أزياء','تصميم','موضة'],cat:'تصميم',tc:'g',budget:'٣٥٠٠ ريال',dur:'٣ أسابيع',type:'حضوري/أونلاين',offers:3,ts:14},
+  {id:17,name:'محمد الشمري',handle:'@moh_sh',av:'م',grad:'linear-gradient(135deg,#134e5e,#71b280)',time:'منذ ١٤ ساعة',urgent:true,isNew:false,title:'كهربائي لتركيب لوحة كهربائية عاجل',desc:'بيت جديد يحتاج تركيب لوحة كهربائية رئيسية. العمل عاجل في جدة.',tags:['كهرباء','عاجل','جدة'],cat:'منزلية',tc:'r',budget:'٨٠٠–١٢٠٠ ريال',dur:'يومان',type:'حضوري',offers:7,ts:13},
+  {id:18,name:'رنا الغامدي',handle:'@rana_g',av:'ر',grad:'linear-gradient(135deg,#b993d6,#8ca6db)',time:'منذ ١٥ ساعة',urgent:false,isNew:false,title:'مدرّبة يوغا لجلسات أونلاين أسبوعية',desc:'أبحث عن مدرّبة يوغا لجلسات أونلاين أسبوعية. ٣ جلسات في الأسبوع.',tags:['يوغا','لياقة','أونلاين'],cat:'تعليم',tc:'',budget:'٢٠٠ ريال/جلسة',dur:'مستمر',type:'أونلاين',offers:5,ts:12},
+  {id:19,name:'سعود الرشيدي',handle:'@saud_r',av:'س',grad:'linear-gradient(135deg,#373b44,#4286f4)',time:'منذ ١٦ ساعة',urgent:false,isNew:false,title:'مطور WordPress لموقع شركة عقارية',desc:'شركة عقارية تحتاج موقع WordPress احترافي مع نظام إدارة العقارات.',tags:['WordPress','PHP','عقارات'],cat:'برمجة',tc:'',budget:'٢٥٠٠ ريال',dur:'أسبوعان',type:'عن بُعد',offers:6,ts:11},
+  {id:20,name:'أسماء الدوسري',handle:'@asma_d',av:'أ',grad:'linear-gradient(135deg,#ee9ca7,#ffdde1)',time:'منذ ١٧ ساعة',urgent:false,isNew:false,title:'معلمة لغة إنجليزية للأطفال أونلاين',desc:'أطفال من عمر ٦–١٢ سنة يحتاجون تعليم إنجليزي ممتع وتفاعلي أونلاين.',tags:['إنجليزي','أطفال','أونلاين'],cat:'تعليم',tc:'g',budget:'١٥٠ ريال/ساعة',dur:'مستمر',type:'أونلاين',offers:8,ts:10},
+  {id:21,name:'وليد المطيري',handle:'@walid_m',av:'و',grad:'linear-gradient(135deg,#1f4037,#99f2c8)',time:'منذ ١٨ ساعة',urgent:false,isNew:false,title:'محاسب قانوني لإعداد الميزانية السنوية',desc:'شركة صغيرة تحتاج محاسب لإعداد الميزانية السنوية وملفات الزكاة.',tags:['محاسبة','زكاة','ميزانية'],cat:'استشارات',tc:'o',budget:'١٥٠٠ ريال',dur:'أسبوعان',type:'عن بُعد',offers:3,ts:9},
+  {id:22,name:'حنان الزهراني',handle:'@hanan_z',av:'ح',grad:'linear-gradient(135deg,#c94b4b,#4b134f)',time:'منذ ١٩ ساعة',urgent:false,isNew:false,title:'شيف لتحضير وجبات صحية أسبوعية',desc:'عائلة تحتاج شيف منزلي لتحضير وجبات صحية أسبوعياً. الرياض حي السليمانية.',tags:['طبخ','صحة','الرياض'],cat:'منزلية',tc:'',budget:'٦٠٠ ريال/أسبوع',dur:'مستمر',type:'حضوري',offers:4,ts:8},
+  {id:23,name:'تركي القحطاني',handle:'@turki_q',av:'ت',grad:'linear-gradient(135deg,#3a6186,#89253e)',time:'منذ ٢٠ ساعة',urgent:false,isNew:false,title:'مصور فيديو لحفل زفاف في الرياض',desc:'حفل زفاف الشهر القادم يحتاج مصور فيديو احترافي مع تصوير وتغطية كاملة.',tags:['فيديو','تصوير','زفاف'],cat:'تصميم',tc:'g',budget:'٣٠٠٠ ريال',dur:'يوم واحد',type:'حضوري',offers:6,ts:7},
+  {id:24,name:'شيماء العتيبي',handle:'@shima_a',av:'ش',grad:'linear-gradient(135deg,#12c2e9,#c471ed)',time:'منذ ٢١ ساعة',urgent:false,isNew:false,title:'مديرة حسابات Instagram لمتجر عطور',desc:'متجر عطور فاخرة يحتاج مديرة حسابات Instagram لبناء محتوى يومي.',tags:['Instagram','محتوى','عطور'],cat:'تسويق',tc:'',budget:'١٢٠٠ ريال/شهر',dur:'مستمر',type:'عن بُعد',offers:5,ts:6},
+  {id:25,name:'ماجد الحميدي',handle:'@majed_h',av:'م',grad:'linear-gradient(135deg,#360033,#0b8793)',time:'منذ يوم',urgent:false,isNew:false,title:'نجار لتركيب مطبخ خشبي مخصص',desc:'مطبخ جديد يحتاج تركيب خشب مخصص. المواد جاهزة. الدمام حي الفيصلية.',tags:['نجارة','مطبخ','الدمام'],cat:'منزلية',tc:'o',budget:'٢٠٠٠ ريال',dur:'٣ أيام',type:'حضوري',offers:3,ts:5},
+  {id:26,name:'رهف الشهري',handle:'@rahaf_sh',av:'ر',grad:'linear-gradient(135deg,#f953c6,#b91d73)',time:'منذ يوم',urgent:false,isNew:false,title:'مدققة لغوية لكتاب أكاديمي',desc:'كتاب أكاديمي ٢٠٠ صفحة يحتاج تدقيق لغوي شامل وتنسيق.',tags:['تدقيق','لغة','أكاديمي'],cat:'كتابة',tc:'',budget:'٨٠٠ ريال',dur:'أسبوع',type:'عن بُعد',offers:2,ts:4},
+  {id:27,name:'ياسر الغامدي',handle:'@yaser_g',av:'ي',grad:'linear-gradient(135deg,#4facfe,#00f2fe)',time:'منذ يومين',urgent:false,isNew:false,title:'مستشار تسويقي لإطلاق منتج جديد',desc:'شركة ناشئة تحتاج مستشار تسويقي لوضع استراتيجية إطلاق منتج في السوق السعودي.',tags:['تسويق','استراتيجية','إطلاق'],cat:'استشارات',tc:'g',budget:'٣٠٠٠ ريال',dur:'شهر',type:'عن بُعد',offers:4,ts:3},
+  {id:28,name:'لمى الحربي',handle:'@lama_h',av:'ل',grad:'linear-gradient(135deg,#11998e,#38ef7d)',time:'منذ يومين',urgent:false,isNew:false,title:'مصممة ديكور لشقة سكنية',desc:'شقة جديدة تحتاج مصممة ديكور لاختيار الألوان والأثاث وتنسيق الغرف.',tags:['ديكور','تصميم داخلي','جدة'],cat:'تصميم',tc:'',budget:'٢٠٠٠ ريال',dur:'أسبوعان',type:'حضوري',offers:7,ts:2},
+  {id:29,name:'عبدالله السلمي',handle:'@abl_s',av:'ع',grad:'linear-gradient(135deg,#667eea,#764ba2)',time:'منذ يومين',urgent:false,isNew:false,title:'مطور Node.js لبناء API للتطبيق',desc:'تطبيق موبايل يحتاج backend بـ Node.js وExpress مع قاعدة بيانات MongoDB.',tags:['Node.js','API','MongoDB'],cat:'برمجة',tc:'',budget:'٤٠٠٠ ريال',dur:'٣ أسابيع',type:'عن بُعد',offers:3,ts:1}
+];
+var PAGE_SIZE=10, currentPage=0, reqs=ALL_REQS.slice();
+var sampleOffers={
+  0:[{name:'محمد السهلي',role:'مطور Full Stack',av:'م',grad:'linear-gradient(135deg,#4facfe,#00f2fe)',rating:'4.9',reviews:127,time:'منذ 10 دقائق',text:'خبرتي 5 سنوات في React وTypeScript.',price:'٣٥٠٠ ريال',dur:'٧ أيام'}],
+  1:[{name:'خالد الديزاين',role:'مصمم هوية بصرية',av:'خ',grad:'linear-gradient(135deg,#f7971e,#ffd200)',rating:'5.0',reviews:203,time:'منذ 5 دقائق',text:'صممت أكثر من 150 هوية للمطاعم.',price:'١٢٠٠ ريال',dur:'٧ أيام'}]
+};
+function getList(){var list=reqs.slice();if(state.activeTab==='urgent')list=list.filter(function(r){return r.urgent;});else if(state.activeTab==='nooffers')list=list.filter(function(r){return r.offers===0;});else if(state.activeTab==='nearby')list=list.filter(function(r){return r.type.indexOf('حضوري')>-1;});else list.sort(function(a,b){return b.ts-a.ts;});if(state.activeFilter!=='all')list=list.filter(function(r){return r.cat===state.activeFilter;});if(state.search){var q=state.search.toLowerCase();list=list.filter(function(r){return r.title.toLowerCase().indexOf(q)>-1||r.tags.join(' ').toLowerCase().indexOf(q)>-1;});}return list;}
+function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.name+'</span>'+(r.urgent?'<span class="ubadge">عاجل 🔴</span>':'')+(r.isNew?'<span class="nbadge">جديد ✨</span>':'')+'</div><div class="rck">'+r.handle+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+r.title+'</div>'+'<div class="rdesc">'+r.desc+'</div>'+'<div class="rtags">'+r.tags.map(function(t){return'<span class="rtag '+r.tc+'">'+t+'</span>';}).join('')+'<span class="rtag g">⏱ '+r.dur+'</span><span class="rtag">'+r.type+'</span></div>'+'<div class="rcf"><div><div class="bl2">الميزانية</div><div class="bv">'+r.budget+'</div></div>'+'<div class="rcf-r"><span class="ocount">🙋 '+(r.offers>0?r.offers+' عروض':'لا عروض بعد')+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation()">'+(isSaved?'🔖 محفوظ':'🔖')+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation()">قدّم عرضك</button>'+'</div></div></div>';}
+function makeFooter(){return'<div class="bcta"><h3>جاهز تبدأ؟</h3><p>انشر طلبك أو سجّل مهارتك</p><div class="bcta-btns"><button class="btn-b" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openComp()">انشر طلبك مجاناً ←</button><button class="btn-p" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openAuth(\'provider\')">ابدأ كسب من مهارتك</button></div></div>'+'<div class="feed-footer"><div class="ff-bot"><span class="ff-copy">© 2025 علاقات · alagat.com</span><span class="ff-copy">كل خبرة عندك، في علاقات تساوي فلوس أكثر</span></div></div>';}
+function renderFeed(){
+  currentPage=0;
+  var list=getList();
+  document.getElementById('resultCount').textContent=list.length+' طلب';
+  var el=document.getElementById('feedContent');
+  if(!list.length){el.innerHTML='<div class="empty-state"><div style="font-size:2rem;margin-bottom:10px">🔍</div><div style="font-weight:600;margin-bottom:5px">لا توجد نتائج</div></div>';return;}
+  var shown=Math.min(PAGE_SIZE,list.length);
+  var html='<div id="cardsContainer">';
+  list.slice(0,shown).forEach(function(r){html+=makeCard(r);});
+  html+='</div>';
+  if(list.length>shown){
+    html+='<div id="loadMoreWrap" style="margin:8px 14px 4px"><button id="loadMoreBtn" style="width:100%;padding:12px;border-radius:10px;background:var(--s1);border:1px solid var(--b);color:var(--t2);font-family:inherit;font-size:.84rem;cursor:pointer;transition:.2s" onclick="window.loadMore(this)">تحميل المزيد <span style="color:var(--t3);font-size:.75rem">('+shown+' من '+list.length+')</span> ↓</button></div>';
+  }
+  html+='<div id="feedFooter">'+makeFooter()+'</div>';
+  el.innerHTML=html;
+  bindCardEvents();
+}
+window.loadMore=function(btn){
+  if(btn){btn.textContent='جاري التحميل...';btn.disabled=true;}
+  setTimeout(function(){
+    currentPage++;
+    var list=getList();
+    var start=currentPage*PAGE_SIZE;
+    var end=start+PAGE_SIZE;
+    var cc=document.getElementById('cardsContainer');
+    list.slice(start,end).forEach(function(r){cc.insertAdjacentHTML('beforeend',makeCard(r));});
+    bindCardEvents();
+    var shown=Math.min(end,list.length);
+    var wrap=document.getElementById('loadMoreWrap');
+    if(shown>=list.length){
+      if(wrap)wrap.parentNode.removeChild(wrap);
+    } else {
+      if(wrap){wrap.innerHTML='<button id="loadMoreBtn" style="width:100%;padding:12px;border-radius:10px;background:var(--s1);border:1px solid var(--b);color:var(--t2);font-family:inherit;font-size:.84rem;cursor:pointer;transition:.2s" onclick="window.loadMore(this)">تحميل المزيد <span style="color:var(--t3);font-size:.75rem">('+shown+' من '+list.length+')</span> ↓</button>';}
+    }
+  },300);
+};
+function bindCardEvents(){var c=document.getElementById('cardsContainer');if(!c)return;c.onclick=function(e){var s=e.target.closest('.btn-save'),o=e.target.closest('.btn-offer');if(s){e.stopPropagation();if(!state.loggedIn){openAuth('login');return;}var id=parseInt(s.getAttribute('data-id'));var idx=state.saved.indexOf(id);if(idx>-1){state.saved.splice(idx,1);s.textContent='🔖';s.classList.remove('saved');}else{state.saved.push(id);s.textContent='🔖 محفوظ';s.classList.add('saved');}hToast('✓ تم');}else if(o){e.stopPropagation();if(!state.loggedIn){openAuth('login');return;}openOffer(parseInt(o.getAttribute('data-id')));}};}
+window.openDetail=function(id){var r=reqs.find(function(x){return x.id===id;});if(!r)return;var av=document.getElementById('detAvatar');av.style.background=r.grad;av.textContent=r.av;document.getElementById('detName').textContent=r.name;document.getElementById('detHandle').textContent=r.handle;document.getElementById('detTime').textContent=r.time;document.getElementById('detTitle').textContent=r.title;document.getElementById('detDesc').textContent=r.desc;document.getElementById('detBudget').textContent=r.budget;document.getElementById('detDur').textContent=r.dur;document.getElementById('detType').textContent=r.type;document.getElementById('detTags').innerHTML=r.tags.map(function(t){return'<span class="rtag '+r.tc+'">'+t+'</span>';}).join('');var offers=sampleOffers[id]||[];document.getElementById('offersCount').textContent=offers.length+' عرض';var oh=offers.length?'':'<div class="no-offers">🤝 لا توجد عروض بعد!</div>';offers.forEach(function(o){oh+='<div class="offer-card"><div class="offer-header"><div class="offer-av" style="background:'+o.grad+'">'+o.av+'</div><div style="flex:1"><div class="offer-name">'+o.name+'</div><div class="offer-role">'+o.role+'</div><div class="offer-stars">★ '+o.rating+' ('+o.reviews+' تقييم)</div></div><div class="offer-time">'+o.time+'</div></div><div class="offer-text">'+o.text+'</div><div class="offer-footer"><div><div class="offer-price">'+o.price+'</div><div class="offer-dur">'+o.dur+'</div></div><button class="offer-contact">تواصل معه</button></div></div>';});document.getElementById('offersList').innerHTML=oh;document.getElementById('detOfferBtn').onclick=function(){document.getElementById('detailModal').classList.remove('open');openOffer(id);};document.getElementById('detailModal').classList.add('open');};
+function openAuth(tab){switchAuthTab(tab||'login');document.getElementById('authModal').classList.add('open');}
+function switchAuthTab(tab){['login','register','provider'].forEach(function(t){document.getElementById('f-'+t).style.display=t===tab?'block':'none';var b=document.getElementById('at-'+t);b.className='at'+(t===tab?(t==='provider'?' on-p':' on'):'');});}
+function doLoginUI(){state.loggedIn=true;document.getElementById('authModal').classList.remove('open');document.getElementById('navGuest').style.display='none';document.getElementById('navUser').style.display='flex';document.getElementById('navUserLinks').style.display='flex';document.getElementById('miniBar').style.display='flex';document.getElementById('fab').style.display='flex';document.getElementById('rpGuest').style.display='none';document.getElementById('rpUser').style.display='block';renderFeed();hToast('👋 أهلاً بك في علاقات!');}
+function doLogin(){doLoginUI();}
+function doLogout(){if(!confirm('هل تريد تسجيل الخروج؟'))return;state.loggedIn=false;document.getElementById('navGuest').style.display='flex';document.getElementById('navUser').style.display='none';document.getElementById('navUserLinks').style.display='none';document.getElementById('miniBar').style.display='none';document.getElementById('fab').style.display='none';document.getElementById('rpGuest').style.display='block';document.getElementById('rpUser').style.display='none';renderFeed();hToast('تم تسجيل الخروج');}
+window.openComp=function(){if(!state.loggedIn){openAuth('login');return;}document.getElementById('compModal').classList.add('open');};
+function openOffer(id){var r=reqs.find(function(x){return x.id===id;});if(!r)return;state.currentOfferId=id;document.getElementById('offerTitle').textContent=r.title;document.getElementById('offerMeta').textContent=r.name+' · '+r.budget;document.getElementById('offerText').value='';document.getElementById('offerPrice').value='';document.getElementById('offerModal').classList.add('open');}
+window.openAuth=openAuth; window.doLogout=doLogout;
+document.getElementById('at-login').onclick=function(){switchAuthTab('login');};
+document.getElementById('at-register').onclick=function(){switchAuthTab('register');};
+document.getElementById('at-provider').onclick=function(){switchAuthTab('provider');};
+document.getElementById('doLogin').onclick=async function(){
+  var email = document.getElementById('loginEmail') ? document.getElementById('loginEmail').value.trim() : '';
+  var pass  = document.getElementById('loginPass')  ? document.getElementById('loginPass').value.trim()  : '';
+  if(!email||!pass){ hToast('⚠️ أدخل البريد وكلمة المرور'); return; }
+  hToast('جاري تسجيل الدخول...');
+  var result = await sbLogin(email, pass);
+  if(result.error){ hToast('❌ ' + result.error.message); return; }
+  doLoginUI();
+};
+
+document.getElementById('doRegister').onclick=async function(){
+  var nameEl  = document.querySelector('#f-register input[placeholder="اسمك"]');
+  var userEl  = document.querySelector('#f-register input[placeholder="@username"]');
+  var emailEl = document.getElementById('regEmail');
+  var passEl  = document.querySelector('#f-register input[type="password"]');
+  var name    = nameEl  ? nameEl.value.trim()  : '';
+  var username= userEl  ? userEl.value.trim()  : '';
+  var email   = emailEl ? emailEl.value.trim() : '';
+  var pass    = passEl  ? passEl.value.trim()  : '';
+  if(!name||!email||!pass){ hToast('⚠️ أكمل البيانات المطلوبة'); return; }
+  if(!email.includes('@')){ hToast('⚠️ أدخل بريد إلكتروني صحيح'); return; }
+  hToast('جاري إنشاء الحساب...');
+  var result = await sbRegister(email, pass, name, username);
+  if(result.error){ hToast('❌ ' + result.error.message); return; }
+  doLoginUI();
+  hToast('🎉 تم إنشاء حسابك بنجاح!');
+};
+document.getElementById('doProvider').onclick=doLogin;
+document.getElementById('goRegister').onclick=function(){switchAuthTab('register');};
+document.getElementById('btnLogin').onclick=function(){openAuth('login');};
+document.getElementById('btnRegister').onclick=function(){openAuth('register');};
+document.getElementById('rpLogin').onclick=function(){openAuth('login');};
+document.getElementById('rpRegister').onclick=function(){openAuth('register');};
+document.getElementById('btnProvider').onclick=function(){openAuth('provider');};
+document.getElementById('btnNewReq').onclick=window.openComp;
+document.getElementById('miniBar').onclick=window.openComp;
+document.getElementById('fab').onclick=window.openComp;
+document.getElementById('cancelComp').onclick=function(){document.getElementById('compModal').classList.remove('open');};
+document.getElementById('cancelOffer').onclick=function(){document.getElementById('offerModal').classList.remove('open');};
+document.getElementById('typeClient').onclick=function(){this.classList.add('sel');document.getElementById('typeBoth').classList.remove('sel');};
+document.getElementById('typeBoth').onclick=function(){this.classList.add('sel');document.getElementById('typeClient').classList.remove('sel');};
+document.querySelectorAll('.sk-grid .sko').forEach(function(s){s.onclick=function(){this.classList.toggle('sel');};});
+document.querySelectorAll('.fbtn').forEach(function(b){b.onclick=function(){this.classList.toggle('fon');this.textContent=this.classList.contains('fon')?'متابَع':'تابع';};});
+document.querySelectorAll('.ftab').forEach(function(t){t.onclick=function(){document.querySelectorAll('.ftab').forEach(function(x){x.classList.remove('on');});t.classList.add('on');state.activeTab=t.getAttribute('data-tab');renderFeed();};});
+document.querySelectorAll('.fc').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fc').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.activeFilter=b.getAttribute('data-cat');renderFeed();};});
+document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});si.classList.add('on');var cat=si.getAttribute('data-cat');state.activeFilter=cat;document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')===cat);});renderFeed();};});
+// search handled inline on input
+document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.search='';var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();};
+document.getElementById('si-saved').onclick=function(){if(!state.loggedIn){openAuth('login');return;}document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');if(!state.saved.length){hToast('لا توجد طلبات محفوظة بعد');return;}var savedList=reqs.filter(function(r){return state.saved.indexOf(r.id)>-1;});var html='';savedList.forEach(function(r){html+=makeCard(r);});html+='<div style="margin:10px 14px"><button class="btn-g" style="width:100%;padding:9px;border-radius:9px" id="backToFeed">← العودة</button></div>';document.getElementById('feedContent').innerHTML='<div id="cardsContainer">'+html+'</div>';bindCardEvents();document.getElementById('backToFeed').onclick=renderFeed;};
+['si-discover','si-notif','si-msgs','si-myreqs'].forEach(function(id){var el=document.getElementById(id);if(el)el.onclick=function(){if(!state.loggedIn){openAuth('login');return;}hToast('هذا القسم سيكون متاحاً قريباً');};});
+document.getElementById('submitReq').onclick=async function(){
+  var title=document.getElementById('reqTitle').value.trim();
+  if(!title){hToast('⚠️ اكتب عنوان الطلب أولاً');return;}
+  hToast('جاري النشر...');
+  var result = await sbCreateRequest({
+    title:title,
+    description:document.getElementById('reqDesc').value||'',
+    category:document.getElementById('reqCat').value,
+    budget:(document.getElementById('reqBudget').value||'يُحدد')+' ريال',
+    duration:document.getElementById('reqDur').value,
+    workType:document.getElementById('reqType').value
+  });
+  var newReq={id:result.data?result.data.id:Date.now(),name:'أنت',handle:'@me',av:'أ',grad:'linear-gradient(135deg,var(--ac),var(--ac2))',time:'الآن',urgent:false,isNew:true,isUserAdded:true,title:title,desc:document.getElementById('reqDesc').value||'',tags:[document.getElementById('reqCat').value],cat:document.getElementById('reqCat').value,tc:'',budget:(document.getElementById('reqBudget').value||'يُحدد')+' ريال',dur:document.getElementById('reqDur').value,type:document.getElementById('reqType').value,offers:0,ts:999};
+  reqs.unshift(newReq);
+  document.getElementById('compModal').classList.remove('open');
+  document.getElementById('reqTitle').value='';document.getElementById('reqDesc').value='';document.getElementById('reqBudget').value='';
+  renderFeed();hToast('✓ تم نشر طلبك! ستصلك عروض قريباً');
+};
+document.getElementById('submitOffer').onclick=function(){var txt=document.getElementById('offerText').value.trim();var price=document.getElementById('offerPrice').value.trim();if(!txt||!price){hToast('⚠️ أكمل العرض والسعر');return;}var r=reqs.find(function(x){return x.id===state.currentOfferId;});if(r)r.offers++;document.getElementById('offerModal').classList.remove('open');renderFeed();hToast('✓ تم إرسال عرضك!');};
+function hToast(msg){var t=document.createElement('div');t.textContent=msg;Object.assign(t.style,{position:'fixed',bottom:'30px',left:'50%',transform:'translateX(-50%) translateY(8px)',background:'var(--s2)',border:'1px solid var(--b)',color:'var(--t)',padding:'10px 22px',borderRadius:'11px',fontSize:'.83rem',zIndex:'9999',opacity:'0',transition:'all .22s',boxShadow:'0 8px 28px rgba(0,0,0,.5)',whiteSpace:'nowrap'});document.body.appendChild(t);requestAnimationFrame(function(){t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';});setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove();},250);},2500);}
+window.hToast = hToast;
+document.addEventListener('DOMContentLoaded', function(){ renderFeed(); });
+
+/* ===== PROFILE LOGIC ===== */
+window.switchPTab = function(el,id){document.querySelectorAll('.ptab').forEach(function(t){t.classList.remove('on');});el.classList.add('on');document.getElementById('p-offers').style.display=id==='offers'?'block':'none';document.getElementById('p-requests').style.display=id==='requests'?'block':'none';};
+window.openPModal = function(id){document.getElementById(id).classList.add('open');};
+window.closePModal = function(id){document.getElementById(id).classList.remove('open');};
+window.togglePlusMenu = function(){var m=document.getElementById('plusMenu');var btn=document.getElementById('pAddBtn');var isOpen=m.style.display==='block';m.style.display=isOpen?'none':'block';btn.style.transform=isOpen?'':'rotate(45deg)';};
+window.closePlusMenu = function(){document.getElementById('plusMenu').style.display='none';document.getElementById('pAddBtn').style.transform='';};
+document.addEventListener('click',function(e){if(!e.target.closest('.bn-center'))closePlusMenu();});
+
+// Rating
+var currentRating=0;
+var rLabels=['','سيء','مقبول','جيد','جيد جداً','ممتاز ⭐'];
+document.querySelectorAll('.star').forEach(function(s){
+  s.onclick=function(){currentRating=parseInt(this.getAttribute('data-v'));document.querySelectorAll('.star').forEach(function(x,i){x.classList.toggle('on',i<currentRating);});document.getElementById('ratingLbl').textContent=rLabels[currentRating];};
+  s.onmouseover=function(){var v=parseInt(this.getAttribute('data-v'));document.querySelectorAll('.star').forEach(function(x,i){x.classList.toggle('on',i<v);});};
+  s.onmouseout=function(){document.querySelectorAll('.star').forEach(function(x,i){x.classList.toggle('on',i<currentRating);});};
+});
+window.submitRating=function(){if(!currentRating){alert('اختر عدد النجوم');return;}closePModal('ratingModal');hToast('شكراً! تم إرسال تقييمك ('+currentRating+' نجوم)');currentRating=0;document.querySelectorAll('.star').forEach(function(s){s.classList.remove('on');});document.getElementById('ratingLbl').textContent='اختر تقييمك';};
+window.shareVia=function(app){closePModal('shareModal');hToast('تم الفتح في '+app);};
+window.copyLink=function(){navigator.clipboard.writeText('alagat.com/u/mohammed_g').catch(function(){});hToast('✓ تم نسخ الرابط');};
+window.sendMsg=function(){var input=document.getElementById('chatInput');var txt=input.value.trim();if(!txt)return;var msgs=document.getElementById('chatMsgs');var now=new Date();var time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');var div=document.createElement('div');div.className='msg me';div.innerHTML=txt+'<div class="msg-time">'+time+'</div>';msgs.appendChild(div);input.value='';msgs.scrollTop=msgs.scrollHeight;setTimeout(function(){var rep=document.createElement('div');rep.className='msg them';rep.innerHTML='تم استلام رسالتك، سأرد عليك قريباً 👍<div class="msg-time">'+time+'</div>';msgs.appendChild(rep);msgs.scrollTop=msgs.scrollHeight;},1000);};
+
+/* ===== MESSAGES LOGIC ===== */
+var CONVS = [
+  {id:0, name:'نورة السبيعي', av:'ن', grad:'linear-gradient(135deg,#f953c6,#b91d73)', online:true, reqId:1,
+   refTitle:'تصميم هوية بصرية لمطعم عربي راقٍ', refSub:'الميزانية: ١٥٠٠ ريال · مفتوح',
+   msgs:[
+     {me:false, txt:'السلام عليكم، شفت عروضك وأنا مهتمة', time:'١٠:٣٠ ص'},
+     {me:true,  txt:'وعليكم السلام! يسعدني أساعدك، وش تبين بالضبط؟', time:'١٠:٣٢ ص'},
+     {me:false, txt:'أبي هوية بصرية كاملة للمطعم، شعار + ألوان + قوائم', time:'١٠:٣٥ ص'},
+     {me:true,  txt:'تمام، عندي خبرة في هذا المجال. قدرت أشوف المطعم أونلاين؟', time:'١٠:٣٦ ص'},
+     {me:false, txt:'لا ما يزال، هو مشروع جديد', time:'١٠:٣٨ ص'},
+     {me:true,  txt:'ممتاز! سأرسل لك أمثلة من أعمالي السابقة', time:'١٠:٤٠ ص'},
+     {me:false, txt:'ممتاز! متى تقدر تبدأ؟', time:'٢:٤٥ م'},
+   ]},
+  {id:1, name:'أحمد الغامدي', av:'أ', grad:'linear-gradient(135deg,#4facfe,#00f2fe)', online:false, reqId:0,
+   refTitle:'أحتاج مطور React لبناء لوحة تحكم إدارية', refSub:'الميزانية: ٢٠٠٠–٤٠٠٠ ريال · مفتوح',
+   msgs:[
+     {me:false, txt:'مرحبا، أبي أستفسر عن المشروع', time:'الأمس ٩:٠٠ ص'},
+     {me:true,  txt:'أهلاً، تفضل', time:'الأمس ٩:١٠ ص'},
+     {me:false, txt:'هل تقدر تشمل نظام صلاحيات متعدد المستويات؟', time:'الأمس ٩:١٥ ص'},
+     {me:true,  txt:'نعم بالتأكيد، هذا من تخصصي. سأضمن Role-Based Access Control كامل', time:'الأمس ٩:١٨ ص'},
+     {me:false, txt:'تمام، شكراً على التوضيح 👍', time:'الأمس ٩:٢٠ ص'},
+   ]},
+  {id:2, name:'منى القحطاني', av:'م', grad:'linear-gradient(135deg,#43e97b,#38f9d7)', online:true, reqId:3,
+   refTitle:'محاضر Excel متقدم لتدريب فريق', refSub:'الميزانية: ١٢٠٠ ريال · مفتوح',
+   msgs:[
+     {me:false, txt:'أهلاً، رأيت عرضك على الطلب', time:'الأمس ١١:٠٠ ص'},
+     {me:true,  txt:'أهلاً! نعم، عندي خبرة ٧ سنوات في Excel ومؤهل تدريبي', time:'الأمس ١١:٠٥ ص'},
+     {me:false, txt:'الفريق ١٢ شخص، هل مشكلة؟', time:'الأمس ١١:١٠ ص'},
+     {me:true,  txt:'لا إطلاقاً، معتاد على مجموعات أكبر', time:'الأمس ١١:١٢ ص'},
+     {me:false, txt:'هل تقدر تحضر يوم الثلاثاء؟', time:'الأمس ٤:٣٠ م'},
+   ]},
+  {id:3, name:'عبدالرحمن الحربي', av:'ع', grad:'linear-gradient(135deg,#667eea,#764ba2)', online:false, reqId:4,
+   refTitle:'كاتب محتوى تقني للنشر الأسبوعي', refSub:'الميزانية: ٤٠٠ ريال/مقال · مستمر',
+   msgs:[
+     {me:false, txt:'هل لديك أمثلة على مقالات AI كتبتها؟', time:'الأحد ٢:٠٠ م'},
+     {me:true,  txt:'نعم، سأشارك معك ٣ مقالات من بلوغ التقني', time:'الأحد ٢:٠٥ م'},
+     {me:false, txt:'ممتاز، ننتظرك', time:'الأحد ٢:١٠ م'},
+     {me:true,  txt:'سأرسل لك المقال الأول غداً', time:'الأحد ٣:٠٠ م'},
+   ]},
+  {id:4, name:'فيصل الدوسري', av:'ف', grad:'linear-gradient(135deg,#f7971e,#ffd200)', online:false, reqId:2,
+   refTitle:'سباك عاجل — تسرب مياه في الحمام', refSub:'الميزانية: ٣٠٠–٦٠٠ ريال · مكتمل',
+   msgs:[
+     {me:false, txt:'أحتاج سباك الآن، في تسرب في الحمام!', time:'السبت ٨:٠٠ ص'},
+     {me:true,  txt:'أنا في الطريق، وصل خلال ٣٠ دقيقة', time:'السبت ٨:٠٥ ص'},
+     {me:false, txt:'شكراً، أنتظرك', time:'السبت ٨:٠٦ ص'},
+     {me:true,  txt:'وصلت، أين الحمام؟', time:'السبت ٨:٣٥ ص'},
+     {me:false, txt:'تم الإصلاح، شكراً جزيلاً ✅', time:'السبت ١٠:٠٠ ص'},
+   ]},
+  {id:5, name:'ليلى العنزي', av:'ل', grad:'linear-gradient(135deg,#ff9a9e,#fecfef)', online:false, reqId:5,
+   refTitle:'مدرّس رياضيات للمرحلة المتوسطة', refSub:'الميزانية: ١٠٠–١٥٠ ريال/ساعة · مفتوح',
+   msgs:[
+     {me:false, txt:'ابني في الصف الثاني متوسط، عنده ضعف في الجبر', time:'الجمعة ١:٠٠ م'},
+     {me:true,  txt:'لا مشكلة، الجبر تخصصي. نبدأ بتشخيص مستواه أول جلسة', time:'الجمعة ١:٠٥ م'},
+     {me:false, txt:'ممتاز، كم جلسة تحتاج لتحسين مستواه؟', time:'الجمعة ١:١٠ م'},
+     {me:true,  txt:'عادةً ٤–٦ جلسات تكفي لإتقان الأساسيات', time:'الجمعة ١:١٥ م'},
+     {me:true,  txt:'هل يناسبك السبت الساعة ٥ مساءً؟', time:'الجمعة ٢:٠٠ م'},
+   ]},
+];
+
+var currentConvIdx = 0;
+
+window.goMessages = function(){
+  showPage('messages');
+  document.getElementById('convList').style.display = 'block';
+  document.getElementById('chatView').style.display = 'none';
+  document.getElementById('mNavTitle').textContent = 'الرسائل';
+  document.getElementById('mNavBack').onclick = goHome;
+};
+
+window.msgsBack = function(){
+  var cv = document.getElementById('chatView');
+  var cl = document.getElementById('convList');
+  if(cv.style.display !== 'none'){
+    cv.style.display = 'none';
+    cl.style.display = 'block';
+    document.getElementById('mNavTitle').textContent = 'الرسائل';
+    document.getElementById('mNavBack').onclick = goHome;
+  } else {
+    goHome();
+  }
+};
+
+window.openChat = function(idx){
+  currentConvIdx = idx;
+  var c = CONVS[idx];
+  // remove badge
+  var item = document.querySelector('[data-idx="'+idx+'"]');
+  if(item){ var b=item.querySelector('.conv-badge'); if(b)b.remove(); var p=item.querySelector('.conv-preview'); if(p)p.classList.remove('unread-txt'); }
+  // header
+  var avEl = document.getElementById('chAv');
+  avEl.style.background = c.grad;
+  avEl.innerHTML = c.av + (c.online ? '<div class="ch-av-dot"></div>' : '');
+  document.getElementById('chName').textContent = c.name;
+  document.getElementById('chStat').textContent = c.online ? 'متصل الآن' : 'غير متصل';
+  document.getElementById('chStat').style.color = c.online ? '#22c55e' : '#9ca3af';
+  document.getElementById('chRefT').textContent = c.refTitle;
+  document.getElementById('chRefS').textContent = c.refSub;
+  document.getElementById('chProfBtn').onclick = function(){ goProfile(c.reqId); };
+  // messages
+  var body = document.getElementById('chBody');
+  body.innerHTML = '<div class="day-lbl">اليوم</div>';
+  c.msgs.forEach(function(m){
+    var d = document.createElement('div');
+    d.className = 'bbl ' + (m.me ? 'me' : 'them');
+    d.innerHTML = '<div class="bbl-txt">'+m.txt+'</div><div class="bbl-meta">'+m.time+(m.me?' <span style="color:#93c5fd">✓✓</span>':'')+'</div>';
+    body.appendChild(d);
+  });
+  body.scrollTop = body.scrollHeight;
+  // show chat
+  document.getElementById('convList').style.display = 'none';
+  document.getElementById('chatView').style.display = 'block';
+  document.getElementById('mNavTitle').textContent = c.name;
+  document.getElementById('mNavBack').onclick = function(){ msgsBack(); };
+  document.getElementById('chIn').value = '';
+  document.getElementById('chIn').style.height = 'auto';
+};
+
+window.sendChatMsg = function(){
+  var inp = document.getElementById('chIn');
+  var txt = inp.value.trim();
+  if(!txt) return;
+  var c = CONVS[currentConvIdx];
+  var now = new Date();
+  var time = now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  var body = document.getElementById('chBody');
+  var d = document.createElement('div');
+  d.className = 'bbl me';
+  d.innerHTML = '<div class="bbl-txt">'+txt+'</div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
+  body.appendChild(d);
+  inp.value = ''; inp.style.height = 'auto';
+  body.scrollTop = body.scrollHeight;
+  c.msgs.push({me:true, txt:txt, time:time});
+  // auto reply after 1.2s
+  setTimeout(function(){
+    var replies = ['شكراً على ردك 😊','حسناً، سأتواصل معك قريباً','تمام، في انتظارك','ممتاز! نكمل الحديث لاحقاً'];
+    var rep = replies[Math.floor(Math.random()*replies.length)];
+    var rd = document.createElement('div');
+    rd.className = 'bbl them';
+    rd.innerHTML = '<div class="bbl-txt">'+rep+'</div><div class="bbl-meta">'+time+'</div>';
+    body.appendChild(rd);
+    body.scrollTop = body.scrollHeight;
+    c.msgs.push({me:false, txt:rep, time:time});
+  }, 1200);
+};
+
+window.filterConvs = function(q){
+  var items = document.querySelectorAll('#convItems .conv-item');
+  items.forEach(function(item){
+    var name = item.querySelector('.conv-name').textContent.toLowerCase();
+    var tag = item.querySelector('.conv-tag').textContent.toLowerCase();
+    item.style.display = (name.indexOf(q.toLowerCase())>-1 || tag.indexOf(q.toLowerCase())>-1) ? 'flex' : 'none';
+  });
+};
+
+// ربط زر الرسائل في النافبار
+document.getElementById('si-msgs').onclick = function(){
+  if(!state.loggedIn){openAuth('login');return;}
+  goMessages();
+};
+
+/* ===== NOTIFICATIONS LOGIC ===== */
+var NOTIFS = [
+  {id:0, type:'offer', unread:true, icon:'💼', iconBg:'#eff6ff', text:'<b>محمد السهلي</b> قدّم عرضاً على طلبك «أحتاج مطور React»', time:'منذ ٥ دقائق', tab:'offers', action:true, actionLabel:'عرض العرض'},
+  {id:1, type:'offer', unread:true, icon:'💼', iconBg:'#eff6ff', text:'<b>سارة العمري</b> قدّمت عرضاً على طلبك «أحتاج مطور React»', time:'منذ ١٢ دقيقة', tab:'offers', action:true, actionLabel:'عرض العرض'},
+  {id:2, type:'msgs', unread:true, icon:'💬', iconBg:'#f0fdf4', text:'<b>نورة السبيعي</b> أرسلت لك رسالة جديدة', time:'منذ ٢٠ دقيقة', tab:'msgs', action:false},
+  {id:3, type:'offer', unread:false, icon:'⭐', iconBg:'#fefce8', text:'<b>أحمد الزهراني</b> قيّمك بـ ٥ نجوم على مشروع لوحة البيانات', time:'منذ ساعة', tab:'offers', action:false},
+  {id:4, type:'msgs', unread:false, icon:'💬', iconBg:'#f0fdf4', text:'<b>منى القحطاني</b> ردّت على رسالتك', time:'منذ ساعتين', tab:'msgs', action:false},
+  {id:5, type:'system', unread:false, icon:'✅', iconBg:'#f0fdf4', text:'تم <b>قبول طلبك</b> «تصميم هوية بصرية» بنجاح', time:'منذ ٣ ساعات', tab:'system', action:false},
+  {id:6, type:'offer', unread:false, icon:'🙋', iconBg:'#eff6ff', text:'طلبك «سباك عاجل» حصل على <b>عرضين جدد</b>', time:'أمس', tab:'offers', action:true, actionLabel:'رؤية العروض'},
+  {id:7, type:'system', unread:false, icon:'🎉', iconBg:'#fdf4ff', text:'مبروك! أكملت <b>١٠ صفقات</b> على علاقات', time:'أمس', tab:'system', action:false},
+  {id:8, type:'msgs', unread:false, icon:'💬', iconBg:'#f0fdf4', text:'<b>فيصل الدوسري</b> أرسل لك رسالة', time:'منذ يومين', tab:'msgs', action:false},
+  {id:9, type:'system', unread:false, icon:'🔔', iconBg:'#f4f6fb', text:'تم تفعيل حسابك على <b>علاقات</b> بنجاح', time:'منذ أسبوع', tab:'system', action:false},
+];
+
+var currentNTab = 'all';
+
+function renderNotifs(tab){
+  currentNTab = tab;
+  var list = tab === 'all' ? NOTIFS : NOTIFS.filter(function(n){ return n.tab === tab; });
+  var el = document.getElementById('nList');
+  if(!list.length){
+    el.innerHTML = '<div class="n-empty"><div class="n-empty-icon">🔔</div><div>لا توجد إشعارات</div></div>';
+    return;
+  }
+  // split today vs older
+  var todayItems = list.filter(function(n){ return n.time.indexOf('دقيقة')>-1||n.time.indexOf('ساعة')>-1||n.time.indexOf('ساعتين')>-1||n.time.indexOf('٣ ساعات')>-1; });
+  var olderItems = list.filter(function(n){ return todayItems.indexOf(n)<0; });
+  var html = '';
+  if(todayItems.length){
+    html += '<div class="n-section">اليوم</div>';
+    todayItems.forEach(function(n){ html += makeNotif(n); });
+  }
+  if(olderItems.length){
+    html += '<div class="n-section">سابقاً</div>';
+    olderItems.forEach(function(n){ html += makeNotif(n); });
+  }
+  el.innerHTML = html;
+}
+
+function makeNotif(n){
+  return '<div class="n-item'+(n.unread?' unread':'')+'" id="nitem'+n.id+'" onclick="readNotif('+n.id+')">'
+    +'<div class="n-icon-wrap" style="background:'+n.iconBg+'">'+n.icon+'</div>'
+    +'<div class="n-body">'
+      +'<div class="n-text">'+n.text+'</div>'
+      +'<div class="n-time">'+n.time+'</div>'
+      +(n.action ? '<div class="n-action"><button class="n-btn-yes" onclick="event.stopPropagation();hToast(\'جاري الفتح...\')">'+n.actionLabel+'</button></div>' : '')
+    +'</div>'
+  +'</div>';
+}
+
+window.readNotif = function(id){
+  var n = NOTIFS.find(function(x){ return x.id===id; });
+  if(n) n.unread = false;
+  var el = document.getElementById('nitem'+id);
+  if(el) el.classList.remove('unread');
+  updateNotifBadge();
+};
+
+window.markAllRead = function(){
+  NOTIFS.forEach(function(n){ n.unread=false; });
+  renderNotifs(currentNTab);
+  updateNotifBadge();
+  hToast('✓ تم تحديد الكل كمقروء');
+};
+
+window.switchNTab = function(el, tab){
+  document.querySelectorAll('.n-tab').forEach(function(t){ t.classList.remove('on'); });
+  el.classList.add('on');
+  renderNotifs(tab);
+};
+
+function updateNotifBadge(){
+  var count = NOTIFS.filter(function(n){ return n.unread; }).length;
+  var badge = document.querySelector('#si-notif .si-b');
+  if(badge) badge.textContent = count || '';
+  if(badge && !count) badge.style.display = 'none';
+}
+
+window.goNotifs = function(){
+  showPage('notifs');
+  renderNotifs('all');
+};
+
+// ربط زر الإشعارات في السايدبار
+document.getElementById('si-notif').onclick = function(){
+  if(!state.loggedIn){ openAuth('login'); return; }
+  goNotifs();
+};
+
+})();
+</script>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// =====================
+// إعداد Supabase
+// =====================
+const SUPA_URL = 'https://ohkgmzwpzijxcttqytrq.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oa2dtendwemlqeGN0dHF5dHJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNzA1ODgsImV4cCI6MjA5Njc0NjU4OH0.Qx2paUh-d7LTTHFSljt7cnoenOdzOdcno9PGobtRb_g';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// =====================
+// AUTH — تسجيل دخول / إنشاء حساب / خروج
+// =====================
+async function sbRegister(email, password, fullName, username) {
+  const { data, error } = await sb.auth.signUp({
+    email, password,
+    options: { data: { full_name: fullName, username } }
+  });
+  return { data, error };
+}
+
+async function sbLogin(email, password) {
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  return { data, error };
+}
+
+async function sbLogout() {
+  await sb.auth.signOut();
+}
+
+async function sbGetUser() {
+  const { data: { user } } = await sb.auth.getUser();
+  return user;
+}
+
+// =====================
+// REQUESTS — الطلبات
+// =====================
+async function sbGetRequests(filters = {}) {
+  let query = sb.from('requests')
+    .select('*, profiles(full_name, username, avatar_color, avatar_letter, rating)')
+    .eq('status', 'open')
+    .order('created_at', { ascending: false });
+
+  if (filters.category) query = query.eq('category', filters.category);
+  if (filters.urgent)   query = query.eq('is_urgent', true);
+  if (filters.search)   query = query.ilike('title', '%' + filters.search + '%');
+
+  const { data, error } = await query.limit(50);
+  return { data, error };
+}
+
+async function sbCreateRequest(req) {
+  const user = await sbGetUser();
+  if (!user) return { error: 'غير مسجل' };
+  const { data, error } = await sb.from('requests').insert({
+    user_id: user.id,
+    title: req.title,
+    description: req.description,
+    category: req.category,
+    budget_text: req.budget,
+    duration: req.duration,
+    work_type: req.workType,
+    is_urgent: req.urgent || false
+  }).select().single();
+  return { data, error };
+}
+
+// =====================
+// OFFERS — العروض
+// =====================
+async function sbCreateOffer(requestId, text, price, duration) {
+  const user = await sbGetUser();
+  if (!user) return { error: 'غير مسجل' };
+  const { data, error } = await sb.from('offers').insert({
+    request_id: requestId,
+    provider_id: user.id,
+    offer_text: text,
+    price: price,
+    duration: duration
+  }).select().single();
+  return { data, error };
+}
+
+// =====================
+// SAVED — المحفوظات
+// =====================
+async function sbToggleSave(requestId) {
+  const user = await sbGetUser();
+  if (!user) return { error: 'غير مسجل' };
+  const { data: existing } = await sb.from('saved_requests')
+    .select('id').eq('user_id', user.id).eq('request_id', requestId).single();
+  if (existing) {
+    await sb.from('saved_requests').delete().eq('id', existing.id);
+    return { saved: false };
+  } else {
+    await sb.from('saved_requests').insert({ user_id: user.id, request_id: requestId });
+    return { saved: true };
+  }
+}
+
+async function sbGetSaved() {
+  const user = await sbGetUser();
+  if (!user) return { data: [] };
+  const { data } = await sb.from('saved_requests')
+    .select('request_id').eq('user_id', user.id);
+  return { data: (data || []).map(x => x.request_id) };
+}
+
+// =====================
+// MESSAGES — الرسائل
+// =====================
+async function sbGetConversations() {
+  const user = await sbGetUser();
+  if (!user) return { data: [] };
+  const { data } = await sb.from('messages')
+    .select('*, sender:profiles!sender_id(full_name,avatar_letter,avatar_color), receiver:profiles!receiver_id(full_name,avatar_letter,avatar_color)')
+    .or('sender_id.eq.' + user.id + ',receiver_id.eq.' + user.id)
+    .order('created_at', { ascending: false });
+  return { data: data || [] };
+}
+
+async function sbSendMessage(receiverId, content, requestId) {
+  const user = await sbGetUser();
+  if (!user) return { error: 'غير مسجل' };
+  const { data, error } = await sb.from('messages').insert({
+    sender_id: user.id,
+    receiver_id: receiverId,
+    content,
+    request_id: requestId || null
+  }).select().single();
+  return { data, error };
+}
+
+// =====================
+// NOTIFICATIONS — الإشعارات
+// =====================
+async function sbGetNotifications() {
+  const user = await sbGetUser();
+  if (!user) return { data: [] };
+  const { data } = await sb.from('notifications')
+    .select('*').eq('user_id', user.id)
+    .order('created_at', { ascending: false });
+  return { data: data || [] };
+}
+
+async function sbMarkNotifsRead() {
+  const user = await sbGetUser();
+  if (!user) return;
+  await sb.from('notifications').update({ is_read: true }).eq('user_id', user.id);
+}
+
+// =====================
+// REALTIME — رسائل فورية
+// =====================
+function sbListenMessages(userId, callback) {
+  return sb.channel('messages_' + userId)
+    .on('postgres_changes', {
+      event: 'INSERT', schema: 'public', table: 'messages',
+      filter: 'receiver_id=eq.' + userId
+    }, callback)
+    .subscribe();
+}
+
+// =====================
+// تحقق من الجلسة عند فتح الصفحة
+// =====================
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'SIGNED_IN' && session) {
+    // تحديث واجهة المستخدم
+    const profile = session.user.user_metadata;
+    const letter = profile.full_name ? profile.full_name[0] : 'م';
+    document.querySelectorAll('.nav-av, #userAvatar').forEach(el => el.textContent = letter);
+    console.log('✅ مسجل دخول:', session.user.email);
+  } else if (event === 'SIGNED_OUT') {
+    console.log('👋 خروج');
+  }
+});
+
+console.log('✅ Supabase متصل بنجاح');
+</script>
+
+</body>
+</html>
