@@ -903,7 +903,7 @@ document.getElementById('submitReq').onclick=async function(){
 document.getElementById('submitOffer').onclick=function(){var txt=document.getElementById('offerText').value.trim();var price=document.getElementById('offerPrice').value.trim();if(!txt||!price){hToast('⚠️ أكمل العرض والسعر');return;}var r=reqs.find(function(x){return x.id===state.currentOfferId;});if(r)r.offers++;document.getElementById('offerModal').classList.remove('open');renderFeed();hToast('✓ تم إرسال عرضك!');};
 function hToast(msg){var t=document.createElement('div');t.textContent=msg;Object.assign(t.style,{position:'fixed',bottom:'30px',left:'50%',transform:'translateX(-50%) translateY(8px)',background:'var(--s2)',border:'1px solid var(--b)',color:'var(--t)',padding:'10px 22px',borderRadius:'11px',fontSize:'.83rem',zIndex:'9999',opacity:'0',transition:'all .22s',boxShadow:'0 8px 28px rgba(0,0,0,.5)',whiteSpace:'nowrap'});document.body.appendChild(t);requestAnimationFrame(function(){t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';});setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove();},250);},2500);}
 window.hToast = hToast;
-renderFeed();
+document.addEventListener('DOMContentLoaded', function(){ renderFeed(); });
 
 /* ===== PROFILE LOGIC ===== */
 window.switchPTab = function(el,id){document.querySelectorAll('.ptab').forEach(function(t){t.classList.remove('on');});el.classList.add('on');document.getElementById('p-offers').style.display=id==='offers'?'block':'none';document.getElementById('p-requests').style.display=id==='requests'?'block':'none';};
@@ -978,5 +978,4 @@ var CONVS = [
    refTitle:'مدرّس رياضيات للمرحلة المتوسطة', refSub:'الميزانية: ١٠٠–١٥٠ ريال/ساعة · مفتوح',
    msgs:[
      {me:false, txt:'ابني في الصف الثاني متوسط، عنده ضعف في الجبر', time:'الجمعة ١:٠٠ م'},
-     {me:true,  txt:'لا مشكلة، الجبر تخصصي. نبدأ بتشخيص مستواه أول جلسة', time:'الجمعة ١:٠٥ م'},
-     {me:false, txt:'ممتاز، كم ج
+     {me:true,  txt:'لا مشكلة، الجبر تخصصي. نبدأ بتشخيص مستواه أول 
