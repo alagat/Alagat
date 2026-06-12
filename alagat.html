@@ -331,6 +331,10 @@ textarea.fi{resize:vertical;min-height:68px}
       <div class="ftab" data-tab="nearby">قريب مني</div>
     </div>
     <div class="filters-row">
+      <div style="display:flex;align-items:center;gap:7px;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:6px 11px;width:100%;margin-bottom:6px">
+        <span style="color:var(--t3);font-size:.85rem">🔍</span>
+        <input type="text" placeholder="ابحث في الطلبات..." id="searchInput" style="flex:1;background:none;border:none;outline:none;color:var(--t);font-family:inherit;font-size:.82rem" oninput="state.search=this.value;renderFeed()">
+      </div>
       <button class="fc on" data-cat="all">الكل</button>
       <button class="fc" data-cat="برمجة">برمجة</button>
       <button class="fc" data-cat="تصميم">تصميم</button>
@@ -345,7 +349,7 @@ textarea.fi{resize:vertical;min-height:68px}
     <div id="feedContent"></div>
   </main>
   <aside class="rpanel">
-    <div class="sr-box"><span style="color:var(--t3)">🔍</span><input type="text" placeholder="ابحث في الطلبات..." id="searchInput"></div>
+    <div class="sr-box"><span style="color:var(--t3)">🔍</span><input type="text" placeholder="ابحث في الطلبات..." id="searchInput2" oninput="state.search=this.value;renderFeed()"></div>
     <div class="pc">
       <div class="pt">🔥 الأكثر طلباً</div>
       <div class="hti"><span class="tr2">1</span><span class="tn">تطوير موقع</span><span class="tc">312</span></div>
@@ -390,8 +394,8 @@ textarea.fi{resize:vertical;min-height:68px}
   <div class="modal">
     <div style="text-align:center;margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 52" width="56" height="36" style="margin-bottom:6px"><defs><linearGradient id="mL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1144ff"/><stop offset="100%" stop-color="#00bbff"/></linearGradient><linearGradient id="mR" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0055ff"/><stop offset="100%" stop-color="#00eeff"/></linearGradient><filter id="mg"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="mb"><feGaussianBlur stdDeviation="3"/></filter><clipPath id="mCR"><rect x="40" y="0" width="40" height="52"/></clipPath></defs><rect x="4" y="7" width="38" height="36" rx="18" fill="none" stroke="#1155ff" stroke-width="9" filter="url(#mb)" opacity="0.5"/><rect x="38" y="7" width="38" height="36" rx="18" fill="none" stroke="#0088ff" stroke-width="9" filter="url(#mb)" opacity="0.5"/><rect x="38" y="7" width="38" height="36" rx="18" fill="none" stroke="url(#mR)" stroke-width="5.5" filter="url(#mg)"/><rect x="4" y="7" width="38" height="36" rx="18" fill="none" stroke="url(#mL)" stroke-width="5.5" filter="url(#mg)"/><rect x="38" y="7" width="38" height="36" rx="18" fill="none" stroke="url(#mR)" stroke-width="5.5" clip-path="url(#mCR)" filter="url(#mg)"/></svg><div style="font-size:1.25rem;font-weight:800;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent">علاقات</div></div>
     <div class="auth-tabs"><button class="at on" id="at-login">تسجيل الدخول</button><button class="at" id="at-register">إنشاء حساب</button><button class="at" id="at-provider">مزود خدمة</button></div>
-    <div id="f-login"><div class="fg"><label class="fgl">اسم المستخدم أو رقم الجوال</label><div class="prow"><input class="pcode" value="+966" readonly><input class="fi" type="text" placeholder="05xxxxxxxx أو @username" style="flex:1"></div></div><div class="fg"><label class="fgl">كلمة المرور</label><input class="fi" type="password" placeholder="••••••••"></div><div style="text-align:left;margin-bottom:12px"><span style="font-size:.74rem;color:var(--ac);cursor:pointer">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister">إنشاء حساب جديد</button></div>
-    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك"></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username"></div></div><div class="fg"><label class="fgl">رقم الجوال *</label><div class="prow"><input class="pcode" value="+966" readonly><input class="fi" type="tel" placeholder="05xxxxxxxx" style="flex:1"></div></div><div class="fg"><label class="fgl">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px">💰 الاثنين</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px">بالتسجيل توافق على <span style="color:var(--ac);cursor:pointer">شروط الاستخدام</span></p></div>
+    <div id="f-login"><div class="fg"><label class="fgl">البريد الإلكتروني</label><input class="fi" type="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl">كلمة المرور</label><input class="fi" type="password" placeholder="••••••••" id="loginPass"></div><div style="text-align:left;margin-bottom:12px"><span style="font-size:.74rem;color:var(--ac);cursor:pointer">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister">إنشاء حساب جديد</button></div>
+    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك"></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username"></div></div><div class="fg"><label class="fgl">البريد الإلكتروني *</label><input class="fi" type="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px">💰 الاثنين</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px">بالتسجيل توافق على <span style="color:var(--ac);cursor:pointer">شروط الاستخدام</span></p></div>
     <div id="f-provider" style="display:none"><div class="frow"><div class="fg"><label class="fgl">الاسم *</label><input class="fi" type="text" placeholder="اسمك"></div><div class="fg"><label class="fgl">الجوال *</label><div class="prow" style="gap:5px"><input class="pcode" value="+966" readonly style="width:58px"><input class="fi" type="tel" placeholder="05xxxxxxxx" style="flex:1"></div></div></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username"></div><div class="fg"><label class="fgl">مهاراتك *</label><div class="sk-grid"><div class="sko">💻 برمجة</div><div class="sko">🎨 تصميم</div><div class="sko">📱 تسويق</div><div class="sko">✍️ كتابة</div><div class="sko">📚 تدريس</div><div class="sko">⚡ كهرباء</div><div class="sko">🔧 صيانة</div><div class="sko">🚿 سباكة</div><div class="sko">📸 تصوير</div></div></div><div class="frow"><div class="fg"><label class="fgl">المدينة</label><select class="fi"><option>الرياض</option><option>جدة</option><option>الدمام</option><option>مكة</option><option>أخرى</option></select></div><div class="fg"><label class="fgl">نوع العمل</label><select class="fi"><option>عن بُعد</option><option>حضوري</option><option>كلاهما</option></select></div></div><div class="fg"><label class="fgl">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><button class="btn-p" style="width:100%;padding:11px;border-radius:10px" id="doProvider">انضم كمزود ←</button></div>
   </div>
 </div>
@@ -829,10 +833,8 @@ document.getElementById('at-login').onclick=function(){switchAuthTab('login');};
 document.getElementById('at-register').onclick=function(){switchAuthTab('register');};
 document.getElementById('at-provider').onclick=function(){switchAuthTab('provider');};
 document.getElementById('doLogin').onclick=async function(){
-  var emailEl = document.querySelector('#f-login input[type="text"]');
-  var passEl  = document.querySelector('#f-login input[type="password"]');
-  var email   = emailEl ? emailEl.value.trim() : '';
-  var pass    = passEl  ? passEl.value.trim()  : '';
+  var email = document.getElementById('loginEmail') ? document.getElementById('loginEmail').value.trim() : '';
+  var pass  = document.getElementById('loginPass')  ? document.getElementById('loginPass').value.trim()  : '';
   if(!email||!pass){ hToast('⚠️ أدخل البريد وكلمة المرور'); return; }
   hToast('جاري تسجيل الدخول...');
   var result = await sbLogin(email, pass);
@@ -843,13 +845,14 @@ document.getElementById('doLogin').onclick=async function(){
 document.getElementById('doRegister').onclick=async function(){
   var nameEl  = document.querySelector('#f-register input[placeholder="اسمك"]');
   var userEl  = document.querySelector('#f-register input[placeholder="@username"]');
-  var emailEl = document.querySelector('#f-register input[type="tel"]');
+  var emailEl = document.getElementById('regEmail');
   var passEl  = document.querySelector('#f-register input[type="password"]');
   var name    = nameEl  ? nameEl.value.trim()  : '';
   var username= userEl  ? userEl.value.trim()  : '';
   var email   = emailEl ? emailEl.value.trim() : '';
   var pass    = passEl  ? passEl.value.trim()  : '';
   if(!name||!email||!pass){ hToast('⚠️ أكمل البيانات المطلوبة'); return; }
+  if(!email.includes('@')){ hToast('⚠️ أدخل بريد إلكتروني صحيح'); return; }
   hToast('جاري إنشاء الحساب...');
   var result = await sbRegister(email, pass, name, username);
   if(result.error){ hToast('❌ ' + result.error.message); return; }
@@ -875,8 +878,8 @@ document.querySelectorAll('.fbtn').forEach(function(b){b.onclick=function(){this
 document.querySelectorAll('.ftab').forEach(function(t){t.onclick=function(){document.querySelectorAll('.ftab').forEach(function(x){x.classList.remove('on');});t.classList.add('on');state.activeTab=t.getAttribute('data-tab');renderFeed();};});
 document.querySelectorAll('.fc').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fc').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.activeFilter=b.getAttribute('data-cat');renderFeed();};});
 document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});si.classList.add('on');var cat=si.getAttribute('data-cat');state.activeFilter=cat;document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')===cat);});renderFeed();};});
-document.getElementById('searchInput').oninput=function(){state.search=this.value;renderFeed();};
-document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.search='';document.getElementById('searchInput').value='';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();};
+// search handled inline on input
+document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.search='';var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();};
 document.getElementById('si-saved').onclick=function(){if(!state.loggedIn){openAuth('login');return;}document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');if(!state.saved.length){hToast('لا توجد طلبات محفوظة بعد');return;}var savedList=reqs.filter(function(r){return state.saved.indexOf(r.id)>-1;});var html='';savedList.forEach(function(r){html+=makeCard(r);});html+='<div style="margin:10px 14px"><button class="btn-g" style="width:100%;padding:9px;border-radius:9px" id="backToFeed">← العودة</button></div>';document.getElementById('feedContent').innerHTML='<div id="cardsContainer">'+html+'</div>';bindCardEvents();document.getElementById('backToFeed').onclick=renderFeed;};
 ['si-discover','si-notif','si-msgs','si-myreqs'].forEach(function(id){var el=document.getElementById(id);if(el)el.onclick=function(){if(!state.loggedIn){openAuth('login');return;}hToast('هذا القسم سيكون متاحاً قريباً');};});
 document.getElementById('submitReq').onclick=async function(){
@@ -976,386 +979,4 @@ var CONVS = [
    msgs:[
      {me:false, txt:'ابني في الصف الثاني متوسط، عنده ضعف في الجبر', time:'الجمعة ١:٠٠ م'},
      {me:true,  txt:'لا مشكلة، الجبر تخصصي. نبدأ بتشخيص مستواه أول جلسة', time:'الجمعة ١:٠٥ م'},
-     {me:false, txt:'ممتاز، كم جلسة تحتاج لتحسين مستواه؟', time:'الجمعة ١:١٠ م'},
-     {me:true,  txt:'عادةً ٤–٦ جلسات تكفي لإتقان الأساسيات', time:'الجمعة ١:١٥ م'},
-     {me:true,  txt:'هل يناسبك السبت الساعة ٥ مساءً؟', time:'الجمعة ٢:٠٠ م'},
-   ]},
-];
-
-var currentConvIdx = 0;
-
-window.goMessages = function(){
-  showPage('messages');
-  document.getElementById('convList').style.display = 'block';
-  document.getElementById('chatView').style.display = 'none';
-  document.getElementById('mNavTitle').textContent = 'الرسائل';
-  document.getElementById('mNavBack').onclick = goHome;
-};
-
-window.msgsBack = function(){
-  var cv = document.getElementById('chatView');
-  var cl = document.getElementById('convList');
-  if(cv.style.display !== 'none'){
-    cv.style.display = 'none';
-    cl.style.display = 'block';
-    document.getElementById('mNavTitle').textContent = 'الرسائل';
-    document.getElementById('mNavBack').onclick = goHome;
-  } else {
-    goHome();
-  }
-};
-
-window.openChat = function(idx){
-  currentConvIdx = idx;
-  var c = CONVS[idx];
-  // remove badge
-  var item = document.querySelector('[data-idx="'+idx+'"]');
-  if(item){ var b=item.querySelector('.conv-badge'); if(b)b.remove(); var p=item.querySelector('.conv-preview'); if(p)p.classList.remove('unread-txt'); }
-  // header
-  var avEl = document.getElementById('chAv');
-  avEl.style.background = c.grad;
-  avEl.innerHTML = c.av + (c.online ? '<div class="ch-av-dot"></div>' : '');
-  document.getElementById('chName').textContent = c.name;
-  document.getElementById('chStat').textContent = c.online ? 'متصل الآن' : 'غير متصل';
-  document.getElementById('chStat').style.color = c.online ? '#22c55e' : '#9ca3af';
-  document.getElementById('chRefT').textContent = c.refTitle;
-  document.getElementById('chRefS').textContent = c.refSub;
-  document.getElementById('chProfBtn').onclick = function(){ goProfile(c.reqId); };
-  // messages
-  var body = document.getElementById('chBody');
-  body.innerHTML = '<div class="day-lbl">اليوم</div>';
-  c.msgs.forEach(function(m){
-    var d = document.createElement('div');
-    d.className = 'bbl ' + (m.me ? 'me' : 'them');
-    d.innerHTML = '<div class="bbl-txt">'+m.txt+'</div><div class="bbl-meta">'+m.time+(m.me?' <span style="color:#93c5fd">✓✓</span>':'')+'</div>';
-    body.appendChild(d);
-  });
-  body.scrollTop = body.scrollHeight;
-  // show chat
-  document.getElementById('convList').style.display = 'none';
-  document.getElementById('chatView').style.display = 'block';
-  document.getElementById('mNavTitle').textContent = c.name;
-  document.getElementById('mNavBack').onclick = function(){ msgsBack(); };
-  document.getElementById('chIn').value = '';
-  document.getElementById('chIn').style.height = 'auto';
-};
-
-window.sendChatMsg = function(){
-  var inp = document.getElementById('chIn');
-  var txt = inp.value.trim();
-  if(!txt) return;
-  var c = CONVS[currentConvIdx];
-  var now = new Date();
-  var time = now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
-  var body = document.getElementById('chBody');
-  var d = document.createElement('div');
-  d.className = 'bbl me';
-  d.innerHTML = '<div class="bbl-txt">'+txt+'</div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
-  body.appendChild(d);
-  inp.value = ''; inp.style.height = 'auto';
-  body.scrollTop = body.scrollHeight;
-  c.msgs.push({me:true, txt:txt, time:time});
-  // auto reply after 1.2s
-  setTimeout(function(){
-    var replies = ['شكراً على ردك 😊','حسناً، سأتواصل معك قريباً','تمام، في انتظارك','ممتاز! نكمل الحديث لاحقاً'];
-    var rep = replies[Math.floor(Math.random()*replies.length)];
-    var rd = document.createElement('div');
-    rd.className = 'bbl them';
-    rd.innerHTML = '<div class="bbl-txt">'+rep+'</div><div class="bbl-meta">'+time+'</div>';
-    body.appendChild(rd);
-    body.scrollTop = body.scrollHeight;
-    c.msgs.push({me:false, txt:rep, time:time});
-  }, 1200);
-};
-
-window.filterConvs = function(q){
-  var items = document.querySelectorAll('#convItems .conv-item');
-  items.forEach(function(item){
-    var name = item.querySelector('.conv-name').textContent.toLowerCase();
-    var tag = item.querySelector('.conv-tag').textContent.toLowerCase();
-    item.style.display = (name.indexOf(q.toLowerCase())>-1 || tag.indexOf(q.toLowerCase())>-1) ? 'flex' : 'none';
-  });
-};
-
-// ربط زر الرسائل في النافبار
-document.getElementById('si-msgs').onclick = function(){
-  if(!state.loggedIn){openAuth('login');return;}
-  goMessages();
-};
-
-/* ===== NOTIFICATIONS LOGIC ===== */
-var NOTIFS = [
-  {id:0, type:'offer', unread:true, icon:'💼', iconBg:'#eff6ff', text:'<b>محمد السهلي</b> قدّم عرضاً على طلبك «أحتاج مطور React»', time:'منذ ٥ دقائق', tab:'offers', action:true, actionLabel:'عرض العرض'},
-  {id:1, type:'offer', unread:true, icon:'💼', iconBg:'#eff6ff', text:'<b>سارة العمري</b> قدّمت عرضاً على طلبك «أحتاج مطور React»', time:'منذ ١٢ دقيقة', tab:'offers', action:true, actionLabel:'عرض العرض'},
-  {id:2, type:'msgs', unread:true, icon:'💬', iconBg:'#f0fdf4', text:'<b>نورة السبيعي</b> أرسلت لك رسالة جديدة', time:'منذ ٢٠ دقيقة', tab:'msgs', action:false},
-  {id:3, type:'offer', unread:false, icon:'⭐', iconBg:'#fefce8', text:'<b>أحمد الزهراني</b> قيّمك بـ ٥ نجوم على مشروع لوحة البيانات', time:'منذ ساعة', tab:'offers', action:false},
-  {id:4, type:'msgs', unread:false, icon:'💬', iconBg:'#f0fdf4', text:'<b>منى القحطاني</b> ردّت على رسالتك', time:'منذ ساعتين', tab:'msgs', action:false},
-  {id:5, type:'system', unread:false, icon:'✅', iconBg:'#f0fdf4', text:'تم <b>قبول طلبك</b> «تصميم هوية بصرية» بنجاح', time:'منذ ٣ ساعات', tab:'system', action:false},
-  {id:6, type:'offer', unread:false, icon:'🙋', iconBg:'#eff6ff', text:'طلبك «سباك عاجل» حصل على <b>عرضين جدد</b>', time:'أمس', tab:'offers', action:true, actionLabel:'رؤية العروض'},
-  {id:7, type:'system', unread:false, icon:'🎉', iconBg:'#fdf4ff', text:'مبروك! أكملت <b>١٠ صفقات</b> على علاقات', time:'أمس', tab:'system', action:false},
-  {id:8, type:'msgs', unread:false, icon:'💬', iconBg:'#f0fdf4', text:'<b>فيصل الدوسري</b> أرسل لك رسالة', time:'منذ يومين', tab:'msgs', action:false},
-  {id:9, type:'system', unread:false, icon:'🔔', iconBg:'#f4f6fb', text:'تم تفعيل حسابك على <b>علاقات</b> بنجاح', time:'منذ أسبوع', tab:'system', action:false},
-];
-
-var currentNTab = 'all';
-
-function renderNotifs(tab){
-  currentNTab = tab;
-  var list = tab === 'all' ? NOTIFS : NOTIFS.filter(function(n){ return n.tab === tab; });
-  var el = document.getElementById('nList');
-  if(!list.length){
-    el.innerHTML = '<div class="n-empty"><div class="n-empty-icon">🔔</div><div>لا توجد إشعارات</div></div>';
-    return;
-  }
-  // split today vs older
-  var todayItems = list.filter(function(n){ return n.time.indexOf('دقيقة')>-1||n.time.indexOf('ساعة')>-1||n.time.indexOf('ساعتين')>-1||n.time.indexOf('٣ ساعات')>-1; });
-  var olderItems = list.filter(function(n){ return todayItems.indexOf(n)<0; });
-  var html = '';
-  if(todayItems.length){
-    html += '<div class="n-section">اليوم</div>';
-    todayItems.forEach(function(n){ html += makeNotif(n); });
-  }
-  if(olderItems.length){
-    html += '<div class="n-section">سابقاً</div>';
-    olderItems.forEach(function(n){ html += makeNotif(n); });
-  }
-  el.innerHTML = html;
-}
-
-function makeNotif(n){
-  return '<div class="n-item'+(n.unread?' unread':'')+'" id="nitem'+n.id+'" onclick="readNotif('+n.id+')">'
-    +'<div class="n-icon-wrap" style="background:'+n.iconBg+'">'+n.icon+'</div>'
-    +'<div class="n-body">'
-      +'<div class="n-text">'+n.text+'</div>'
-      +'<div class="n-time">'+n.time+'</div>'
-      +(n.action ? '<div class="n-action"><button class="n-btn-yes" onclick="event.stopPropagation();hToast(\'جاري الفتح...\')">'+n.actionLabel+'</button></div>' : '')
-    +'</div>'
-  +'</div>';
-}
-
-window.readNotif = function(id){
-  var n = NOTIFS.find(function(x){ return x.id===id; });
-  if(n) n.unread = false;
-  var el = document.getElementById('nitem'+id);
-  if(el) el.classList.remove('unread');
-  updateNotifBadge();
-};
-
-window.markAllRead = function(){
-  NOTIFS.forEach(function(n){ n.unread=false; });
-  renderNotifs(currentNTab);
-  updateNotifBadge();
-  hToast('✓ تم تحديد الكل كمقروء');
-};
-
-window.switchNTab = function(el, tab){
-  document.querySelectorAll('.n-tab').forEach(function(t){ t.classList.remove('on'); });
-  el.classList.add('on');
-  renderNotifs(tab);
-};
-
-function updateNotifBadge(){
-  var count = NOTIFS.filter(function(n){ return n.unread; }).length;
-  var badge = document.querySelector('#si-notif .si-b');
-  if(badge) badge.textContent = count || '';
-  if(badge && !count) badge.style.display = 'none';
-}
-
-window.goNotifs = function(){
-  showPage('notifs');
-  renderNotifs('all');
-};
-
-// ربط زر الإشعارات في السايدبار
-document.getElementById('si-notif').onclick = function(){
-  if(!state.loggedIn){ openAuth('login'); return; }
-  goNotifs();
-};
-
-})();
-</script>
-
-<!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-// =====================
-// إعداد Supabase
-// =====================
-const SUPA_URL = 'https://ohkgmzwpzijxcttqytrq.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oa2dtendwemlqeGN0dHF5dHJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNzA1ODgsImV4cCI6MjA5Njc0NjU4OH0.Qx2paUh-d7LTTHFSljt7cnoenOdzOdcno9PGobtRb_g';
-const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
-
-// =====================
-// AUTH — تسجيل دخول / إنشاء حساب / خروج
-// =====================
-async function sbRegister(email, password, fullName, username) {
-  const { data, error } = await sb.auth.signUp({
-    email, password,
-    options: { data: { full_name: fullName, username } }
-  });
-  return { data, error };
-}
-
-async function sbLogin(email, password) {
-  const { data, error } = await sb.auth.signInWithPassword({ email, password });
-  return { data, error };
-}
-
-async function sbLogout() {
-  await sb.auth.signOut();
-}
-
-async function sbGetUser() {
-  const { data: { user } } = await sb.auth.getUser();
-  return user;
-}
-
-// =====================
-// REQUESTS — الطلبات
-// =====================
-async function sbGetRequests(filters = {}) {
-  let query = sb.from('requests')
-    .select('*, profiles(full_name, username, avatar_color, avatar_letter, rating)')
-    .eq('status', 'open')
-    .order('created_at', { ascending: false });
-
-  if (filters.category) query = query.eq('category', filters.category);
-  if (filters.urgent)   query = query.eq('is_urgent', true);
-  if (filters.search)   query = query.ilike('title', '%' + filters.search + '%');
-
-  const { data, error } = await query.limit(50);
-  return { data, error };
-}
-
-async function sbCreateRequest(req) {
-  const user = await sbGetUser();
-  if (!user) return { error: 'غير مسجل' };
-  const { data, error } = await sb.from('requests').insert({
-    user_id: user.id,
-    title: req.title,
-    description: req.description,
-    category: req.category,
-    budget_text: req.budget,
-    duration: req.duration,
-    work_type: req.workType,
-    is_urgent: req.urgent || false
-  }).select().single();
-  return { data, error };
-}
-
-// =====================
-// OFFERS — العروض
-// =====================
-async function sbCreateOffer(requestId, text, price, duration) {
-  const user = await sbGetUser();
-  if (!user) return { error: 'غير مسجل' };
-  const { data, error } = await sb.from('offers').insert({
-    request_id: requestId,
-    provider_id: user.id,
-    offer_text: text,
-    price: price,
-    duration: duration
-  }).select().single();
-  return { data, error };
-}
-
-// =====================
-// SAVED — المحفوظات
-// =====================
-async function sbToggleSave(requestId) {
-  const user = await sbGetUser();
-  if (!user) return { error: 'غير مسجل' };
-  const { data: existing } = await sb.from('saved_requests')
-    .select('id').eq('user_id', user.id).eq('request_id', requestId).single();
-  if (existing) {
-    await sb.from('saved_requests').delete().eq('id', existing.id);
-    return { saved: false };
-  } else {
-    await sb.from('saved_requests').insert({ user_id: user.id, request_id: requestId });
-    return { saved: true };
-  }
-}
-
-async function sbGetSaved() {
-  const user = await sbGetUser();
-  if (!user) return { data: [] };
-  const { data } = await sb.from('saved_requests')
-    .select('request_id').eq('user_id', user.id);
-  return { data: (data || []).map(x => x.request_id) };
-}
-
-// =====================
-// MESSAGES — الرسائل
-// =====================
-async function sbGetConversations() {
-  const user = await sbGetUser();
-  if (!user) return { data: [] };
-  const { data } = await sb.from('messages')
-    .select('*, sender:profiles!sender_id(full_name,avatar_letter,avatar_color), receiver:profiles!receiver_id(full_name,avatar_letter,avatar_color)')
-    .or('sender_id.eq.' + user.id + ',receiver_id.eq.' + user.id)
-    .order('created_at', { ascending: false });
-  return { data: data || [] };
-}
-
-async function sbSendMessage(receiverId, content, requestId) {
-  const user = await sbGetUser();
-  if (!user) return { error: 'غير مسجل' };
-  const { data, error } = await sb.from('messages').insert({
-    sender_id: user.id,
-    receiver_id: receiverId,
-    content,
-    request_id: requestId || null
-  }).select().single();
-  return { data, error };
-}
-
-// =====================
-// NOTIFICATIONS — الإشعارات
-// =====================
-async function sbGetNotifications() {
-  const user = await sbGetUser();
-  if (!user) return { data: [] };
-  const { data } = await sb.from('notifications')
-    .select('*').eq('user_id', user.id)
-    .order('created_at', { ascending: false });
-  return { data: data || [] };
-}
-
-async function sbMarkNotifsRead() {
-  const user = await sbGetUser();
-  if (!user) return;
-  await sb.from('notifications').update({ is_read: true }).eq('user_id', user.id);
-}
-
-// =====================
-// REALTIME — رسائل فورية
-// =====================
-function sbListenMessages(userId, callback) {
-  return sb.channel('messages_' + userId)
-    .on('postgres_changes', {
-      event: 'INSERT', schema: 'public', table: 'messages',
-      filter: 'receiver_id=eq.' + userId
-    }, callback)
-    .subscribe();
-}
-
-// =====================
-// تحقق من الجلسة عند فتح الصفحة
-// =====================
-sb.auth.onAuthStateChange(async (event, session) => {
-  if (event === 'SIGNED_IN' && session) {
-    // تحديث واجهة المستخدم
-    const profile = session.user.user_metadata;
-    const letter = profile.full_name ? profile.full_name[0] : 'م';
-    document.querySelectorAll('.nav-av, #userAvatar').forEach(el => el.textContent = letter);
-    console.log('✅ مسجل دخول:', session.user.email);
-  } else if (event === 'SIGNED_OUT') {
-    console.log('👋 خروج');
-  }
-});
-
-console.log('✅ Supabase متصل بنجاح');
-</script>
-
-</body>
-</html>
+     {me:false, txt:'ممتاز، كم ج
