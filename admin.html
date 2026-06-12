@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم علاقات</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPA_URL = 'https://ohkgmzwpzijxcttqytrq.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oa2dtendwemlqeGN0dHF5dHJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNzA1ODgsImV4cCI6MjA5Njc0NjU4OH0.Qx2paUh-d7LTTHFSljt7cnoenOdzOdcno9PGobtRb_g';
+const ADMIN_EMAIL = 'alagatsa.com@gmail.com';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#0a0d14;color:#e8ecf5;min-height:100vh}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#252d3d;border-radius:3px}
+
+/* LOGIN */
+#loginPage{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#0a0d14,#111827)}
+.login-box{background:#111318;border:1px solid #252d3d;border-radius:16px;padding:32px;width:360px;max-width:94vw;text-align:center}
+.login-logo{font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,#0066ff,#00aaff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.login-sub{font-size:.78rem;color:#4a5568;margin-bottom:24px}
+.lfi{width:100%;background:#181c24;border:1px solid #252d3d;border-radius:9px;padding:10px 14px;color:#e8ecf5;font-family:inherit;font-size:.88rem;margin-bottom:10px;outline:none;transition:.2s}
+.lfi:focus{border-color:#0066ff}
+.lbtn{width:100%;background:linear-gradient(135deg,#0066ff,#00aaff);color:#fff;border:none;border-radius:9px;padding:12px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;transition:.2s}
+.lbtn:hover{opacity:.9}
+.lerr{color:#ff4466;font-size:.78rem;margin-top:8px}
+
+/* DASHBOARD */
+#dashboard{display:none}
+nav{background:#111318;border-bottom:1px solid #252d3d;padding:0 20px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-brand{font-size:.95rem;font-weight:800;background:linear-gradient(135deg,#0066ff,#00aaff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-badge{background:rgba(255,68,102,.15);color:#ff4466;border:1px solid rgba(255,68,102,.2);font-size:.7rem;padding:3px 9px;border-radius:20px;font-weight:600}
+.logout-btn{background:none;border:1px solid #252d3d;color:#8896b0;padding:5px 12px;border-radius:7px;font-family:inherit;font-size:.75rem;cursor:pointer;transition:.15s}
+.logout-btn:hover{border-color:#ff4466;color:#ff4466}
+
+.page{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+@media(max-width:700px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:#111318;border:1px solid #252d3d;border-radius:12px;padding:16px;text-align:center}
+.stat-num{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,#0066ff,#00aaff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-num.g{background:linear-gradient(135deg,#00d4a0,#38ef7d);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-num.o{background:linear-gradient(135deg,#ffaa00,#ffd200);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-num.r{background:linear-gradient(135deg,#ff4466,#ff6b6b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-lbl{font-size:.72rem;color:#4a5568;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid #252d3d;margin-bottom:16px;gap:2px}
+.tab{padding:9px 16px;font-size:.83rem;font-weight:600;color:#4a5568;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.15s;white-space:nowrap}
+.tab:hover{color:#8896b0}
+.tab.on{color:#0066ff;border-bottom-color:#0066ff}
+
+/* TABLE */
+.tbl-wrap{background:#111318;border:1px solid #252d3d;border-radius:12px;overflow:hidden}
+.tbl-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #252d3d}
+.tbl-title{font-size:.82rem;font-weight:700;color:#8896b0;text-transform:uppercase;letter-spacing:.5px}
+.tbl-search{background:#181c24;border:1px solid #252d3d;border-radius:7px;padding:6px 12px;color:#e8ecf5;font-family:inherit;font-size:.79rem;outline:none;width:200px}
+.tbl-search:focus{border-color:#0066ff}
+table{width:100%;border-collapse:collapse}
+th{font-size:.72rem;color:#4a5568;text-transform:uppercase;letter-spacing:.5px;padding:10px 16px;text-align:right;border-bottom:1px solid #252d3d;white-space:nowrap}
+td{padding:12px 16px;font-size:.82rem;color:#8896b0;border-bottom:1px solid rgba(37,45,61,.5);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.td-name{color:#e8ecf5;font-weight:600}
+.td-email{color:#4a5568;font-size:.75rem}
+.badge{font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.badge.open{background:rgba(0,212,160,.1);color:#00d4a0;border:1px solid rgba(0,212,160,.2)}
+.badge.closed{background:rgba(74,85,104,.15);color:#4a5568;border:1px solid #252d3d}
+.badge.active{background:rgba(0,102,255,.1);color:#00aaff;border:1px solid rgba(0,102,255,.2)}
+.act-btn{background:none;border:1px solid #252d3d;color:#8896b0;padding:4px 10px;border-radius:6px;font-family:inherit;font-size:.72rem;cursor:pointer;transition:.15s;margin-left:4px}
+.act-btn:hover{border-color:#ff4466;color:#ff4466}
+.act-btn.view{border-color:rgba(0,102,255,.3);color:#0066ff}
+.act-btn.view:hover{background:rgba(0,102,255,.1)}
+.empty-row td{text-align:center;padding:32px;color:#4a5568}
+
+/* MSG CARD */
+.msg-card{background:#111318;border:1px solid #252d3d;border-radius:10px;padding:13px;margin-bottom:8px;transition:.15s}
+.msg-card:hover{border-color:rgba(0,102,255,.3)}
+.msg-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.msg-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0066ff,#00aaff);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;color:#fff;flex-shrink:0}
+.msg-meta{flex:1}
+.msg-names{font-size:.82rem;font-weight:600;color:#e8ecf5}
+.msg-time{font-size:.7rem;color:#4a5568}
+.msg-text{font-size:.82rem;color:#8896b0;line-height:1.55;padding:8px 10px;background:#181c24;border-radius:7px}
+.msg-unread{border-right:3px solid #0066ff}
+
+/* LOADING */
+.loading{text-align:center;padding:40px;color:#4a5568;font-size:.84rem}
+
+/* CONFIRM */
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.2s}
+.confirm-overlay.open{opacity:1;pointer-events:all}
+.confirm-box{background:#111318;border:1px solid #252d3d;border-radius:14px;padding:24px;width:320px;text-align:center}
+.confirm-title{font-size:1rem;font-weight:700;margin-bottom:8px}
+.confirm-sub{font-size:.82rem;color:#8896b0;margin-bottom:18px;line-height:1.5}
+.confirm-btns{display:flex;gap:8px}
+.cbtn{flex:1;padding:10px;border-radius:8px;font-family:inherit;font-size:.83rem;font-weight:600;cursor:pointer;border:none}
+.cbtn.cancel{background:#181c24;color:#8896b0;border:1px solid #252d3d}
+.cbtn.danger{background:linear-gradient(135deg,#ff4466,#ff6b6b);color:#fff}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage">
+  <div class="login-box">
+    <div class="login-logo">⚙️ علاقات</div>
+    <div class="login-sub">لوحة تحكم المالك</div>
+    <input class="lfi" type="email" id="adminEmail" placeholder="البريد الإلكتروني" value="alagatsa.com@gmail.com">
+    <input class="lfi" type="password" id="adminPass" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')adminLogin()">
+    <button class="lbtn" onclick="adminLogin()">دخول ←</button>
+    <div class="lerr" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+<nav>
+  <div class="nav-brand">⚙️ لوحة التحكم — علاقات</div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span class="nav-badge" id="onlineBadge">● يتحمل...</span>
+    <button class="logout-btn" onclick="adminLogout()">خروج</button>
+  </div>
+</nav>
+
+<div class="page">
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-num" id="sUsers">-</div><div class="stat-lbl">إجمالي الأعضاء</div></div>
+    <div class="stat-card"><div class="stat-num g" id="sRequests">-</div><div class="stat-lbl">إجمالي الطلبات</div></div>
+    <div class="stat-card"><div class="stat-num o" id="sOffers">-</div><div class="stat-lbl">إجمالي العروض</div></div>
+    <div class="stat-card"><div class="stat-num r" id="sMsgs">-</div><div class="stat-lbl">إجمالي الرسائل</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab on" onclick="switchTab(this,'users')">👥 الأعضاء</div>
+    <div class="tab" onclick="switchTab(this,'requests')">📋 الطلبات</div>
+    <div class="tab" onclick="switchTab(this,'messages')">💬 الرسائل</div>
+    <div class="tab" onclick="switchTab(this,'offers')">💼 العروض</div>
+  </div>
+
+  <!-- USERS -->
+  <div id="tab-users">
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <span class="tbl-title">قائمة الأعضاء</span>
+        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('usersBody',this.value)">
+      </div>
+      <table>
+        <thead><tr>
+          <th>الاسم</th><th>اسم المستخدم</th><th>تاريخ التسجيل</th><th>الصفقات</th><th>التقييم</th><th>إجراء</th>
+        </tr></thead>
+        <tbody id="usersBody"><tr><td colspan="6" class="loading">⏳ جاري التحميل...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- REQUESTS -->
+  <div id="tab-requests" style="display:none">
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <span class="tbl-title">قائمة الطلبات</span>
+        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('reqsBody',this.value)">
+      </div>
+      <table>
+        <thead><tr>
+          <th>العنوان</th><th>الفئة</th><th>الميزانية</th><th>العروض</th><th>الحالة</th><th>التاريخ</th><th>إجراء</th>
+        </tr></thead>
+        <tbody id="reqsBody"><tr><td colspan="7" class="loading">⏳ جاري التحميل...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MESSAGES -->
+  <div id="tab-messages" style="display:none">
+    <div class="tbl-wrap" style="padding:12px">
+      <div class="tbl-head" style="margin:-12px -12px 12px;border-radius:12px 12px 0 0">
+        <span class="tbl-title">الرسائل</span>
+        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterMsgs(this.value)">
+      </div>
+      <div id="msgsBody"><div class="loading">⏳ جاري التحميل...</div></div>
+    </div>
+  </div>
+
+  <!-- OFFERS -->
+  <div id="tab-offers" style="display:none">
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <span class="tbl-title">قائمة العروض</span>
+        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('offersBody',this.value)">
+      </div>
+      <table>
+        <thead><tr>
+          <th>العرض</th><th>السعر</th><th>المدة</th><th>الحالة</th><th>التاريخ</th><th>إجراء</th>
+        </tr></thead>
+        <tbody id="offersBody"><tr><td colspan="6" class="loading">⏳ جاري التحميل...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirmModal">
+  <div class="confirm-box">
+    <div class="confirm-title" id="confirmTitle">تأكيد الحذف</div>
+    <div class="confirm-sub" id="confirmSub">هل أنت متأكد من هذا الإجراء؟</div>
+    <div class="confirm-btns">
+      <button class="cbtn cancel" onclick="closeConfirm()">إلغاء</button>
+      <button class="cbtn danger" id="confirmOk">تأكيد</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var allUsers=[], allReqs=[], allMsgs=[], allOffers=[];
+
+// ===== AUTH =====
+async function adminLogin(){
+  var email = document.getElementById('adminEmail').value.trim();
+  var pass  = document.getElementById('adminPass').value.trim();
+  if(email !== ADMIN_EMAIL){ document.getElementById('loginErr').textContent='غير مصرح لك بالدخول'; return; }
+  var {data,error} = await sb.auth.signInWithPassword({email,password:pass});
+  if(error){ document.getElementById('loginErr').textContent='❌ '+error.message; return; }
+  showDashboard();
+}
+
+function adminLogout(){ sb.auth.signOut(); location.reload(); }
+
+sb.auth.getSession().then(function(res){
+  if(res.data&&res.data.session){
+    var email = res.data.session.user.email;
+    if(email===ADMIN_EMAIL) showDashboard();
+  }
+});
+
+async function showDashboard(){
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  loadStats();
+  loadUsers();
+}
+
+// ===== STATS =====
+async function loadStats(){
+  var [u,r,o,m] = await Promise.all([
+    sb.from('profiles').select('id',{count:'exact',head:true}),
+    sb.from('requests').select('id',{count:'exact',head:true}),
+    sb.from('offers').select('id',{count:'exact',head:true}),
+    sb.from('messages').select('id',{count:'exact',head:true})
+  ]);
+  document.getElementById('sUsers').textContent    = u.count||0;
+  document.getElementById('sRequests').textContent = r.count||0;
+  document.getElementById('sOffers').textContent   = o.count||0;
+  document.getElementById('sMsgs').textContent     = m.count||0;
+  document.getElementById('onlineBadge').textContent = '● '+((u.count||0)+' عضو');
+}
+
+// ===== USERS =====
+async function loadUsers(){
+  var {data} = await sb.from('profiles').select('*').order('created_at',{ascending:false});
+  allUsers = data||[];
+  renderUsers(allUsers);
+}
+
+function renderUsers(list){
+  var html = list.length ? '' : '<tr><td colspan="6" class="empty-row">لا يوجد أعضاء بعد</td></tr>';
+  list.forEach(function(u){
+    html+='<tr>'
+      +'<td><div class="td-name">'+(u.full_name||'—')+'</div></td>'
+      +'<td><span style="color:#4a5568">@'+(u.username||'—')+'</span></td>'
+      +'<td>'+fDate(u.created_at)+'</td>'
+      +'<td>'+(u.deals_count||0)+'</td>'
+      +'<td>'+(u.rating||0)+' ⭐</td>'
+      +'<td><button class="act-btn" onclick="deleteUser(\''+u.id+'\',\''+escHtml(u.full_name||'')+'\')">حذف</button></td>'
+      +'</tr>';
+  });
+  document.getElementById('usersBody').innerHTML=html;
+}
+
+window.deleteUser=function(id,name){
+  showConfirm('حذف العضو','هل تريد حذف "'+name+'"؟ سيتم حذف كل بياناته.',async function(){
+    await sb.from('profiles').delete().eq('id',id);
+    loadUsers(); loadStats(); toast('✓ تم حذف العضو');
+  });
+};
+
+// ===== REQUESTS =====
+async function loadRequests(){
+  var {data} = await sb.from('requests').select('*, profiles(full_name)').order('created_at',{ascending:false});
+  allReqs = data||[];
+  renderReqs(allReqs);
+}
+
+function renderReqs(list){
+  var html = list.length ? '' : '<tr><td colspan="7" class="empty-row">لا توجد طلبات</td></tr>';
+  list.forEach(function(r){
+    html+='<tr>'
+      +'<td><div class="td-name" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escHtml(r.title)+'</div>'
+      +'<div class="td-email">'+(r.profiles&&r.profiles.full_name?r.profiles.full_name:'—')+'</div></td>'
+      +'<td><span class="badge active">'+r.category+'</span></td>'
+      +'<td style="color:#00aaff;font-weight:600">'+(r.budget_text||'—')+'</td>'
+      +'<td>'+(r.offers_count||0)+'</td>'
+      +'<td><span class="badge '+(r.status==='open'?'open':'closed')+'">'+(r.status==='open'?'مفتوح':'مغلق')+'</span></td>'
+      +'<td>'+fDate(r.created_at)+'</td>'
+      +'<td><button class="act-btn" onclick="deleteReq('+r.id+',\''+escHtml(r.title)+'\')">حذف</button></td>'
+      +'</tr>';
+  });
+  document.getElementById('reqsBody').innerHTML=html;
+}
+
+window.deleteReq=function(id,title){
+  showConfirm('حذف الطلب','هل تريد حذف "'+title+'"؟',async function(){
+    await sb.from('requests').delete().eq('id',id);
+    loadRequests(); loadStats(); toast('✓ تم حذف الطلب');
+  });
+};
+
+// ===== MESSAGES =====
+async function loadMessages(){
+  var {data} = await sb.from('messages')
+    .select('*, sender:profiles!sender_id(full_name,username), receiver:profiles!receiver_id(full_name,username)')
+    .order('created_at',{ascending:false})
+    .limit(100);
+  allMsgs = data||[];
+  renderMsgs(allMsgs);
+}
+
+function renderMsgs(list){
+  var html = list.length ? '' : '<div class="loading">لا توجد رسائل بعد</div>';
+  list.forEach(function(m){
+    var sName = m.sender&&m.sender.full_name ? m.sender.full_name : 'مجهول';
+    var rName = m.receiver&&m.receiver.full_name ? m.receiver.full_name : 'مجهول';
+    html+='<div class="msg-card'+(m.is_read?'':' msg-unread')+'">'
+      +'<div class="msg-top">'
+      +'<div class="msg-av">'+sName[0]+'</div>'
+      +'<div class="msg-meta">'
+        +'<div class="msg-names">'+escHtml(sName)+' <span style="color:#4a5568">←</span> '+escHtml(rName)+'</div>'
+        +'<div class="msg-time">'+fDate(m.created_at)+(m.is_read?'':' · <span style="color:#0066ff">غير مقروء</span>')+'</div>'
+      +'</div>'
+      +'<button class="act-btn" onclick="deleteMsg('+m.id+')">حذف</button>'
+      +'</div>'
+      +'<div class="msg-text">'+escHtml(m.content)+'</div>'
+      +'</div>';
+  });
+  document.getElementById('msgsBody').innerHTML=html;
+}
+
+window.deleteMsg=function(id){
+  showConfirm('حذف الرسالة','هل تريد حذف هذه الرسالة؟',async function(){
+    await sb.from('messages').delete().eq('id',id);
+    loadMessages(); loadStats(); toast('✓ تم حذف الرسالة');
+  });
+};
+
+window.filterMsgs=function(q){
+  var list = allMsgs.filter(function(m){ return m.content.toLowerCase().indexOf(q.toLowerCase())>-1; });
+  renderMsgs(list);
+};
+
+// ===== OFFERS =====
+async function loadOffers(){
+  var {data} = await sb.from('offers')
+    .select('*, provider:profiles!provider_id(full_name), request:requests(title)')
+    .order('created_at',{ascending:false});
+  allOffers = data||[];
+  renderOffers(allOffers);
+}
+
+function renderOffers(list){
+  var html = list.length ? '' : '<tr><td colspan="6" class="empty-row">لا توجد عروض</td></tr>';
+  list.forEach(function(o){
+    html+='<tr>'
+      +'<td><div class="td-name" style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escHtml(o.offer_text||'—')+'</div>'
+      +'<div class="td-email">'+(o.provider&&o.provider.full_name?o.provider.full_name:'—')+'</div></td>'
+      +'<td style="color:#00aaff;font-weight:600">'+(o.price||0)+' ريال</td>'
+      +'<td>'+(o.duration||'—')+'</td>'
+      +'<td><span class="badge '+(o.status==='accepted'?'open':'closed')+'">'+(o.status==='accepted'?'مقبول':'انتظار')+'</span></td>'
+      +'<td>'+fDate(o.created_at)+'</td>'
+      +'<td><button class="act-btn" onclick="deleteOffer('+o.id+')">حذف</button></td>'
+      +'</tr>';
+  });
+  document.getElementById('offersBody').innerHTML=html;
+}
+
+window.deleteOffer=function(id){
+  showConfirm('حذف العرض','هل تريد حذف هذا العرض؟',async function(){
+    await sb.from('offers').delete().eq('id',id);
+    loadOffers(); loadStats(); toast('✓ تم حذف العرض');
+  });
+};
+
+// ===== TABS =====
+function switchTab(el,tab){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
+  el.classList.add('on');
+  ['users','requests','messages','offers'].forEach(function(t){
+    document.getElementById('tab-'+t).style.display = t===tab?'block':'none';
+  });
+  if(tab==='requests'&&!allReqs.length) loadRequests();
+  if(tab==='messages'&&!allMsgs.length) loadMessages();
+  if(tab==='offers'&&!allOffers.length) loadOffers();
+}
+
+// ===== HELPERS =====
+function filterTable(tbodyId, q){
+  var rows = document.getElementById(tbodyId).querySelectorAll('tr');
+  rows.forEach(function(r){ r.style.display = r.textContent.toLowerCase().indexOf(q.toLowerCase())>-1?'':'none'; });
+}
+
+function fDate(d){ if(!d) return '—'; var dt=new Date(d); return dt.toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'}); }
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+var confirmCb=null;
+function showConfirm(title,sub,cb){
+  document.getElementById('confirmTitle').textContent=title;
+  document.getElementById('confirmSub').textContent=sub;
+  confirmCb=cb;
+  document.getElementById('confirmModal').classList.add('open');
+  document.getElementById('confirmOk').onclick=function(){ closeConfirm(); if(confirmCb) confirmCb(); };
+}
+function closeConfirm(){ document.getElementById('confirmModal').classList.remove('open'); }
+
+function toast(msg){
+  var t=document.createElement('div');
+  t.textContent=msg;
+  Object.assign(t.style,{position:'fixed',bottom:'24px',left:'50%',transform:'translateX(-50%) translateY(8px)',background:'#111318',border:'1px solid #252d3d',color:'#e8ecf5',padding:'10px 22px',borderRadius:'11px',fontSize:'.83rem',zIndex:'9999',opacity:'0',transition:'all .22s',whiteSpace:'nowrap',boxShadow:'0 8px 28px rgba(0,0,0,.5)'});
+  document.body.appendChild(t);
+  requestAnimationFrame(function(){t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';});
+  setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove();},250);},2500);
+}
+</script>
+</body>
+</html>
