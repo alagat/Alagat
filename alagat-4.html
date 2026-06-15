@@ -534,7 +534,7 @@ const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
   <div class="followers-badge" id="followersBadge" style="display:none">0 متابع</div>
   <div class="p-av-wrap"><div class="p-av">م</div><div class="p-av-dot"></div></div>
   <div class="profile-name"> <span class="p-verified">✓</span></div>
-  <div class="profile-handle">@mohammed_g</div>
+  <div class="profile-handle" id="profileHandle">@—</div>
   <div class="profile-lastseen">آخر ظهور قبل ٢٢ دقيقة</div>
   <div class="meta-row">
     <div class="meta-item"><div class="meta-val" id="profileRating">0.0 ⭐</div><div class="meta-lbl">تقييم</div></div>
@@ -566,7 +566,6 @@ const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
     <button class="p-add-btn" id="pAddBtn" onclick="togglePlusMenu()">＋</button>
   </div>
   <button class="bn" onclick="if(!state.loggedIn){openAuth('login');return;}goMessages()"><div class="bn-iw" style="position:relative">✉️<span id="msgsBadge" style="display:none;position:absolute;top:-4px;right:-6px;background:#ef4444;color:#fff;font-size:.6rem;font-weight:800;border-radius:50%;min-width:16px;height:16px;line-height:16px;text-align:center;padding:0 3px;border:2px solid var(--bg)"></span></div>الرسائل</button>
-  <button class="bn" onclick="if(!state.loggedIn){openAuth('login');return;}goProfile()" id="bnProfile"><div class="bn-iw">✏️</div>ملفي</button>
   <button class="bn" onclick="if(!state.loggedIn){openAuth('login');return;}goNotifs()"><div class="bn-iw" style="position:relative">🔔<span id="notifsBadge" style="display:none;position:absolute;top:-4px;right:-6px;background:#ef4444;color:#fff;font-size:.6rem;font-weight:800;border-radius:50%;min-width:16px;height:16px;line-height:16px;text-align:center;padding:0 3px;border:2px solid var(--bg)"></span></div>الإشعارات</button>
 </div>
 
@@ -582,25 +581,32 @@ const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 <div class="p-overlay" id="shareModal" onclick="if(event.target===this)closePModal('shareModal')">
   <div class="sheet"><div class="sheet-handle"></div><div class="sheet-title">مشاركة الملف</div>
     <div class="share-grid">
-      <div class="share-item" onclick="shareVia('واتساب')"><div class="share-icon" style="background:#dcfce7">💬</div><span class="share-lbl">واتساب</span></div>
-      <div class="share-item" onclick="shareVia('تويتر')"><div class="share-icon" style="background:#dbeafe">🐦</div><span class="share-lbl">تويتر</span></div>
-      <div class="share-item" onclick="shareVia('سناب')"><div class="share-icon" style="background:#fef9c3">👻</div><span class="share-lbl">سناب</span></div>
-      <div class="share-item" onclick="shareVia('تيليغرام')"><div class="share-icon" style="background:#e0f2fe">✈️</div><span class="share-lbl">تيليغرام</span></div>
-    </div>
-    <div class="copy-row"><span class="copy-url">alagat.com/u/mohammed_g</span><button class="copy-btn" onclick="copyLink()">نسخ الرابط</button></div>
-  </div>
-</div>
-<div class="p-overlay" id="chatModal" onclick="if(event.target===this)closePModal('chatModal')">
-  <div class="sheet" style="padding-bottom:16px">
-    <div class="sheet-handle"></div>
-    <div class="sheet-title" style="margin-bottom:10px" id="chatModalTitle">💬 محادثة</div>
-    <div class="chat-window">
-      <div class="chat-msgs" id="chatMsgs" style="min-height:200px"></div>
-      <div class="chat-input-row">
-        <button class="send-btn" onclick="sendProfileMsg()">➤</button>
-        <input class="chat-input" id="chatInput" placeholder="اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendProfileMsg()">
+      <div class="share-item" onclick="shareVia('واتساب')">
+        <div class="share-icon" style="background:#dcfce7;overflow:hidden;padding:0">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="52" height="52" style="border-radius:50%;object-fit:cover">
+        </div>
+        <span class="share-lbl">واتساب</span>
+      </div>
+      <div class="share-item" onclick="shareVia('تويتر')">
+        <div class="share-icon" style="background:#000;overflow:hidden;padding:0">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png" width="52" height="52" style="border-radius:50%;object-fit:cover;padding:10px">
+        </div>
+        <span class="share-lbl">X</span>
+      </div>
+      <div class="share-item" onclick="shareVia('سناب')">
+        <div class="share-icon" style="background:#FFFC00;overflow:hidden;padding:0">
+          <img src="https://upload.wikimedia.org/wikipedia/en/c/c4/Snapchat_logo.svg" width="52" height="52" style="border-radius:50%;object-fit:contain;padding:8px">
+        </div>
+        <span class="share-lbl">سناب</span>
+      </div>
+      <div class="share-item" onclick="shareVia('تيليغرام')">
+        <div class="share-icon" style="background:#e0f2fe;overflow:hidden;padding:0">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" width="52" height="52" style="border-radius:50%;object-fit:cover">
+        </div>
+        <span class="share-lbl">تيليغرام</span>
       </div>
     </div>
+    <div class="copy-row"><span class="copy-url" id="shareUrl">alagat.vercel.app</span><button class="copy-btn" onclick="copyLink()">نسخ الرابط</button></div>
   </div>
 </div>
 </div><!-- end #profile -->
@@ -809,6 +815,12 @@ window.goProfile = async function(reqId){
 };
 
 function populateProfileFromDB(p){
+  // Update share URL with real username
+  var shareUrlEl = document.getElementById('shareUrl');
+  if(shareUrlEl && p.username) shareUrlEl.textContent = 'alagat.vercel.app/u/' + p.username;
+  var handleEl2 = document.getElementById('profileHandle');
+  if(handleEl2) handleEl2.textContent = '@' + (p.username || '—');
+
   var letter=(p.full_name||'م')[0];
   var avEl=document.querySelector('#profile .p-av');
   if(avEl){avEl.textContent=letter;if(p.avatar_color)avEl.style.background=p.avatar_color;}
@@ -1126,7 +1138,7 @@ window.openDetail=async function(id){
           +'<div style="font-size:1rem;font-weight:800;color:var(--ac2)">'+(o.price||0)+' ريال</div>'
           +'<div style="font-size:.72rem;color:var(--t3)">⏱ '+(o.duration||'مرن')+'</div>'
         +'</div>'
-        +'<button class="offer-contact-btn" data-uid="'+o.provider_id+'" data-name="'+encodeURIComponent(p.full_name||'المزود')+'" style="background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;border-radius:9px;padding:8px 16px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer">💬 تواصل</button>'
+        +(o.provider_id ? '<button class="offer-contact-btn" data-uid="'+o.provider_id+'" data-name="'+encodeURIComponent(p.full_name||'المزود')+'" style="background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;border-radius:9px;padding:8px 16px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer">💬 تواصل</button>' : '')
       +'</div>'
     +'</div>';
   });
@@ -1242,7 +1254,9 @@ document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){
 // search handled inline on input
 document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.search='';var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();};
 document.getElementById('si-saved').onclick=function(){if(!state.loggedIn){openAuth('login');return;}document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');if(!state.saved.length){hToast('لا توجد طلبات محفوظة بعد');return;}var savedList=reqs.filter(function(r){return state.saved.indexOf(r.id)>-1;});var html='';savedList.forEach(function(r){html+=makeCard(r);});html+='<div style="margin:10px 14px"><button class="btn-g" style="width:100%;padding:9px;border-radius:9px" id="backToFeed">← العودة</button></div>';document.getElementById('feedContent').innerHTML='<div id="cardsContainer">'+html+'</div>';bindCardEvents();document.getElementById('backToFeed').onclick=renderFeed;};
-['si-discover','si-notif','si-msgs','si-myreqs'].forEach(function(id){var el=document.getElementById(id);if(el)el.onclick=function(){if(!state.loggedIn){openAuth('login');return;}hToast('هذا القسم سيكون متاحاً قريباً');};});
+// si-discover and si-myreqs handled below
+var siDiscover=document.getElementById('si-discover');if(siDiscover)siDiscover.onclick=function(){hToast('قريباً');};
+var siMyreqs=document.getElementById('si-myreqs');if(siMyreqs)siMyreqs.onclick=function(){if(!state.loggedIn){openAuth('login');return;}hToast('قريباً');};
 document.getElementById('submitReq').onclick=function(){
   var title=document.getElementById('reqTitle').value.trim();
   if(!title){hToast('⚠️ اكتب عنوان الطلب أولاً');return;}
@@ -1386,6 +1400,7 @@ document.addEventListener('click', function(e){
   var btn = e.target.closest('.offer-contact-btn');
   if(btn){
     e.preventDefault(); e.stopPropagation();
+    if(!state.loggedIn){ openAuth('login'); return; }
     var uid = btn.getAttribute('data-uid');
     var name = decodeURIComponent(btn.getAttribute('data-name')||'مستخدم');
     openProfileChat(uid, name);
@@ -1430,6 +1445,8 @@ window.shareVia=function(app){
   var text='تفقد هذا الملف على علاقات: '+url;
   if(app==='واتساب') window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
   else if(app==='تويتر'||app==='X') window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text),'_blank');
+  else if(app==='سناب') window.open('https://www.snapchat.com/share?link='+encodeURIComponent(url),'_blank');
+  else if(app==='تيليغرام') window.open('https://t.me/share/url?url='+encodeURIComponent(url)+'&text='+encodeURIComponent(text),'_blank');
   else if(app==='نسخ'||app==='نسخ الرابط'){
     navigator.clipboard.writeText(url).then(function(){hToast('✓ تم نسخ الرابط');}).catch(function(){hToast('الرابط: '+url);});
     closePModal('shareModal'); return;
@@ -1439,7 +1456,7 @@ window.shareVia=function(app){
   }
   closePModal('shareModal');
 };
-window.copyLink=function(){navigator.clipboard.writeText('alagat.com/u/mohammed_g').catch(function(){});hToast('✓ تم نسخ الرابط');};
+window.copyLink=function(){var url=document.getElementById('shareUrl')?document.getElementById('shareUrl').textContent:'alagat.vercel.app';navigator.clipboard.writeText(url).catch(function(){});hToast('✓ تم نسخ الرابط');};
 // chatModal receiver id
 window.profileChatReceiverId = null;
 var profileChatReceiverId = null;
@@ -1478,7 +1495,7 @@ window.openProfileChat = async function openProfileChat(receiverId, name){
   msgs.innerHTML = '<div style="text-align:center;padding:20px;color:#9ca3af;font-size:.8rem">⏳</div>';
   openPModal('chatModal');
   var user = await sbGetUser();
-  if(!user){ msgs.innerHTML = '<div style="text-align:center;padding:20px;color:#9ca3af">سجّل دخول أولاً</div>'; return; }
+  if(!user){ closePModal('chatModal'); openAuth('login'); return; }
   var {data} = await sb.from('messages')
     .select('*')
     .or('and(sender_id.eq.'+user.id+',receiver_id.eq.'+receiverId+'),and(sender_id.eq.'+receiverId+',receiver_id.eq.'+user.id+')')
@@ -1873,6 +1890,20 @@ sb.auth.onAuthStateChange(async (event, session) => {
 
 console.log('✅ Supabase متصل بنجاح');
 </script>
+
+<div class="p-overlay" id="chatModal" style="z-index:9999" onclick="if(event.target===this)closePModal('chatModal')">
+  <div class="sheet" style="padding-bottom:16px">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" style="margin-bottom:10px" id="chatModalTitle">💬 محادثة</div>
+    <div class="chat-window">
+      <div class="chat-msgs" id="chatMsgs" style="min-height:200px"></div>
+      <div class="chat-input-row">
+        <button class="send-btn" onclick="sendProfileMsg()">➤</button>
+        <input class="chat-input" id="chatInput" placeholder="اكتب رسالتك..." onkeydown="if(event.key==='Enter')sendProfileMsg()">
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
