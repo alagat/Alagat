@@ -410,6 +410,11 @@ document.addEventListener('DOMContentLoaded', function(){
   var btn = document.getElementById('langBtn');
   if(btn) btn.textContent = window.currentLang === 'ar' ? 'EN' : 'AR';
 });
+
+window.onerror = function(msg, url, line, col, error){
+  alert('⚠️ خطأ في الكود:\n' + msg + '\nسطر: ' + line);
+  return false;
+};
 </script>
 </head>
 <body>
@@ -674,20 +679,6 @@ document.addEventListener('DOMContentLoaded', function(){
 </div>
 <div class="listings" id="p-requests" style="display:none">
   <div style="text-align:center;padding:30px;color:#9ca3af;font-size:.84rem">⏳ جاري التحميل...</div>
-</div>
-
-<!-- BOTTOM NAV -->
-<div class="bottom-nav" id="mainBottomNav">
-  <button class="bn" onclick="goHome()"><div class="bn-iw">🏠</div><span data-i18n="bottomHome">الرئيسية</span></button>
-  <div class="bn-center" style="position:relative">
-    <div class="plus-menu" id="plusMenu">
-      <div class="plus-item" onclick="closePlusMenu();openComp()" data-i18n="postRequest">📋 طلب جديد</div>
-      <div class="plus-item" onclick="closePlusMenu();hToast('💼 قريباً')">💼 عرض جديد</div>
-    </div>
-    <button class="p-add-btn" id="pAddBtn" onclick="togglePlusMenu()">＋</button>
-  </div>
-  <button class="bn" onclick="if(!state.loggedIn){openAuth('login');return;}goMessages()"><div class="bn-iw" style="position:relative">✉️<span id="msgsBadge" style="display:none;position:absolute;top:-4px;right:-6px;background:#ef4444;color:#fff;font-size:.6rem;font-weight:800;border-radius:50%;min-width:16px;height:16px;line-height:16px;text-align:center;padding:0 3px;border:2px solid var(--bg)"></span></div><span data-i18n="bottomMsgs">الرسائل</span></button>
-  <button class="bn" onclick="if(!state.loggedIn){openAuth('login');return;}goNotifs()"><div class="bn-iw" style="position:relative">🔔<span id="notifsBadge" style="display:none;position:absolute;top:-4px;right:-6px;background:#ef4444;color:#fff;font-size:.6rem;font-weight:800;border-radius:50%;min-width:16px;height:16px;line-height:16px;text-align:center;padding:0 3px;border:2px solid var(--bg)"></span></div><span data-i18n="bottomNotifs">الإشعارات</span></button>
 </div>
 
 <!-- PROFILE MODALS -->
@@ -2213,5 +2204,18 @@ console.log('✅ Supabase متصل بنجاح');
   </div>
 </div>
 
+<!-- BOTTOM NAV (عنصر عام مشترك بين كل الصفحات) -->
+<div class="bottom-nav" id="mainBottomNav">
+  <button class="bn" onclick="goHome()"><div class="bn-iw">🏠</div><span data-i18n="bottomHome">الرئيسية</span></button>
+  <div class="bn-center" style="position:relative">
+    <div class="plus-menu" id="plusMenu">
+      <div class="plus-item" onclick="closePlusMenu();openComp()" data-i18n="postRequest">📋 طلب جديد</div>
+      <div class="plus-item" onclick="closePlusMenu();hToast('💼 قريباً')">💼 عرض جديد</div>
+    </div>
+    <button class="p-add-btn" id="pAddBtn" onclick="togglePlusMenu()">＋</button>
+  </div>
+  <button class="bn" onclick="if(!state.loggedIn){openAuth('login');return;}goMessages()"><div class="bn-iw" style="position:relative">✉️<span id="msgsBadge" style="display:none;position:absolute;top:-4px;right:-6px;background:#ef4444;color:#fff;font-size:.6rem;font-weight:800;border-radius:50%;min-width:16px;height:16px;line-height:16px;text-align:center;padding:0 3px;border:2px solid var(--bg)"></span></div><span data-i18n="bottomMsgs">الرسائل</span></button>
+  <button class="bn" onclick="if(!state.loggedIn){openAuth('login');return;}goNotifs()"><div class="bn-iw" style="position:relative">🔔<span id="notifsBadge" style="display:none;position:absolute;top:-4px;right:-6px;background:#ef4444;color:#fff;font-size:.6rem;font-weight:800;border-radius:50%;min-width:16px;height:16px;line-height:16px;text-align:center;padding:0 3px;border:2px solid var(--bg)"></span></div><span data-i18n="bottomNotifs">الإشعارات</span></button>
+</div>
 </body>
 </html>
