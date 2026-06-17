@@ -996,6 +996,7 @@ window.showPage = function showPage(id){
 
 /* ===== HOME LOGIC ===== */
 var state = { loggedIn:false, activeTab:'latest', activeFilter:'all', search:'', saved:[], currentOfferId:null };
+window.state = state;
 var ALL_REQS = [
   {id:0,name:'أحمد الغامدي',handle:'@ahmed_g',av:'أ',grad:'linear-gradient(135deg,#4a9fd4,#4a9fd4)',time:'منذ 3 دقائق',urgent:true,isNew:false,title:'أحتاج مطور React لبناء لوحة تحكم إدارية',desc:'أبحث عن مطور React لبناء dashboard لمنصة تعليمية. يشمل جداول بيانات ورسوم بيانية.',tags:['React','TypeScript','Dashboard'],cat:'برمجة',tc:'',budget:'٢٠٠٠–٤٠٠٠ ريال',dur:'أسبوع',type:'عن بُعد',offers:0,ts:30},
   {id:1,name:'مستخدم',handle:'@noura_s',av:'ن',grad:'linear-gradient(135deg,#f953c6,#b91d73)',time:'منذ 8 دقائق',urgent:false,isNew:true,title:'تصميم هوية بصرية لمطعم عربي راقٍ',desc:'أحتاج هوية بصرية شاملة: شعار، ألوان، قوائم طعام، وعبوات تغليف.',tags:['Branding','شعار','Figma'],cat:'تصميم',tc:'g',budget:'١٥٠٠ ريال',dur:'١٠ أيام',type:'عن بُعد',offers:3,ts:29},
