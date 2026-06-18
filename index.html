@@ -333,6 +333,10 @@ window.I18N = {
     messagesTitle:'الرسائل', searchInMessages:'🔍  ابحث في الرسائل...', editSoon:'قريباً ✍️',
     onlineNow:'متصل الآن', voiceCallSoon:'مكالمة صوتية قريباً', typeYourMessage:'اكتب رسالتك...',
     noConvsYet:'لا توجد محادثات', unknownUser:'مجهول', newBadgeShort:'جديد',
+    convHidden:'تم حذف المحادثة', deleteConvAction:'حذف المحادثة', confirmHideConv:'هل تريد حذف هذه المحادثة من قائمتك؟',
+    blockUserAction:'حظر المستخدم', confirmBlockUser:'هل تريد حظر هذا المستخدم؟ لن تتمكنا من التراسل أو رؤية ملفاتكما الشخصية بعد الحظر.',
+    userBlockedToast:'تم حظر المستخدم', userUnblockedToast:'تم إلغاء الحظر',
+    cannotMessageBlocked:'لا يمكن التراسل — يوجد حظر بينكما', profileUnavailableBlocked:'هذا الملف الشخصي غير متاح',
     rating:'تقييم', joined:'انضم', activeRecently:'نشط',
     bottomHome:'الرئيسية', bottomNotifs:'الإشعارات', bottomMsgs:'الرسائل',
     flexible:'مرن', open:'مفتوح', completed:'مكتمل', noOffers:'لا عروض بعد',
@@ -394,6 +398,10 @@ window.I18N = {
     messagesTitle:'Messages', searchInMessages:'🔍  Search messages...', editSoon:'Coming soon ✍️',
     onlineNow:'Online now', voiceCallSoon:'Voice call coming soon', typeYourMessage:'Type your message...',
     noConvsYet:'No conversations yet', unknownUser:'Unknown', newBadgeShort:'New',
+    convHidden:'Conversation deleted', deleteConvAction:'Delete Conversation', confirmHideConv:'Delete this conversation from your list?',
+    blockUserAction:'Block User', confirmBlockUser:"Block this user? You won't be able to message or see each other's profiles after blocking.",
+    userBlockedToast:'User blocked', userUnblockedToast:'User unblocked',
+    cannotMessageBlocked:"Can't message — there's a block between you", profileUnavailableBlocked:'This profile is unavailable',
     rating:'Rating', joined:'Joined', activeRecently:'Active',
     bottomHome:'Home', bottomNotifs:'Notifications', bottomMsgs:'Messages',
     flexible:'Flexible', open:'Open', completed:'Completed', noOffers:'No offers yet',
@@ -491,7 +499,7 @@ window.onerror = function(msg, url, line, col, error){
     <button class="nl on" data-i18n="requests">الطلبات</button>
   </div>
   <div class="nav-r" style="display:flex;align-items:center;gap:7px">
-    <button id="langBtn" onclick="setLang(window.currentLang==='ar'?'en':'ar')" title="Language" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;color:#fff">EN</button>
+    <button id="langBtn" onclick="setLang(window.currentLang==='ar'?'en':'ar')" title="Language" style="background:var(--s2);border:1px solid var(--b);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;color:var(--t)">EN</button>
     <button id="themeBtn" onclick="toggleTheme()" title="تبديل الثيم" data-i18n-title="toggleTheme" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s">🌙</button>
     <div id="navGuest" style="display:flex;gap:7px">
       <button class="btn-g" id="btnLogin" data-i18n="login">تسجيل الدخول</button>
@@ -499,7 +507,7 @@ window.onerror = function(msg, url, line, col, error){
     </div>
     <div id="navUser" style="display:none;gap:7px;align-items:center" class="nav-r">
       <button class="btn-b" id="btnNewReq" data-i18n="newRequest">+ طلب جديد</button>
-      <div class="nav-av" id="userAvatar" onclick="goProfile()" title="ملفي الشخصي" style="cursor:pointer">أ</div>
+      <div class="nav-av" id="userAvatar" onclick="openAccountMenu()" title="حسابي" style="cursor:pointer">أ</div>
     </div>
   </div>
 </nav>
@@ -867,10 +875,7 @@ window.onerror = function(msg, url, line, col, error){
       <div class="ch-name" id="chName"></div>
       <div class="ch-status" id="chStat" data-i18n="onlineNow">متصل الآن</div>
     </div>
-    <div class="ch-btns">
-      <div class="ch-btn" onclick="hToast(t('voiceCallSoon'))">📞</div>
-      <div class="ch-btn" id="chProfBtn">👤</div>
-    </div>
+
   </div>
   <div class="ch-ref" id="chRef"><b id="chRefT"></b><span id="chRefS"></span></div>
   <div class="ch-body" id="chBody"></div>
@@ -971,6 +976,18 @@ window.goProfile = async function(reqId){
           document.getElementById('topActionsOwn').style.display='flex';
           if(fb){fb.style.display='block';fb.textContent=(prof&&prof.followers_count||0)+' '+t('followers');}
         } else {
+          // فحص الحظر المتبادل قبل عرض الملف
+          if(currentUser){
+            var blockedProf = await isBlockedEitherWay(currentUser.id, targetUserId);
+            if(blockedProf){
+              document.getElementById('profile').querySelectorAll('.p-tabs, .listings, .chat-btn, #followBtn').forEach(function(el){ if(el) el.style.display='none'; });
+              var blockNotice = document.createElement('div');
+              blockNotice.style.cssText='text-align:center;padding:40px 20px;color:#9ca3af;font-size:.86rem';
+              blockNotice.textContent = '🚫 ' + t('profileUnavailableBlocked');
+              document.querySelector('.profile-section').insertAdjacentElement('afterend', blockNotice);
+              return;
+            }
+          }
           // ملف شخص آخر
           document.getElementById('topActionsOther').style.display='flex';
           if(fb){fb.style.display='block';fb.textContent=(prof&&prof.followers_count||0)+' '+t('followers');}
@@ -1179,9 +1196,9 @@ function makeFooter(){
   + '<div class="feed-footer">'
   + '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--b);margin-bottom:10px">'
   + '<div style="font-size:.78rem;font-weight:700;color:var(--t2);margin-bottom:4px">تواصل معنا</div>'
-  + '<a href="https://wa.me/966530708077" target="_blank" style="display:flex;align-items:center;gap:8px;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.25);border-radius:10px;padding:9px 18px;text-decoration:none;color:#25d366;font-size:.84rem;font-weight:600">'
-  + '<svg width="18" height="18" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.12.554 4.107 1.523 5.834L.057 23.428a.75.75 0 00.906.974l5.747-1.505A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.886 0-3.655-.52-5.168-1.427l-.361-.214-3.742.98.998-3.648-.235-.376A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>'
-  + '<span>+966530708077</span></a>'
+  + '<a href="https://wa.me/966530708077" target="_blank" style="display:flex;align-items:center;justify-content:center;width:52px;height:52px;background:#25d366;border-radius:50%;text-decoration:none;box-shadow:0 4px 14px rgba(37,211,102,.4);transition:.2s" onmouseover="this.style.transform=\'scale(1.08)\'" onmouseout="this.style.transform=\'\'">'
+  + '<svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.12.554 4.107 1.523 5.834L.057 23.428a.75.75 0 00.906.974l5.747-1.505A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.886 0-3.655-.52-5.168-1.427l-.361-.214-3.742.98.998-3.648-.235-.376A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>'
+  + '</a>'
   + '<a href="mailto:supportalagat@gmail.com" style="display:flex;align-items:center;gap:8px;background:rgba(37,99,168,.08);border:1px solid rgba(37,99,168,.2);border-radius:10px;padding:9px 18px;text-decoration:none;color:var(--ac);font-size:.84rem;font-weight:600">'
   + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>'
   + '<span>supportalagat@gmail.com</span></a>'
@@ -1560,9 +1577,9 @@ window.openDetail=async function(id){
     oh+='<div style="background:var(--s2);border:1px solid var(--b);border-radius:12px;padding:14px;margin-bottom:10px">'
       // Header
       +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">'
-        +'<div style="width:40px;height:40px;border-radius:50%;background:'+grad+';display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:.9rem">'+letter+'</div>'
+        +'<div style="width:40px;height:40px;border-radius:50%;background:'+grad+';display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:.9rem;cursor:pointer" onclick="openUserProfile(\''+o.provider_id+'\')">'+letter+'</div>'
         +'<div style="flex:1;min-width:0">'
-          +'<div style="font-weight:700;font-size:.88rem;color:var(--t)">'+String(p.full_name||'مجهول').replace(/</g,'&lt;')+'</div>'
+          +'<div style="font-weight:700;font-size:.88rem;color:var(--t);cursor:pointer;text-decoration:underline;text-underline-offset:2px" onclick="openUserProfile(\''+o.provider_id+'\')">'+String(p.full_name||'مجهول').replace(/</g,'&lt;')+'</div>'
           +'<div style="font-size:.72rem;color:var(--t3)">@'+(p.username||'user')+' · <span style="color:#fbbf24">'+stars+'</span> ('+rating+')</div>'
         +'</div>'
         +'<div style="font-size:.7rem;color:var(--t3)">'+timeAgo(o.created_at)+'</div>'
@@ -2044,14 +2061,82 @@ async function loadConversations(){
     document.getElementById('convItems').innerHTML='<div style="text-align:center;padding:40px;color:#9ca3af;font-size:.84rem">💬 لا توجد رسائل بعد</div>';
     return;
   }
+  // جلب قائمة المحادثات المخفية لهذا المستخدم
+  var {data:profRow} = await sb.from('profiles').select('hidden_conversations').eq('id',user.id).maybeSingle();
+  var hiddenList = (profRow && profRow.hidden_conversations) || [];
+  window._hiddenConvs = hiddenList;
+
   var seen={}, convList=[];
   data.forEach(function(m){
     var other = m.sender_id===user.id ? m.receiver : m.sender;
     if(!other||seen[other.id]) return;
+    if(hiddenList.indexOf(other.id) > -1) return; // تخطي المحادثات المخفية
     seen[other.id]=true;
     convList.push({other:other, lastMsg:m});
   });
   renderConvList(convList, user.id);
+}
+
+window.hideConversation = async function(otherUserId){
+  var user = await sbGetUser();
+  if(!user) return;
+  var hiddenList = window._hiddenConvs || [];
+  if(hiddenList.indexOf(otherUserId) === -1) hiddenList.push(otherUserId);
+  await sb.from('profiles').update({hidden_conversations: hiddenList}).eq('id', user.id);
+  window._hiddenConvs = hiddenList;
+  hToast('✓ '+t('convHidden'));
+  loadConversations();
+};
+
+window.openConvMenu = function(event, otherUserId, otherName){
+  event.stopPropagation();
+  var existing = document.getElementById('convMenuPopup');
+  if(existing) existing.remove();
+  var menu = document.createElement('div');
+  menu.id = 'convMenuPopup';
+  menu.style.cssText = 'position:fixed;background:var(--s1);border:1px solid var(--b);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:99999;overflow:hidden;min-width:160px';
+  var rect = event.currentTarget.getBoundingClientRect();
+  menu.style.top = (rect.bottom + 4) + 'px';
+  menu.style.left = Math.max(8, rect.right - 160) + 'px';
+  menu.innerHTML = '<div style="padding:12px 16px;font-size:.84rem;color:var(--t);cursor:pointer;font-weight:600;border-bottom:1px solid var(--b)" onclick="document.getElementById(\'convMenuPopup\').remove();if(confirm(t(\'confirmHideConv\'))){hideConversation(\''+otherUserId+'\');}">🗑 '+t('deleteConvAction')+'</div>'
+    + '<div style="padding:12px 16px;font-size:.84rem;color:#ef4444;cursor:pointer;font-weight:600" onclick="document.getElementById(\'convMenuPopup\').remove();if(confirm(t(\'confirmBlockUser\'))){blockUser(\''+otherUserId+'\');}">🚫 '+t('blockUserAction')+'</div>';
+  document.body.appendChild(menu);
+  setTimeout(function(){
+    document.addEventListener('click', function closeMenu(){
+      var m = document.getElementById('convMenuPopup');
+      if(m) m.remove();
+      document.removeEventListener('click', closeMenu);
+    });
+  }, 0);
+};
+
+window.blockUser = async function(otherUserId){
+  var user = await sbGetUser();
+  if(!user) return;
+  var {error} = await sb.from('blocks').insert({blocker_id:user.id, blocked_id:otherUserId});
+  if(error && error.code !== '23505'){ hToast('⚠️ حدث خطأ'); return; } // 23505 = unique violation (محظور مسبقاً)
+  // إخفاء المحادثة تلقائياً أيضاً بعد الحظر
+  var hiddenList = window._hiddenConvs || [];
+  if(hiddenList.indexOf(otherUserId) === -1) hiddenList.push(otherUserId);
+  await sb.from('profiles').update({hidden_conversations: hiddenList}).eq('id', user.id);
+  window._hiddenConvs = hiddenList;
+  hToast('🚫 '+t('userBlockedToast'));
+  loadConversations();
+};
+
+window.unblockUser = async function(otherUserId){
+  var user = await sbGetUser();
+  if(!user) return;
+  await sb.from('blocks').delete().eq('blocker_id',user.id).eq('blocked_id',otherUserId);
+  hToast('✓ '+t('userUnblockedToast'));
+};
+
+// فحص إن كان فيه حظر متبادل بين المستخدم الحالي وشخص آخر (بأي اتجاه)
+async function isBlockedEitherWay(myId, otherId){
+  var {data} = await sb.from('blocks').select('id')
+    .or('and(blocker_id.eq.'+myId+',blocked_id.eq.'+otherId+'),and(blocker_id.eq.'+otherId+',blocked_id.eq.'+myId+')')
+    .limit(1);
+  return data && data.length > 0;
 }
 
 function renderConvList(list, myId){
@@ -2070,6 +2155,7 @@ function renderConvList(list, myId){
         +'<div class="conv-preview'+(unread?' unread-txt':'')+'">'+escH(preview)+'</div>'
       +'</div>'
       +(unread?'<div class="conv-badge">'+t('newBadgeShort')+'</div>':'')
+      +'<div style="padding:8px;color:var(--t3);font-size:1.1rem;cursor:pointer" onclick="openConvMenu(event,\''+p.id+'\',\''+escJ(p.full_name||'')+'\')">⋮</div>'
       +'</div>';
   });
   document.getElementById('convItems').innerHTML=html;
@@ -2092,6 +2178,18 @@ window.openChatWith = async function(uid, name, grad, letter){
   document.getElementById('mNavBack').onclick=function(){ msgsBack(); };
   document.getElementById('chIn').value='';
   var user=await sbGetUser();
+
+  // فحص الحظر قبل عرض المحادثة
+  var blocked = await isBlockedEitherWay(user.id, uid);
+  var inputArea = document.querySelector('.ch-input-area');
+  if(blocked){
+    if(inputArea) inputArea.style.display='none';
+    document.getElementById('chBody').innerHTML='<div style="text-align:center;padding:40px 20px;color:#9ca3af;font-size:.86rem">🚫 '+t('cannotMessageBlocked')+'</div>';
+    return;
+  } else {
+    if(inputArea) inputArea.style.display='flex';
+  }
+
   var {data}=await sb.from('messages')
     .select('*')
     .or('and(sender_id.eq.'+user.id+',receiver_id.eq.'+uid+'),and(sender_id.eq.'+uid+',receiver_id.eq.'+user.id+')')
@@ -2167,8 +2265,9 @@ window.sendChatMsg = async function(){
   var inp=document.getElementById('chIn');
   var txt=inp.value.trim();
   if(!txt||!currentReceiverId) return;
-  inp.value=''; inp.style.height='auto';
   var user=await sbGetUser();
+  if(await isBlockedEitherWay(user.id, currentReceiverId)){ hToast('🚫 '+t('cannotMessageBlocked')); return; }
+  inp.value=''; inp.style.height='auto';
   var {error}=await sb.from('messages').insert({sender_id:user.id,receiver_id:currentReceiverId,content:txt});
   if(error){ hToast('❌ فشل الإرسال'); return; }
   var body=document.getElementById('chBody');
@@ -2269,6 +2368,35 @@ async function updateMsgsBadge(){
 // offer-contact-btn handler defined above
 window.goNotifs=function(){if(!state.loggedIn){openAuth('login');return;}showPage('notifs');var bn=document.querySelector('.bottom-nav');if(bn)bn.style.display='none';loadNotifications();};
 document.getElementById('si-notif').onclick=function(){ if(!state.loggedIn){openAuth('login');return;} goNotifs(); };
+
+// فتح ملف شخصي بواسطة UUID المستخدم (من عروض أو رسائل)
+window.openUserProfile = async function(userId){
+  if(!userId) return;
+  showPage('profile');
+  // إخفاء أزرار المالك وإظهار أزرار الزائر
+  document.getElementById('topActionsOwn').style.display = 'none';
+  document.getElementById('topActionsOther').style.display = 'flex';
+  document.getElementById('followBtn').style.display = 'block';
+  // تحميل بيانات الملف
+  var {data:p} = await sb.from('profiles').select('*').eq('id', userId).maybeSingle();
+  if(!p) return;
+  var letter = (p.full_name||'م')[0];
+  var avEl = document.querySelector('#profile .p-av');
+  if(avEl){ avEl.textContent = letter; avEl.style.background = p.avatar_color||'linear-gradient(135deg,#2563a8,#4a9fd4)'; }
+  var nameEl = document.querySelector('#profile .profile-name');
+  if(nameEl) nameEl.innerHTML = (p.full_name||'مستخدم') + ' <span class="p-verified">✓</span>';
+  var handleEl = document.getElementById('profileHandle');
+  if(handleEl) handleEl.textContent = '@' + (p.username||'user');
+  var ratingEl = document.getElementById('profileRating');
+  if(ratingEl) ratingEl.textContent = (p.rating||'0.0') + ' ⭐';
+  // تفعيل زر المحادثة
+  var chatBtn = document.querySelector('#profile .chat-btn');
+  if(chatBtn) chatBtn.onclick = function(){ openProfileChat(userId, p.full_name||'مستخدم'); };
+  // تفعيل متابعة
+  window.profileChatReceiverId = userId;
+  // تحميل الطلبات والعروض
+  loadProfileData(userId);
+};
 
 
 })();
@@ -2477,5 +2605,107 @@ console.log('✅ Supabase متصل بنجاح');
   <button class="bn" onclick="if(!state.loggedIn){openAuth('login');return;}goMessages()"><div class="bn-iw" style="position:relative">✉️<span id="msgsBadge" style="display:none;position:absolute;top:-4px;right:-6px;background:#ef4444;color:#fff;font-size:.6rem;font-weight:800;border-radius:50%;min-width:16px;height:16px;line-height:16px;text-align:center;padding:0 3px;border:2px solid var(--bg)"></span></div><span data-i18n="bottomMsgs">الرسائل</span></button>
   <button class="bn" onclick="if(!state.loggedIn){openAuth('login');return;}goNotifs()"><div class="bn-iw" style="position:relative">🔔<span id="notifsBadge" style="display:none;position:absolute;top:-4px;right:-6px;background:#ef4444;color:#fff;font-size:.6rem;font-weight:800;border-radius:50%;min-width:16px;height:16px;line-height:16px;text-align:center;padding:0 3px;border:2px solid var(--bg)"></span></div><span data-i18n="bottomNotifs">الإشعارات</span></button>
 </div>
+<!-- ==================== ACCOUNT MENU ==================== -->
+<div id="accountMenuOverlay" onclick="if(event.target===this)closeAccountMenu()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1200;align-items:flex-end">
+  <div id="accountMenuSheet" style="background:var(--s1);border-radius:22px 22px 0 0;width:100%;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:.28s cubic-bezier(.4,0,.2,1)">
+
+    <!-- رأس القائمة -->
+    <div style="padding:18px 18px 0">
+      <div style="width:40px;height:4px;background:var(--b);border-radius:2px;margin:0 auto 18px"></div>
+      <div id="amUserRow" style="display:flex;align-items:center;gap:13px;background:var(--glow);border:1px solid rgba(0,133,255,.15);border-radius:14px;padding:14px;margin-bottom:14px;cursor:pointer" onclick="closeAccountMenu();goProfile()">
+        <div id="amAvatar" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:1.2rem;flex-shrink:0">أ</div>
+        <div style="flex:1;min-width:0">
+          <div id="amName" style="font-weight:800;font-size:.95rem;color:var(--t)">مستخدم</div>
+          <div style="font-size:.76rem;color:var(--ac);margin-top:2px">ملفي الشخصي، طلباتي</div>
+        </div>
+        <div style="color:var(--t3);font-size:1rem">›</div>
+      </div>
+    </div>
+
+    <!-- قائمة الخيارات -->
+    <div style="padding:0 12px 32px;display:flex;flex-direction:column;gap:2px">
+
+      <div class="am-item" onclick="closeAccountMenu();openComp()">
+        <span class="am-icon" style="background:rgba(0,133,255,.1)">➕</span>
+        <div class="am-label">أضف طلب</div>
+        <span class="am-arrow">›</span>
+      </div>
+
+      <div class="am-item" onclick="closeAccountMenu();document.getElementById('si-saved').click()">
+        <span class="am-icon" style="background:rgba(255,170,0,.1)">🔖</span>
+        <div class="am-label">المحفوظات</div>
+        <span class="am-arrow">›</span>
+      </div>
+
+      <div class="am-sep"></div>
+
+      <div class="am-item" onclick="closeAccountMenu();openPaymentInfo()">
+        <span class="am-icon" style="background:rgba(0,212,160,.1)">💳</span>
+        <div class="am-label">سداد الرسوم والاشتراكات</div>
+        <span class="am-arrow">›</span>
+      </div>
+
+      <div class="am-sep"></div>
+
+      <div class="am-item" onclick="closeAccountMenu();window.open('https://wa.me/966530708077','_blank')">
+        <span class="am-icon" style="background:rgba(37,211,102,.1)">📞</span>
+        <div class="am-label">اتصل بنا</div>
+        <span class="am-arrow">›</span>
+      </div>
+
+      <div class="am-item" onclick="closeAccountMenu();hToast('سياسة الاستخدام — قريباً')">
+        <span class="am-icon" style="background:rgba(124,58,237,.1)">📄</span>
+        <div class="am-label">سياسة موقع علاقات</div>
+        <span class="am-arrow">›</span>
+      </div>
+
+      <div class="am-sep"></div>
+
+      <div class="am-item" onclick="closeAccountMenu();doLogout()" style="color:var(--red)">
+        <span class="am-icon" style="background:rgba(255,68,102,.1)">🚪</span>
+        <div class="am-label" style="color:var(--red)">تسجيل الخروج</div>
+        <span class="am-arrow" style="color:var(--red)">›</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+.am-item{display:flex;align-items:center;gap:13px;padding:13px 10px;border-radius:12px;cursor:pointer;transition:.15s;color:var(--t)}
+.am-item:hover{background:var(--s2)}
+.am-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.am-label{flex:1;font-size:.88rem;font-weight:600}
+.am-arrow{color:var(--t3);font-size:1.1rem;font-weight:300}
+.am-sep{height:1px;background:var(--b);margin:4px 6px}
+</style>
+
+<script>
+window.openAccountMenu = async function(){
+  var overlay = document.getElementById('accountMenuOverlay');
+  var sheet = document.getElementById('accountMenuSheet');
+  overlay.style.display = 'flex';
+  requestAnimationFrame(function(){ sheet.style.transform = 'translateY(0)'; });
+  // تحديث بيانات المستخدم
+  var user = await sbGetUser();
+  if(user){
+    var {data:p} = await sb.from('profiles').select('full_name,avatar_color').eq('id',user.id).maybeSingle();
+    if(p){
+      var letter = (p.full_name||'م')[0];
+      document.getElementById('amAvatar').textContent = letter;
+      document.getElementById('amAvatar').style.background = p.avatar_color||'linear-gradient(135deg,var(--ac),var(--ac2))';
+      document.getElementById('amName').textContent = p.full_name||'مستخدم';
+      document.getElementById('userAvatar').textContent = letter;
+    }
+  }
+};
+window.closeAccountMenu = function(){
+  var sheet = document.getElementById('accountMenuSheet');
+  sheet.style.transform = 'translateY(100%)';
+  setTimeout(function(){ document.getElementById('accountMenuOverlay').style.display = 'none'; }, 280);
+};
+</script>
+
+
 </body>
 </html>
