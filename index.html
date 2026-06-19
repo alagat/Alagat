@@ -656,6 +656,7 @@ window.onerror = function(msg, url, line, col, error){
       <button id="ownerDeleteBtn" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#ef4444;border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">🗑 حذف</button>
     </div>
     <button id="ownerPayBtn" style="width:100%;background:linear-gradient(135deg,#16a34a,#22c55e);border:none;color:#fff;border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">💳 دفع الرسوم</button>
+    <button id="ownerShareBtn" style="width:100%;margin-top:8px;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">⤴ مشاركة الطلب</button>
     <div id="bumpHint" style="font-size:.72rem;color:var(--t3);text-align:center;margin-top:8px"></div>
   </div>
 </div>
@@ -722,9 +723,9 @@ window.onerror = function(msg, url, line, col, error){
 <!-- ==================== PROFILE PAGE ==================== -->
 <div id="profile" class="page">
 <nav>
-  <div class="p-nav-av">—</div>
+  <div class="p-nav-av" id="pNavAv" onclick="openAccountMenu()" style="cursor:pointer">أ</div>
   <input class="p-nav-search" placeholder="ابحث عن خدمة.." data-i18n-placeholder="searchServicePlaceholder">
-  <div class="p-nav-logo">علاقات</div>
+  <div class="p-nav-logo" onclick="goHome()" style="cursor:pointer">علاقات</div>
 </nav>
 <div class="p-cover"><div class="p-cover-dots"></div></div>
 <div class="profile-section">
@@ -1387,6 +1388,18 @@ function setupOwnerControls(requestId, r){
   document.getElementById('ownerPayBtn').onclick = function(){
     openPaymentInfo(r.budget);
   };
+
+  // ====== مشاركة الإعلان ======
+  document.getElementById('ownerShareBtn').onclick = function(){
+    var url = window.location.origin + '/?req=' + requestId;
+    var text = '📋 ' + r.title + '\n💰 ' + r.budget + '\n\nعبر علاقات: ' + url;
+    if(navigator.share){
+      navigator.share({ title: r.title, text: text, url: url });
+    } else {
+      navigator.clipboard.writeText(url).catch(function(){});
+      hToast('✓ تم نسخ رابط الإعلان');
+    }
+  };
 }
 
 // نافذة تعديل الطلب
@@ -1618,7 +1631,7 @@ function doLoginUI(){
       if(!r.data) return;
       var p = r.data;
       var letter = (p.full_name||'م')[0];
-      document.querySelectorAll('.nav-av,#userAvatar').forEach(function(el){ el.textContent=letter; });
+      document.querySelectorAll('.nav-av,#userAvatar,#pNavAv,#amAvatar').forEach(function(el){ el.textContent=letter; });
       // تحديث صفحة الملف الشخصي
       var avEl=document.querySelector('#profile .p-av');
       if(avEl){avEl.textContent=letter;}
@@ -2598,7 +2611,7 @@ console.log('✅ Supabase متصل بنجاح');
   <div class="bn-center" style="position:relative">
     <div class="plus-menu" id="plusMenu">
       <div class="plus-item" onclick="closePlusMenu();openComp()" data-i18n="postRequest">📋 طلب جديد</div>
-      <div class="plus-item" onclick="closePlusMenu();hToast('💼 قريباً')">💼 عرض جديد</div>
+
     </div>
     <button class="p-add-btn" id="pAddBtn" onclick="togglePlusMenu()">＋</button>
   </div>
