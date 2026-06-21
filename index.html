@@ -315,8 +315,8 @@ window.I18N = {
     login:'تسجيل الدخول', register:'إنشاء حساب', newRequest:'+ طلب جديد', myProfile:'ملفي الشخصي',
     menu:'القائمة', home:'الرئيسية', logout:'تسجيل الخروج', notifications:'الإشعارات',
     myMessages:'رسائلي', saved:'المحفوظات', categories:'الفئات',
-    catProgramming:'برمجة', catDesign:'تصميم', catWriting:'كتابة', catMarketing:'تسويق',
-    catConsulting:'استشارات', catTeaching:'تعليم', catConstruction:'مقاولات', catHome:'منزلية', catTransport:'نقل', catFollowup:'تعقيب', catOther:'خدمات أخرى',
+    catProgramming:'برمجة', catDesign:'تصميم', catMaintenance:'صيانة عامة', catMarketing:'تسويق',
+    catConsulting:'استشارات', catTeaching:'تعليم', catConstruction:'مقاولات', catHome:'منزلية', catHealth:'صحة وجمال', catCars:'سيارات', catEvents:'مناسبات وتنظيم', catOther:'خدمات أخرى',
     postRequest:'نشر طلب', whatDoYouNeed:'ماذا تحتاج؟', urgent:'عاجل', latest:'الأحدث',
     all:'الكل', searchInRequests:'ابحث في الطلبات...', requestsCount:'طلب',
     budget:'الميزانية', duration:'المدة', serviceType:'نوع الخدمة',
@@ -379,8 +379,8 @@ window.I18N = {
     login:'Log In', register:'Sign Up', newRequest:'+ New Request', myProfile:'My Profile',
     menu:'Menu', home:'Home', logout:'Log Out', notifications:'Notifications',
     myMessages:'My Messages', saved:'Saved', categories:'Categories',
-    catProgramming:'Programming', catDesign:'Design', catWriting:'Writing', catMarketing:'Marketing',
-    catConsulting:'Consulting', catTeaching:'Teaching', catConstruction:'Contracting', catHome:'Home Services', catTransport:'Transport', catFollowup:'Follow-up', catOther:'Other Services',
+    catProgramming:'Programming', catDesign:'Design', catMaintenance:'General Maintenance', catMarketing:'Marketing',
+    catConsulting:'Consulting', catTeaching:'Teaching', catConstruction:'Contracting', catHome:'Home Services', catHealth:'Health & Beauty', catCars:'Cars', catEvents:'Events & Planning', catOther:'Other Services',
     postRequest:'Post a Request', whatDoYouNeed:'What do you need?', urgent:'Urgent', latest:'Latest',
     all:'All', searchInRequests:'Search requests...', requestsCount:'requests',
     budget:'Budget', duration:'Duration', serviceType:'Service Type',
@@ -520,16 +520,17 @@ window.onerror = function(msg, url, line, col, error){
 
     <div class="si" id="si-saved" data-i18n="saved">⭐ المحفوظات</div>
     <div class="ss" style="margin-top:6px" data-i18n="categories">الفئات</div>
+    <div class="si cat-si" data-cat="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</div>
+    <div class="si cat-si" data-cat="سيارات" data-i18n="catCars">🚙 سيارات</div>
+    <div class="si cat-si" data-cat="استشارات" data-i18n="catConsulting">⚖️ استشارات</div>
+    <div class="si cat-si" data-cat="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</div>
+    <div class="si cat-si" data-cat="مناسبات" data-i18n="catEvents">🎉 مناسبات وتنظيم</div>
     <div class="si cat-si" data-cat="برمجة" data-i18n="catProgramming">💻 برمجة</div>
     <div class="si cat-si" data-cat="تصميم" data-i18n="catDesign">🎨 تصميم</div>
     <div class="si cat-si" data-cat="تسويق" data-i18n="catMarketing">📱 تسويق</div>
     <div class="si cat-si" data-cat="منزلية" data-i18n="catHome">🏠 منزلية</div>
-    <div class="si cat-si" data-cat="كتابة" data-i18n="catWriting">✍️ كتابة</div>
+    <div class="si cat-si" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</div>
     <div class="si cat-si" data-cat="تعليم" data-i18n="catTeaching">📚 تعليم</div>
-    <div class="si cat-si" data-cat="نقل" data-i18n="catTransport">🚗 نقل</div>
-    
-    <div class="si cat-si" data-cat="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</div>
-    <div class="si cat-si" data-cat="تعقيب" data-i18n="catFollowup">📋 تعقيب</div>
     <div class="si cat-si" data-cat="أخرى" data-i18n="catOther">🔧 خدمات أخرى</div>
   </div>
   <main class="feed">
@@ -576,15 +577,16 @@ window.onerror = function(msg, url, line, col, error){
       </div>
       <button class="fc on" data-cat="all" data-i18n="all">الكل</button>
       <button class="fc" data-cat="مقاولات">🏗️ مقاولات</button>
-      <button class="fc" data-cat="تعقيب">📋 تعقيب</button>
+      <button class="fc" data-cat="سيارات">🚙 سيارات</button>
+      <button class="fc" data-cat="استشارات">⚖️ استشارات</button>
+      <button class="fc" data-cat="صحة وجمال">💆 صحة وجمال</button>
+      <button class="fc" data-cat="مناسبات">🎉 مناسبات</button>
       <button class="fc" data-cat="برمجة">💻 برمجة</button>
       <button class="fc" data-cat="تصميم">🎨 تصميم</button>
       <button class="fc" data-cat="تسويق">📱 تسويق</button>
-      <button class="fc" data-cat="كتابة">✍️ كتابة</button>
       <button class="fc" data-cat="منزلية">🏠 منزلية</button>
+      <button class="fc" data-cat="صيانة عامة">🔧 صيانة عامة</button>
       <button class="fc" data-cat="تعليم">📚 تعليم</button>
-      
-      <button class="fc" data-cat="نقل">🚗 نقل</button>
       <button class="fc" data-cat="أخرى">🔧 أخرى</button>
       <span class="result-count" id="resultCount"></span>
     </div>
@@ -699,6 +701,17 @@ window.onerror = function(msg, url, line, col, error){
     <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك"></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username"></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px">💰 لدي مهارة أرغب بالربح</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px">بالتسجيل توافق على <span style="color:var(--ac);cursor:pointer">شروط الاستخدام</span></p></div>
   </div>
 </div>
+<!-- OTP VERIFY MODAL -->
+<div class="h-overlay" id="otpModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal" style="max-width:380px;text-align:center">
+    <div style="font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px">علاقات</div>
+    <div style="font-size:1rem;font-weight:700;margin-bottom:6px;color:var(--t)">📧 تفعيل البريد الإلكتروني</div>
+    <div style="font-size:.8rem;color:var(--t2);margin-bottom:18px">أرسلنا رمز تفعيل من 6 أرقام إلى<br><span id="otpEmailDisplay" style="color:var(--ac);font-weight:600"></span></div>
+    <input class="fi" type="text" id="otpCode" inputmode="numeric" maxlength="6" placeholder="• • • • • •" style="text-align:center;font-size:1.4rem;letter-spacing:8px;font-weight:700;margin-bottom:14px">
+    <button class="btn-b" style="width:100%;padding:11px;border-radius:10px;margin-bottom:10px" id="doVerifyOtp">تفعيل الحساب ←</button>
+    <div style="font-size:.78rem;color:var(--t3)">لم يصلك الرمز؟ <span id="resendOtp" style="color:var(--ac);cursor:pointer;font-weight:600">إعادة الإرسال</span></div>
+  </div>
+</div>
 <!-- TERMS MODAL -->
 <div class="h-overlay" id="termsModal" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal" style="max-width:420px;text-align:right">
@@ -730,7 +743,7 @@ window.onerror = function(msg, url, line, col, error){
 </div>
 
 <div class="h-overlay" id="compModal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات">🏗️ مقاولات</option><option value="تعقيب">📋 تعقيب</option><option value="برمجة">💻 برمجة</option><option value="تصميم">🎨 تصميم</option><option value="تسويق">📱 تسويق</option><option value="منزلية">🏠 منزلية</option><option value="كتابة">✍️ كتابة</option><option value="تعليم">📚 تعليم</option><option value="نقل">🚗 نقل</option><option value="أخرى">🔧 خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option>24 ساعة</option><option>3 أيام</option><option>أسبوع</option><option>أسبوعان</option><option>مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option>عن بُعد</option><option>حضوري</option><option>كلاهما</option></select></div></div><div class="fg"><label class="fgl">المنطقة *</label><select class="fi" id="reqCity"><option value="">اختر المنطقة</option><option value="الرياض">الرياض</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="القصيم">القصيم</option><option value="الشرقية">الشرقية</option><option value="عسير">عسير</option><option value="تبوك">تبوك</option><option value="حائل">حائل</option><option value="الحدود الشمالية">الحدود الشمالية</option><option value="الجوف">الجوف</option><option value="جازان">جازان</option><option value="نجران">نجران</option><option value="الباحة">الباحة</option></select></div>
+  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات">🏗️ مقاولات</option><option value="سيارات">🚙 سيارات</option><option value="استشارات">⚖️ استشارات</option><option value="صحة وجمال">💆 صحة وجمال</option><option value="مناسبات">🎉 مناسبات وتنظيم</option><option value="برمجة">💻 برمجة</option><option value="تصميم">🎨 تصميم</option><option value="تسويق">📱 تسويق</option><option value="منزلية">🏠 منزلية</option><option value="صيانة عامة">🔧 صيانة عامة</option><option value="تعليم">📚 تعليم</option><option value="أخرى">🔧 خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option>24 ساعة</option><option>3 أيام</option><option>أسبوع</option><option>أسبوعان</option><option>مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option>عن بُعد</option><option>حضوري</option><option>كلاهما</option></select></div></div><div class="fg"><label class="fgl">المنطقة *</label><select class="fi" id="reqCity"><option value="">اختر المنطقة</option><option value="الرياض">الرياض</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="القصيم">القصيم</option><option value="الشرقية">الشرقية</option><option value="عسير">عسير</option><option value="تبوك">تبوك</option><option value="حائل">حائل</option><option value="الحدود الشمالية">الحدود الشمالية</option><option value="الجوف">الجوف</option><option value="جازان">جازان</option><option value="نجران">نجران</option><option value="الباحة">الباحة</option></select></div>
   <div class="fg">
     <label class="fgl">📷 صور وفيديو (اختياري — حتى 10 صور)</label>
     <input type="file" id="reqMediaInput" accept="image/*,video/*" multiple style="display:none" onchange="handleReqMediaSelect(this)">
@@ -972,7 +985,7 @@ window.onerror = function(msg, url, line, col, error){
 'use strict';
 
 /* ===== NAV BETWEEN PAGES ===== */
-window.goHome = function(){ showPage('home'); var bn=document.querySelector('.bottom-nav'); if(bn) bn.style.display='flex'; };
+window.goHome = function(){ stopChatListener(); showPage('home'); var bn=document.querySelector('.bottom-nav'); if(bn) bn.style.display='flex'; };
 window.goProfile = async function(reqId){
   showPage('profile');
   profileChatReceiverId = null;
@@ -1164,12 +1177,10 @@ var ALL_REQS = [
   {id:1,name:'مستخدم',handle:'@noura_s',av:'ن',grad:'linear-gradient(135deg,#f953c6,#b91d73)',time:'منذ 8 دقائق',urgent:false,isNew:true,title:'تصميم هوية بصرية لمطعم عربي راقٍ',desc:'أحتاج هوية بصرية شاملة: شعار، ألوان، قوائم طعام، وعبوات تغليف.',tags:['Branding','شعار','Figma'],cat:'تصميم',tc:'g',budget:'١٥٠٠ ريال',dur:'١٠ أيام',type:'عن بُعد',offers:3,ts:29},
   {id:2,name:'فيصل الدوسري',handle:'@faisal_d',av:'ف',grad:'linear-gradient(135deg,#f7971e,#ffd200)',time:'منذ 20 دقيقة',urgent:true,isNew:false,title:'سباك عاجل — تسرب مياه في الحمام',desc:'تسرب مياه في الحمام، أحتاج سباك متاح اليوم في الرياض حي العليا.',tags:['سباكة','عاجل','الرياض'],cat:'منزلية',tc:'r',budget:'٣٠٠–٦٠٠ ريال',dur:'اليوم',type:'حضوري',offers:2,ts:28},
   {id:3,name:'منى القحطاني',handle:'@mona_q',av:'م',grad:'linear-gradient(135deg,#43e97b,#38f9d7)',time:'منذ 35 دقيقة',urgent:false,isNew:false,title:'محاضر Excel متقدم لتدريب فريق',desc:'أحتاج محاضر متخصص في Excel المتقدم. الجلسة ٣ ساعات.',tags:['Excel','تدريب','Power Query'],cat:'تعليم',tc:'o',budget:'١٢٠٠ ريال',dur:'يوم واحد',type:'حضوري/أونلاين',offers:5,ts:27},
-  {id:4,name:'عبدالرحمن الحربي',handle:'@abdo_h',av:'ع',grad:'linear-gradient(135deg,#667eea,#764ba2)',time:'منذ ساعة',urgent:false,isNew:false,title:'كاتب محتوى تقني للنشر الأسبوعي',desc:'مقالتان أسبوعياً في الذكاء الاصطناعي. مطلوب خبرة SEO وأسلوب سلس.',tags:['كتابة','SEO','AI'],cat:'كتابة',tc:'',budget:'٤٠٠ ريال/مقال',dur:'مستمر',type:'عن بُعد',offers:7,ts:26},
   {id:5,name:'ليلى العنزي',handle:'@layla_a',av:'ل',grad:'linear-gradient(135deg,#ff9a9e,#fecfef)',time:'منذ ساعتين',urgent:false,isNew:false,title:'مدرّس رياضيات للمرحلة المتوسطة',desc:'أبحث عن مدرس رياضيات لابني. جلستان أسبوعياً في جدة أو أونلاين.',tags:['رياضيات','متوسطة','جدة'],cat:'تعليم',tc:'g',budget:'١٠٠–١٥٠ ريال/ساعة',dur:'مستمر',type:'حضوري/أونلاين',offers:4,ts:25},
   {id:6,name:'سالم المالكي',handle:'@salem_m',av:'س',grad:'linear-gradient(135deg,#11998e,#38ef7d)',time:'منذ ٣ ساعات',urgent:false,isNew:false,title:'مصمم UI لتطبيق جوال iOS وAndroid',desc:'نحتاج مصمم UI/UX لتطبيق توصيل طلبات. مطلوب تجربة مستخدم سلسة.',tags:['UI/UX','Figma','موبايل'],cat:'تصميم',tc:'',budget:'٣٠٠٠ ريال',dur:'أسبوعان',type:'عن بُعد',offers:6,ts:24},
   {id:7,name:'ريم الحمدان',handle:'@reem_h',av:'ر',grad:'linear-gradient(135deg,#f093fb,#f5576c)',time:'منذ ٤ ساعات',urgent:false,isNew:false,title:'مصوّر منتجات لمتجر إلكتروني',desc:'متجر ملابس نسائي يحتاج تصوير ٥٠ منتج. الإضاءة والخلفية مهمة.',tags:['تصوير','منتجات','جدة'],cat:'تصميم',tc:'g',budget:'٨٠٠ ريال',dur:'يوم واحد',type:'حضوري',offers:4,ts:23},
   {id:8,name:'بندر العصيمي',handle:'@bandar_a',av:'ب',grad:'linear-gradient(135deg,#4776e6,#8e54e9)',time:'منذ ٥ ساعات',urgent:false,isNew:false,title:'مدير إعلانات Google Ads لمتجر إلكتروني',desc:'متجر إلكترونيات يحتاج إدارة حملات Google Ads بميزانية ٥٠٠٠ ريال شهرياً.',tags:['Google Ads','SEM','تسويق'],cat:'تسويق',tc:'o',budget:'٢٠٠٠ ريال/شهر',dur:'مستمر',type:'عن بُعد',offers:3,ts:22},
-  {id:9,name:'هند الشهراني',handle:'@hind_s',av:'ه',grad:'linear-gradient(135deg,#f7797d,#fbd786)',time:'منذ ٦ ساعات',urgent:true,isNew:false,title:'مترجم عربي-إنجليزي عاجل لعقد تجاري',desc:'عقد تجاري ٢٠ صفحة يحتاج ترجمة احترافية خلال ٢٤ ساعة.',tags:['ترجمة','عاجل','قانوني'],cat:'كتابة',tc:'r',budget:'٦٠٠ ريال',dur:'٢٤ ساعة',type:'عن بُعد',offers:8,ts:21},
   {id:10,name:'طارق الزهراني',handle:'@tariq_z',av:'ط',grad:'linear-gradient(135deg,#2980b9,#6dd5fa)',time:'منذ ٧ ساعات',urgent:false,isNew:false,title:'مقاول دهانات لشقة سكنية في الرياض',desc:'شقة ١٥٠ م² تحتاج دهان كامل داخلي.',tags:['دهانات','صيانة','الرياض'],cat:'منزلية',tc:'',budget:'٢٥٠٠ ريال',dur:'٣ أيام',type:'حضوري',offers:5,ts:20},
   {id:11,name:'نواف القرني',handle:'@nawaf_q',av:'ن',grad:'linear-gradient(135deg,#1a1a2e,#4776e6)',time:'منذ ٨ ساعات',urgent:false,isNew:false,title:'مطور Python لتحليل بيانات المبيعات',desc:'شركة تجارية تحتاج سكريبت Python لتحليل ٣ سنوات من بيانات المبيعات.',tags:['Python','Data','تحليل'],cat:'برمجة',tc:'',budget:'١٨٠٠ ريال',dur:'أسبوع',type:'عن بُعد',offers:2,ts:19},
   {id:12,name:'خالد الشمري',handle:'@khalid_sh',av:'خ',grad:'linear-gradient(135deg,#f857a6,#ff5858)',time:'منذ ٩ ساعات',urgent:false,isNew:false,title:'مصمم إعلانات سوشيال ميديا أسبوعي',desc:'نشاط تجاري يحتاج ١٠ تصاميم أسبوعياً لـ Instagram وSnapchat.',tags:['سوشيال','Photoshop','إعلانات'],cat:'تصميم',tc:'',budget:'١٠٠٠ ريال/شهر',dur:'مستمر',type:'عن بُعد',offers:9,ts:18},
@@ -1186,7 +1197,6 @@ var ALL_REQS = [
   {id:23,name:'تركي القحطاني',handle:'@turki_q',av:'ت',grad:'linear-gradient(135deg,#3a6186,#89253e)',time:'منذ ٢٠ ساعة',urgent:false,isNew:false,title:'مصور فيديو لحفل زفاف في الرياض',desc:'حفل زفاف الشهر القادم يحتاج مصور فيديو احترافي مع تصوير وتغطية كاملة.',tags:['فيديو','تصوير','زفاف'],cat:'تصميم',tc:'g',budget:'٣٠٠٠ ريال',dur:'يوم واحد',type:'حضوري',offers:6,ts:7},
   {id:24,name:'شيماء العتيبي',handle:'@shima_a',av:'ش',grad:'linear-gradient(135deg,#12c2e9,#c471ed)',time:'منذ ٢١ ساعة',urgent:false,isNew:false,title:'مديرة حسابات Instagram لمتجر عطور',desc:'متجر عطور فاخرة يحتاج مديرة حسابات Instagram لبناء محتوى يومي.',tags:['Instagram','محتوى','عطور'],cat:'تسويق',tc:'',budget:'١٢٠٠ ريال/شهر',dur:'مستمر',type:'عن بُعد',offers:5,ts:6},
   {id:25,name:'ماجد الحميدي',handle:'@majed_h',av:'م',grad:'linear-gradient(135deg,#360033,#0b8793)',time:'منذ يوم',urgent:false,isNew:false,title:'نجار لتركيب مطبخ خشبي مخصص',desc:'مطبخ جديد يحتاج تركيب خشب مخصص. المواد جاهزة. الدمام حي الفيصلية.',tags:['نجارة','مطبخ','الدمام'],cat:'منزلية',tc:'o',budget:'٢٠٠٠ ريال',dur:'٣ أيام',type:'حضوري',offers:3,ts:5},
-  {id:26,name:'رهف الشهري',handle:'@rahaf_sh',av:'ر',grad:'linear-gradient(135deg,#f953c6,#b91d73)',time:'منذ يوم',urgent:false,isNew:false,title:'مدققة لغوية لكتاب أكاديمي',desc:'كتاب أكاديمي ٢٠٠ صفحة يحتاج تدقيق لغوي شامل وتنسيق.',tags:['تدقيق','لغة','أكاديمي'],cat:'كتابة',tc:'',budget:'٨٠٠ ريال',dur:'أسبوع',type:'عن بُعد',offers:2,ts:4},
   {id:27,name:'ياسر الغامدي',handle:'@yaser_g',av:'ي',grad:'linear-gradient(135deg,#4a9fd4,#4a9fd4)',time:'منذ يومين',urgent:false,isNew:false,title:'مستشار تسويقي لإطلاق منتج جديد',desc:'شركة ناشئة تحتاج مستشار تسويقي لوضع استراتيجية إطلاق منتج في السوق السعودي.',tags:['تسويق','استراتيجية','إطلاق'],cat:'استشارات',tc:'g',budget:'٣٠٠٠ ريال',dur:'شهر',type:'عن بُعد',offers:4,ts:3},
   {id:28,name:'لمى الحربي',handle:'@lama_h',av:'ل',grad:'linear-gradient(135deg,#11998e,#38ef7d)',time:'منذ يومين',urgent:false,isNew:false,title:'مصممة ديكور لشقة سكنية',desc:'شقة جديدة تحتاج مصممة ديكور لاختيار الألوان والأثاث وتنسيق الغرف.',tags:['ديكور','تصميم داخلي','جدة'],cat:'تصميم',tc:'',budget:'٢٠٠٠ ريال',dur:'أسبوعان',type:'حضوري',offers:7,ts:2},
   {id:29,name:'عبدالله السلمي',handle:'@abl_s',av:'ع',grad:'linear-gradient(135deg,#667eea,#764ba2)',time:'منذ يومين',urgent:false,isNew:false,title:'مطور Node.js لبناء API للتطبيق',desc:'تطبيق موبايل يحتاج backend بـ Node.js وExpress مع قاعدة بيانات MongoDB.',tags:['Node.js','API','MongoDB'],cat:'برمجة',tc:'',budget:'٤٠٠٠ ريال',dur:'٣ أسابيع',type:'عن بُعد',offers:3,ts:1}
@@ -1206,7 +1216,7 @@ window.filterFeed = function(q){
 };
 function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.name+'</span>'+(r.urgent?'<span class="ubadge">'+t('urgentBadge')+'</span>':'')+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+r.handle+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+r.title+'</div>'+'<div class="rdesc">'+r.desc+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+tg+'</span>';}).join('')+'<span class="rtag g">⏱ '+r.dur+'</span><span class="rtag">'+r.type+'</span>'+(r.city?'<span class="rtag">📍 '+r.city+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+r.budget+'</div></div>'+'<div class="rcf-r"><span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation()">'+(isSaved?t('savedBadge'):'🔖')+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation()">'+t('submitOffer')+'</button>'+'</div></div></div>';}
 function makeFooter(){
-  return '<div class="bcta"><h3>'+t('readyToStart')+'</h3><p>'+t('ctaSubtitle')+'</p><div class="bcta-btns"><button class="btn-b" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openComp()">'+t('postFree')+'</button><button class="btn-p" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openAuth(\'provider\')">'+t('startEarning')+'</button></div></div>'
+  return '<div class="bcta"><h3>'+t('readyToStart')+'</h3><p>'+t('ctaSubtitle')+'</p><div class="bcta-btns"><button class="btn-b" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openComp()">'+t('postFree')+'</button><button class="btn-p" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openAuth(\'register\')">'+t('startEarning')+'</button></div></div>'
   + '<div class="feed-footer">'
   + '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid var(--b);margin-bottom:10px">'
   + '<div style="font-size:.78rem;font-weight:700;color:var(--t2);margin-bottom:4px">تواصل معنا</div>'
@@ -1479,7 +1489,76 @@ function setupOwnerControls(requestId, r){
 }
 
 // نافذة تعديل الطلب
+var editExistingMedia = [];
+var editNewMediaFiles = [];
+
+function renderEditMediaPreview(){
+  var box = document.getElementById('editMediaPreview');
+  if(!box) return;
+  box.innerHTML = '';
+  editExistingMedia.forEach(function(m, idx){
+    var item = document.createElement('div');
+    item.style.cssText = 'position:relative;width:64px;height:64px;border-radius:10px;overflow:hidden;background:var(--s2);border:1px solid var(--b);flex-shrink:0';
+    item.innerHTML = m.type==='video'
+      ? '<video src="'+m.url+'" style="width:100%;height:100%;object-fit:cover"></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);font-size:1.2rem">🎬</div>'
+      : '<img src="'+m.url+'" style="width:100%;height:100%;object-fit:cover">';
+    var removeBtn = document.createElement('div');
+    removeBtn.textContent = '✕';
+    removeBtn.style.cssText = 'position:absolute;top:2px;right:2px;background:rgba(0,0,0,.6);color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;cursor:pointer';
+    removeBtn.onclick = function(){ editExistingMedia.splice(idx,1); renderEditMediaPreview(); };
+    item.appendChild(removeBtn);
+    box.appendChild(item);
+  });
+  editNewMediaFiles.forEach(function(file, idx){
+    var isVideo = file.type.startsWith('video/');
+    var url = URL.createObjectURL(file);
+    var item = document.createElement('div');
+    item.style.cssText = 'position:relative;width:64px;height:64px;border-radius:10px;overflow:hidden;background:var(--s2);border:1px solid var(--b);flex-shrink:0';
+    item.innerHTML = isVideo
+      ? '<video src="'+url+'" style="width:100%;height:100%;object-fit:cover"></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);font-size:1.2rem">🎬</div>'
+      : '<img src="'+url+'" style="width:100%;height:100%;object-fit:cover">';
+    var removeBtn = document.createElement('div');
+    removeBtn.textContent = '✕';
+    removeBtn.style.cssText = 'position:absolute;top:2px;right:2px;background:rgba(0,0,0,.6);color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;cursor:pointer';
+    removeBtn.onclick = function(){ editNewMediaFiles.splice(idx,1); renderEditMediaPreview(); };
+    item.appendChild(removeBtn);
+    box.appendChild(item);
+  });
+  var addBtn = document.getElementById('editMediaAddBtn');
+  if(addBtn) addBtn.style.display = (editExistingMedia.length+editNewMediaFiles.length) >= 10 ? 'none' : 'block';
+}
+
+window.handleEditMediaSelect = function(input){
+  var files = Array.from(input.files || []);
+  files.forEach(function(file){
+    if((editExistingMedia.length+editNewMediaFiles.length) >= 10){ hToast('⚠️ الحد الأعلى 10 ملفات'); return; }
+    var isVideo = file.type.startsWith('video/');
+    if(isVideo && file.size > 50*1024*1024){ hToast('⚠️ الفيديو أكبر من 50 ميجابايت'); return; }
+    if(!isVideo && file.size > 20*1024*1024){ hToast('⚠️ الصورة أكبر من 20 ميجابايت'); return; }
+    editNewMediaFiles.push(file);
+  });
+  input.value = '';
+  renderEditMediaPreview();
+};
+
+async function uploadEditMediaFiles(){
+  var urls = [];
+  for(var i=0; i<editNewMediaFiles.length; i++){
+    var file = editNewMediaFiles[i];
+    var user = await sbGetUser();
+    var ext = file.name.split('.').pop();
+    var path = user.id + '_' + Date.now() + '_' + i + '.' + ext;
+    var {error} = await sb.storage.from('request-media').upload(path, file);
+    if(error) continue;
+    var {data:urlData} = sb.storage.from('request-media').getPublicUrl(path);
+    urls.push({url:urlData.publicUrl, type: file.type.startsWith('video/') ? 'video' : 'image'});
+  }
+  return urls;
+}
+
 window.openEditRequest = function(requestId, r){
+  editExistingMedia = (r.media||[]).slice();
+  editNewMediaFiles = [];
   var sheet = document.createElement('div');
   sheet.className = 'h-overlay open';
   sheet.id = 'editReqModal';
@@ -1490,20 +1569,34 @@ window.openEditRequest = function(requestId, r){
       +'<input id="editReqTitle" placeholder="العنوان" value="'+String(r.title||'').replace(/"/g,'&quot;')+'" style="background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:11px 14px;font-family:inherit;font-size:.86rem;color:var(--t);outline:none">'
       +'<textarea id="editReqDesc" placeholder="الوصف" style="background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:11px 14px;font-family:inherit;font-size:.84rem;color:var(--t);outline:none;height:90px;resize:none">'+String(r.desc||'')+'</textarea>'
       +'<input id="editReqBudget" placeholder="الميزانية" value="'+String(r.budget||'').replace(/"/g,'&quot;')+'" style="background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:11px 14px;font-family:inherit;font-size:.86rem;color:var(--t);outline:none">'
+      +'<div>'
+        +'<label style="font-size:.78rem;color:var(--t2);display:block;margin-bottom:6px">📷 الصور والفيديو (حتى 10)</label>'
+        +'<input type="file" id="editMediaInput" accept="image/*,video/*" multiple style="display:none" onchange="handleEditMediaSelect(this)">'
+        +'<div id="editMediaPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"></div>'
+        +'<button type="button" id="editMediaAddBtn" onclick="document.getElementById(\'editMediaInput\').click()" style="width:100%;background:var(--s2);border:1px dashed var(--b);color:var(--t2);border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer">+ إضافة صور أو فيديو</button>'
+      +'</div>'
       +'<button id="editReqSaveBtn" class="submit-btn">حفظ التعديلات</button>'
     +'</div>'
   +'</div>';
   document.body.appendChild(sheet);
+  renderEditMediaPreview();
   sheet.onclick = function(e){ if(e.target===sheet){ sheet.remove(); } };
   document.getElementById('editReqSaveBtn').onclick = async function(){
     var newTitle = document.getElementById('editReqTitle').value.trim();
     var newDesc = document.getElementById('editReqDesc').value.trim();
     var newBudget = document.getElementById('editReqBudget').value.trim();
     if(!newTitle){ hToast('⚠️ العنوان مطلوب'); return; }
+    var saveBtn = document.getElementById('editReqSaveBtn');
+    saveBtn.textContent = 'جاري الحفظ...'; saveBtn.disabled = true;
+    var uploadedUrls = [];
+    if(editNewMediaFiles.length > 0){
+      uploadedUrls = await uploadEditMediaFiles();
+    }
+    var finalMedia = editExistingMedia.concat(uploadedUrls);
     var {error} = await sb.from('requests').update({
-      title: newTitle, description: newDesc, budget_text: newBudget
+      title: newTitle, description: newDesc, budget_text: newBudget, media_urls: finalMedia
     }).eq('id', requestId);
-    if(error){ hToast('⚠️ تعذر حفظ التعديلات'); return; }
+    if(error){ hToast('⚠️ تعذر حفظ التعديلات'); saveBtn.textContent='حفظ التعديلات'; saveBtn.disabled=false; return; }
     hToast('✓ تم حفظ التعديلات');
     sheet.remove();
     openDetail(requestId);
@@ -1620,7 +1713,7 @@ window.openDetail=async function(id){
           if(m.type === 'video'){
             return '<video src="'+m.url+'" controls style="width:260px;height:180px;border-radius:14px;object-fit:cover;flex-shrink:0;scroll-snap-align:start;background:#000"></video>';
           } else {
-            return '<img src="'+m.url+'" style="width:260px;height:180px;border-radius:14px;object-fit:cover;flex-shrink:0;scroll-snap-align:start;cursor:pointer" onclick="window.open(\''+m.url+'\',\'_blank\')">';
+            return '<img src="'+m.url+'" style="width:260px;height:180px;border-radius:14px;object-fit:cover;flex-shrink:0;scroll-snap-align:start;cursor:pointer" onclick="openImagePreview(\''+m.url+'\')">';
           }
         }).join('') +
       '</div>';
@@ -1777,7 +1870,14 @@ document.getElementById('doLogin').onclick=async function(){
   if(!email||!pass){ hToast('⚠️ أدخل البريد وكلمة المرور'); return; }
   hToast('جاري تسجيل الدخول...');
   var result = await sbLogin(email, pass);
-  if(result.error){ hToast('❌ ' + result.error.message); return; }
+  if(result.error){
+    if(result.error.message === 'EMAIL_NOT_CONFIRMED'){
+      hToast('⚠️ يجب تفعيل بريدك الإلكتروني أولاً');
+      openOtpModal(email);
+      return;
+    }
+    hToast('❌ ' + result.error.message); return;
+  }
   doLoginUI();
 };
 
@@ -1807,8 +1907,44 @@ document.getElementById('doRegister').onclick=async function(){
     }
     return;
   }
+  document.getElementById('authModal').classList.remove('open');
+  openOtpModal(email);
+  hToast('📧 أرسلنا رمز تفعيل إلى بريدك');
+};
+
+// =====================
+// OTP — تفعيل البريد الإلكتروني
+// =====================
+function openOtpModal(email){
+  window.pendingOtpEmail = email;
+  var disp = document.getElementById('otpEmailDisplay');
+  if(disp) disp.textContent = email;
+  var codeEl = document.getElementById('otpCode');
+  if(codeEl) codeEl.value = '';
+  document.getElementById('otpModal').classList.add('open');
+}
+document.getElementById('doVerifyOtp').onclick=async function(){
+  var code = document.getElementById('otpCode').value.trim();
+  var email = window.pendingOtpEmail;
+  if(!email){ hToast('⚠️ حدث خطأ، حاول التسجيل من جديد'); return; }
+  if(!code || code.length !== 6){ hToast('⚠️ أدخل الرمز المكوّن من 6 أرقام'); return; }
+  hToast('جاري التحقق من الرمز...');
+  var result = await sbVerifyOtp(email, code);
+  if(result.error){
+    hToast('❌ الرمز غير صحيح أو منتهي الصلاحية');
+    return;
+  }
+  document.getElementById('otpModal').classList.remove('open');
+  hToast('🎉 تم تفعيل حسابك بنجاح!');
   doLoginUI();
-  hToast('🎉 تم إنشاء حسابك بنجاح!');
+};
+document.getElementById('resendOtp').onclick=async function(){
+  var email = window.pendingOtpEmail;
+  if(!email){ return; }
+  hToast('جاري إعادة إرسال الرمز...');
+  var result = await sbResendOtp(email);
+  if(result.error){ hToast('❌ ' + result.error.message); return; }
+  hToast('📧 تم إرسال رمز جديد إلى بريدك');
 };
 document.getElementById('goRegister').onclick=function(){switchAuthTab('register');};
 document.getElementById('btnLogin').onclick=function(){openAuth('login');};
@@ -1994,6 +2130,22 @@ window.toggleTheme = function(){
 applyTheme(currentTheme);
 
 window.hToast = hToast;
+
+// معاينة صورة مبسّطة داخل الموقع — بدون أسهم تنقل أو أدوات زووم، بدون فتح تبويب جديد
+window.openImagePreview = function(url){
+  var existing = document.getElementById('imgPreviewOverlay');
+  if(existing) existing.remove();
+  var overlay = document.createElement('div');
+  overlay.id = 'imgPreviewOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.innerHTML =
+    '<div style="position:absolute;top:16px;left:16px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer" id="imgPreviewCloseBtn">✕</div>'
+    + '<img src="'+url+'" style="max-width:100%;max-height:100%;border-radius:8px;object-fit:contain">';
+  document.body.appendChild(overlay);
+  function close(){ overlay.remove(); }
+  overlay.onclick = function(e){ if(e.target===overlay) close(); };
+  document.getElementById('imgPreviewCloseBtn').onclick = close;
+};
 // تحقق من الجلسة عند فتح الصفحة - يحافظ على تسجيل الدخول
 sb.auth.getSession().then(function(res){
   if(res.data&&res.data.session){ doLoginUI(); }
@@ -2332,6 +2484,7 @@ function escJ(s){ return String(s).replace(/['"\\/]/g,''); }
 function escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 window.openChatWith = async function(uid, name, grad, letter){
+  stopChatListener();
   currentReceiverId = uid;
   var avEl=document.getElementById('chAv');
   avEl.style.background=grad; avEl.innerHTML=letter+'<div class="ch-av-dot"></div>';
@@ -2370,7 +2523,7 @@ window.openChatWith = async function(uid, name, grad, letter){
     var checkmark=isMe?' <span style="color:#93c5fd">✓✓</span>':'';
     if(m.attachment_url){
       if(m.attachment_type==='image'){
-        d.innerHTML='<div class="bbl-txt"><img src="'+m.attachment_url+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="window.open(\''+m.attachment_url+'\',\'_blank\')"></div><div class="bbl-meta">'+timeAgo(m.created_at)+checkmark+'</div>';
+        d.innerHTML='<div class="bbl-txt"><img src="'+m.attachment_url+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="openImagePreview(\''+m.attachment_url+'\')"></div><div class="bbl-meta">'+timeAgo(m.created_at)+checkmark+'</div>';
       } else {
         d.innerHTML='<div class="bbl-txt"><a href="'+m.attachment_url+'" target="_blank" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:8px"><span style="font-size:1.4rem">📄</span><span style="font-size:.82rem;word-break:break-all">'+escH(m.attachment_name||'ملف')+'</span></a></div><div class="bbl-meta">'+timeAgo(m.created_at)+checkmark+'</div>';
       }
@@ -2381,6 +2534,34 @@ window.openChatWith = async function(uid, name, grad, letter){
   });
   body.scrollTop=body.scrollHeight;
   await sb.from('messages').update({is_read:true}).eq('sender_id',uid).eq('receiver_id',user.id);
+
+  // تفعيل استقبال الرسائل الفورية لهذي المحادثة بالتحديد
+  activeChatChannel = sb.channel('chatwith_'+user.id+'_'+uid)
+    .on('postgres_changes', {
+      event:'INSERT', schema:'public', table:'messages',
+      filter:'receiver_id=eq.'+user.id
+    }, function(payload){
+      var m = payload.new;
+      if(m.sender_id !== uid) return; // فقط رسائل نفس الشخص المفتوحة معه المحادثة الآن
+      var bodyEl = document.getElementById('chBody');
+      if(!bodyEl) return;
+      var d=document.createElement('div');
+      d.className='bbl them';
+      if(m.attachment_url){
+        if(m.attachment_type==='image'){
+          d.innerHTML='<div class="bbl-txt"><img src="'+m.attachment_url+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="openImagePreview(\''+m.attachment_url+'\')"></div><div class="bbl-meta">'+timeAgo(m.created_at)+'</div>';
+        } else {
+          d.innerHTML='<div class="bbl-txt"><a href="'+m.attachment_url+'" target="_blank" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:8px"><span style="font-size:1.4rem">📄</span><span style="font-size:.82rem;word-break:break-all">'+escH(m.attachment_name||'ملف')+'</span></a></div><div class="bbl-meta">'+timeAgo(m.created_at)+'</div>';
+        }
+      } else {
+        d.innerHTML='<div class="bbl-txt">'+escH(m.content)+'</div><div class="bbl-meta">'+timeAgo(m.created_at)+'</div>';
+      }
+      bodyEl.appendChild(d);
+      bodyEl.scrollTop = bodyEl.scrollHeight;
+      // تعليم الرسالة كمقروءة فوراً بما إن المحادثة مفتوحة حالياً
+      sb.from('messages').update({is_read:true}).eq('id', m.id);
+    })
+    .subscribe();
 };
 
 window.handleChatFileSelect = async function(input){
@@ -2417,7 +2598,7 @@ window.handleChatFileSelect = async function(input){
   var now=new Date(); var time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
   var d=document.createElement('div'); d.className='bbl me';
   if(isImage){
-    d.innerHTML='<div class="bbl-txt"><img src="'+fileUrl+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="window.open(\''+fileUrl+'\',\'_blank\')"></div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
+    d.innerHTML='<div class="bbl-txt"><img src="'+fileUrl+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="openImagePreview(\''+fileUrl+'\')"></div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
   } else {
     d.innerHTML='<div class="bbl-txt"><a href="'+fileUrl+'" target="_blank" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:8px"><span style="font-size:1.4rem">📄</span><span style="font-size:.82rem;word-break:break-all">'+escH(file.name)+'</span></a></div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
   }
@@ -2446,6 +2627,7 @@ window.sendChatMsg = async function(){
 };
 
 window.msgsBack = function(){
+  stopChatListener();
   var cv=document.getElementById('chatView'), cl=document.getElementById('convList');
   if(cv.style.display!=='none'){
     cv.style.display='none'; cl.style.display='block';
@@ -2589,8 +2771,24 @@ async function sbRegister(email, password, fullName, username) {
   return { data, error };
 }
 
+async function sbVerifyOtp(email, token) {
+  const { data, error } = await sb.auth.verifyOtp({ email, token, type: 'email' });
+  return { data, error };
+}
+
+async function sbResendOtp(email) {
+  const { data, error } = await sb.auth.resend({ type: 'signup', email });
+  return { data, error };
+}
+
 async function sbLogin(email, password) {
   const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) return { data, error };
+  var user = data && data.user;
+  if (user && !user.email_confirmed_at) {
+    await sb.auth.signOut();
+    return { data: null, error: { message: 'EMAIL_NOT_CONFIRMED', email: email } };
+  }
   return { data, error };
 }
 
