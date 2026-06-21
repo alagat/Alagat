@@ -355,7 +355,6 @@ window.I18N = {
     urgentBadge:'عاجل 🔴', newBadge:'جديد ✨', noOffersBadge:'لا عروض بعد', savedBadge:'🔖 محفوظ',
     requestDetails:'تفاصيل الطلب', serviceTypeShort:'نوع الخدمة',
     offersTab:'العروض المقدمة', noOffersOnRequest:'لا توجد عروض بعد على هذا الطلب',
-    registerAsProvider:'تسجيل كمقدم خدمة',
     email:'البريد الإلكتروني', password:'كلمة المرور', fullName:'الاسم الكامل',
     confirmPassword:'تأكيد كلمة المرور', forgotPassword:'نسيت كلمة المرور؟',
     dontHaveAccount:'ليس لديك حساب؟', alreadyHaveAccount:'لديك حساب؟',
@@ -420,7 +419,6 @@ window.I18N = {
     urgentBadge:'Urgent 🔴', newBadge:'New ✨', noOffersBadge:'No offers yet', savedBadge:'🔖 Saved',
     requestDetails:'Request Details', serviceTypeShort:'Service Type',
     offersTab:'Submitted Offers', noOffersOnRequest:'No offers on this request yet',
-    registerAsProvider:'Register as Provider',
     email:'Email', password:'Password', fullName:'Full Name',
     confirmPassword:'Confirm Password', forgotPassword:'Forgot password?',
     dontHaveAccount:"Don't have an account?", alreadyHaveAccount:'Already have an account?',
@@ -551,6 +549,31 @@ window.onerror = function(msg, url, line, col, error){
         <span style="color:var(--t3);font-size:.85rem">🔍</span>
         <input type="text" placeholder="ابحث في الطلبات..." data-i18n-placeholder="searchInRequests" id="searchInput" style="flex:1;background:none;border:none;outline:none;color:var(--t);font-family:inherit;font-size:.82rem" oninput="filterFeed(this.value)">
       </div>
+      <div style="display:flex;gap:8px;width:100%;margin-bottom:8px">
+        <select id="filterCity" style="flex:1;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:7px 9px;color:var(--t);font-family:inherit;font-size:.78rem">
+          <option value="all">📍 كل المناطق</option>
+          <option value="الرياض">الرياض</option>
+          <option value="مكة المكرمة">مكة المكرمة</option>
+          <option value="المدينة المنورة">المدينة المنورة</option>
+          <option value="القصيم">القصيم</option>
+          <option value="الشرقية">الشرقية</option>
+          <option value="عسير">عسير</option>
+          <option value="تبوك">تبوك</option>
+          <option value="حائل">حائل</option>
+          <option value="الحدود الشمالية">الحدود الشمالية</option>
+          <option value="الجوف">الجوف</option>
+          <option value="جازان">جازان</option>
+          <option value="نجران">نجران</option>
+          <option value="الباحة">الباحة</option>
+        </select>
+        <select id="filterTime" style="flex:1;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:7px 9px;color:var(--t);font-family:inherit;font-size:.78rem">
+          <option value="all">🕐 كل الأوقات</option>
+          <option value="day">خلال يوم</option>
+          <option value="3days">آخر 3 أيام</option>
+          <option value="week">آخر أسبوع</option>
+          <option value="month">آخر شهر</option>
+        </select>
+      </div>
       <button class="fc on" data-cat="all" data-i18n="all">الكل</button>
       <button class="fc" data-cat="مقاولات">🏗️ مقاولات</button>
       <button class="fc" data-cat="تعقيب">📋 تعقيب</button>
@@ -615,7 +638,10 @@ window.onerror = function(msg, url, line, col, error){
       <div id="detName" style="font-size:.92rem;font-weight:700;color:var(--t);cursor:pointer" onclick="goProfile(window._currentDetailId)"></div>
       <div id="detHandle" style="font-size:.75rem;color:var(--t3)"></div>
     </div>
-    <div id="detTime" style="font-size:.72rem;color:var(--t3)"></div>
+    <div style="text-align:left;flex-shrink:0">
+      <div id="detTime" style="font-size:.72rem;color:var(--t3)"></div>
+      <div id="detAdNumber" style="font-size:.68rem;color:var(--t3);margin-top:2px;cursor:pointer" onclick="copyAdNumber()"></div>
+    </div>
   </div>
   <!-- عنوان ووصف -->
   <div id="detTitle" style="font-size:1.15rem;font-weight:800;color:var(--t);margin-bottom:8px;line-height:1.4"></div>
@@ -668,10 +694,9 @@ window.onerror = function(msg, url, line, col, error){
 <div class="h-overlay" id="authModal" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal">
     <div style="text-align:center;margin-bottom:16px"><div style="font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px">علاقات</div></div>
-    <div class="auth-tabs"><button class="at on" id="at-login" data-i18n="login">تسجيل الدخول</button><button class="at" id="at-register" data-i18n="register">إنشاء حساب</button><button class="at" id="at-provider" data-i18n="registerAsProvider">مزود خدمة</button></div>
+    <div class="auth-tabs"><button class="at on" id="at-login" data-i18n="login">تسجيل الدخول</button><button class="at" id="at-register" data-i18n="register">إنشاء حساب</button></div>
     <div id="f-login"><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني</label><input class="fi" type="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور</label><input class="fi" type="password" placeholder="••••••••" id="loginPass"></div><div style="text-align:left;margin-bottom:12px"><span style="font-size:.74rem;color:var(--ac);cursor:pointer" data-i18n="forgotPassword">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin" data-i18n="loginBtn">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister" data-i18n="register">إنشاء حساب جديد</button></div>
-    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك"></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username"></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px">💰 الاثنين</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px">بالتسجيل توافق على <span style="color:var(--ac);cursor:pointer">شروط الاستخدام</span></p></div>
-    <div id="f-provider" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم *</label><input class="fi" type="text" placeholder="اسمك"></div><div class="fg"><label class="fgl">الجوال *</label><div class="prow" style="gap:5px"><input class="pcode" value="+966" readonly style="width:58px"><input class="fi" type="tel" placeholder="05xxxxxxxx" style="flex:1"></div></div></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username"></div><div class="fg"><label class="fgl">مهاراتك *</label><div class="sk-grid"><div class="sko">💻 برمجة</div><div class="sko">🎨 تصميم</div><div class="sko">📱 تسويق</div><div class="sko">✍️ كتابة</div><div class="sko">📚 تدريس</div><div class="sko">⚡ كهرباء</div><div class="sko">🔧 صيانة</div><div class="sko">🚿 سباكة</div><div class="sko">📸 تصوير</div></div></div><div class="frow"><div class="fg"><label class="fgl">المدينة</label><select class="fi"><option>الرياض</option><option>جدة</option><option>الدمام</option><option>مكة</option><option>أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع العمل</label><select class="fi"><option>عن بُعد</option><option>حضوري</option><option>كلاهما</option></select></div></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><button class="btn-p" style="width:100%;padding:11px;border-radius:10px" id="doProvider">انضم كمزود ←</button></div>
+    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك"></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username"></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px">💰 لدي مهارة أرغب بالربح</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px">بالتسجيل توافق على <span style="color:var(--ac);cursor:pointer">شروط الاستخدام</span></p></div>
   </div>
 </div>
 <!-- TERMS MODAL -->
@@ -705,7 +730,7 @@ window.onerror = function(msg, url, line, col, error){
 </div>
 
 <div class="h-overlay" id="compModal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات">🏗️ مقاولات</option><option value="تعقيب">📋 تعقيب</option><option value="برمجة">💻 برمجة</option><option value="تصميم">🎨 تصميم</option><option value="تسويق">📱 تسويق</option><option value="منزلية">🏠 منزلية</option><option value="كتابة">✍️ كتابة</option><option value="تعليم">📚 تعليم</option><option value="نقل">🚗 نقل</option><option value="أخرى">🔧 خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option>24 ساعة</option><option>3 أيام</option><option>أسبوع</option><option>أسبوعان</option><option>مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option>عن بُعد</option><option>حضوري</option><option>كلاهما</option></select></div></div>
+  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات">🏗️ مقاولات</option><option value="تعقيب">📋 تعقيب</option><option value="برمجة">💻 برمجة</option><option value="تصميم">🎨 تصميم</option><option value="تسويق">📱 تسويق</option><option value="منزلية">🏠 منزلية</option><option value="كتابة">✍️ كتابة</option><option value="تعليم">📚 تعليم</option><option value="نقل">🚗 نقل</option><option value="أخرى">🔧 خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option>24 ساعة</option><option>3 أيام</option><option>أسبوع</option><option>أسبوعان</option><option>مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option>عن بُعد</option><option>حضوري</option><option>كلاهما</option></select></div></div><div class="fg"><label class="fgl">المنطقة *</label><select class="fi" id="reqCity"><option value="">اختر المنطقة</option><option value="الرياض">الرياض</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="القصيم">القصيم</option><option value="الشرقية">الشرقية</option><option value="عسير">عسير</option><option value="تبوك">تبوك</option><option value="حائل">حائل</option><option value="الحدود الشمالية">الحدود الشمالية</option><option value="الجوف">الجوف</option><option value="جازان">جازان</option><option value="نجران">نجران</option><option value="الباحة">الباحة</option></select></div>
   <div class="fg">
     <label class="fgl">📷 صور وفيديو (اختياري — حتى 10 صور)</label>
     <input type="file" id="reqMediaInput" accept="image/*,video/*" multiple style="display:none" onchange="handleReqMediaSelect(this)">
@@ -1132,7 +1157,7 @@ window.showPage = function showPage(id){
 }
 
 /* ===== HOME LOGIC ===== */
-var state = { loggedIn:false, activeTab:'latest', activeFilter:'all', search:'', saved:[], currentOfferId:null };
+var state = { loggedIn:false, activeTab:'latest', activeFilter:'all', activeCity:'all', activeTime:'all', search:'', saved:[], currentOfferId:null };
 window.state = state;
 var ALL_REQS = [
   {id:0,name:'أحمد الغامدي',handle:'@ahmed_g',av:'أ',grad:'linear-gradient(135deg,#4a9fd4,#4a9fd4)',time:'منذ 3 دقائق',urgent:true,isNew:false,title:'أحتاج مطور React لبناء لوحة تحكم إدارية',desc:'أبحث عن مطور React لبناء dashboard لمنصة تعليمية. يشمل جداول بيانات ورسوم بيانية.',tags:['React','TypeScript','Dashboard'],cat:'برمجة',tc:'',budget:'٢٠٠٠–٤٠٠٠ ريال',dur:'أسبوع',type:'عن بُعد',offers:0,ts:30},
@@ -1168,31 +1193,18 @@ var ALL_REQS = [
 ];
 var PAGE_SIZE=10, currentPage=0, reqs=ALL_REQS.slice();
 var sampleOffers={};
-function getList(){var list=reqs.slice();if(state.activeTab==='urgent')list=list.filter(function(r){return r.urgent;});else if(state.activeTab==='nooffers')list=list.filter(function(r){return r.offers===0;});else if(state.activeTab==='nearby')list=list.filter(function(r){return r.type.indexOf('حضوري')>-1;});else list.sort(function(a,b){return b.ts-a.ts;});if(state.activeFilter!=='all')list=list.filter(function(r){return r.cat===state.activeFilter;});if(state.search){var q=state.search.toLowerCase();list=list.filter(function(r){return r.title.toLowerCase().indexOf(q)>-1||r.tags.join(' ').toLowerCase().indexOf(q)>-1;});}return list;}
+function getList(){var list=reqs.slice();if(state.activeTab==='latest')list.sort(function(a,b){return b.ts-a.ts;});return list;}
 
-// بحث محلي بدون رجوع لـ Supabase
+// بحث عبر الخادم (مع debounce لتقليل عدد الطلبات أثناء الكتابة)
+var searchDebounceTimer=null;
 window.filterFeed = function(q){
   state.search = q;
-  var list = getList();
-  document.getElementById('resultCount').textContent = list.length + ' طلب';
-  var cc = document.getElementById('cardsContainer');
-  if(!cc) return;
-  if(!list.length){
-    cc.innerHTML = '<div class="empty-state" style="padding:40px 20px;text-align:center;color:var(--t2)"><div style="font-size:2rem;margin-bottom:8px">🔍</div><div>لا توجد نتائج</div></div>';
-    return;
-  }
-  cc.innerHTML = '';
-  list.slice(0, PAGE_SIZE).forEach(function(r){ cc.insertAdjacentHTML('beforeend', makeCard(r)); });
-  bindCardEvents();
-  // إزالة sentinel القديم
-  var old = document.getElementById('loadSentinel');
-  if(old) old.remove();
-  if(list.length > PAGE_SIZE){
-    cc.insertAdjacentHTML('afterend', '<div id="loadSentinel" style="height:60px;display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:.8rem">⏳</div>');
-    setupInfiniteScroll();
-  }
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(function(){
+    renderFeed();
+  }, 350);
 };
-function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.name+'</span>'+(r.urgent?'<span class="ubadge">'+t('urgentBadge')+'</span>':'')+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+r.handle+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+r.title+'</div>'+'<div class="rdesc">'+r.desc+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+tg+'</span>';}).join('')+'<span class="rtag g">⏱ '+r.dur+'</span><span class="rtag">'+r.type+'</span></div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+r.budget+'</div></div>'+'<div class="rcf-r"><span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation()">'+(isSaved?t('savedBadge'):'🔖')+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation()">'+t('submitOffer')+'</button>'+'</div></div></div>';}
+function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.name+'</span>'+(r.urgent?'<span class="ubadge">'+t('urgentBadge')+'</span>':'')+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+r.handle+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+r.title+'</div>'+'<div class="rdesc">'+r.desc+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+tg+'</span>';}).join('')+'<span class="rtag g">⏱ '+r.dur+'</span><span class="rtag">'+r.type+'</span>'+(r.city?'<span class="rtag">📍 '+r.city+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+r.budget+'</div></div>'+'<div class="rcf-r"><span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation()">'+(isSaved?t('savedBadge'):'🔖')+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation()">'+t('submitOffer')+'</button>'+'</div></div></div>';}
 function makeFooter(){
   return '<div class="bcta"><h3>'+t('readyToStart')+'</h3><p>'+t('ctaSubtitle')+'</p><div class="bcta-btns"><button class="btn-b" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openComp()">'+t('postFree')+'</button><button class="btn-p" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openAuth(\'provider\')">'+t('startEarning')+'</button></div></div>'
   + '<div class="feed-footer">'
@@ -1226,26 +1238,62 @@ function makeSkeleton(n){
   }
   return h;
 }
+var FETCH_SIZE=50, hasMoreFromServer=true, isLoadingMore=false;
+
+// بناء استعلام Supabase بناءً على الفلاتر النشطة حالياً (تبويب/فئة/بحث)
+function buildFeedQuery(){
+  var q = sb.from('requests')
+    .select('*, profiles(full_name,username,avatar_color,avatar_letter)')
+    .eq('status','open');
+  if(state.activeTab==='urgent'){
+    q = q.eq('is_urgent', true);
+  } else if(state.activeTab==='nooffers'){
+    q = q.eq('offers_count', 0);
+  } else if(state.activeTab==='nearby'){
+    q = q.eq('work_type', 'حضوري');
+  }
+  if(state.activeFilter!=='all'){
+    q = q.eq('category', state.activeFilter);
+  }
+  if(state.activeCity && state.activeCity!=='all'){
+    q = q.eq('city', state.activeCity);
+  }
+  if(state.activeTime && state.activeTime!=='all'){
+    var hoursMap = {day:24, '3days':72, week:24*7, month:24*30};
+    var hrs = hoursMap[state.activeTime];
+    if(hrs){
+      var since = new Date(Date.now() - hrs*3600*1000).toISOString();
+      q = q.gte('created_at', since);
+    }
+  }
+  if(state.search){
+    q = q.ilike('title', '%'+state.search+'%');
+  }
+  q = q.order('created_at',{ascending:false});
+  return q;
+}
+
+function mapRequestRow(r){
+  var p=r.profiles||{};
+  return{id:r.id,name:p.full_name||'مجهول',handle:'@'+(p.username||'user'),av:(p.full_name||'م')[0],
+    grad:p.avatar_color||'linear-gradient(135deg,#2563a8,#4a9fd4)',time:timeAgo(r.created_at),
+    urgent:r.is_urgent||false,isNew:(Date.now()-new Date(r.created_at))<3600000,
+    title:r.title,desc:r.description||'',tags:[r.category],cat:r.category,tc:'',userId:r.user_id,adNumber:r.ad_number,
+    budget:r.budget_text||'يُحدد',dur:r.duration||'مرن',type:r.work_type||'عن بُعد',city:r.city||'',
+    offers:r.offers_count||0,ts:new Date(r.created_at).getTime(),created_at:r.created_at,lastBump:r.created_at,media:r.media_urls||[]};
+}
+
 function renderFeed(){
   currentPage=0;
+  hasMoreFromServer=true;
   var el=document.getElementById('feedContent');
   el.innerHTML='<div id="feedSkeleton" style="padding:14px">'+makeSkeleton(6)+'</div>';
-  sb.from('requests')
-    .select('*, profiles(full_name,username,avatar_color,avatar_letter)')
-    .eq('status','open')
-    .order('created_at',{ascending:false})
-    .limit(200)
+  buildFeedQuery()
+    .range(0, FETCH_SIZE-1)
     .then(function(res){
       if(res.error){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--t3)">❌ خطأ في التحميل</div>';return;}
-      reqs=(res.data||[]).map(function(r){
-        var p=r.profiles||{};
-        return{id:r.id,name:p.full_name||'مجهول',handle:'@'+(p.username||'user'),av:(p.full_name||'م')[0],
-          grad:p.avatar_color||'linear-gradient(135deg,#2563a8,#4a9fd4)',time:timeAgo(r.created_at),
-          urgent:r.is_urgent||false,isNew:(Date.now()-new Date(r.created_at))<3600000,
-          title:r.title,desc:r.description||'',tags:[r.category],cat:r.category,tc:'',userId:r.user_id,
-          budget:r.budget_text||'يُحدد',dur:r.duration||'مرن',type:r.work_type||'عن بُعد',
-          offers:r.offers_count||0,ts:new Date(r.created_at).getTime(),created_at:r.created_at,lastBump:r.created_at,media:r.media_urls||[]};
-      });
+      hasMoreFromServer = (res.data||[]).length >= FETCH_SIZE;
+      reqs=(res.data||[]).map(mapRequestRow);
       var list=getList();
       document.getElementById('resultCount').textContent=list.length+' طلب';
       if(!list.length){
@@ -1256,7 +1304,7 @@ function renderFeed(){
       var html='<div id="cardsContainer">';
       list.slice(0,shown).forEach(function(r){html+=makeCard(r);});
       html+='</div>';
-      if(list.length>shown){
+      if(list.length>shown || hasMoreFromServer){
         html+='<div id="feedSkeleton" style="padding:0 14px">'+makeSkeleton(3)+'</div><div id="loadSentinel" style="height:1px;opacity:0"></div>';
       }
       html+='<div id="feedFooter">'+makeFooter()+'</div>';
@@ -1283,8 +1331,14 @@ function loadNextPage(){
   var list=getList();
   var start=(currentPage+1)*PAGE_SIZE;
   var sk=document.getElementById('feedSkeleton'); if(sk)sk.remove();
+
+  // لو خلصنا البيانات المحلية المحمّلة، نطلب دفعة جديدة فعلية من الخادم
   if(start>=list.length){
-    var s=document.getElementById('loadSentinel'); if(s)s.remove();
+    if(hasMoreFromServer && !isLoadingMore){
+      fetchMoreFromServer();
+    } else {
+      var s=document.getElementById('loadSentinel'); if(s)s.remove();
+    }
     return;
   }
   currentPage++;
@@ -1295,13 +1349,34 @@ function loadNextPage(){
     cc.insertAdjacentHTML('beforeend',makeCard(r));
   });
   bindCardEvents();
-  if(end>=list.length){
+  if(end>=list.length && !hasMoreFromServer){
     var s=document.getElementById('loadSentinel'); if(s)s.remove();
   } else {
     var s=document.getElementById('loadSentinel'); if(s)s.remove();
     cc.insertAdjacentHTML('afterend','<div id="feedSkeleton" style="padding:0 14px">'+makeSkeleton(3)+'</div><div id="loadSentinel" style="height:1px;opacity:0"></div>');
     setupInfiniteScroll();
   }
+}
+
+function fetchMoreFromServer(){
+  isLoadingMore=true;
+  var offset=reqs.length;
+  buildFeedQuery()
+    .range(offset, offset+FETCH_SIZE-1)
+    .then(function(res){
+      isLoadingMore=false;
+      var sk=document.getElementById('feedSkeleton'); if(sk)sk.remove();
+      if(res.error || !(res.data||[]).length){
+        hasMoreFromServer=false;
+        var s=document.getElementById('loadSentinel'); if(s)s.remove();
+        return;
+      }
+      hasMoreFromServer = res.data.length >= FETCH_SIZE;
+      var newReqs = res.data.map(mapRequestRow);
+      reqs = reqs.concat(newReqs);
+      // الآن نكرر loadNextPage بعد ما زادت البيانات محلياً
+      loadNextPage();
+    });
 }
 function bindCardEvents(){
   var c=document.getElementById('cardsContainer');
@@ -1507,6 +1582,12 @@ window.openPaymentInfo = function(requestBudget){
   };
 };
 
+window.copyAdNumber=function(){
+  if(!window._currentAdNumber)return;
+  navigator.clipboard.writeText(String(window._currentAdNumber)).catch(function(){});
+  hToast('✓ تم نسخ رقم الإعلان #'+window._currentAdNumber);
+};
+
 window.openDetail=async function(id){
   var sid=String(id);
   var r=reqs.find(function(x){return String(x.id)===sid;});
@@ -1518,6 +1599,8 @@ window.openDetail=async function(id){
   document.getElementById('detName').textContent=r.name;
   document.getElementById('detHandle').textContent=r.handle;
   document.getElementById('detTime').textContent=r.time;
+  document.getElementById('detAdNumber').textContent=r.adNumber?('🔖 #'+r.adNumber):'';
+  window._currentAdNumber = r.adNumber||null;
   document.getElementById('detTitle').textContent=r.title;
   document.getElementById('detDesc').textContent=r.desc;
   document.getElementById('detBudget').textContent=r.budget;
@@ -1585,10 +1668,12 @@ window.openDetail=async function(id){
   }
 
   // أرقام الجوال تُجلب فقط إذا كان المستخدم الحالي هو صاحب الطلب
+  // تُقرأ من جدول offer_contacts المنفصل (محمي بـ RLS خاص بصاحب الطلب فقط)
   var phoneMap = {};
   if(isOwnerView){
-    var {data:phoneRows} = await sb.from('offers').select('id,phone').eq('request_id', sid);
-    (phoneRows||[]).forEach(function(pr){ if(pr.phone) phoneMap[pr.id]=pr.phone; });
+    var offerIds = list.map(function(o){ return o.id; });
+    var {data:phoneRows} = await sb.from('offer_contacts').select('offer_id,phone').in('offer_id', offerIds);
+    (phoneRows||[]).forEach(function(pr){ if(pr.phone) phoneMap[pr.offer_id]=pr.phone; });
   }
 
   var oh='';
@@ -1626,7 +1711,7 @@ window.openDetail=async function(id){
   document.getElementById('offersList').innerHTML=oh;
 };
 function openAuth(tab){switchAuthTab(tab||'login');document.getElementById('authModal').classList.add('open');}
-function switchAuthTab(tab){['login','register','provider'].forEach(function(t){document.getElementById('f-'+t).style.display=t===tab?'block':'none';var b=document.getElementById('at-'+t);b.className='at'+(t===tab?(t==='provider'?' on-p':' on'):'');});}
+function switchAuthTab(tab){['login','register'].forEach(function(t){document.getElementById('f-'+t).style.display=t===tab?'block':'none';var b=document.getElementById('at-'+t);b.className='at'+(t===tab?' on':'');});}
 function doLoginUI(){
   state.loggedIn=true;
   document.getElementById('authModal').classList.remove('open');
@@ -1665,7 +1750,7 @@ function doLoginUI(){
   hToast('👋 أهلاً بك في علاقات!');
 }
 function doLogin(){doLoginUI();}
-function doLogout(){if(!confirm('هل تريد تسجيل الخروج؟'))return;state.loggedIn=false;document.getElementById('navGuest').style.display='flex';document.getElementById('navUser').style.display='none';document.getElementById('navUserLinks').style.display='none';document.getElementById('miniBar').style.display='none';document.getElementById('rpGuest').style.display='block';document.getElementById('rpUser').style.display='none';renderFeed();hToast('تم تسجيل الخروج');}
+async function doLogout(){if(!confirm('هل تريد تسجيل الخروج؟'))return;await sb.auth.signOut();state.loggedIn=false;document.getElementById('navGuest').style.display='flex';document.getElementById('navUser').style.display='none';document.getElementById('navUserLinks').style.display='none';document.getElementById('miniBar').style.display='none';document.getElementById('rpGuest').style.display='block';document.getElementById('rpUser').style.display='none';renderFeed();hToast('تم تسجيل الخروج');}
 window.openComp=function(){if(!state.loggedIn){openAuth('login');return;}document.getElementById('compModal').classList.add('open');};
 window.openOffer=function openOffer(id){
   var sid=String(id);
@@ -1686,7 +1771,6 @@ var siLogout = document.getElementById('si-logout');
 if(siLogout) siLogout.onclick = function(){ doLogout(); };
 document.getElementById('at-login').onclick=function(){switchAuthTab('login');};
 document.getElementById('at-register').onclick=function(){switchAuthTab('register');};
-document.getElementById('at-provider').onclick=function(){switchAuthTab('provider');};
 document.getElementById('doLogin').onclick=async function(){
   var email = document.getElementById('loginEmail') ? document.getElementById('loginEmail').value.trim() : '';
   var pass  = document.getElementById('loginPass')  ? document.getElementById('loginPass').value.trim()  : '';
@@ -1707,20 +1791,31 @@ document.getElementById('doRegister').onclick=async function(){
   var email   = emailEl ? emailEl.value.trim() : '';
   var pass    = passEl  ? passEl.value.trim()  : '';
   if(!name||!email||!pass){ hToast('⚠️ أكمل البيانات المطلوبة'); return; }
+  if(!username){ hToast('⚠️ أدخل اسم مستخدم'); return; }
   if(!email.includes('@')){ hToast('⚠️ أدخل بريد إلكتروني صحيح'); return; }
+  hToast('جاري التحقق من اسم المستخدم...');
+  var taken = await sbCheckUsernameTaken(username);
+  if(taken){ hToast('❌ اسم المستخدم هذا محجوز، جرّب اسماً آخر'); return; }
   hToast('جاري إنشاء الحساب...');
   var result = await sbRegister(email, pass, name, username);
-  if(result.error){ hToast('❌ ' + result.error.message); return; }
+  if(result.error){
+    var msg = result.error.message || '';
+    if(msg.indexOf('duplicate') > -1 || msg.indexOf('unique') > -1){
+      hToast('❌ اسم المستخدم هذا محجوز، جرّب اسماً آخر');
+    } else {
+      hToast('❌ ' + msg);
+    }
+    return;
+  }
   doLoginUI();
   hToast('🎉 تم إنشاء حسابك بنجاح!');
 };
-document.getElementById('doProvider').onclick=doLogin;
 document.getElementById('goRegister').onclick=function(){switchAuthTab('register');};
 document.getElementById('btnLogin').onclick=function(){openAuth('login');};
 document.getElementById('btnRegister').onclick=function(){openAuth('register');};
 document.getElementById('rpLogin').onclick=function(){openAuth('login');};
 document.getElementById('rpRegister').onclick=function(){openAuth('register');};
-document.getElementById('btnProvider').onclick=function(){openAuth('provider');};
+document.getElementById('btnProvider').onclick=function(){openAuth('register');};
 document.getElementById('btnNewReq').onclick=window.openComp;
 document.getElementById('miniBar').onclick=window.openComp;
 
@@ -1732,9 +1827,11 @@ document.querySelectorAll('.sk-grid .sko').forEach(function(s){s.onclick=functio
 document.querySelectorAll('.fbtn').forEach(function(b){b.onclick=function(){this.classList.toggle('fon');this.textContent=this.classList.contains('fon')?'متابَع':'تابع';};});
 document.querySelectorAll('.ftab').forEach(function(t){t.onclick=function(){document.querySelectorAll('.ftab').forEach(function(x){x.classList.remove('on');});t.classList.add('on');state.activeTab=t.getAttribute('data-tab');renderFeed();};});
 document.querySelectorAll('.fc').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fc').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.activeFilter=b.getAttribute('data-cat');renderFeed();};});
+document.getElementById('filterCity').onchange=function(){state.activeCity=this.value;renderFeed();};
+document.getElementById('filterTime').onchange=function(){state.activeTime=this.value;renderFeed();};
 document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});si.classList.add('on');var cat=si.getAttribute('data-cat');state.activeFilter=cat;document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')===cat);});renderFeed();};});
 // search handled inline on input
-document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.search='';var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();};
+document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.activeCity='all';state.activeTime='all';state.search='';var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';var fc=document.getElementById('filterCity');if(fc)fc.value='all';var ft=document.getElementById('filterTime');if(ft)ft.value='all';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();};
 document.getElementById('si-saved').onclick=function(){if(!state.loggedIn){openAuth('login');return;}document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');if(!state.saved.length){hToast(t('noSavedYet'));return;}var savedList=reqs.filter(function(r){return state.saved.indexOf(r.id)>-1;});var html='';savedList.forEach(function(r){html+=makeCard(r);});html+='<div style="margin:10px 14px"><button class="btn-g" style="width:100%;padding:9px;border-radius:9px" id="backToFeed">'+t('backToFeed')+'</button></div>';document.getElementById('feedContent').innerHTML='<div id="cardsContainer">'+html+'</div>';bindCardEvents();document.getElementById('backToFeed').onclick=renderFeed;};
 // si-discover and si-myreqs handled below
 var siDiscover=document.getElementById('si-discover');if(siDiscover)siDiscover.onclick=function(){hToast('قريباً');};
@@ -1797,6 +1894,8 @@ async function uploadReqMediaFiles(){
 document.getElementById('submitReq').onclick=function(){
   var title=document.getElementById('reqTitle').value.trim();
   if(!title){hToast('⚠️ اكتب عنوان الطلب أولاً');return;}
+  var city=document.getElementById('reqCity').value;
+  if(!city){hToast('⚠️ اختر المنطقة أولاً');return;}
   // افتح نافذة الاتفاقية أولاً
   document.getElementById('compModal').classList.remove('open');
   document.getElementById('termsCheck').style.background='';
@@ -1837,12 +1936,14 @@ window.submitAfterTerms = async function(){
     budget:(document.getElementById('reqBudget').value?document.getElementById('reqBudget').value+' ريال':'يُحدد'),
     duration:document.getElementById('reqDur').value,
     workType:document.getElementById('reqType').value,
+    city:document.getElementById('reqCity').value,
     media: mediaUrls
   });
   if(result.error){hToast('❌ '+result.error);return;}
   document.getElementById('reqTitle').value='';
   document.getElementById('reqDesc').value='';
   document.getElementById('reqBudget').value='';
+  document.getElementById('reqCity').value='';
   reqMediaFiles = [];
   renderReqMediaPreview();
   renderFeed();
@@ -2016,6 +2117,14 @@ window.copyLink=function(){var url=document.getElementById('shareUrl')?document.
 // chatModal receiver id
 window.profileChatReceiverId = null;
 var profileChatReceiverId = null;
+var activeChatChannel = null;
+
+function stopChatListener(){
+  if(activeChatChannel){
+    sb.removeChannel(activeChatChannel);
+    activeChatChannel = null;
+  }
+}
 
 window.sendProfileMsg = async function(){
   var input = document.getElementById('chatInput');
@@ -2045,6 +2154,7 @@ window.sendProfileMsg = async function(){
 
 // load chat history when opening profile chat
 window.openProfileChat = async function openProfileChat(receiverId, name){
+  stopChatListener();
   profileChatReceiverId = receiverId;
   document.getElementById('chatModalTitle').textContent = '💬 محادثة مع ' + name;
   var msgs = document.getElementById('chatMsgs');
@@ -2070,6 +2180,26 @@ window.openProfileChat = async function openProfileChat(receiverId, name){
     });
   }
   msgs.scrollTop = msgs.scrollHeight;
+
+  // تفعيل استقبال الرسائل الفورية أثناء فتح هذي المحادثة بالتحديد
+  activeChatChannel = sb.channel('chat_'+user.id+'_'+receiverId)
+    .on('postgres_changes', {
+      event:'INSERT', schema:'public', table:'messages',
+      filter:'receiver_id=eq.'+user.id
+    }, function(payload){
+      var m = payload.new;
+      // نعرض فقط الرسائل الجاية من نفس الشخص المفتوحة معه المحادثة الآن
+      if(m.sender_id !== receiverId) return;
+      var msgsEl = document.getElementById('chatMsgs');
+      if(!msgsEl) return;
+      if(msgsEl.children.length===1 && msgsEl.textContent.indexOf('ابدأ المحادثة')>-1){ msgsEl.innerHTML=''; }
+      var d = document.createElement('div');
+      d.className = 'msg them';
+      d.innerHTML = String(m.content).replace(/</g,'&lt;') + '<div class="msg-time">'+timeAgo(m.created_at)+'</div>';
+      msgsEl.appendChild(d);
+      msgsEl.scrollTop = msgsEl.scrollHeight;
+    })
+    .subscribe();
 }
 
 /* ===== MESSAGES LOGIC - SUPABASE ===== */
@@ -2445,6 +2575,12 @@ window.openUserProfile = async function(userId){
 // =====================
 // AUTH — تسجيل دخول / إنشاء حساب / خروج
 // =====================
+async function sbCheckUsernameTaken(username) {
+  if (!username) return false;
+  const { data } = await sb.from('profiles').select('id').eq('username', username).maybeSingle();
+  return !!data;
+}
+
 async function sbRegister(email, password, fullName, username) {
   const { data, error } = await sb.auth.signUp({
     email, password,
@@ -2458,10 +2594,6 @@ async function sbLogin(email, password) {
   return { data, error };
 }
 
-async function sbLogout() {
-  await sb.auth.signOut();
-}
-
 async function sbGetUser() {
   const { data: { user } } = await sb.auth.getUser();
   return user;
@@ -2470,20 +2602,6 @@ async function sbGetUser() {
 // =====================
 // REQUESTS — الطلبات
 // =====================
-async function sbGetRequests(filters = {}) {
-  let query = sb.from('requests')
-    .select('*, profiles(full_name, username, avatar_color, avatar_letter, rating)')
-    .eq('status', 'open')
-    .order('created_at', { ascending: false });
-
-  if (filters.category) query = query.eq('category', filters.category);
-  if (filters.urgent)   query = query.eq('is_urgent', true);
-  if (filters.search)   query = query.ilike('title', '%' + filters.search + '%');
-
-  const { data, error } = await query.limit(50);
-  return { data, error };
-}
-
 async function sbCreateRequest(req) {
   const user = await sbGetUser();
   if (!user) return { error: 'غير مسجل' };
@@ -2495,6 +2613,7 @@ async function sbCreateRequest(req) {
     budget_text: req.budget,
     duration: req.duration,
     work_type: req.workType,
+    city: req.city || null,
     is_urgent: req.urgent || false,
     media_urls: req.media || []
   }).select().single();
@@ -2512,90 +2631,14 @@ async function sbCreateOffer(requestId, text, price, duration, phone) {
     provider_id: user.id,
     offer_text: text,
     price: price,
-    duration: duration,
-    phone: phone || null
+    duration: duration
   }).select().single();
-  return { data, error };
-}
-
-// =====================
-// SAVED — المحفوظات
-// =====================
-async function sbToggleSave(requestId) {
-  const user = await sbGetUser();
-  if (!user) return { error: 'غير مسجل' };
-  const { data: existing } = await sb.from('saved_requests')
-    .select('id').eq('user_id', user.id).eq('request_id', requestId).single();
-  if (existing) {
-    await sb.from('saved_requests').delete().eq('id', existing.id);
-    return { saved: false };
-  } else {
-    await sb.from('saved_requests').insert({ user_id: user.id, request_id: requestId });
-    return { saved: true };
+  if (error) return { error };
+  // حفظ رقم الجوال (اختياري) بجدول منفصل محمي بـ RLS — يراه صاحب الطلب فقط
+  if (phone && data && data.id) {
+    await sb.from('offer_contacts').insert({ offer_id: data.id, phone: phone });
   }
-}
-
-async function sbGetSaved() {
-  const user = await sbGetUser();
-  if (!user) return { data: [] };
-  const { data } = await sb.from('saved_requests')
-    .select('request_id').eq('user_id', user.id);
-  return { data: (data || []).map(x => x.request_id) };
-}
-
-// =====================
-// MESSAGES — الرسائل
-// =====================
-async function sbGetConversations() {
-  const user = await sbGetUser();
-  if (!user) return { data: [] };
-  const { data } = await sb.from('messages')
-    .select('*, sender:profiles!sender_id(full_name,avatar_letter,avatar_color), receiver:profiles!receiver_id(full_name,avatar_letter,avatar_color)')
-    .or('sender_id.eq.' + user.id + ',receiver_id.eq.' + user.id)
-    .order('created_at', { ascending: false });
-  return { data: data || [] };
-}
-
-async function sbSendMessage(receiverId, content, requestId) {
-  const user = await sbGetUser();
-  if (!user) return { error: 'غير مسجل' };
-  const { data, error } = await sb.from('messages').insert({
-    sender_id: user.id,
-    receiver_id: receiverId,
-    content,
-    request_id: requestId || null
-  }).select().single();
   return { data, error };
-}
-
-// =====================
-// NOTIFICATIONS — الإشعارات
-// =====================
-async function sbGetNotifications() {
-  const user = await sbGetUser();
-  if (!user) return { data: [] };
-  const { data } = await sb.from('notifications')
-    .select('*').eq('user_id', user.id)
-    .order('created_at', { ascending: false });
-  return { data: data || [] };
-}
-
-async function sbMarkNotifsRead() {
-  const user = await sbGetUser();
-  if (!user) return;
-  await sb.from('notifications').update({ is_read: true }).eq('user_id', user.id);
-}
-
-// =====================
-// REALTIME — رسائل فورية
-// =====================
-function sbListenMessages(userId, callback) {
-  return sb.channel('messages_' + userId)
-    .on('postgres_changes', {
-      event: 'INSERT', schema: 'public', table: 'messages',
-      filter: 'receiver_id=eq.' + userId
-    }, callback)
-    .subscribe();
 }
 
 // =====================
@@ -2616,7 +2659,7 @@ sb.auth.onAuthStateChange(async (event, session) => {
 console.log('✅ Supabase متصل بنجاح');
 </script>
 
-<div class="p-overlay" id="chatModal" style="z-index:9999" onclick="if(event.target===this)closePModal('chatModal')">
+<div class="p-overlay" id="chatModal" style="z-index:9999" onclick="if(event.target===this){stopChatListener();closePModal('chatModal');}">
   <div class="sheet" style="padding-bottom:16px">
     <div class="sheet-handle"></div>
     <div class="sheet-title" style="margin-bottom:10px" id="chatModalTitle">💬 محادثة</div>
