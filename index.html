@@ -48,12 +48,14 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 /* Detail Page */
 #detailPage nav{box-shadow:0 1px 0 var(--b)}
+#detailPage > div:not(nav){max-width:680px;margin:0 auto}
+@media(min-width:681px){#detailPage{display:flex;flex-direction:column;align-items:center}#detailPage nav{width:100%}}
 
 /* ====== HOME NAV ====== */
 #home{background:var(--bg);color:var(--t)}
 #home nav{position:fixed;top:0;left:0;right:0;z-index:500;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--b)}
 .logo{display:flex;align-items:center;gap:9px;cursor:pointer}
-.logo-t{font-size:1.05rem;font-weight:800;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo-t{font-size:1.05rem;font-weight:800;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .logo-d{font-size:.58rem;color:var(--t3)}
 .nav-mid{display:flex;gap:2px}
 .nl{background:none;border:none;color:var(--t2);padding:6px 11px;border-radius:8px;font-family:inherit;font-size:.8rem;font-weight:500;cursor:pointer;transition:.15s}
@@ -106,7 +108,7 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 .rtag.o{background:rgba(255,170,0,.07);color:var(--orange);border-color:rgba(255,170,0,.15)}
 .rtag.r{background:rgba(255,68,102,.07);color:var(--red);border-color:rgba(255,68,102,.15)}
 .rcf{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--b)}
-.bv{font-size:.9rem;font-weight:700;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.bv{font-size:.9rem;font-weight:700;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .bl2{font-size:.65rem;color:var(--t3)}
 .rcf-r{display:flex;gap:6px;align-items:center}
 .ocount{font-size:.72rem;color:var(--t2)}
@@ -195,7 +197,7 @@ textarea.fi{resize:vertical;min-height:68px}
 .offer-stars{color:var(--orange);font-size:.75rem;margin-top:1px}
 .offer-text{font-size:.82rem;color:var(--t2);line-height:1.65;margin-bottom:9px}
 .offer-footer{display:flex;align-items:center;justify-content:space-between}
-.offer-price{font-size:.95rem;font-weight:700;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.offer-price{font-size:.95rem;font-weight:700;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .offer-dur{font-size:.75rem;color:var(--t3)}
 .offer-contact{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;padding:6px 14px;border-radius:7px;font-family:inherit;font-size:.76rem;font-weight:600;cursor:pointer;transition:.2s}
 .offer-contact:hover{opacity:.88}
@@ -531,7 +533,7 @@ window.onerror = function(msg, url, line, col, error){
     <div class="si cat-si" data-cat="منزلية" data-i18n="catHome">🏠 منزلية</div>
     <div class="si cat-si" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</div>
     <div class="si cat-si" data-cat="تعليم" data-i18n="catTeaching">📚 تعليم</div>
-    <div class="si cat-si" data-cat="أخرى" data-i18n="catOther">🔧 خدمات أخرى</div>
+    <div class="si cat-si" data-cat="أخرى" data-i18n="catOther">خدمات أخرى</div>
   </div>
   <main class="feed">
     <div class="mini-bar" id="miniBar" style="display:none">
@@ -587,7 +589,7 @@ window.onerror = function(msg, url, line, col, error){
       <button class="fc" data-cat="منزلية">🏠 منزلية</button>
       <button class="fc" data-cat="صيانة عامة">🔧 صيانة عامة</button>
       <button class="fc" data-cat="تعليم">📚 تعليم</button>
-      <button class="fc" data-cat="أخرى">🔧 أخرى</button>
+      <button class="fc" data-cat="أخرى">أخرى</button>
       <span class="result-count" id="resultCount"></span>
     </div>
     <div id="feedContent"></div>
@@ -648,10 +650,9 @@ window.onerror = function(msg, url, line, col, error){
   <!-- عنوان ووصف -->
   <div id="detTitle" style="font-size:1.15rem;font-weight:800;color:var(--t);margin-bottom:8px;line-height:1.4"></div>
   <div id="detDesc" style="font-size:.86rem;color:var(--t2);line-height:1.7;margin-bottom:12px"></div>
-  <div id="detGallery" style="display:none;margin-bottom:14px"></div>
   <div id="detTags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
   <!-- الميزانية والتفاصيل -->
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px">
     <div style="background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:10px;text-align:center">
       <div style="font-size:.7rem;color:var(--t3);margin-bottom:3px" data-i18n="budget">الميزانية</div>
       <div id="detBudget" style="font-size:.95rem;font-weight:700;color:var(--ac2)"></div>
@@ -664,13 +665,25 @@ window.onerror = function(msg, url, line, col, error){
       <div style="font-size:.7rem;color:var(--t3);margin-bottom:3px" data-i18n="serviceTypeShort">نوع الخدمة</div>
       <div id="detType" style="font-size:.9rem;font-weight:600;color:var(--t)"></div>
     </div>
+    <div id="detCityCard" style="display:none;background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:10px;text-align:center">
+      <div style="font-size:.7rem;color:var(--t3);margin-bottom:3px">📍 الموقع</div>
+      <div id="detCity" style="font-size:.9rem;font-weight:600;color:var(--t)"></div>
+    </div>
   </div>
+  <!-- معرض الصور (بعد التفاصيل المنظمة، أسفل النص بالكامل) -->
+  <div id="detGallery" style="display:none;margin-bottom:16px"></div>
   <!-- العروض -->
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
     <div style="font-size:.9rem;font-weight:700;color:var(--t)">العروض المقدمة</div>
     <span id="offersCount" style="background:var(--glow);color:var(--ac2);border:1px solid rgba(37,99,168,.2);font-size:.7rem;padding:3px 10px;border-radius:10px;font-weight:600"></span>
   </div>
   <div id="offersList"></div>
+
+  <!-- طلبات مشابهة -->
+  <div id="similarSection" style="display:none;margin-top:24px;padding-top:18px;border-top:1px solid var(--b)">
+    <div style="font-size:.92rem;font-weight:700;color:var(--t);margin-bottom:12px">طلبات مشابهة</div>
+    <div id="similarGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
+  </div>
 
   <!-- لوحة تحكم صاحب الطلب -->
   <div id="ownerControls" style="display:none;margin-top:20px;padding-top:16px;border-top:1px solid var(--b)">
@@ -689,13 +702,13 @@ window.onerror = function(msg, url, line, col, error){
   </div>
 </div>
 <!-- زر قدّم عرضك في الأسفل -->
-<div style="position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:var(--bg);border-top:1px solid var(--b)">
-  <button class="btn-b" id="detOfferBtn" style="width:100%;padding:13px;font-size:.9rem;border-radius:12px" data-i18n="submitOfferOnRequest">قدّم عرضك على هذا الطلب ←</button>
+<div style="position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:var(--bg);border-top:1px solid var(--b);display:flex;justify-content:center">
+  <button class="btn-b" id="detOfferBtn" style="width:100%;max-width:680px;padding:13px;font-size:.9rem;border-radius:12px" data-i18n="submitOfferOnRequest">قدّم عرضك على هذا الطلب ←</button>
 </div>
 </div>
 <div class="h-overlay" id="authModal" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal">
-    <div style="text-align:center;margin-bottom:16px"><div style="font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px">علاقات</div></div>
+    <div style="text-align:center;margin-bottom:16px"><div style="font-size:1.6rem;font-weight:900;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px">علاقات</div></div>
     <div class="auth-tabs"><button class="at on" id="at-login" data-i18n="login">تسجيل الدخول</button><button class="at" id="at-register" data-i18n="register">إنشاء حساب</button></div>
     <div id="f-login"><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني</label><input class="fi" type="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور</label><input class="fi" type="password" placeholder="••••••••" id="loginPass"></div><div style="text-align:left;margin-bottom:12px"><span style="font-size:.74rem;color:var(--ac);cursor:pointer" data-i18n="forgotPassword">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin" data-i18n="loginBtn">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister" data-i18n="register">إنشاء حساب جديد</button></div>
     <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك"></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username"></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px">💰 لدي مهارة أرغب بالربح</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px">بالتسجيل توافق على <span style="color:var(--ac);cursor:pointer">شروط الاستخدام</span></p></div>
@@ -704,12 +717,12 @@ window.onerror = function(msg, url, line, col, error){
 <!-- OTP VERIFY MODAL -->
 <div class="h-overlay" id="otpModal" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal" style="max-width:380px;text-align:center">
-    <div style="font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px">علاقات</div>
-    <div style="font-size:1rem;font-weight:700;margin-bottom:6px;color:var(--t)">📧 تفعيل البريد الإلكتروني</div>
-    <div style="font-size:.8rem;color:var(--t2);margin-bottom:18px">أرسلنا رمز تفعيل من 6 أرقام إلى<br><span id="otpEmailDisplay" style="color:var(--ac);font-weight:600"></span></div>
-    <input class="fi" type="text" id="otpCode" inputmode="numeric" maxlength="6" placeholder="• • • • • •" style="text-align:center;font-size:1.4rem;letter-spacing:8px;font-weight:700;margin-bottom:14px">
-    <button class="btn-b" style="width:100%;padding:11px;border-radius:10px;margin-bottom:10px" id="doVerifyOtp">تفعيل الحساب ←</button>
-    <div style="font-size:.78rem;color:var(--t3)">لم يصلك الرمز؟ <span id="resendOtp" style="color:var(--ac);cursor:pointer;font-weight:600">إعادة الإرسال</span></div>
+    <div style="font-size:1.6rem;font-weight:900;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px">علاقات</div>
+    <div style="font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--t)">📧 تفعيل البريد الإلكتروني</div>
+    <div style="font-size:.85rem;color:var(--t);opacity:.85;margin-bottom:18px;line-height:1.6">أرسلنا رمز تفعيل من 6 أرقام إلى<br><span id="otpEmailDisplay" style="color:var(--ac);font-weight:700"></span></div>
+    <input class="fi" type="text" id="otpCode" inputmode="numeric" maxlength="6" placeholder="• • • • • •" style="text-align:center;font-size:1.5rem;letter-spacing:8px;font-weight:800;margin-bottom:16px;color:var(--t)">
+    <button class="btn-b" style="width:100%;padding:13px;border-radius:10px;margin-bottom:12px;font-size:.95rem;box-shadow:0 4px 14px rgba(0,0,0,.25)" id="doVerifyOtp">تفعيل الحساب ←</button>
+    <div style="font-size:.82rem;color:var(--t);opacity:.7">لم يصلك الرمز؟ <span id="resendOtp" style="color:var(--ac);cursor:pointer;font-weight:700;opacity:1">إعادة الإرسال</span></div>
   </div>
 </div>
 <!-- TERMS MODAL -->
@@ -743,7 +756,7 @@ window.onerror = function(msg, url, line, col, error){
 </div>
 
 <div class="h-overlay" id="compModal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات">🏗️ مقاولات</option><option value="سيارات">🚙 سيارات</option><option value="استشارات">⚖️ استشارات</option><option value="صحة وجمال">💆 صحة وجمال</option><option value="مناسبات">🎉 مناسبات وتنظيم</option><option value="برمجة">💻 برمجة</option><option value="تصميم">🎨 تصميم</option><option value="تسويق">📱 تسويق</option><option value="منزلية">🏠 منزلية</option><option value="صيانة عامة">🔧 صيانة عامة</option><option value="تعليم">📚 تعليم</option><option value="أخرى">🔧 خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option>24 ساعة</option><option>3 أيام</option><option>أسبوع</option><option>أسبوعان</option><option>مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option>عن بُعد</option><option>حضوري</option><option>كلاهما</option></select></div></div><div class="fg"><label class="fgl">المنطقة *</label><select class="fi" id="reqCity"><option value="">اختر المنطقة</option><option value="الرياض">الرياض</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="القصيم">القصيم</option><option value="الشرقية">الشرقية</option><option value="عسير">عسير</option><option value="تبوك">تبوك</option><option value="حائل">حائل</option><option value="الحدود الشمالية">الحدود الشمالية</option><option value="الجوف">الجوف</option><option value="جازان">جازان</option><option value="نجران">نجران</option><option value="الباحة">الباحة</option></select></div>
+  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات">🏗️ مقاولات</option><option value="سيارات">🚙 سيارات</option><option value="استشارات">⚖️ استشارات</option><option value="صحة وجمال">💆 صحة وجمال</option><option value="مناسبات">🎉 مناسبات وتنظيم</option><option value="برمجة">💻 برمجة</option><option value="تصميم">🎨 تصميم</option><option value="تسويق">📱 تسويق</option><option value="منزلية">🏠 منزلية</option><option value="صيانة عامة">🔧 صيانة عامة</option><option value="تعليم">📚 تعليم</option><option value="أخرى">خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option>24 ساعة</option><option>3 أيام</option><option>أسبوع</option><option>أسبوعان</option><option>مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option>عن بُعد</option><option>حضوري</option><option>كلاهما</option></select></div></div><div class="fg"><label class="fgl">المنطقة *</label><select class="fi" id="reqCity"><option value="">اختر المنطقة</option><option value="الرياض">الرياض</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="القصيم">القصيم</option><option value="الشرقية">الشرقية</option><option value="عسير">عسير</option><option value="تبوك">تبوك</option><option value="حائل">حائل</option><option value="الحدود الشمالية">الحدود الشمالية</option><option value="الجوف">الجوف</option><option value="جازان">جازان</option><option value="نجران">نجران</option><option value="الباحة">الباحة</option></select></div>
   <div class="fg">
     <label class="fgl">📷 صور وفيديو (اختياري — حتى 10 صور)</label>
     <input type="file" id="reqMediaInput" accept="image/*,video/*" multiple style="display:none" onchange="handleReqMediaSelect(this)">
@@ -1166,7 +1179,12 @@ window.showPage = function showPage(id){
   // تأكد البوتم نافبار ظاهر دائماً
   var bn = document.querySelector('.bottom-nav');
   if(bn) bn.style.display='flex';
-  window.scrollTo(0,0);
+  // تأخير صغير يضمن تصفير التمرير بعد اكتمال الرسم (مشكلة معروفة في iOS/WebKit)
+  requestAnimationFrame(function(){
+    window.scrollTo(0,0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  });
 }
 
 /* ===== HOME LOGIC ===== */
@@ -1681,6 +1699,44 @@ window.copyAdNumber=function(){
   hToast('✓ تم نسخ رقم الإعلان #'+window._currentAdNumber);
 };
 
+function renderSimilarRequests(current){
+  var grid = document.getElementById('similarGrid');
+  var section = document.getElementById('similarSection');
+  if(!grid || !section) return;
+
+  // المرحلة 1: نفس الفئة + نفس المدينة (مطابق لحراج)
+  var matches = reqs.filter(function(x){
+    return String(x.id)!==String(current.id) && x.cat===current.cat && x.city && current.city && x.city===current.city;
+  });
+  // المرحلة 2 (fallback): لو النتائج قليلة، نوسّع لنفس الفئة فقط بدون قيد المدينة
+  if(matches.length < 3){
+    var byCategory = reqs.filter(function(x){
+      return String(x.id)!==String(current.id) && x.cat===current.cat;
+    });
+    // ندمج بدون تكرار، نعطي الأولوية لمطابقات المدينة أولاً
+    var seen = {}; matches.forEach(function(m){ seen[m.id]=true; });
+    byCategory.forEach(function(x){ if(!seen[x.id]){ matches.push(x); seen[x.id]=true; } });
+  }
+  matches = matches.slice(0,6);
+
+  if(!matches.length){
+    section.style.display='none';
+    return;
+  }
+  section.style.display='block';
+  grid.innerHTML = matches.map(function(x){
+    var thumb = (x.media && x.media.length>0) ? x.media[0].url : '';
+    var imgHtml = thumb
+      ? '<img src="'+thumb+'" style="width:100%;height:90px;object-fit:cover;border-radius:10px;margin-bottom:6px" loading="lazy">'
+      : '<div style="width:100%;height:90px;border-radius:10px;margin-bottom:6px;background:'+x.grad+';display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff">'+(x.av||'📋')+'</div>';
+    return '<div onclick="openDetail('+x.id+')" style="cursor:pointer">'
+      + imgHtml
+      + '<div style="font-size:.74rem;color:var(--t);font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">'+String(x.title||'').replace(/</g,'&lt;')+'</div>'
+      + '<div style="font-size:.7rem;color:var(--ac2);font-weight:700;margin-top:3px">'+(x.budget||'')+'</div>'
+      + '</div>';
+  }).join('');
+}
+
 window.openDetail=async function(id){
   var sid=String(id);
   var r=reqs.find(function(x){return String(x.id)===sid;});
@@ -1696,9 +1752,17 @@ window.openDetail=async function(id){
   window._currentAdNumber = r.adNumber||null;
   document.getElementById('detTitle').textContent=r.title;
   document.getElementById('detDesc').textContent=r.desc;
+  renderSimilarRequests(r);
   document.getElementById('detBudget').textContent=r.budget;
   document.getElementById('detDur').textContent=r.dur;
   document.getElementById('detType').textContent=r.type;
+  var cityCard = document.getElementById('detCityCard');
+  if(r.city){
+    cityCard.style.display='block';
+    document.getElementById('detCity').textContent=r.city;
+  } else {
+    cityCard.style.display='none';
+  }
   document.getElementById('detTags').innerHTML=r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+tg+'</span>';}).join('');
   document.getElementById('detOfferBtn').onclick=function(){openOffer(id);};
   window._currentDetailId = id;
@@ -1708,12 +1772,12 @@ window.openDetail=async function(id){
   if(galleryEl){
     if(r.media && r.media.length > 0){
       galleryEl.style.display = 'block';
-      galleryEl.innerHTML = '<div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x mandatory">' +
+      galleryEl.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px">' +
         r.media.map(function(m){
           if(m.type === 'video'){
-            return '<video src="'+m.url+'" controls style="width:260px;height:180px;border-radius:14px;object-fit:cover;flex-shrink:0;scroll-snap-align:start;background:#000"></video>';
+            return '<video src="'+m.url+'" controls style="width:100%;max-height:320px;border-radius:14px;object-fit:cover;background:#000"></video>';
           } else {
-            return '<img src="'+m.url+'" style="width:260px;height:180px;border-radius:14px;object-fit:cover;flex-shrink:0;scroll-snap-align:start;cursor:pointer" onclick="openImagePreview(\''+m.url+'\')">';
+            return '<img src="'+m.url+'" style="width:100%;max-height:320px;border-radius:14px;object-fit:cover;cursor:pointer" onclick="openImagePreview(\''+m.url+'\')">';
           }
         }).join('') +
       '</div>';
