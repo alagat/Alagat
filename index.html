@@ -203,12 +203,16 @@ textarea.fi{resize:vertical;min-height:68px}
 .p-cover{width:100%;height:200px;display:block;background:linear-gradient(135deg,#5a9fd8,#7bb8e8,#a8d4f0);position:relative;overflow:hidden}
 .p-cover-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.12) 1px,transparent 1px);background-size:28px 28px}
 .profile-section{background:var(--s1);padding:0 16px 16px;border-bottom:1px solid var(--b);text-align:center;position:relative}
+.p-top-row{display:flex;align-items:center;justify-content:space-between;padding-top:10px;margin-top:-30px;position:relative;z-index:2}
 .p-av-wrap{display:inline-block;position:relative;margin-top:-44px;margin-bottom:8px}
 .p-av{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#ff6b6b,#ff8e53);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:2rem;border:3px solid var(--s1);box-shadow:0 2px 12px rgba(0,0,0,.12)}
 .p-av-dot{position:absolute;bottom:5px;left:1px;width:16px;height:16px;background:#22c55e;border:2px solid var(--s1);border-radius:50%}
-.top-actions{position:absolute;top:10px;right:10px;display:flex;gap:8px}
+.top-actions{display:flex;gap:8px}
 .top-actions button{padding:5px 10px;border-radius:20px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:.78rem;font-weight:600;cursor:pointer;backdrop-filter:blur(4px);display:flex;align-items:center;gap:4px;font-family:inherit}
-.followers-badge{position:absolute;top:20px;left:16px;font-size:.78rem;color:var(--ac);font-weight:600;cursor:pointer}
+.followers-badge{font-size:.78rem;color:var(--ac);font-weight:600;cursor:pointer}
+@media(min-width:681px){
+  #profile .p-cover,#profile .profile-section,#profile .p-tabs,#profile .listings{max-width:680px;width:100%;margin-left:auto;margin-right:auto}
+}
 .profile-name{font-size:1.2rem;font-weight:800;color:var(--t);display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:3px}
 .p-verified{background:var(--ac);border-radius:50%;width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;font-size:.6rem;color:#fff}
 .profile-handle{font-size:.82rem;color:var(--t2);margin-bottom:3px}
@@ -766,15 +770,17 @@ window.onerror = function(msg, url, line, col, error){
 </nav>
 <div class="p-cover"><div class="p-cover-dots"></div></div>
 <div class="profile-section">
-  <div class="top-actions" id="topActionsOther" style="display:none">
-    <button onclick="openPModal('ratingModal')" data-i18n="ratingAction">★ تقييم</button>
-    <button onclick="openPModal('shareModal')" data-i18n="shareAction">⤴ مشاركة</button>
+  <div class="p-top-row">
+    <div class="top-actions" id="topActionsOther" style="display:none">
+      <button onclick="openPModal('ratingModal')" data-i18n="ratingAction">★ تقييم</button>
+      <button onclick="openPModal('shareModal')" data-i18n="shareAction">⤴ مشاركة</button>
+    </div>
+    <div class="top-actions" id="topActionsOwn" style="display:none">
+      <button onclick="openEditProfileModal()" data-i18n="editProfile">✏️ تعديل الملف الشخصي</button>
+      <button onclick="openPModal('shareModal')" data-i18n="shareAction">⤴ مشاركة</button>
+    </div>
+    <div class="followers-badge" id="followersBadge" style="display:none">0 متابع</div>
   </div>
-  <div class="top-actions" id="topActionsOwn" style="display:none">
-    <button onclick="openEditProfileModal()" data-i18n="editProfile">✏️ تعديل الملف الشخصي</button>
-    <button onclick="openPModal('shareModal')" data-i18n="shareAction">⤴ مشاركة</button>
-  </div>
-  <div class="followers-badge" id="followersBadge" style="display:none">0 متابع</div>
   <div class="p-av-wrap"><div class="p-av">م</div><div class="p-av-dot"></div></div>
   <div class="profile-name"> <span class="p-verified">✓</span></div>
   <div class="profile-handle" id="profileHandle">@—</div>
@@ -2327,7 +2333,30 @@ window.openImagePreview = function(url){
 sb.auth.getSession().then(function(res){
   if(res.data&&res.data.session){ doLoginUI(); }
   else { renderFeed(); }
+  handleSharedRequestLink();
 });
+
+// ====== فتح رابط طلب مُشارك مباشرة (مثال: alagat.com/?req=123) ======
+function handleSharedRequestLink(){
+  var params = new URLSearchParams(window.location.search);
+  var reqId = params.get('req');
+  if(!reqId) return;
+  var existing = reqs.find(function(x){ return String(x.id)===String(reqId); });
+  if(existing){
+    openDetail(existing.id);
+    return;
+  }
+  sb.from('requests').select('*, profiles(full_name,username,avatar_color,avatar_letter)').eq('id', reqId).single()
+    .then(function(res){
+      if(res.error || !res.data){
+        hToast('⚠️ الطلب غير موجود أو تم حذفه');
+        return;
+      }
+      var mapped = mapRequestRow(res.data);
+      reqs.push(mapped);
+      openDetail(mapped.id);
+    });
+}
 
 /* ===== PROFILE LOGIC ===== */
 window.switchPTab = function(el,id){
