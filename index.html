@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>علاقات | منصة طلب وتقديم الخدمات في السعودية</title>
-<meta name="description" content="علاقات منصة سعودية تربط بين طالبي الخدمات ومزوّدي الخدمات في جميع مناطق المملكة. اطلب أي خدمة أو قدّم عرضك بسهولة.">
+<title>علاقات | لتسهيل الخدمات تحتاج علاقات</title>
+<meta name="description" content="لتسهيل الخدمات تحتاج علاقات. تربطك بمزوّدي الخدمات في جميع مناطق المملكة. اطلب أي خدمة أو قدّم عرضك بسهولة.">
 <meta name="keywords" content="علاقات, خدمات السعودية, طلب خدمة, مزود خدمة, فريلانس السعودية, خدمات حرة">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://alagat.com/">
@@ -12,8 +12,8 @@
 <!-- Open Graph (واتساب، فيسبوك، لينكدإن) -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://alagat.com/">
-<meta property="og:title" content="علاقات | منصة طلب وتقديم الخدمات في السعودية">
-<meta property="og:description" content="منصة سعودية تربط بين طالبي الخدمات ومزوّدي الخدمات في جميع مناطق المملكة. اطلب أي خدمة أو قدّم عرضك بسهولة.">
+<meta property="og:title" content="علاقات | لتسهيل الخدمات تحتاج علاقات">
+<meta property="og:description" content="لتسهيل الخدمات تحتاج علاقات. تربطك بمزوّدي الخدمات في جميع مناطق المملكة. اطلب أي خدمة أو قدّم عرضك بسهولة.">
 <meta property="og:image" content="https://alagat.com/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -22,8 +22,8 @@
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="علاقات | منصة طلب وتقديم الخدمات في السعودية">
-<meta name="twitter:description" content="منصة سعودية تربط بين طالبي الخدمات ومزوّدي الخدمات في جميع مناطق المملكة.">
+<meta name="twitter:title" content="علاقات | لتسهيل الخدمات تحتاج علاقات">
+<meta name="twitter:description" content="لتسهيل الخدمات تحتاج علاقات. تربطك بمزوّدي الخدمات في جميع مناطق المملكة.">
 <meta name="twitter:image" content="https://alagat.com/og-image.svg">
 
 <!-- Favicon مؤقت (نص "ع" بدون لوغو رسمي بعد) -->
@@ -1458,7 +1458,7 @@ function bindCardEvents(){
       hToast('✓ تم');
     } else if(o){
       e.preventDefault();e.stopPropagation();
-      if(!state.loggedIn){openAuth('login');return;}
+      if(!state.loggedIn){openAuth('register');return;}
       openOffer(o.getAttribute('data-id'));
     }
   }
@@ -1950,6 +1950,7 @@ function doLogin(){doLoginUI();}
 async function doLogout(){if(!confirm('هل تريد تسجيل الخروج؟'))return;await sb.auth.signOut();state.loggedIn=false;document.getElementById('navGuest').style.display='flex';document.getElementById('navUser').style.display='none';document.getElementById('navUserLinks').style.display='none';document.getElementById('miniBar').style.display='none';document.getElementById('rpGuest').style.display='block';document.getElementById('rpUser').style.display='none';renderFeed();hToast('تم تسجيل الخروج');}
 window.openComp=function(){if(!state.loggedIn){openAuth('login');return;}document.getElementById('compModal').classList.add('open');};
 window.openOffer=function openOffer(id){
+  if(!state.loggedIn){ openAuth('register'); return; }
   var sid=String(id);
   var r=reqs.find(function(x){return String(x.id)===sid;});
   if(!r)return;
@@ -2193,6 +2194,10 @@ async function uploadReqMediaFiles(){
 document.getElementById('submitReq').onclick=function(){
   var title=document.getElementById('reqTitle').value.trim();
   if(!title){hToast('⚠️ اكتب عنوان الطلب أولاً');return;}
+  var desc=document.getElementById('reqDesc').value.trim();
+  if(!desc){hToast('⚠️ اشرح تفاصيل الطلب أولاً');return;}
+  var budget=document.getElementById('reqBudget').value.trim();
+  if(!budget){hToast('⚠️ أدخل الميزانية المتوقعة');return;}
   var city=document.getElementById('reqCity').value;
   if(!city){hToast('⚠️ اختر المنطقة أولاً');return;}
   // افتح نافذة الاتفاقية أولاً
@@ -2218,9 +2223,18 @@ window.toggleTermsCheck = function(){
 };
 
 window.submitAfterTerms = async function(){
+  var title=document.getElementById('reqTitle').value.trim();
+  var desc=document.getElementById('reqDesc').value.trim();
+  var budget=document.getElementById('reqBudget').value.trim();
+  var city=document.getElementById('reqCity').value;
+  if(!title || !desc || !budget || !city){
+    document.getElementById('termsModal').classList.remove('open');
+    hToast('⚠️ تأكد من إكمال كل الحقول المطلوبة');
+    document.getElementById('compModal').classList.add('open');
+    return;
+  }
   document.getElementById('termsModal').classList.remove('open');
   hToast('جاري النشر...');
-  var title=document.getElementById('reqTitle').value.trim();
 
   var mediaUrls = [];
   if(reqMediaFiles.length > 0){
@@ -2230,12 +2244,12 @@ window.submitAfterTerms = async function(){
 
   var result = await sbCreateRequest({
     title:title,
-    description:document.getElementById('reqDesc').value||'',
+    description:desc,
     category:document.getElementById('reqCat').value,
-    budget:(document.getElementById('reqBudget').value?document.getElementById('reqBudget').value+' ريال':'يُحدد'),
+    budget:budget+' ريال',
     duration:document.getElementById('reqDur').value,
     workType:document.getElementById('reqType').value,
-    city:document.getElementById('reqCity').value,
+    city:city,
     media: mediaUrls
   });
   if(result.error){hToast('❌ '+result.error);return;}
