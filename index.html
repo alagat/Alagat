@@ -3,7 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>علاقات</title>
+<title>علاقات | منصة طلب وتقديم الخدمات في السعودية</title>
+<meta name="description" content="علاقات منصة سعودية تربط بين طالبي الخدمات ومزوّدي الخدمات في جميع مناطق المملكة. اطلب أي خدمة أو قدّم عرضك بسهولة.">
+<meta name="keywords" content="علاقات, خدمات السعودية, طلب خدمة, مزود خدمة, فريلانس السعودية, خدمات حرة">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://alagat.com/">
+
+<!-- Open Graph (واتساب، فيسبوك، لينكدإن) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://alagat.com/">
+<meta property="og:title" content="علاقات | منصة طلب وتقديم الخدمات في السعودية">
+<meta property="og:description" content="منصة سعودية تربط بين طالبي الخدمات ومزوّدي الخدمات في جميع مناطق المملكة. اطلب أي خدمة أو قدّم عرضك بسهولة.">
+<meta property="og:image" content="https://alagat.com/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ar_SA">
+<meta property="og:site_name" content="علاقات">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="علاقات | منصة طلب وتقديم الخدمات في السعودية">
+<meta name="twitter:description" content="منصة سعودية تربط بين طالبي الخدمات ومزوّدي الخدمات في جميع مناطق المملكة.">
+<meta name="twitter:image" content="https://alagat.com/og-image.svg">
+
+<!-- Favicon مؤقت (نص "ع" بدون لوغو رسمي بعد) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230085ff'/%3E%3Cstop offset='100%25' stop-color='%230073e6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='%230a0f14'/%3E%3Ctext x='50' y='68' font-family='Arial' font-size='55' font-weight='900' fill='url(%23g)' text-anchor='middle'%3Eع%3C/text%3E%3C/svg%3E">
+
 <style>
 /* ====== SHARED ====== */
 *{box-sizing:border-box;margin:0;padding:0}
@@ -48,7 +73,7 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 /* Detail Page */
 #detailPage nav{box-shadow:0 1px 0 var(--b)}
-#detailPage > div:not(nav){max-width:680px;margin:0 auto}
+#detailPage > div:not(nav){max-width:680px;width:100%;margin:0 auto}
 @media(min-width:681px){#detailPage{display:flex;flex-direction:column;align-items:center}#detailPage nav{width:100%}}
 
 /* ====== HOME NAV ====== */
@@ -56,7 +81,6 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 #home nav{position:fixed;top:0;left:0;right:0;z-index:500;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--b)}
 .logo{display:flex;align-items:center;gap:9px;cursor:pointer}
 .logo-t{font-size:1.05rem;font-weight:800;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.logo-d{font-size:.58rem;color:var(--t3)}
 .nav-mid{display:flex;gap:2px}
 .nl{background:none;border:none;color:var(--t2);padding:6px 11px;border-radius:8px;font-family:inherit;font-size:.8rem;font-weight:500;cursor:pointer;transition:.15s}
 .nl:hover,.nl.on{background:var(--s2);color:var(--t)}
@@ -98,7 +122,6 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 .rcn{font-weight:600;font-size:.86rem;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .rck{font-size:.72rem;color:var(--t3);margin-top:1px}
 .rct{font-size:.7rem;color:var(--t3);white-space:nowrap}
-.ubadge{background:rgba(255,68,102,.1);color:var(--red);border:1px solid rgba(255,68,102,.2);font-size:.63rem;font-weight:700;padding:2px 6px;border-radius:5px}
 .nbadge{background:rgba(0,212,160,.1);color:var(--green);border:1px solid rgba(0,212,160,.2);font-size:.63rem;font-weight:700;padding:2px 6px;border-radius:5px}
 .rtitle{font-size:.9rem;font-weight:600;margin-bottom:4px;line-height:1.4}
 .rdesc{font-size:.8rem;color:var(--t2);line-height:1.6;margin-bottom:8px}
@@ -121,10 +144,6 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 .bcta p{font-size:.79rem;color:var(--t2);margin-bottom:14px;line-height:1.6}
 .bcta-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .feed-footer{margin:16px 14px 10px;padding:16px;background:var(--s1);border:1px solid var(--b);border-radius:12px}
-.ff-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:14px}
-.ff-col-t{font-size:.7rem;font-weight:700;color:var(--t);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
-.ff-link{font-size:.77rem;color:var(--t2);cursor:pointer;margin-bottom:5px;display:block}
-.ff-link:hover{color:var(--ac)}
 .ff-bot{border-top:1px solid var(--b);padding-top:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:5px}
 .ff-copy{font-size:.68rem;color:var(--t3)}
 .rpanel{width:270px;min-width:270px;position:fixed;top:56px;bottom:0;left:0;padding:14px 12px;border-right:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
@@ -140,13 +159,6 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 .tr2{color:var(--t3);font-size:.74rem;width:16px}
 .tn{font-size:.82rem;font-weight:500;color:var(--t2);flex:1;padding:0 7px}
 .tc{font-size:.69rem;color:var(--t3)}
-.su{display:flex;align-items:center;gap:8px;padding:6px 0}
-.su-i{flex:1}
-.su-n{font-size:.82rem;font-weight:600}
-.su-r{font-size:.71rem;color:var(--t3);margin-top:1px}
-.fbtn{background:none;border:1px solid var(--b);color:var(--t2);padding:4px 10px;border-radius:6px;font-family:inherit;font-size:.7rem;cursor:pointer;transition:.15s}
-.fbtn:hover{border-color:var(--ac);color:var(--ac)}
-.fbtn.fon{background:var(--ac);border-color:var(--ac);color:#fff}
 
 .h-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.82);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.22s}
 .h-overlay.open{opacity:1;pointer-events:all}
@@ -155,9 +167,10 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 .auth-tabs{display:flex;background:var(--s2);border-radius:10px;padding:3px;margin-bottom:16px}
 .at{flex:1;text-align:center;padding:8px;border-radius:8px;font-size:.81rem;font-weight:600;color:var(--t2);cursor:pointer;transition:.2s;border:none;background:none;font-family:inherit}
 .at.on{background:var(--ac);color:#fff}
-.at.on-p{background:var(--ac3);color:#fff}
 .fg{margin-bottom:10px}
 .fgl{font-size:.73rem;font-weight:600;color:var(--t2);margin-bottom:4px;display:block}
+.avc-dot{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:.15s}
+.avc-dot.sel{border-color:var(--t)}
 .fi{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:9px;padding:9px 12px;color:var(--t);font-family:inherit;font-size:.85rem;transition:.2s}
 .fi:focus{outline:none;border-color:var(--ac)}
 .fi::placeholder{color:var(--t3)}
@@ -171,38 +184,11 @@ textarea.fi{resize:vertical;min-height:68px}
 .or-div{display:flex;align-items:center;gap:10px;margin:12px 0}
 .or-line{flex:1;height:1px;background:var(--b)}
 .or-txt{font-size:.73rem;color:var(--t3)}
-.prow{display:flex;gap:7px}
-.pcode{background:var(--s2);border:1px solid var(--b);border-radius:9px;padding:9px 10px;color:var(--t2);font-family:inherit;font-size:.82rem;width:68px;text-align:center}
 .op-box{background:var(--s2);border:1px solid var(--b);border-radius:9px;padding:10px;margin-bottom:12px}
 .op-t{font-size:.84rem;font-weight:600;margin-bottom:2px}
 .op-m{font-size:.73rem;color:var(--t2)}
-.detail-modal{width:580px;max-width:96vw}
-.det-header{display:flex;gap:11px;align-items:flex-start;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--b)}
-.det-title{font-size:1.05rem;font-weight:700;margin-bottom:6px;line-height:1.4}
-.det-desc{font-size:.85rem;color:var(--t2);line-height:1.7;margin-bottom:10px}
-.det-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
-.det-meta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
-.det-meta-item{display:flex;flex-direction:column;gap:2px}
-.det-meta-label{font-size:.68rem;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
-.det-meta-val{font-size:.88rem;font-weight:600}
-.offers-section{border-top:1px solid var(--b);padding-top:14px}
-.offers-title{font-size:.85rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:7px}
-.offer-card{background:var(--s2);border:1px solid var(--b);border-radius:11px;padding:13px;margin-bottom:9px;transition:.2s}
-.offer-card:hover{border-color:rgba(37,99,168,.3)}
-.offer-header{display:flex;gap:9px;align-items:flex-start;margin-bottom:8px}
-.offer-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.78rem;flex-shrink:0}
-.offer-name{font-size:.85rem;font-weight:600}
-.offer-role{font-size:.71rem;color:var(--t3);margin-top:1px}
-.offer-time{font-size:.7rem;color:var(--t3);margin-right:auto;white-space:nowrap}
-.offer-stars{color:var(--orange);font-size:.75rem;margin-top:1px}
-.offer-text{font-size:.82rem;color:var(--t2);line-height:1.65;margin-bottom:9px}
-.offer-footer{display:flex;align-items:center;justify-content:space-between}
-.offer-price{font-size:.95rem;font-weight:700;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.offer-dur{font-size:.75rem;color:var(--t3)}
 .offer-contact{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;padding:6px 14px;border-radius:7px;font-family:inherit;font-size:.76rem;font-weight:600;cursor:pointer;transition:.2s}
 .offer-contact:hover{opacity:.88}
-.no-offers{text-align:center;padding:24px;color:var(--t3);font-size:.84rem}
-.det-offer-btn{width:100%;padding:11px;border-radius:10px;margin-top:14px}
 .empty-state{text-align:center;padding:40px 20px;color:var(--t2)}
 @media(max-width:1050px){.rpanel{display:none}.feed{margin-left:0;max-width:100%}}
 @media(max-width:680px){.sidebar{display:none}.feed{margin-right:0}}
@@ -254,7 +240,6 @@ textarea.fi{resize:vertical;min-height:68px}
 .req-status{font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
 .req-status.open{background:rgba(34,197,94,.1);color:#16a34a;border:1px solid rgba(34,197,94,.2)}
 .req-status.done{background:rgba(156,163,175,.1);color:#9ca3af;border:1px solid #e5e9f0}
-.req-status.urgent{background:rgba(239,68,68,.1);color:#dc2626;border:1px solid rgba(239,68,68,.2)}
 
 /* PROFILE SHEET OVERLAY */
 .p-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:.2s}
@@ -289,12 +274,12 @@ textarea.fi{resize:vertical;min-height:68px}
 
 /* BOTTOM NAV (profile) */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--s1);border-top:1px solid var(--b);display:flex;align-items:center;height:64px;padding:0 8px;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
+@media(min-width:681px){.bottom-nav{justify-content:center;gap:0}.bottom-nav .bn{flex:0 0 110px}.bottom-nav .bn-center{flex:0 0 64px}}
 .bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:.63rem;font-weight:600;color:#9ca3af;cursor:pointer;padding:6px 4px;border-radius:12px;transition:.15s;border:none;background:none;font-family:inherit;position:relative}
 .bn:hover{color:#2563a8}
 .bn.on{color:#2563a8}
 .bn-iw{width:28px;height:28px;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:.15s;margin-bottom:1px}
 .bn.on .bn-iw{background:transparent}
-.bn-dot{position:absolute;top:5px;right:calc(50% - 20px);width:8px;height:8px;background:#ef4444;border-radius:50%;border:2px solid var(--s1)}
 .bn-center{flex:1;display:flex;align-items:center;justify-content:center}
 .p-add-btn{width:48px;height:48px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;border-radius:50%;font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,133,255,.4);transition:.25s;font-family:inherit}
 .plus-menu{display:none;position:absolute;bottom:62px;left:50%;transform:translateX(-50%);background:var(--s1);border:1px solid var(--b);border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.5);overflow:hidden;width:155px;z-index:200}
@@ -314,16 +299,15 @@ const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 window.I18N = {
   ar: {
     appName:'علاقات', requests:'الطلبات', toggleTheme:'تبديل الثيم',
-    login:'تسجيل الدخول', register:'إنشاء حساب', newRequest:'+ طلب جديد', myProfile:'ملفي الشخصي',
+    login:'تسجيل الدخول', register:'إنشاء حساب', newRequest:'+ طلب جديد',
     menu:'القائمة', home:'الرئيسية', logout:'تسجيل الخروج', notifications:'الإشعارات',
     myMessages:'رسائلي', saved:'المحفوظات', categories:'الفئات',
     catProgramming:'برمجة', catDesign:'تصميم', catMaintenance:'صيانة عامة', catMarketing:'تسويق',
     catConsulting:'استشارات', catTeaching:'تعليم', catConstruction:'مقاولات', catHome:'منزلية', catHealth:'صحة وجمال', catCars:'سيارات', catEvents:'مناسبات وتنظيم', catOther:'خدمات أخرى',
-    postRequest:'نشر طلب', whatDoYouNeed:'ماذا تحتاج؟', urgent:'عاجل', latest:'الأحدث',
-    all:'الكل', searchInRequests:'ابحث في الطلبات...', requestsCount:'طلب',
-    budget:'الميزانية', duration:'المدة', serviceType:'نوع الخدمة',
-    offersSubmitted:'العروض المقدمة', offer:'عرض', noOffersYet:'لا توجد عروض بعد',
-    submitOffer:'قدّم عرضك', submitOfferOnThis:'قدّم عرضك على هذا الطلب', contact:'تواصل',
+    postRequest:'نشر طلب', whatDoYouNeed:'ماذا تحتاج؟', latest:'الأحدث',
+    all:'الكل', searchInRequests:'ابحث في الطلبات...',
+    budget:'الميزانية', duration:'المدة', serviceType:'نوع الخدمة', offer:'عرض',
+    submitOffer:'قدّم عرضك', contact:'تواصل',
     follow:'+ متابعة', following:'✓ تتابعه', followers:'متابع', chat:'محادثة',
     unfollowedToast:'تم إلغاء المتابعة', followedToast:'✓ تمت المتابعة',
     noRequestsOnProfile:'لا توجد طلبات بعد', noOffersOnProfile:'لا توجد عروض بعد',
@@ -332,62 +316,58 @@ window.I18N = {
     chooseRating:'اختر تقييمك', shareProfileTitle:'مشاركة الملف',
     ratingBad:'سيء', ratingOk:'مقبول', ratingGood:'جيد', ratingVeryGood:'جيد جداً', ratingExcellent:'ممتاز ⭐',
     submitOfferOnRequest:'قدّم عرضك على هذا الطلب ←',
-    messagesTitle:'الرسائل', searchInMessages:'🔍  ابحث في الرسائل...', editSoon:'قريباً ✍️',
-    onlineNow:'متصل الآن', voiceCallSoon:'مكالمة صوتية قريباً', typeYourMessage:'اكتب رسالتك...',
+    messagesTitle:'الرسائل', searchInMessages:'🔍  ابحث في الرسائل...',
+    onlineNow:'متصل الآن', typeYourMessage:'اكتب رسالتك...',
     noConvsYet:'لا توجد محادثات', unknownUser:'مجهول', newBadgeShort:'جديد',
     convHidden:'تم حذف المحادثة', deleteConvAction:'حذف المحادثة', confirmHideConv:'هل تريد حذف هذه المحادثة من قائمتك؟',
     blockUserAction:'حظر المستخدم', confirmBlockUser:'هل تريد حظر هذا المستخدم؟ لن تتمكنا من التراسل أو رؤية ملفاتكما الشخصية بعد الحظر.',
     userBlockedToast:'تم حظر المستخدم', userUnblockedToast:'تم إلغاء الحظر',
     cannotMessageBlocked:'لا يمكن التراسل — يوجد حظر بينكما', profileUnavailableBlocked:'هذا الملف الشخصي غير متاح',
-    rating:'تقييم', joined:'انضم', activeRecently:'نشط',
+    rating:'تقييم', joined:'انضم',
     bottomHome:'الرئيسية', bottomNotifs:'الإشعارات', bottomMsgs:'الرسائل',
-    flexible:'مرن', open:'مفتوح', completed:'مكتمل', noOffers:'لا عروض بعد',
-    saveBtn:'حفظ', saved2:'محفوظ', share:'مشاركة', manageAd:'إدارة الإعلان',
-    edit:'تعديل', bump:'تحديث', featureRequest:'تفضيل الطلب', deleteAd:'حذف',
-    payFees:'دفع الرسوم', loading:'جاري التحميل...',
+    flexible:'مرن', open:'مفتوح', noOffers:'لا عروض بعد',
+    saveBtn:'حفظ', share:'مشاركة',
+    edit:'تعديل', bump:'تحديث', loading:'جاري التحميل...',
     postYourRequest:'✏️ انشر طلبك', postHint:'اشرح ما تحتاجه وسيصلك عروض خلال دقائق',
     titlePlaceholder:'عنوان الطلب — ماذا تحتاج بالضبط؟', detailsPlaceholder:'اشرح التفاصيل...',
     category:'الفئة', durationLbl:'المدة', budgetLbl:'الميزانية (ريال)', budgetPlaceholder:'مثال: 500',
     serviceTypeLbl:'نوع الخدمة', remote:'عن بُعد', inPerson:'حضوري', both:'كلاهما',
-    hours24:'24 ساعة', days3:'3 أيام', week1:'أسبوع', weeks2:'أسبوعان',
+    regionLbl:'المنطقة *', selectRegion:'اختر المنطقة', tellClientWhy:'أخبر العميل لماذا أنت الأنسب',
+    phoneOptional:'رقم جوالك (اختياري) 🔒', phoneVisibleToOwner:'يظهر لصاحب الطلب فقط، ولا يره أي شخص آخر',
+    mediaOptionalLbl:'📷 صور وفيديو (اختياري — حتى 10 صور)', addMediaBtn:'+ إضافة صور أو فيديو',
+    hours24:'24 ساعة', days3:'3 أيام', week1:'أسبوع', weeks2:'أسبوعان', month1:'شهر', months3:'3 أشهر',
     cancel:'إلغاء', publishRequest:'نشر الطلب ←',
     readyToStart:'جاهز تبدأ؟', ctaSubtitle:'انشر طلبك أو زد دخلك',
     postFree:'انشر طلبك مجاناً ←', startEarning:'ابدأ بزيادة دخلك',
     noRequestsYet:'لا توجد طلبات بعد', beFirstToPost:'كن أول من ينشر طلباً!',
-    urgentBadge:'عاجل 🔴', newBadge:'جديد ✨', noOffersBadge:'لا عروض بعد', savedBadge:'🔖 محفوظ',
-    requestDetails:'تفاصيل الطلب', serviceTypeShort:'نوع الخدمة',
-    offersTab:'العروض المقدمة', noOffersOnRequest:'لا توجد عروض بعد على هذا الطلب',
-    email:'البريد الإلكتروني', password:'كلمة المرور', fullName:'الاسم الكامل',
-    confirmPassword:'تأكيد كلمة المرور', forgotPassword:'نسيت كلمة المرور؟',
-    dontHaveAccount:'ليس لديك حساب؟', alreadyHaveAccount:'لديك حساب؟',
+    newBadge:'جديد ✨', noOffersBadge:'لا عروض بعد', savedBadge:'🔖 محفوظ',
+    requestDetails:'تفاصيل الطلب',
+    offersTab:'العروض المقدمة',
+    email:'البريد الإلكتروني', password:'كلمة المرور', fullName:'الاسم الكامل', forgotPassword:'نسيت كلمة المرور؟',
     loginBtn:'دخول', createAccountBtn:'إنشاء الحساب',
-    notificationsTitle:'الإشعارات', allTab:'الكل', offersTabN:'العروض', followsTab:'المتابعات',
-    msgsTab:'الرسائل', noNotifsYet:'لا توجد إشعارات', markAllRead:'قراءة الكل', systemTab:'النظام',
-    profileTab:'الملف الشخصي', editProfile:'تعديل الملف الشخصي',
+    notificationsTitle:'الإشعارات', allTab:'الكل', offersTabN:'العروض',
+    msgsTab:'الرسائل', noNotifsYet:'لا توجد إشعارات', markAllRead:'قراءة الكل', systemTab:'النظام', editProfile:'✏️ تعديل الملف الشخصي',
+    username:'اسم المستخدم *', avatarColor:'لون الصورة الرمزية', saveChanges:'حفظ التغييرات',
     searchServicePlaceholder:'ابحث عن خدمة..', ratingAction:'★ تقييم', shareAction:'⤴ مشاركة',
     ratingLbl:'تقييم', followAction:'+ متابعة',
-    joinedLbl:'انضم', chatAction:'💬 محادثة', offersTabP:'العروض', requestsTabP:'الطلبات', loadingTxt:'⏳ جاري التحميل...',
-    shareTitle:'مشاركة', shareVia:'مشاركة عبر', copyLink:'نسخ الرابط', linkCopied:'تم نسخ الرابط',
-    ratingTitle:'تقييم', submitRating:'إرسال التقييم', yourRating:'تقييمك',
+    joinedLbl:'انضم', chatAction:'💬 محادثة', offersTabP:'العروض', requestsTabP:'الطلبات', loadingTxt:'⏳ جاري التحميل...', shareVia:'مشاركة عبر', copyLink:'نسخ الرابط', linkCopied:'تم نسخ الرابط',
+    ratingTitle:'تقييم', submitRating:'إرسال التقييم',
     writeComment:'اكتب تعليقك (اختياري)',
     offerModalTitle:'تقديم عرض', offerDescPlaceholder:'اشرح كيف يمكنك تنفيذ هذا الطلب...',
     offerPriceLbl:'السعر المعروض (ريال)', offerDurLbl:'مدة التنفيذ',
-    submitOfferBtn:'إرسال العرض ←',
-    savedTitle:'المحفوظات', noSavedYet:'لا توجد طلبات محفوظة بعد', backToFeed:'← العودة',
-    termsTitle:'اتفاقية الاستخدام', termsAgree:'أوافق على الشروط والأحكام', continueBtn:'استمرار',
+    submitOfferBtn:'إرسال العرض ←', noSavedYet:'لا توجد طلبات محفوظة بعد', backToFeed:'← العودة',
   },
   en: {
     appName:'Alagat', requests:'Requests', toggleTheme:'Toggle theme',
-    login:'Log In', register:'Sign Up', newRequest:'+ New Request', myProfile:'My Profile',
+    login:'Log In', register:'Sign Up', newRequest:'+ New Request',
     menu:'Menu', home:'Home', logout:'Log Out', notifications:'Notifications',
     myMessages:'My Messages', saved:'Saved', categories:'Categories',
     catProgramming:'Programming', catDesign:'Design', catMaintenance:'General Maintenance', catMarketing:'Marketing',
     catConsulting:'Consulting', catTeaching:'Teaching', catConstruction:'Contracting', catHome:'Home Services', catHealth:'Health & Beauty', catCars:'Cars', catEvents:'Events & Planning', catOther:'Other Services',
-    postRequest:'Post a Request', whatDoYouNeed:'What do you need?', urgent:'Urgent', latest:'Latest',
-    all:'All', searchInRequests:'Search requests...', requestsCount:'requests',
-    budget:'Budget', duration:'Duration', serviceType:'Service Type',
-    offersSubmitted:'Offers Submitted', offer:'offers', noOffersYet:'No offers yet',
-    submitOffer:'Submit Offer', submitOfferOnThis:'Submit an offer on this request', contact:'Contact',
+    postRequest:'Post a Request', whatDoYouNeed:'What do you need?', latest:'Latest',
+    all:'All', searchInRequests:'Search requests...',
+    budget:'Budget', duration:'Duration', serviceType:'Service Type', offer:'offers',
+    submitOffer:'Submit Offer', contact:'Contact',
     follow:'+ Follow', following:'✓ Following', followers:'Followers', chat:'Chat',
     unfollowedToast:'Unfollowed', followedToast:'✓ Followed',
     noRequestsOnProfile:'No requests yet', noOffersOnProfile:'No offers yet',
@@ -396,49 +376,47 @@ window.I18N = {
     chooseRating:'Choose your rating', shareProfileTitle:'Share Profile',
     ratingBad:'Bad', ratingOk:'Okay', ratingGood:'Good', ratingVeryGood:'Very Good', ratingExcellent:'Excellent ⭐',
     submitOfferOnRequest:'Submit your offer on this request ←',
-    messagesTitle:'Messages', searchInMessages:'🔍  Search messages...', editSoon:'Coming soon ✍️',
-    onlineNow:'Online now', voiceCallSoon:'Voice call coming soon', typeYourMessage:'Type your message...',
+    messagesTitle:'Messages', searchInMessages:'🔍  Search messages...',
+    onlineNow:'Online now', typeYourMessage:'Type your message...',
     noConvsYet:'No conversations yet', unknownUser:'Unknown', newBadgeShort:'New',
     convHidden:'Conversation deleted', deleteConvAction:'Delete Conversation', confirmHideConv:'Delete this conversation from your list?',
     blockUserAction:'Block User', confirmBlockUser:"Block this user? You won't be able to message or see each other's profiles after blocking.",
     userBlockedToast:'User blocked', userUnblockedToast:'User unblocked',
     cannotMessageBlocked:"Can't message — there's a block between you", profileUnavailableBlocked:'This profile is unavailable',
-    rating:'Rating', joined:'Joined', activeRecently:'Active',
+    rating:'Rating', joined:'Joined',
     bottomHome:'Home', bottomNotifs:'Notifications', bottomMsgs:'Messages',
-    flexible:'Flexible', open:'Open', completed:'Completed', noOffers:'No offers yet',
-    saveBtn:'Save', saved2:'Saved', share:'Share', manageAd:'Manage Ad',
-    edit:'Edit', bump:'Bump', featureRequest:'Feature Request', deleteAd:'Delete',
-    payFees:'Pay Fees', loading:'Loading...',
+    flexible:'Flexible', open:'Open', noOffers:'No offers yet',
+    saveBtn:'Save', share:'Share',
+    edit:'Edit', bump:'Bump', loading:'Loading...',
     postYourRequest:'✏️ Post Your Request', postHint:'Describe what you need and get offers within minutes',
     titlePlaceholder:'Request title — what exactly do you need?', detailsPlaceholder:'Describe the details...',
     category:'Category', durationLbl:'Duration', budgetLbl:'Budget (SAR)', budgetPlaceholder:'e.g. 500',
     serviceTypeLbl:'Service Type', remote:'Remote', inPerson:'In-person', both:'Both',
-    hours24:'24 hours', days3:'3 days', week1:'1 week', weeks2:'2 weeks',
+    regionLbl:'Region *', selectRegion:'Select region', tellClientWhy:"Tell the client why you're the best fit",
+    phoneOptional:'Your phone (optional) 🔒', phoneVisibleToOwner:'Visible only to the request owner, no one else can see it',
+    mediaOptionalLbl:'📷 Photos & video (optional — up to 10)', addMediaBtn:'+ Add photos or video',
+    hours24:'24 hours', days3:'3 days', week1:'1 week', weeks2:'2 weeks', month1:'1 month', months3:'3 months',
     cancel:'Cancel', publishRequest:'Publish Request ←',
     readyToStart:'Ready to start?', ctaSubtitle:'Post your request or boost your income',
     postFree:'Post your request for free ←', startEarning:'Start earning more',
     noRequestsYet:'No requests yet', beFirstToPost:'Be the first to post a request!',
-    urgentBadge:'Urgent 🔴', newBadge:'New ✨', noOffersBadge:'No offers yet', savedBadge:'🔖 Saved',
-    requestDetails:'Request Details', serviceTypeShort:'Service Type',
-    offersTab:'Submitted Offers', noOffersOnRequest:'No offers on this request yet',
-    email:'Email', password:'Password', fullName:'Full Name',
-    confirmPassword:'Confirm Password', forgotPassword:'Forgot password?',
-    dontHaveAccount:"Don't have an account?", alreadyHaveAccount:'Already have an account?',
+    newBadge:'New ✨', noOffersBadge:'No offers yet', savedBadge:'🔖 Saved',
+    requestDetails:'Request Details',
+    offersTab:'Submitted Offers',
+    email:'Email', password:'Password', fullName:'Full Name', forgotPassword:'Forgot password?',
+
     loginBtn:'Login', createAccountBtn:'Create Account',
-    notificationsTitle:'Notifications', allTab:'All', offersTabN:'Offers', followsTab:'Follows',
-    msgsTab:'Messages', noNotifsYet:'No notifications yet', markAllRead:'Mark all read', systemTab:'System',
-    profileTab:'Profile', editProfile:'Edit Profile',
+    notificationsTitle:'Notifications', allTab:'All', offersTabN:'Offers',
+    msgsTab:'Messages', noNotifsYet:'No notifications yet', markAllRead:'Mark all read', systemTab:'System', editProfile:'✏️ Edit Profile',
+    username:'Username *', avatarColor:'Avatar color', saveChanges:'Save changes',
     searchServicePlaceholder:'Search for a service..', ratingAction:'★ Rate', shareAction:'⤴ Share',
     ratingLbl:'Rating', followAction:'+ Follow',
-    joinedLbl:'Joined', chatAction:'💬 Chat', offersTabP:'Offers', requestsTabP:'Requests', loadingTxt:'⏳ Loading...',
-    shareTitle:'Share', shareVia:'Share via', copyLink:'Copy Link', linkCopied:'Link copied',
-    ratingTitle:'Rating', submitRating:'Submit Rating', yourRating:'Your Rating',
+    joinedLbl:'Joined', chatAction:'💬 Chat', offersTabP:'Offers', requestsTabP:'Requests', loadingTxt:'⏳ Loading...', shareVia:'Share via', copyLink:'Copy Link', linkCopied:'Link copied',
+    ratingTitle:'Rating', submitRating:'Submit Rating',
     writeComment:'Write a comment (optional)',
     offerModalTitle:'Submit an Offer', offerDescPlaceholder:'Explain how you can fulfill this request...',
     offerPriceLbl:'Offered Price (SAR)', offerDurLbl:'Completion Time',
-    submitOfferBtn:'Send Offer ←',
-    savedTitle:'Saved', noSavedYet:'No saved requests yet', backToFeed:'← Back',
-    termsTitle:'Terms of Use', termsAgree:'I agree to the Terms and Conditions', continueBtn:'Continue',
+    submitOfferBtn:'Send Offer ←', noSavedYet:'No saved requests yet', backToFeed:'← Back',
   }
 };
 window.currentLang = localStorage.getItem('alagat_lang') || 'ar';
@@ -543,7 +521,6 @@ window.onerror = function(msg, url, line, col, error){
     </div>
     <div class="feed-tabs">
       <div class="ftab on" data-tab="latest" data-i18n="latest">الأحدث</div>
-      <div class="ftab" data-tab="urgent" data-i18n="urgent">عاجل 🔴</div>
 
 
     </div>
@@ -610,11 +587,7 @@ window.onerror = function(msg, url, line, col, error){
       <button class="btn-b" style="width:100%;border-radius:8px;padding:8px;font-size:.79rem;margin-bottom:7px" id="rpRegister">إنشاء حساب مجاناً</button>
       <button class="btn-g" style="width:100%;border-radius:8px;padding:8px;font-size:.79rem" id="rpLogin">تسجيل الدخول</button>
     </div>
-    <div class="pc" id="rpUser" style="display:none">
-      <div class="pt">⚡ مزودون متاحون</div>
-      <div class="su"><div class="su-i"><div class="su-n">—</div></div><button class="fbtn">تابع</button></div>
-      <div class="su"><div class="su-i"><div class="su-n">—</div></div><button class="fbtn">تابع</button></div>
-    </div>
+    <div class="pc" id="rpUser" style="display:none"></div>
     <div class="pc" style="background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(37,99,168,.05));border-color:rgba(124,58,237,.18)">
       <div class="pt" style="color:#c084fc">💰 عندك مهارة؟</div>
       <p style="font-size:.78rem;color:var(--t2);line-height:1.6;margin-bottom:10px">حوّل وقتك الحر إلى دخل ثانٍ حقيقي</p>
@@ -651,27 +624,18 @@ window.onerror = function(msg, url, line, col, error){
   <div id="detTitle" style="font-size:1.15rem;font-weight:800;color:var(--t);margin-bottom:8px;line-height:1.4"></div>
   <div id="detDesc" style="font-size:.86rem;color:var(--t2);line-height:1.7;margin-bottom:12px"></div>
   <div id="detTags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
-  <!-- الميزانية والتفاصيل -->
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px">
-    <div style="background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:10px;text-align:center">
-      <div style="font-size:.7rem;color:var(--t3);margin-bottom:3px" data-i18n="budget">الميزانية</div>
-      <div id="detBudget" style="font-size:.95rem;font-weight:700;color:var(--ac2)"></div>
-    </div>
-    <div style="background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:10px;text-align:center">
-      <div style="font-size:.7rem;color:var(--t3);margin-bottom:3px" data-i18n="durationLbl">المدة</div>
-      <div id="detDur" style="font-size:.9rem;font-weight:600;color:var(--t)"></div>
-    </div>
-    <div style="background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:10px;text-align:center">
-      <div style="font-size:.7rem;color:var(--t3);margin-bottom:3px" data-i18n="serviceTypeShort">نوع الخدمة</div>
-      <div id="detType" style="font-size:.9rem;font-weight:600;color:var(--t)"></div>
-    </div>
-    <div id="detCityCard" style="display:none;background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:10px;text-align:center">
-      <div style="font-size:.7rem;color:var(--t3);margin-bottom:3px">📍 الموقع</div>
-      <div id="detCity" style="font-size:.9rem;font-weight:600;color:var(--t)"></div>
-    </div>
+  <!-- شريط التفاصيل السريعة (ميزانية / مدة / نوع / موقع) -->
+  <div id="detQuickInfo" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:10px 12px;background:var(--s2);border:1px solid var(--b);border-radius:10px;margin-bottom:14px;font-size:.8rem">
+    <span style="display:flex;align-items:center;gap:4px;color:var(--ac2);font-weight:700">💰 <span id="detBudget"></span></span>
+    <span style="color:var(--t3)">·</span>
+    <span style="display:flex;align-items:center;gap:4px;color:var(--t)">⏱ <span id="detDur"></span></span>
+    <span style="color:var(--t3)">·</span>
+    <span style="display:flex;align-items:center;gap:4px;color:var(--t)">🗂 <span id="detType"></span></span>
+    <span id="detCitySep" style="display:none;color:var(--t3)">·</span>
+    <span id="detCityCard" style="display:none;align-items:center;gap:4px;color:var(--t)">📍 <span id="detCity"></span></span>
   </div>
   <!-- معرض الصور (بعد التفاصيل المنظمة، أسفل النص بالكامل) -->
-  <div id="detGallery" style="display:none;margin-bottom:16px"></div>
+  <div id="detGallery" style="display:none;margin-bottom:14px"></div>
   <!-- العروض -->
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
     <div style="font-size:.9rem;font-weight:700;color:var(--t)">العروض المقدمة</div>
@@ -710,8 +674,8 @@ window.onerror = function(msg, url, line, col, error){
   <div class="modal">
     <div style="text-align:center;margin-bottom:16px"><div style="font-size:1.6rem;font-weight:900;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px">علاقات</div></div>
     <div class="auth-tabs"><button class="at on" id="at-login" data-i18n="login">تسجيل الدخول</button><button class="at" id="at-register" data-i18n="register">إنشاء حساب</button></div>
-    <div id="f-login"><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني</label><input class="fi" type="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور</label><input class="fi" type="password" placeholder="••••••••" id="loginPass"></div><div style="text-align:left;margin-bottom:12px"><span style="font-size:.74rem;color:var(--ac);cursor:pointer" data-i18n="forgotPassword">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin" data-i18n="loginBtn">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister" data-i18n="register">إنشاء حساب جديد</button></div>
-    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك"></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username"></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px">💰 لدي مهارة أرغب بالربح</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px">بالتسجيل توافق على <span style="color:var(--ac);cursor:pointer">شروط الاستخدام</span></p></div>
+    <div id="f-login"><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني</label><input class="fi" type="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور</label><input class="fi" type="password" placeholder="••••••••" id="loginPass"></div><div style="text-align:left;margin-bottom:12px"><span id="forgotPassBtn" style="font-size:.74rem;color:var(--ac);cursor:pointer" data-i18n="forgotPassword">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin" data-i18n="loginBtn">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister" data-i18n="register">إنشاء حساب جديد</button></div>
+    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك"></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username"></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px">💰 لدي مهارة أرغب بالربح</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px">بالتسجيل توافق على <a href="terms.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none">شروط الاستخدام</a> و<a href="privacy.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none">سياسة الخصوصية</a></p></div>
   </div>
 </div>
 <!-- OTP VERIFY MODAL -->
@@ -723,6 +687,28 @@ window.onerror = function(msg, url, line, col, error){
     <input class="fi" type="text" id="otpCode" inputmode="numeric" maxlength="6" placeholder="• • • • • •" style="text-align:center;font-size:1.5rem;letter-spacing:8px;font-weight:800;margin-bottom:16px;color:var(--t)">
     <button class="btn-b" style="width:100%;padding:13px;border-radius:10px;margin-bottom:12px;font-size:.95rem;box-shadow:0 4px 14px rgba(0,0,0,.25)" id="doVerifyOtp">تفعيل الحساب ←</button>
     <div style="font-size:.82rem;color:var(--t);opacity:.7">لم يصلك الرمز؟ <span id="resendOtp" style="color:var(--ac);cursor:pointer;font-weight:700;opacity:1">إعادة الإرسال</span></div>
+  </div>
+</div>
+<!-- FORGOT PASSWORD - STEP 1: طلب الإيميل -->
+<div class="h-overlay" id="forgotPassModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal" style="max-width:380px;text-align:center">
+    <div style="font-size:1.6rem;font-weight:900;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px">علاقات</div>
+    <div style="font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--t)">🔑 نسيت كلمة المرور؟</div>
+    <div style="font-size:.85rem;color:var(--t);opacity:.85;margin-bottom:18px;line-height:1.6">أدخل بريدك الإلكتروني المسجّل وسنرسل لك رمز إعادة التعيين</div>
+    <input class="fi" type="email" id="forgotPassEmail" placeholder="example@gmail.com" style="text-align:center;margin-bottom:16px;color:var(--t)">
+    <button class="btn-b" style="width:100%;padding:13px;border-radius:10px;font-size:.95rem;box-shadow:0 4px 14px rgba(0,0,0,.25)" id="doRequestReset">إرسال رمز التعيين ←</button>
+  </div>
+</div>
+<!-- FORGOT PASSWORD - STEP 2: الرمز + كلمة مرور جديدة -->
+<div class="h-overlay" id="resetPassModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal" style="max-width:380px;text-align:center">
+    <div style="font-size:1.6rem;font-weight:900;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px">علاقات</div>
+    <div style="font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--t)">🔑 إعادة تعيين كلمة المرور</div>
+    <div style="font-size:.85rem;color:var(--t);opacity:.85;margin-bottom:16px;line-height:1.6">أرسلنا رمز تعيين من 6 أرقام إلى<br><span id="resetEmailDisplay" style="color:var(--ac);font-weight:700"></span></div>
+    <input class="fi" type="text" id="resetOtpCode" inputmode="numeric" maxlength="6" placeholder="• • • • • •" style="text-align:center;font-size:1.5rem;letter-spacing:8px;font-weight:800;margin-bottom:14px;color:var(--t)">
+    <input class="fi" type="password" id="newPassword" placeholder="كلمة المرور الجديدة" style="text-align:center;margin-bottom:16px;color:var(--t)">
+    <button class="btn-b" style="width:100%;padding:13px;border-radius:10px;margin-bottom:12px;font-size:.95rem;box-shadow:0 4px 14px rgba(0,0,0,.25)" id="doResetPassword">تعيين كلمة المرور ←</button>
+    <div style="font-size:.82rem;color:var(--t);opacity:.7">لم يصلك الرمز؟ <span id="resendResetOtp" style="color:var(--ac);cursor:pointer;font-weight:700;opacity:1">إعادة الإرسال</span></div>
   </div>
 </div>
 <!-- TERMS MODAL -->
@@ -756,17 +742,17 @@ window.onerror = function(msg, url, line, col, error){
 </div>
 
 <div class="h-overlay" id="compModal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات">🏗️ مقاولات</option><option value="سيارات">🚙 سيارات</option><option value="استشارات">⚖️ استشارات</option><option value="صحة وجمال">💆 صحة وجمال</option><option value="مناسبات">🎉 مناسبات وتنظيم</option><option value="برمجة">💻 برمجة</option><option value="تصميم">🎨 تصميم</option><option value="تسويق">📱 تسويق</option><option value="منزلية">🏠 منزلية</option><option value="صيانة عامة">🔧 صيانة عامة</option><option value="تعليم">📚 تعليم</option><option value="أخرى">خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option>24 ساعة</option><option>3 أيام</option><option>أسبوع</option><option>أسبوعان</option><option>مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option>عن بُعد</option><option>حضوري</option><option>كلاهما</option></select></div></div><div class="fg"><label class="fgl">المنطقة *</label><select class="fi" id="reqCity"><option value="">اختر المنطقة</option><option value="الرياض">الرياض</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="القصيم">القصيم</option><option value="الشرقية">الشرقية</option><option value="عسير">عسير</option><option value="تبوك">تبوك</option><option value="حائل">حائل</option><option value="الحدود الشمالية">الحدود الشمالية</option><option value="الجوف">الجوف</option><option value="جازان">جازان</option><option value="نجران">نجران</option><option value="الباحة">الباحة</option></select></div>
+  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات">🏗️ مقاولات</option><option value="سيارات">🚙 سيارات</option><option value="استشارات">⚖️ استشارات</option><option value="صحة وجمال">💆 صحة وجمال</option><option value="مناسبات">🎉 مناسبات وتنظيم</option><option value="برمجة">💻 برمجة</option><option value="تصميم">🎨 تصميم</option><option value="تسويق">📱 تسويق</option><option value="منزلية">🏠 منزلية</option><option value="صيانة عامة">🔧 صيانة عامة</option><option value="تعليم">📚 تعليم</option><option value="أخرى">خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option data-i18n="hours24">24 ساعة</option><option data-i18n="days3">3 أيام</option><option data-i18n="week1">أسبوع</option><option data-i18n="weeks2">أسبوعان</option><option data-i18n="flexible">مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option data-i18n="remote">عن بُعد</option><option data-i18n="inPerson">حضوري</option><option data-i18n="both">كلاهما</option></select></div></div><div class="fg"><label class="fgl" data-i18n="regionLbl">المنطقة *</label><select class="fi" id="reqCity"><option value="" data-i18n="selectRegion">اختر المنطقة</option><option value="الرياض">الرياض</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="القصيم">القصيم</option><option value="الشرقية">الشرقية</option><option value="عسير">عسير</option><option value="تبوك">تبوك</option><option value="حائل">حائل</option><option value="الحدود الشمالية">الحدود الشمالية</option><option value="الجوف">الجوف</option><option value="جازان">جازان</option><option value="نجران">نجران</option><option value="الباحة">الباحة</option></select></div>
   <div class="fg">
-    <label class="fgl">📷 صور وفيديو (اختياري — حتى 10 صور)</label>
+    <label class="fgl" data-i18n="mediaOptionalLbl">📷 صور وفيديو (اختياري — حتى 10 صور)</label>
     <input type="file" id="reqMediaInput" accept="image/*,video/*" multiple style="display:none" onchange="handleReqMediaSelect(this)">
     <div id="reqMediaPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"></div>
-    <button type="button" id="reqMediaAddBtn" onclick="document.getElementById('reqMediaInput').click()" style="width:100%;background:var(--s2);border:1px dashed var(--b);color:var(--t2);border-radius:10px;padding:12px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer">+ إضافة صور أو فيديو</button>
+    <button type="button" id="reqMediaAddBtn" onclick="document.getElementById('reqMediaInput').click()" style="width:100%;background:var(--s2);border:1px dashed var(--b);color:var(--t2);border-radius:10px;padding:12px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer" data-i18n="addMediaBtn">+ إضافة صور أو فيديو</button>
   </div>
 <div class="ma"><button class="btn-g" id="cancelComp" data-i18n="cancel">إلغاء</button><button class="btn-b" id="submitReq" data-i18n="publishRequest">نشر الطلب ←</button></div></div>
 </div>
 <div class="h-overlay" id="offerModal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="offerModalTitle">💼 قدّم عرضك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px">أخبر العميل لماذا أنت الأنسب</div><div class="op-box"><div class="op-t" id="offerTitle">—</div><div class="op-m" id="offerMeta">—</div></div><div class="fg"><label class="fgl" data-i18n="yourOffer">عرضك *</label><textarea class="fi" id="offerText" placeholder="خبرتك وكيف ستنجز الطلب..." data-i18n-placeholder="offerDescPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="offerPriceLbl">سعرك (ريال) *</label><input class="fi" id="offerPrice" type="number" placeholder="أدخل سعرك" data-i18n-placeholder="enterPrice"></div><div class="fg"><label class="fgl" data-i18n="offerDurLbl">المدة</label><select class="fi" id="offerDur"><option>24 ساعة</option><option>3 أيام</option><option>أسبوع</option><option>شهر</option><option>3 أشهر</option></select></div></div><div class="fg"><label class="fgl">رقم جوالك (اختياري) 🔒</label><input class="fi" id="offerPhone" type="tel" placeholder="05xxxxxxxx"><div style="font-size:.7rem;color:var(--t3);margin-top:4px">يظهر لصاحب الطلب فقط، ولا يره أي شخص آخر</div></div><div class="ma"><button class="btn-g" id="cancelOffer" data-i18n="cancel">إلغاء</button><button class="btn-b" id="submitOffer" data-i18n="submitOfferBtn">إرسال العرض ←</button></div></div>
+  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="offerModalTitle">💼 قدّم عرضك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="tellClientWhy">أخبر العميل لماذا أنت الأنسب</div><div class="op-box"><div class="op-t" id="offerTitle">—</div><div class="op-m" id="offerMeta">—</div></div><div class="fg"><label class="fgl" data-i18n="yourOffer">عرضك *</label><textarea class="fi" id="offerText" placeholder="خبرتك وكيف ستنجز الطلب..." data-i18n-placeholder="offerDescPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="offerPriceLbl">سعرك (ريال) *</label><input class="fi" id="offerPrice" type="number" placeholder="أدخل سعرك" data-i18n-placeholder="enterPrice"></div><div class="fg"><label class="fgl" data-i18n="offerDurLbl">المدة</label><select class="fi" id="offerDur"><option data-i18n="hours24">24 ساعة</option><option data-i18n="days3">3 أيام</option><option data-i18n="week1">أسبوع</option><option data-i18n="month1">شهر</option><option data-i18n="months3">3 أشهر</option></select></div></div><div class="fg"><label class="fgl" data-i18n="phoneOptional">رقم جوالك (اختياري) 🔒</label><input class="fi" id="offerPhone" type="tel" placeholder="05xxxxxxxx"><div style="font-size:.7rem;color:var(--t3);margin-top:4px" data-i18n="phoneVisibleToOwner">يظهر لصاحب الطلب فقط، ولا يره أي شخص آخر</div></div><div class="ma"><button class="btn-g" id="cancelOffer" data-i18n="cancel">إلغاء</button><button class="btn-b" id="submitOffer" data-i18n="submitOfferBtn">إرسال العرض ←</button></div></div>
 </div>
 
 
@@ -785,6 +771,7 @@ window.onerror = function(msg, url, line, col, error){
     <button onclick="openPModal('shareModal')" data-i18n="shareAction">⤴ مشاركة</button>
   </div>
   <div class="top-actions" id="topActionsOwn" style="display:none">
+    <button onclick="openEditProfileModal()" data-i18n="editProfile">✏️ تعديل الملف الشخصي</button>
     <button onclick="openPModal('shareModal')" data-i18n="shareAction">⤴ مشاركة</button>
   </div>
   <div class="followers-badge" id="followersBadge" style="display:none">0 متابع</div>
@@ -818,6 +805,25 @@ window.onerror = function(msg, url, line, col, error){
     <div style="text-align:center;font-size:.82rem;color:#9ca3af;margin-bottom:12px" id="ratingLbl" data-i18n="chooseRating">اختر تقييمك</div>
     <textarea class="rate-textarea" placeholder="أضف تعليقك (اختياري)..." id="ratingComment" data-i18n-placeholder="writeComment"></textarea>
     <button class="submit-btn" onclick="submitRating()" data-i18n="submitRating">إرسال التقييم</button>
+  </div>
+</div>
+<div class="p-overlay" id="editProfileModal" onclick="if(event.target===this)closePModal('editProfileModal')">
+  <div class="sheet"><div class="sheet-handle"></div><div class="sheet-title" data-i18n="editProfile">✏️ تعديل الملف الشخصي</div>
+    <div class="fg" style="padding:0 16px"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" id="editFullName" maxlength="50"></div>
+    <div class="fg" style="padding:0 16px"><label class="fgl" data-i18n="username">اسم المستخدم *</label><input class="fi" type="text" id="editUsername" maxlength="30" style="direction:ltr;text-align:right"></div>
+    <div class="fg" style="padding:0 16px">
+      <label class="fgl" data-i18n="avatarColor">لون الصورة الرمزية</label>
+      <div id="editAvatarColors" style="display:flex;gap:8px;flex-wrap:wrap;padding-top:4px">
+        <div class="avc-dot" data-color="#0085ff" style="background:#0085ff"></div>
+        <div class="avc-dot" data-color="#7c3aed" style="background:#7c3aed"></div>
+        <div class="avc-dot" data-color="#dc2626" style="background:#dc2626"></div>
+        <div class="avc-dot" data-color="#16a34a" style="background:#16a34a"></div>
+        <div class="avc-dot" data-color="#ea580c" style="background:#ea580c"></div>
+        <div class="avc-dot" data-color="#0891b2" style="background:#0891b2"></div>
+        <div class="avc-dot" data-color="#db2777" style="background:#db2777"></div>
+      </div>
+    </div>
+    <div style="padding:14px 16px"><button class="btn-b" id="saveProfileBtn" style="width:100%;padding:12px;border-radius:10px" data-i18n="saveChanges">حفظ التغييرات</button></div>
   </div>
 </div>
 <div class="p-overlay" id="shareModal" onclick="if(event.target===this)closePModal('shareModal')">
@@ -1143,7 +1149,66 @@ function populateProfileFromDB(p){
   // عنوان نافذة التقييم
   var rTitle=document.querySelector('#ratingModal .sheet-title');
   if(rTitle) rTitle.textContent='⭐ تقييم '+(p.full_name||'المستخدم');
+  // نحفظ بيانات الملف الحالي للاستخدام عند التعديل
+  window._currentProfileData = p;
 }
+
+// =====================
+// تعديل الملف الشخصي
+// =====================
+window.openEditProfileModal = function(){
+  var p = window._currentProfileData || {};
+  document.getElementById('editFullName').value = p.full_name || '';
+  document.getElementById('editUsername').value = p.username || '';
+  document.querySelectorAll('#editAvatarColors .avc-dot').forEach(function(dot){
+    dot.classList.toggle('sel', dot.getAttribute('data-color') === (p.avatar_color || '#0085ff'));
+  });
+  if(!document.querySelector('#editAvatarColors .avc-dot.sel')){
+    var firstDot = document.querySelector('#editAvatarColors .avc-dot');
+    if(firstDot) firstDot.classList.add('sel');
+  }
+  openPModal('editProfileModal');
+};
+document.querySelectorAll('#editAvatarColors .avc-dot').forEach(function(dot){
+  dot.onclick = function(){
+    document.querySelectorAll('#editAvatarColors .avc-dot').forEach(function(d){ d.classList.remove('sel'); });
+    this.classList.add('sel');
+  };
+});
+document.getElementById('saveProfileBtn').onclick = async function(){
+  var fullName = document.getElementById('editFullName').value.trim();
+  var username = document.getElementById('editUsername').value.trim().replace(/^@/,'');
+  var selectedDot = document.querySelector('#editAvatarColors .avc-dot.sel');
+  var avatarColor = selectedDot ? selectedDot.getAttribute('data-color') : '#0085ff';
+
+  if(!fullName){ hToast('⚠️ أدخل الاسم الكامل'); return; }
+  if(!username){ hToast('⚠️ أدخل اسم المستخدم'); return; }
+
+  var currentUser = await sbGetUser();
+  if(!currentUser){ hToast('⚠️ يجب تسجيل الدخول'); return; }
+
+  var oldUsername = (window._currentProfileData && window._currentProfileData.username) || '';
+  if(username !== oldUsername){
+    hToast('جاري التحقق من اسم المستخدم...');
+    var taken = await sbCheckUsernameTaken(username);
+    if(taken){ hToast('❌ اسم المستخدم هذا محجوز، جرّب اسماً آخر'); return; }
+  }
+
+  hToast('جاري حفظ التغييرات...');
+  var { error } = await sb.from('profiles').update({
+    full_name: fullName, username: username, avatar_color: avatarColor
+  }).eq('id', currentUser.id);
+
+  if(error){ hToast('❌ ' + error.message); return; }
+
+  window._currentProfileData = Object.assign({}, window._currentProfileData, {
+    full_name: fullName, username: username, avatar_color: avatarColor
+  });
+  populateProfileFromDB(window._currentProfileData);
+  closePModal('editProfileModal');
+  hToast('✓ تم حفظ التغييرات بنجاح');
+};
+
 function populateProfile(r){
   // الصورة الرمزية
   var avEl = document.querySelector('#profile .p-av');
@@ -1191,33 +1256,6 @@ window.showPage = function showPage(id){
 var state = { loggedIn:false, activeTab:'latest', activeFilter:'all', activeCity:'all', activeTime:'all', search:'', saved:[], currentOfferId:null };
 window.state = state;
 var ALL_REQS = [
-  {id:0,name:'أحمد الغامدي',handle:'@ahmed_g',av:'أ',grad:'linear-gradient(135deg,#4a9fd4,#4a9fd4)',time:'منذ 3 دقائق',urgent:true,isNew:false,title:'أحتاج مطور React لبناء لوحة تحكم إدارية',desc:'أبحث عن مطور React لبناء dashboard لمنصة تعليمية. يشمل جداول بيانات ورسوم بيانية.',tags:['React','TypeScript','Dashboard'],cat:'برمجة',tc:'',budget:'٢٠٠٠–٤٠٠٠ ريال',dur:'أسبوع',type:'عن بُعد',offers:0,ts:30},
-  {id:1,name:'مستخدم',handle:'@noura_s',av:'ن',grad:'linear-gradient(135deg,#f953c6,#b91d73)',time:'منذ 8 دقائق',urgent:false,isNew:true,title:'تصميم هوية بصرية لمطعم عربي راقٍ',desc:'أحتاج هوية بصرية شاملة: شعار، ألوان، قوائم طعام، وعبوات تغليف.',tags:['Branding','شعار','Figma'],cat:'تصميم',tc:'g',budget:'١٥٠٠ ريال',dur:'١٠ أيام',type:'عن بُعد',offers:3,ts:29},
-  {id:2,name:'فيصل الدوسري',handle:'@faisal_d',av:'ف',grad:'linear-gradient(135deg,#f7971e,#ffd200)',time:'منذ 20 دقيقة',urgent:true,isNew:false,title:'سباك عاجل — تسرب مياه في الحمام',desc:'تسرب مياه في الحمام، أحتاج سباك متاح اليوم في الرياض حي العليا.',tags:['سباكة','عاجل','الرياض'],cat:'منزلية',tc:'r',budget:'٣٠٠–٦٠٠ ريال',dur:'اليوم',type:'حضوري',offers:2,ts:28},
-  {id:3,name:'منى القحطاني',handle:'@mona_q',av:'م',grad:'linear-gradient(135deg,#43e97b,#38f9d7)',time:'منذ 35 دقيقة',urgent:false,isNew:false,title:'محاضر Excel متقدم لتدريب فريق',desc:'أحتاج محاضر متخصص في Excel المتقدم. الجلسة ٣ ساعات.',tags:['Excel','تدريب','Power Query'],cat:'تعليم',tc:'o',budget:'١٢٠٠ ريال',dur:'يوم واحد',type:'حضوري/أونلاين',offers:5,ts:27},
-  {id:5,name:'ليلى العنزي',handle:'@layla_a',av:'ل',grad:'linear-gradient(135deg,#ff9a9e,#fecfef)',time:'منذ ساعتين',urgent:false,isNew:false,title:'مدرّس رياضيات للمرحلة المتوسطة',desc:'أبحث عن مدرس رياضيات لابني. جلستان أسبوعياً في جدة أو أونلاين.',tags:['رياضيات','متوسطة','جدة'],cat:'تعليم',tc:'g',budget:'١٠٠–١٥٠ ريال/ساعة',dur:'مستمر',type:'حضوري/أونلاين',offers:4,ts:25},
-  {id:6,name:'سالم المالكي',handle:'@salem_m',av:'س',grad:'linear-gradient(135deg,#11998e,#38ef7d)',time:'منذ ٣ ساعات',urgent:false,isNew:false,title:'مصمم UI لتطبيق جوال iOS وAndroid',desc:'نحتاج مصمم UI/UX لتطبيق توصيل طلبات. مطلوب تجربة مستخدم سلسة.',tags:['UI/UX','Figma','موبايل'],cat:'تصميم',tc:'',budget:'٣٠٠٠ ريال',dur:'أسبوعان',type:'عن بُعد',offers:6,ts:24},
-  {id:7,name:'ريم الحمدان',handle:'@reem_h',av:'ر',grad:'linear-gradient(135deg,#f093fb,#f5576c)',time:'منذ ٤ ساعات',urgent:false,isNew:false,title:'مصوّر منتجات لمتجر إلكتروني',desc:'متجر ملابس نسائي يحتاج تصوير ٥٠ منتج. الإضاءة والخلفية مهمة.',tags:['تصوير','منتجات','جدة'],cat:'تصميم',tc:'g',budget:'٨٠٠ ريال',dur:'يوم واحد',type:'حضوري',offers:4,ts:23},
-  {id:8,name:'بندر العصيمي',handle:'@bandar_a',av:'ب',grad:'linear-gradient(135deg,#4776e6,#8e54e9)',time:'منذ ٥ ساعات',urgent:false,isNew:false,title:'مدير إعلانات Google Ads لمتجر إلكتروني',desc:'متجر إلكترونيات يحتاج إدارة حملات Google Ads بميزانية ٥٠٠٠ ريال شهرياً.',tags:['Google Ads','SEM','تسويق'],cat:'تسويق',tc:'o',budget:'٢٠٠٠ ريال/شهر',dur:'مستمر',type:'عن بُعد',offers:3,ts:22},
-  {id:10,name:'طارق الزهراني',handle:'@tariq_z',av:'ط',grad:'linear-gradient(135deg,#2980b9,#6dd5fa)',time:'منذ ٧ ساعات',urgent:false,isNew:false,title:'مقاول دهانات لشقة سكنية في الرياض',desc:'شقة ١٥٠ م² تحتاج دهان كامل داخلي.',tags:['دهانات','صيانة','الرياض'],cat:'منزلية',tc:'',budget:'٢٥٠٠ ريال',dur:'٣ أيام',type:'حضوري',offers:5,ts:20},
-  {id:11,name:'نواف القرني',handle:'@nawaf_q',av:'ن',grad:'linear-gradient(135deg,#1a1a2e,#4776e6)',time:'منذ ٨ ساعات',urgent:false,isNew:false,title:'مطور Python لتحليل بيانات المبيعات',desc:'شركة تجارية تحتاج سكريبت Python لتحليل ٣ سنوات من بيانات المبيعات.',tags:['Python','Data','تحليل'],cat:'برمجة',tc:'',budget:'١٨٠٠ ريال',dur:'أسبوع',type:'عن بُعد',offers:2,ts:19},
-  {id:12,name:'خالد الشمري',handle:'@khalid_sh',av:'خ',grad:'linear-gradient(135deg,#f857a6,#ff5858)',time:'منذ ٩ ساعات',urgent:false,isNew:false,title:'مصمم إعلانات سوشيال ميديا أسبوعي',desc:'نشاط تجاري يحتاج ١٠ تصاميم أسبوعياً لـ Instagram وSnapchat.',tags:['سوشيال','Photoshop','إعلانات'],cat:'تصميم',tc:'',budget:'١٠٠٠ ريال/شهر',dur:'مستمر',type:'عن بُعد',offers:9,ts:18},
-  {id:13,name:'سارة المطيري',handle:'@sara_m',av:'س',grad:'linear-gradient(135deg,#8360c3,#2ebf91)',time:'منذ ١٠ ساعات',urgent:false,isNew:false,title:'محامية لمراجعة عقد إيجار تجاري',desc:'عقد إيجار محل تجاري يحتاج مراجعة قانونية ومطابقة مع أنظمة التجارة.',tags:['محاماة','عقود','قانوني'],cat:'استشارات',tc:'g',budget:'٥٠٠ ريال',dur:'٢٤ ساعة',type:'عن بُعد',offers:2,ts:17},
-  {id:14,name:'فهد الدوسري',handle:'@fahad_d',av:'ف',grad:'linear-gradient(135deg,#e96c1a,#f7dc6f)',time:'منذ ١١ ساعة',urgent:false,isNew:false,title:'سائق نقل لتوصيل أثاث داخل الرياض',desc:'محتاج سيارة نقل كبيرة لنقل أثاث شقة من حي العليا إلى حي الملقا.',tags:['نقل','أثاث','الرياض'],cat:'نقل',tc:'o',budget:'٣٥٠ ريال',dur:'يوم واحد',type:'حضوري',offers:6,ts:16},
-  {id:15,name:'عمر البلوي',handle:'@omar_b',av:'ع',grad:'linear-gradient(135deg,#00b09b,#96c93d)',time:'منذ ١٢ ساعة',urgent:false,isNew:false,title:'مطور Flutter لتطبيق تسوق متكامل',desc:'نحتاج مطور Flutter لبناء تطبيق تسوق يدعم iOS وAndroid مع ربط API.',tags:['Flutter','Dart','Mobile'],cat:'برمجة',tc:'',budget:'٥٠٠٠–٨٠٠٠ ريال',dur:'شهر',type:'عن بُعد',offers:4,ts:15},
-  {id:16,name:'دانة الحربي',handle:'@dana_h',av:'د',grad:'linear-gradient(135deg,#fc5c7d,#6a3093)',time:'منذ ١٣ ساعة',urgent:false,isNew:false,title:'مصممة أزياء لتصميم مجموعة ملابس',desc:'مشروع ملابس نسائية يحتاج مصممة أزياء لتصميم ١٥ قطعة للموسم القادم.',tags:['أزياء','تصميم','موضة'],cat:'تصميم',tc:'g',budget:'٣٥٠٠ ريال',dur:'٣ أسابيع',type:'حضوري/أونلاين',offers:3,ts:14},
-  {id:17,name:'محمد الشمري',handle:'@moh_sh',av:'م',grad:'linear-gradient(135deg,#134e5e,#71b280)',time:'منذ ١٤ ساعة',urgent:true,isNew:false,title:'كهربائي لتركيب لوحة كهربائية عاجل',desc:'بيت جديد يحتاج تركيب لوحة كهربائية رئيسية. العمل عاجل في جدة.',tags:['كهرباء','عاجل','جدة'],cat:'منزلية',tc:'r',budget:'٨٠٠–١٢٠٠ ريال',dur:'يومان',type:'حضوري',offers:7,ts:13},
-  {id:18,name:'رنا الغامدي',handle:'@rana_g',av:'ر',grad:'linear-gradient(135deg,#b993d6,#8ca6db)',time:'منذ ١٥ ساعة',urgent:false,isNew:false,title:'مدرّبة يوغا لجلسات أونلاين أسبوعية',desc:'أبحث عن مدرّبة يوغا لجلسات أونلاين أسبوعية. ٣ جلسات في الأسبوع.',tags:['يوغا','لياقة','أونلاين'],cat:'تعليم',tc:'',budget:'٢٠٠ ريال/جلسة',dur:'مستمر',type:'أونلاين',offers:5,ts:12},
-  {id:19,name:'سعود الرشيدي',handle:'@saud_r',av:'س',grad:'linear-gradient(135deg,#373b44,#4286f4)',time:'منذ ١٦ ساعة',urgent:false,isNew:false,title:'مطور WordPress لموقع شركة عقارية',desc:'شركة عقارية تحتاج موقع WordPress احترافي مع نظام إدارة العقارات.',tags:['WordPress','PHP','عقارات'],cat:'برمجة',tc:'',budget:'٢٥٠٠ ريال',dur:'أسبوعان',type:'عن بُعد',offers:6,ts:11},
-  {id:20,name:'أسماء الدوسري',handle:'@asma_d',av:'أ',grad:'linear-gradient(135deg,#ee9ca7,#ffdde1)',time:'منذ ١٧ ساعة',urgent:false,isNew:false,title:'معلمة لغة إنجليزية للأطفال أونلاين',desc:'أطفال من عمر ٦–١٢ سنة يحتاجون تعليم إنجليزي ممتع وتفاعلي أونلاين.',tags:['إنجليزي','أطفال','أونلاين'],cat:'تعليم',tc:'g',budget:'١٥٠ ريال/ساعة',dur:'مستمر',type:'أونلاين',offers:8,ts:10},
-  {id:21,name:'وليد المطيري',handle:'@walid_m',av:'و',grad:'linear-gradient(135deg,#1f4037,#99f2c8)',time:'منذ ١٨ ساعة',urgent:false,isNew:false,title:'محاسب قانوني لإعداد الميزانية السنوية',desc:'شركة صغيرة تحتاج محاسب لإعداد الميزانية السنوية وملفات الزكاة.',tags:['محاسبة','زكاة','ميزانية'],cat:'استشارات',tc:'o',budget:'١٥٠٠ ريال',dur:'أسبوعان',type:'عن بُعد',offers:3,ts:9},
-  {id:22,name:'حنان الزهراني',handle:'@hanan_z',av:'ح',grad:'linear-gradient(135deg,#c94b4b,#4b134f)',time:'منذ ١٩ ساعة',urgent:false,isNew:false,title:'شيف لتحضير وجبات صحية أسبوعية',desc:'عائلة تحتاج شيف منزلي لتحضير وجبات صحية أسبوعياً. الرياض حي السليمانية.',tags:['طبخ','صحة','الرياض'],cat:'منزلية',tc:'',budget:'٦٠٠ ريال/أسبوع',dur:'مستمر',type:'حضوري',offers:4,ts:8},
-  {id:23,name:'تركي القحطاني',handle:'@turki_q',av:'ت',grad:'linear-gradient(135deg,#3a6186,#89253e)',time:'منذ ٢٠ ساعة',urgent:false,isNew:false,title:'مصور فيديو لحفل زفاف في الرياض',desc:'حفل زفاف الشهر القادم يحتاج مصور فيديو احترافي مع تصوير وتغطية كاملة.',tags:['فيديو','تصوير','زفاف'],cat:'تصميم',tc:'g',budget:'٣٠٠٠ ريال',dur:'يوم واحد',type:'حضوري',offers:6,ts:7},
-  {id:24,name:'شيماء العتيبي',handle:'@shima_a',av:'ش',grad:'linear-gradient(135deg,#12c2e9,#c471ed)',time:'منذ ٢١ ساعة',urgent:false,isNew:false,title:'مديرة حسابات Instagram لمتجر عطور',desc:'متجر عطور فاخرة يحتاج مديرة حسابات Instagram لبناء محتوى يومي.',tags:['Instagram','محتوى','عطور'],cat:'تسويق',tc:'',budget:'١٢٠٠ ريال/شهر',dur:'مستمر',type:'عن بُعد',offers:5,ts:6},
-  {id:25,name:'ماجد الحميدي',handle:'@majed_h',av:'م',grad:'linear-gradient(135deg,#360033,#0b8793)',time:'منذ يوم',urgent:false,isNew:false,title:'نجار لتركيب مطبخ خشبي مخصص',desc:'مطبخ جديد يحتاج تركيب خشب مخصص. المواد جاهزة. الدمام حي الفيصلية.',tags:['نجارة','مطبخ','الدمام'],cat:'منزلية',tc:'o',budget:'٢٠٠٠ ريال',dur:'٣ أيام',type:'حضوري',offers:3,ts:5},
-  {id:27,name:'ياسر الغامدي',handle:'@yaser_g',av:'ي',grad:'linear-gradient(135deg,#4a9fd4,#4a9fd4)',time:'منذ يومين',urgent:false,isNew:false,title:'مستشار تسويقي لإطلاق منتج جديد',desc:'شركة ناشئة تحتاج مستشار تسويقي لوضع استراتيجية إطلاق منتج في السوق السعودي.',tags:['تسويق','استراتيجية','إطلاق'],cat:'استشارات',tc:'g',budget:'٣٠٠٠ ريال',dur:'شهر',type:'عن بُعد',offers:4,ts:3},
-  {id:28,name:'لمى الحربي',handle:'@lama_h',av:'ل',grad:'linear-gradient(135deg,#11998e,#38ef7d)',time:'منذ يومين',urgent:false,isNew:false,title:'مصممة ديكور لشقة سكنية',desc:'شقة جديدة تحتاج مصممة ديكور لاختيار الألوان والأثاث وتنسيق الغرف.',tags:['ديكور','تصميم داخلي','جدة'],cat:'تصميم',tc:'',budget:'٢٠٠٠ ريال',dur:'أسبوعان',type:'حضوري',offers:7,ts:2},
-  {id:29,name:'عبدالله السلمي',handle:'@abl_s',av:'ع',grad:'linear-gradient(135deg,#667eea,#764ba2)',time:'منذ يومين',urgent:false,isNew:false,title:'مطور Node.js لبناء API للتطبيق',desc:'تطبيق موبايل يحتاج backend بـ Node.js وExpress مع قاعدة بيانات MongoDB.',tags:['Node.js','API','MongoDB'],cat:'برمجة',tc:'',budget:'٤٠٠٠ ريال',dur:'٣ أسابيع',type:'عن بُعد',offers:3,ts:1}
 ];
 var PAGE_SIZE=10, currentPage=0, reqs=ALL_REQS.slice();
 var sampleOffers={};
@@ -1232,7 +1270,7 @@ window.filterFeed = function(q){
     renderFeed();
   }, 350);
 };
-function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.name+'</span>'+(r.urgent?'<span class="ubadge">'+t('urgentBadge')+'</span>':'')+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+r.handle+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+r.title+'</div>'+'<div class="rdesc">'+r.desc+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+tg+'</span>';}).join('')+'<span class="rtag g">⏱ '+r.dur+'</span><span class="rtag">'+r.type+'</span>'+(r.city?'<span class="rtag">📍 '+r.city+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+r.budget+'</div></div>'+'<div class="rcf-r"><span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation()">'+(isSaved?t('savedBadge'):'🔖')+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation()">'+t('submitOffer')+'</button>'+'</div></div></div>';}
+function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.name+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+r.handle+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+r.title+'</div>'+'<div class="rdesc">'+r.desc+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+tg+'</span>';}).join('')+'<span class="rtag g">⏱ '+r.dur+'</span><span class="rtag">'+r.type+'</span>'+(r.city?'<span class="rtag">📍 '+r.city+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+r.budget+'</div></div>'+'<div class="rcf-r"><span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation()">'+(isSaved?t('savedBadge'):'🔖')+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation()">'+t('submitOffer')+'</button>'+'</div></div></div>';}
 function makeFooter(){
   return '<div class="bcta"><h3>'+t('readyToStart')+'</h3><p>'+t('ctaSubtitle')+'</p><div class="bcta-btns"><button class="btn-b" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openComp()">'+t('postFree')+'</button><button class="btn-p" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openAuth(\'register\')">'+t('startEarning')+'</button></div></div>'
   + '<div class="feed-footer">'
@@ -1246,6 +1284,7 @@ function makeFooter(){
   + '<span>supportalagat@gmail.com</span></a>'
   + '</div>'
   + '<div class="ff-bot"><span class="ff-copy">© '+new Date().getFullYear()+' علاقات</span><span class="ff-copy">كل خبرة عندك تساوي فلوس أكثر</span></div>'
+  + '<div style="display:flex;justify-content:center;gap:14px;margin-top:8px"><a href="terms.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">شروط الاستخدام</a><span style="color:var(--t3);font-size:.74rem">·</span><a href="privacy.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">سياسة الخصوصية</a></div>'
   + '</div>';
 }
 function timeAgo(d){var s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'الآن';if(s<3600)return'منذ '+Math.floor(s/60)+' دقيقة';if(s<86400)return'منذ '+Math.floor(s/3600)+' ساعة';return'منذ '+Math.floor(s/86400)+' يوم';}
@@ -1273,9 +1312,7 @@ function buildFeedQuery(){
   var q = sb.from('requests')
     .select('*, profiles(full_name,username,avatar_color,avatar_letter)')
     .eq('status','open');
-  if(state.activeTab==='urgent'){
-    q = q.eq('is_urgent', true);
-  } else if(state.activeTab==='nooffers'){
+  if(state.activeTab==='nooffers'){
     q = q.eq('offers_count', 0);
   } else if(state.activeTab==='nearby'){
     q = q.eq('work_type', 'حضوري');
@@ -1591,7 +1628,7 @@ window.openEditRequest = function(requestId, r){
         +'<label style="font-size:.78rem;color:var(--t2);display:block;margin-bottom:6px">📷 الصور والفيديو (حتى 10)</label>'
         +'<input type="file" id="editMediaInput" accept="image/*,video/*" multiple style="display:none" onchange="handleEditMediaSelect(this)">'
         +'<div id="editMediaPreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"></div>'
-        +'<button type="button" id="editMediaAddBtn" onclick="document.getElementById(\'editMediaInput\').click()" style="width:100%;background:var(--s2);border:1px dashed var(--b);color:var(--t2);border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer">+ إضافة صور أو فيديو</button>'
+        +'<button type="button" id="editMediaAddBtn" onclick="document.getElementById(\'editMediaInput\').click()" style="width:100%;background:var(--s2);border:1px dashed var(--b);color:var(--t2);border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer" data-i18n="addMediaBtn">+ إضافة صور أو فيديو</button>'
       +'</div>'
       +'<button id="editReqSaveBtn" class="submit-btn">حفظ التعديلات</button>'
     +'</div>'
@@ -1757,11 +1794,14 @@ window.openDetail=async function(id){
   document.getElementById('detDur').textContent=r.dur;
   document.getElementById('detType').textContent=r.type;
   var cityCard = document.getElementById('detCityCard');
+  var citySep = document.getElementById('detCitySep');
   if(r.city){
-    cityCard.style.display='block';
+    cityCard.style.display='flex';
+    citySep.style.display='inline';
     document.getElementById('detCity').textContent=r.city;
   } else {
     cityCard.style.display='none';
+    citySep.style.display='none';
   }
   document.getElementById('detTags').innerHTML=r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+tg+'</span>';}).join('');
   document.getElementById('detOfferBtn').onclick=function(){openOffer(id);};
@@ -2010,6 +2050,69 @@ document.getElementById('resendOtp').onclick=async function(){
   if(result.error){ hToast('❌ ' + result.error.message); return; }
   hToast('📧 تم إرسال رمز جديد إلى بريدك');
 };
+
+// =====================
+// نسيت كلمة المرور
+// =====================
+document.getElementById('forgotPassBtn').onclick=function(){
+  document.getElementById('authModal').classList.remove('open');
+  var emailEl = document.getElementById('forgotPassEmail');
+  var loginEmailVal = document.getElementById('loginEmail') ? document.getElementById('loginEmail').value.trim() : '';
+  if(emailEl) emailEl.value = loginEmailVal;
+  document.getElementById('forgotPassModal').classList.add('open');
+};
+document.getElementById('doRequestReset').onclick=async function(){
+  var email = document.getElementById('forgotPassEmail').value.trim();
+  if(!email || !email.includes('@')){ hToast('⚠️ أدخل بريداً إلكترونياً صحيحاً'); return; }
+  hToast('جاري إرسال رمز التعيين...');
+  var result = await sbRequestPasswordReset(email);
+  if(result.error){ hToast('❌ ' + result.error.message); return; }
+  window.pendingResetEmail = email;
+  document.getElementById('forgotPassModal').classList.remove('open');
+  openResetPassModal(email);
+  hToast('📧 أرسلنا رمز التعيين إلى بريدك');
+};
+function openResetPassModal(email){
+  window.pendingResetEmail = email;
+  var disp = document.getElementById('resetEmailDisplay');
+  if(disp) disp.textContent = email;
+  var codeEl = document.getElementById('resetOtpCode');
+  if(codeEl) codeEl.value = '';
+  var passEl = document.getElementById('newPassword');
+  if(passEl) passEl.value = '';
+  document.getElementById('resetPassModal').classList.add('open');
+}
+document.getElementById('doResetPassword').onclick=async function(){
+  var email = window.pendingResetEmail;
+  var code = document.getElementById('resetOtpCode').value.trim();
+  var newPass = document.getElementById('newPassword').value.trim();
+  if(!email){ hToast('⚠️ حدث خطأ، حاول من جديد'); return; }
+  if(!code || code.length !== 6){ hToast('⚠️ أدخل الرمز المكوّن من 6 أرقام'); return; }
+  if(!newPass || newPass.length < 6){ hToast('⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل'); return; }
+  hToast('جاري التحقق من الرمز...');
+  var verifyResult = await sbVerifyResetOtp(email, code);
+  if(verifyResult.error){
+    hToast('❌ الرمز غير صحيح أو منتهي الصلاحية');
+    return;
+  }
+  hToast('جاري تعيين كلمة المرور الجديدة...');
+  var updateResult = await sbUpdatePassword(newPass);
+  if(updateResult.error){
+    hToast('❌ ' + updateResult.error.message);
+    return;
+  }
+  document.getElementById('resetPassModal').classList.remove('open');
+  hToast('🎉 تم تعيين كلمة المرور بنجاح!');
+  doLoginUI();
+};
+document.getElementById('resendResetOtp').onclick=async function(){
+  var email = window.pendingResetEmail;
+  if(!email){ return; }
+  hToast('جاري إعادة إرسال الرمز...');
+  var result = await sbRequestPasswordReset(email);
+  if(result.error){ hToast('❌ ' + result.error.message); return; }
+  hToast('📧 تم إرسال رمز جديد إلى بريدك');
+};
 document.getElementById('goRegister').onclick=function(){switchAuthTab('register');};
 document.getElementById('btnLogin').onclick=function(){openAuth('login');};
 document.getElementById('btnRegister').onclick=function(){openAuth('register');};
@@ -2024,7 +2127,6 @@ document.getElementById('cancelOffer').onclick=function(){document.getElementByI
 document.getElementById('typeClient').onclick=function(){this.classList.add('sel');document.getElementById('typeBoth').classList.remove('sel');};
 document.getElementById('typeBoth').onclick=function(){this.classList.add('sel');document.getElementById('typeClient').classList.remove('sel');};
 document.querySelectorAll('.sk-grid .sko').forEach(function(s){s.onclick=function(){this.classList.toggle('sel');};});
-document.querySelectorAll('.fbtn').forEach(function(b){b.onclick=function(){this.classList.toggle('fon');this.textContent=this.classList.contains('fon')?'متابَع':'تابع';};});
 document.querySelectorAll('.ftab').forEach(function(t){t.onclick=function(){document.querySelectorAll('.ftab').forEach(function(x){x.classList.remove('on');});t.classList.add('on');state.activeTab=t.getAttribute('data-tab');renderFeed();};});
 document.querySelectorAll('.fc').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fc').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.activeFilter=b.getAttribute('data-cat');renderFeed();};});
 document.getElementById('filterCity').onchange=function(){state.activeCity=this.value;renderFeed();};
@@ -2033,9 +2135,6 @@ document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){
 // search handled inline on input
 document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.activeCity='all';state.activeTime='all';state.search='';var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';var fc=document.getElementById('filterCity');if(fc)fc.value='all';var ft=document.getElementById('filterTime');if(ft)ft.value='all';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();};
 document.getElementById('si-saved').onclick=function(){if(!state.loggedIn){openAuth('login');return;}document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');if(!state.saved.length){hToast(t('noSavedYet'));return;}var savedList=reqs.filter(function(r){return state.saved.indexOf(r.id)>-1;});var html='';savedList.forEach(function(r){html+=makeCard(r);});html+='<div style="margin:10px 14px"><button class="btn-g" style="width:100%;padding:9px;border-radius:9px" id="backToFeed">'+t('backToFeed')+'</button></div>';document.getElementById('feedContent').innerHTML='<div id="cardsContainer">'+html+'</div>';bindCardEvents();document.getElementById('backToFeed').onclick=renderFeed;};
-// si-discover and si-myreqs handled below
-var siDiscover=document.getElementById('si-discover');if(siDiscover)siDiscover.onclick=function(){hToast('قريباً');};
-var siMyreqs=document.getElementById('si-myreqs');if(siMyreqs)siMyreqs.onclick=function(){if(!state.loggedIn){openAuth('login');return;}hToast('قريباً');};
 var reqMediaFiles = []; // الملفات المختارة لإرفاقها بالطلب الجديد
 var REQ_MEDIA_MAX = 10;
 
@@ -2842,6 +2941,24 @@ async function sbVerifyOtp(email, token) {
 
 async function sbResendOtp(email) {
   const { data, error } = await sb.auth.resend({ type: 'signup', email });
+  return { data, error };
+}
+
+// =====================
+// نسيت كلمة المرور
+// =====================
+async function sbRequestPasswordReset(email) {
+  const { data, error } = await sb.auth.resetPasswordForEmail(email);
+  return { data, error };
+}
+
+async function sbVerifyResetOtp(email, token) {
+  const { data, error } = await sb.auth.verifyOtp({ email, token, type: 'recovery' });
+  return { data, error };
+}
+
+async function sbUpdatePassword(newPassword) {
+  const { data, error } = await sb.auth.updateUser({ password: newPassword });
   return { data, error };
 }
 
