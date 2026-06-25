@@ -58,10 +58,9 @@ nav{background:#111318;border-bottom:1px solid #252d3d;padding:0 20px;height:54p
 .tbl-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #252d3d}
 .tbl-title{font-size:.82rem;font-weight:700;color:#8896b0;text-transform:uppercase;letter-spacing:.5px}
 .tbl-search{background:#181c24;border:1px solid #252d3d;border-radius:7px;padding:6px 12px;color:#e8ecf5;font-family:inherit;font-size:.79rem;outline:none;width:200px}
-.tbl-head-actions{display:flex;align-items:center;gap:8px}
-.dl-btn{background:#181c24;border:1px solid #252d3d;color:#8896b0;border-radius:7px;padding:6px 12px;font-family:inherit;font-size:.79rem;cursor:pointer;white-space:nowrap;transition:.15s}
-.dl-btn:hover{border-color:#0066ff;color:#0066ff}
 .tbl-search:focus{border-color:#0066ff}
+.act-btn.dl{margin-left:0;margin-right:4px}
+.act-btn.dl:hover{border-color:#0066ff;color:#0066ff}
 table{width:100%;border-collapse:collapse}
 th{font-size:.72rem;color:#4a5568;text-transform:uppercase;letter-spacing:.5px;padding:10px 16px;text-align:right;border-bottom:1px solid #252d3d;white-space:nowrap}
 td{padding:12px 16px;font-size:.82rem;color:#8896b0;border-bottom:1px solid rgba(37,45,61,.5);vertical-align:middle}
@@ -160,10 +159,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="tbl-wrap">
       <div class="tbl-head">
         <span class="tbl-title">قائمة الأعضاء</span>
-        <div class="tbl-head-actions">
-          <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('usersBody',this.value)">
-          <button class="dl-btn" onclick="downloadCSV('users')">⬇ تحميل</button>
-        </div>
+        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('usersBody',this.value)">
       </div>
       <table>
         <thead><tr>
@@ -179,10 +175,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="tbl-wrap">
       <div class="tbl-head">
         <span class="tbl-title">قائمة الطلبات</span>
-        <div class="tbl-head-actions">
-          <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('reqsBody',this.value)">
-          <button class="dl-btn" onclick="downloadCSV('requests')">⬇ تحميل</button>
-        </div>
+        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('reqsBody',this.value)">
       </div>
       <table>
         <thead><tr>
@@ -198,10 +191,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="tbl-wrap" style="padding:12px">
       <div class="tbl-head" style="margin:-12px -12px 12px;border-radius:12px 12px 0 0">
         <span class="tbl-title">الرسائل</span>
-        <div class="tbl-head-actions">
-          <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterMsgs(this.value)">
-          <button class="dl-btn" onclick="downloadCSV('messages')">⬇ تحميل</button>
-        </div>
+        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterMsgs(this.value)">
       </div>
       <div id="msgsBody"><div class="loading">⏳ جاري التحميل...</div></div>
     </div>
@@ -212,10 +202,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="tbl-wrap">
       <div class="tbl-head">
         <span class="tbl-title">قائمة العروض</span>
-        <div class="tbl-head-actions">
-          <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('offersBody',this.value)">
-          <button class="dl-btn" onclick="downloadCSV('offers')">⬇ تحميل</button>
-        </div>
+        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('offersBody',this.value)">
       </div>
       <table>
         <thead><tr>
@@ -231,10 +218,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="tbl-wrap">
       <div class="tbl-head">
         <span class="tbl-title">البلاغات على الطلبات</span>
-        <div class="tbl-head-actions">
-          <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('reportsBody',this.value)">
-          <button class="dl-btn" onclick="downloadCSV('reports')">⬇ تحميل</button>
-        </div>
+        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('reportsBody',this.value)">
       </div>
       <table>
         <thead><tr>
@@ -331,7 +315,7 @@ function renderUsers(list){
       +'<td data-label="تاريخ التسجيل">'+fDate(u.created_at)+'</td>'
       +'<td data-label="الصفقات">'+(u.deals_count||0)+'</td>'
       +'<td data-label="التقييم">'+(u.rating||0)+' ⭐</td>'
-      +'<td data-label="إجراء"><button class="act-btn" onclick="deleteUser(\''+u.id+'\',\''+escHtml(u.full_name||'')+'\')">🗑 حذف</button></td>'
+      +'<td data-label="إجراء"><button class="act-btn dl" onclick="downloadSingle(\'users\',\''+u.id+'\')">↓ تحميل</button><button class="act-btn" onclick="deleteUser(\''+u.id+'\',\''+escHtml(u.full_name||'')+'\')">🗑 حذف</button></td>'
       +'</tr>';
   });
   document.getElementById('usersBody').innerHTML=html;
@@ -362,7 +346,7 @@ function renderReqs(list){
       +'<td data-label="العروض">'+(r.offers_count||0)+'</td>'
       +'<td data-label="الحالة"><span class="badge '+(r.status==='open'?'open':'closed')+'">'+(r.status==='open'?'مفتوح':'مغلق')+'</span></td>'
       +'<td data-label="التاريخ">'+fDate(r.created_at)+'</td>'
-      +'<td data-label="إجراء"><button class="act-btn" onclick="deleteReq('+r.id+',\''+escHtml(r.title)+'\')">🗑 حذف</button></td>'
+      +'<td data-label="إجراء"><button class="act-btn dl" onclick="downloadSingle(\'requests\','+r.id+')">↓ تحميل</button><button class="act-btn" onclick="deleteReq('+r.id+',\''+escHtml(r.title)+'\')">🗑 حذف</button></td>'
       +'</tr>';
   });
   document.getElementById('reqsBody').innerHTML=html;
@@ -397,7 +381,7 @@ function renderMsgs(list){
         +'<div class="msg-names">'+escHtml(sName)+' <span style="color:#4a5568">←</span> '+escHtml(rName)+'</div>'
         +'<div class="msg-time">'+fDate(m.created_at)+(m.is_read?'':' · <span style="color:#0066ff">غير مقروء</span>')+'</div>'
       +'</div>'
-      +'<button class="act-btn" onclick="deleteMsg('+m.id+')">حذف</button>'
+      +'<button class="act-btn dl" onclick="downloadSingle(\'messages\','+m.id+')">↓</button><button class="act-btn" onclick="deleteMsg('+m.id+')">حذف</button>'
       +'</div>'
       +'<div class="msg-text">'+escHtml(m.content)+'</div>'
       +'</div>';
@@ -436,7 +420,7 @@ function renderOffers(list){
       +'<td data-label="المدة">'+(o.duration||'—')+'</td>'
       +'<td data-label="الحالة"><span class="badge '+(o.status==='accepted'?'open':'closed')+'">'+(o.status==='accepted'?'مقبول':'انتظار')+'</span></td>'
       +'<td data-label="التاريخ">'+fDate(o.created_at)+'</td>'
-      +'<td data-label="إجراء"><button class="act-btn" onclick="deleteOffer('+o.id+')">🗑 حذف</button></td>'
+      +'<td data-label="إجراء"><button class="act-btn dl" onclick="downloadSingle(\'offers\','+o.id+')">↓ تحميل</button><button class="act-btn" onclick="deleteOffer('+o.id+')">🗑 حذف</button></td>'
       +'</tr>';
   });
   document.getElementById('offersBody').innerHTML=html;
@@ -478,6 +462,7 @@ function renderReports(list){
       +'<td data-label="الحالة"><span class="badge '+statusClass+'">'+statusLabel+'</span></td>'
       +'<td data-label="التاريخ">'+fDate(r.created_at)+'</td>'
       +'<td data-label="إجراء" style="display:flex;gap:6px;flex-wrap:wrap">'
+        +'<button class="act-btn dl" onclick="downloadSingle(\'reports\','+r.id+')">↓ تحميل</button>'
         +(r.status==='pending' ? '<button class="act-btn" onclick="dismissReport('+r.id+')">✓ تجاهل</button>' : '')
         +(reqId ? '<button class="act-btn" style="border-color:#ff4466;color:#ff4466" onclick="deleteReportedRequest('+reqId+','+r.id+')">🗑 حذف الطلب</button>' : '')
       +'</td>'
@@ -519,64 +504,51 @@ function filterTable(tbodyId, q){
 
 function fDate(d){ if(!d) return '—'; var dt=new Date(d); return dt.toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'}); }
 
-// ====== تحميل CSV — لأن النص يُقص في الجدول، هذا يصدّر البيانات كاملة بدون اختصار ======
-function csvCell(v){
-  var s = (v===null||v===undefined) ? '' : String(v);
-  s = s.replace(/\r?\n/g,' '); // إزالة الأسطر الجديدة داخل الخلية حتى لا تكسر تنسيق CSV
-  if(/[",]/.test(s)) s = '"' + s.replace(/"/g,'""') + '"';
-  return s;
-}
-function buildCSV(headers, rows){
-  var lines = [headers.map(csvCell).join(',')];
-  rows.forEach(function(row){ lines.push(row.map(csvCell).join(',')); });
-  return '\uFEFF' + lines.join('\r\n'); // BOM في البداية لضمان عرض العربي بشكل صحيح في إكسل
-}
+// ====== تحميل سجل واحد كملف نصي — لأن النص يُقص في الجدول، هذا يصدّر التفاصيل الكاملة لسجل واحد فقط ======
 function triggerDownload(filename, content){
-  var blob = new Blob([content], {type:'text/csv;charset=utf-8;'});
+  var blob = new Blob([content], {type:'text/plain;charset=utf-8;'});
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
   a.href = url; a.download = filename;
   document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(url);
 }
-function downloadCSV(type){
-  var headers, rows, filename;
+function downloadSingle(type, id){
+  var lines = [], filename = 'سجل';
   if(type==='users'){
-    headers = ['الاسم','اسم المستخدم','البريد الإلكتروني','تاريخ التسجيل','الصفقات','التقييم'];
-    rows = allUsers.map(function(u){ return [u.full_name||'',u.username||'',u.email||'',fDate(u.created_at),u.deals_count||0,u.rating||0]; });
-    filename = 'اعضاء_علاقات';
+    var u = allUsers.find(function(x){ return String(x.id)===String(id); });
+    if(!u) return;
+    lines = ['الاسم: '+(u.full_name||'—'),'اسم المستخدم: '+(u.username||'—'),'البريد الإلكتروني: '+(u.email||'—'),'تاريخ التسجيل: '+fDate(u.created_at),'الصفقات: '+(u.deals_count||0),'التقييم: '+(u.rating||0)];
+    filename = 'عضو_'+(u.username||u.id);
   } else if(type==='requests'){
-    headers = ['العنوان','الوصف','الفئة','الميزانية','المنطقة','العروض','الحالة','تاريخ النشر'];
-    rows = allReqs.map(function(r){ return [r.title||'',r.description||'',r.category||'',r.budget_text||'',r.city||'',r.offers_count||0,(r.status==='open'?'مفتوح':'مغلق'),fDate(r.created_at)]; });
-    filename = 'طلبات_علاقات';
+    var r = allReqs.find(function(x){ return String(x.id)===String(id); });
+    if(!r) return;
+    lines = ['العنوان: '+(r.title||'—'),'','الوصف:',(r.description||'—'),'','الفئة: '+(r.category||'—'),'الميزانية: '+(r.budget_text||'—'),'المنطقة: '+(r.city||'—'),'عدد العروض: '+(r.offers_count||0),'الحالة: '+(r.status==='open'?'مفتوح':'مغلق'),'تاريخ النشر: '+fDate(r.created_at)];
+    filename = 'طلب_'+r.id;
   } else if(type==='messages'){
-    headers = ['المرسل','المستلم','نص الرسالة','مقروءة؟','التاريخ'];
-    rows = allMsgs.map(function(m){
-      var sName = m.sender&&m.sender.full_name ? m.sender.full_name : 'مجهول';
-      var rName = m.receiver&&m.receiver.full_name ? m.receiver.full_name : 'مجهول';
-      return [sName,rName,m.content||'',(m.is_read?'نعم':'لا'),fDate(m.created_at)];
-    });
-    filename = 'رسائل_علاقات';
+    var m = allMsgs.find(function(x){ return String(x.id)===String(id); });
+    if(!m) return;
+    var sName = m.sender&&m.sender.full_name ? m.sender.full_name : 'مجهول';
+    var rName = m.receiver&&m.receiver.full_name ? m.receiver.full_name : 'مجهول';
+    lines = ['من: '+sName,'إلى: '+rName,'مقروءة: '+(m.is_read?'نعم':'لا'),'التاريخ: '+fDate(m.created_at),'','نص الرسالة:',(m.content||'—')];
+    filename = 'رسالة_'+m.id;
   } else if(type==='offers'){
-    headers = ['نص العرض','الطلب المرتبط','المزوّد','السعر','المدة','الحالة','التاريخ'];
-    rows = allOffers.map(function(o){
-      var pName = o.provider&&o.provider.full_name ? o.provider.full_name : '—';
-      var reqTitle = o.request&&o.request.title ? o.request.title : '—';
-      return [o.offer_text||'',reqTitle,pName,(o.price||0)+' ريال',o.duration||'',(o.status==='accepted'?'مقبول':'انتظار'),fDate(o.created_at)];
-    });
-    filename = 'عروض_علاقات';
+    var o = allOffers.find(function(x){ return String(x.id)===String(id); });
+    if(!o) return;
+    var pName = o.provider&&o.provider.full_name ? o.provider.full_name : '—';
+    var reqTitle = o.request&&o.request.title ? o.request.title : '—';
+    lines = ['الطلب المرتبط: '+reqTitle,'المزوّد: '+pName,'السعر: '+(o.price||0)+' ريال','المدة: '+(o.duration||'—'),'الحالة: '+(o.status==='accepted'?'مقبول':'انتظار'),'التاريخ: '+fDate(o.created_at),'','نص العرض:',(o.offer_text||'—')];
+    filename = 'عرض_'+o.id;
   } else if(type==='reports'){
-    headers = ['الطلب المبلَّغ عنه','السبب','المبلِّغ','الحالة','التاريخ'];
-    rows = allReports.map(function(r){
-      var reqTitle = r.request&&r.request.title ? r.request.title : 'طلب محذوف';
-      var statusLabel = r.status==='pending' ? 'قيد المراجعة' : (r.status==='reviewed' ? 'تمت المراجعة' : 'تم التجاهل');
-      var repName = r.reporter&&r.reporter.full_name ? r.reporter.full_name : '—';
-      return [reqTitle,r.reason||'',repName,statusLabel,fDate(r.created_at)];
-    });
-    filename = 'بلاغات_علاقات';
+    var rp = allReports.find(function(x){ return String(x.id)===String(id); });
+    if(!rp) return;
+    var reqTitle2 = rp.request&&rp.request.title ? rp.request.title : 'طلب محذوف';
+    var statusLabel = rp.status==='pending' ? 'قيد المراجعة' : (rp.status==='reviewed' ? 'تمت المراجعة' : 'تم التجاهل');
+    var repName = rp.reporter&&rp.reporter.full_name ? rp.reporter.full_name : '—';
+    lines = ['الطلب المبلَّغ عنه: '+reqTitle2,'السبب: '+(rp.reason||'—'),'المبلِّغ: '+repName,'الحالة: '+statusLabel,'التاريخ: '+fDate(rp.created_at)];
+    filename = 'بلاغ_'+rp.id;
   } else { return; }
-  if(!rows.length){ toast('⚠️ لا توجد بيانات لتحميلها'); return; }
-  triggerDownload(filename+'_'+new Date().toISOString().slice(0,10)+'.csv', buildCSV(headers,rows));
+  triggerDownload(filename+'.txt', lines.join('\r\n'));
   toast('✓ تم تحميل الملف');
 }
 
