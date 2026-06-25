@@ -350,7 +350,7 @@ window.I18N = {
     offersTab:'العروض المقدمة',
     email:'البريد الإلكتروني', password:'كلمة المرور', fullName:'الاسم الكامل', forgotPassword:'نسيت كلمة المرور؟',
     loginBtn:'دخول', createAccountBtn:'إنشاء الحساب',
-    notificationsTitle:'الإشعارات', allTab:'الكل', offersTabN:'العروض',
+    notificationsTitle:'الإشعارات', allTab:'الكل', offersTabN:'العروض', reviewsTabN:'تعليقات',
     msgsTab:'الرسائل', noNotifsYet:'لا توجد إشعارات', markAllRead:'قراءة الكل', systemTab:'النظام', editProfile:'✏️ تعديل الملف الشخصي',
     username:'اسم المستخدم *', avatarColor:'لون الصورة الرمزية', saveChanges:'حفظ التغييرات',
     searchServicePlaceholder:'ابحث عن خدمة..', ratingAction:'★ تقييم', shareAction:'⤴ مشاركة',
@@ -411,7 +411,7 @@ window.I18N = {
     email:'Email', password:'Password', fullName:'Full Name', forgotPassword:'Forgot password?',
 
     loginBtn:'Login', createAccountBtn:'Create Account',
-    notificationsTitle:'Notifications', allTab:'All', offersTabN:'Offers',
+    notificationsTitle:'Notifications', allTab:'All', offersTabN:'Offers', reviewsTabN:'Reviews',
     msgsTab:'Messages', noNotifsYet:'No notifications yet', markAllRead:'Mark all read', systemTab:'System', editProfile:'✏️ Edit Profile',
     username:'Username *', avatarColor:'Avatar color', saveChanges:'Save changes',
     searchServicePlaceholder:'Search for a service..', ratingAction:'★ Rate', shareAction:'⤴ Share',
@@ -611,6 +611,7 @@ window.onerror = function(msg, url, line, col, error){
   <button onclick="window.showPage('home')" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;width:36px">←</button>
   <div style="flex:1;font-size:.95rem;font-weight:700;color:#fff" data-i18n="requestDetails">تفاصيل الطلب</div>
   <button onclick="openOffer(window._currentDetailId)" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer" data-i18n="submitOffer">قدّم عرضك</button>
+  <button onclick="openDetailMenu(event)" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;width:30px;flex-shrink:0">⋮</button>
 </nav>
 <div style="padding:16px">
   <!-- بيانات صاحب الطلب -->
@@ -680,7 +681,7 @@ window.onerror = function(msg, url, line, col, error){
     <div style="text-align:center;margin-bottom:16px"><div style="font-size:1.6rem;font-weight:900;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px">علاقات</div></div>
     <div class="auth-tabs"><button class="at on" id="at-login" data-i18n="login">تسجيل الدخول</button><button class="at" id="at-register" data-i18n="register">إنشاء حساب</button></div>
     <div id="f-login"><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني</label><input class="fi" type="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور</label><input class="fi" type="password" placeholder="••••••••" id="loginPass"></div><div style="text-align:left;margin-bottom:12px"><span id="forgotPassBtn" style="font-size:.74rem;color:var(--ac);cursor:pointer" data-i18n="forgotPassword">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin" data-i18n="loginBtn">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister" data-i18n="register">إنشاء حساب جديد</button></div>
-    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك"></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username"></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px">💰 لدي مهارة أرغب بالربح</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px">بالتسجيل توافق على <a href="terms.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none">شروط الاستخدام</a> و<a href="privacy.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none">سياسة الخصوصية</a></p></div>
+    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك" id="regFullName"></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username" id="regUsername" style="direction:ltr;text-align:right"><span id="regUserHint" style="display:block;font-size:.68rem;margin-top:4px;color:var(--t3)"></span></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px">💰 لدي مهارة أرغب بالربح</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px">بالتسجيل توافق على <a href="terms.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none">شروط الاستخدام</a> و<a href="privacy.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none">سياسة الخصوصية</a></p></div>
   </div>
 </div>
 <!-- OTP VERIFY MODAL -->
@@ -808,6 +809,19 @@ window.onerror = function(msg, url, line, col, error){
 </div>
 
 <!-- PROFILE MODALS -->
+<div class="p-overlay" id="reportModal" onclick="if(event.target===this)closePModal('reportModal')">
+  <div class="sheet"><div class="sheet-handle"></div><div class="sheet-title">🚩 تبليغ عن هذا الطلب</div>
+    <div style="font-size:.8rem;color:var(--t2);margin-bottom:14px;text-align:center">اختر سبب التبليغ، وسنراجعه قريباً</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+      <label style="display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:12px 14px;cursor:pointer;font-size:.84rem;color:var(--t)"><input type="radio" name="reportReason" value="محتوى جنسي أو غير لائق">محتوى جنسي أو غير لائق</label>
+      <label style="display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:12px 14px;cursor:pointer;font-size:.84rem;color:var(--t)"><input type="radio" name="reportReason" value="مخدرات أو مواد محظورة">مخدرات أو مواد محظورة</label>
+      <label style="display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:12px 14px;cursor:pointer;font-size:.84rem;color:var(--t)"><input type="radio" name="reportReason" value="احتيال أو نصب">احتيال أو نصب</label>
+      <label style="display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:12px 14px;cursor:pointer;font-size:.84rem;color:var(--t)"><input type="radio" name="reportReason" value="كلام بذيء أو مسيء">كلام بذيء أو مسيء</label>
+      <label style="display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:12px 14px;cursor:pointer;font-size:.84rem;color:var(--t)"><input type="radio" name="reportReason" value="سبب آخر">سبب آخر</label>
+    </div>
+    <button class="submit-btn" onclick="submitReport()">إرسال البلاغ</button>
+  </div>
+</div>
 <div class="p-overlay" id="ratingModal" onclick="if(event.target===this)closePModal('ratingModal')">
   <div class="sheet"><div class="sheet-handle"></div><div class="sheet-title" id="ratingModalTitle" data-i18n="ratingTitle">⭐ تقييم</div>
     <div class="stars-row" id="starsRow"><span class="star" data-v="1">★</span><span class="star" data-v="2">★</span><span class="star" data-v="3">★</span><span class="star" data-v="4">★</span><span class="star" data-v="5">★</span></div>
@@ -1192,6 +1206,7 @@ document.getElementById('saveProfileBtn').onclick = async function(){
 
   if(!fullName){ hToast('⚠️ أدخل الاسم الكامل'); return; }
   if(!username){ hToast('⚠️ أدخل اسم المستخدم'); return; }
+  if(!/^[a-zA-Z0-9_]+$/.test(username)){ hToast('⚠️ اسم المستخدم يجب أن يكون بالإنجليزية فقط (حروف وأرقام و _)'); return; }
 
   var currentUser = await sbGetUser();
   if(!currentUser){ hToast('⚠️ يجب تسجيل الدخول'); return; }
@@ -1646,8 +1661,8 @@ window.openEditRequest = function(requestId, r){
   renderEditMediaPreview();
   sheet.onclick = function(e){ if(e.target===sheet){ sheet.remove(); } };
   document.getElementById('editReqSaveBtn').onclick = async function(){
-    var newTitle = document.getElementById('editReqTitle').value.trim();
-    var newDesc = document.getElementById('editReqDesc').value.trim();
+    var newTitle = censorBadWords(document.getElementById('editReqTitle').value.trim());
+    var newDesc = censorBadWords(document.getElementById('editReqDesc').value.trim());
     var newBudget = document.getElementById('editReqBudget').value.trim();
     if(!newTitle){ hToast('⚠️ العنوان مطلوب'); return; }
     var saveBtn = document.getElementById('editReqSaveBtn');
@@ -1910,7 +1925,7 @@ window.openDetail=async function(id){
           +'<span style="font-size:1.05rem;font-weight:800;color:var(--ac2)">'+(o.price||0)+' ريال</span>'
           +'<span style="font-size:.74rem;color:var(--t3)">⏱ '+(o.duration||'مرن')+'</span>'
         +'</div>'
-        +(o.provider_id ? '<button class="offer-contact-btn" data-uid="'+o.provider_id+'" data-name="'+encodeURIComponent(p.full_name||'المزود')+'" style="background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;border-radius:9px;padding:8px 16px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer;flex-shrink:0">💬 تواصل</button>' : '')
+        +(o.provider_id && !(curUser && curUser.id===o.provider_id) ? '<button class="offer-contact-btn" data-uid="'+o.provider_id+'" data-name="'+encodeURIComponent(p.full_name||'المزود')+'" style="background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;border-radius:9px;padding:8px 16px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer;flex-shrink:0">💬 تواصل</button>' : '')
       +'</div>'
     +'</div>';
   });
@@ -1995,9 +2010,155 @@ document.getElementById('doLogin').onclick=async function(){
   doLoginUI();
 };
 
+// ====== فلتر الكلمات البذيئة (للعنوان والوصف في الطلبات) ======
+// قائمة قابلة للتوسعة — تُستبدل أي كلمة مطابقة بنجوم بنفس عدد حروفها
+var BAD_WORDS_LIST = [
+  'كس','طيز','زب','عير','شرموطة','شرموط','قحبة','قحب','عرص','خنيث','لوطي','لواط',
+  'نيك','نياك','منيوك','يلعن دينك','كافر','حقير','وسخ','حيوان','كلب يا','حمار يا',
+  'fuck','fucking','shit','bitch','asshole','dick','pussy','cunt','whore','slut','bastard'
+];
+function censorBadWords(text){
+  if(!text) return text;
+  var out = String(text);
+  BAD_WORDS_LIST.forEach(function(word){
+    if(!word) return;
+    // حدود الكلمة: بداية/نهاية النص أو مسافة أو علامة ترقيم على الجانبين (يدعم العربي والإنجليزي)
+    var escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    var pattern = new RegExp('(^|[\\s.,!?؛،])(' + escaped + ')(?=$|[\\s.,!?؛،])', 'gi');
+    out = out.replace(pattern, function(full, before, matched){
+      return before + '*'.repeat(matched.length);
+    });
+  });
+  return out;
+}
+
+
+// ====== قاموس الأسماء الشائعة بكتابتها الإنجليزية المتعارف عليها ======
+var COMMON_NAME_MAP = {
+  // أسماء رجال
+  'محمد':'mohammed','احمد':'ahmed','أحمد':'ahmed','عبدالله':'abdullah','عبدالعزيز':'abdulaziz',
+  'عبدالرحمن':'abdulrahman','عبدالرحيم':'abdulraheem','عبدالملك':'abdulmalik','عبدالكريم':'abdulkareem',
+  'عبدالمجيد':'abdulmajeed','عبدالحميد':'abdulhameed','عبدالوهاب':'abdulwahab','عبدالقادر':'abdulqader',
+  'عبدالاله':'abdulilah','عبدالناصر':'abdulnasser','عبدالجبار':'abduljabbar','عبدالسلام':'abdulsalam',
+  'سلطان':'sultan','سعود':'saud','سعد':'saad','سامي':'sami','سامر':'samer','سالم':'salem',
+  'فهد':'fahad','فيصل':'faisal','فواز':'fawaz','فادي':'fadi',
+  'خالد':'khalid','خليل':'khalil',
+  'ماجد':'majed','منصور':'mansour','مشعل':'mishal','مساعد':'musaed','معاذ':'muath','مازن':'mazen',
+  'ناصر':'nasser','نواف':'nawaf','نايف':'nayef',
+  'تركي':'turki','طلال':'talal','طارق':'tariq',
+  'بندر':'bandar','بدر':'badr','براك':'barak',
+  'يوسف':'yousef','ياسر':'yasser','يزيد':'yazeed',
+  'وليد':'waleed','وائل':'wael',
+  'زياد':'ziad','زيد':'zaid',
+  'حسن':'hassan','حسين':'hussein','حمد':'hamad','حمود':'hamoud','حازم':'hazem',
+  'علي':'ali','عمر':'omar','عمار':'ammar','عثمان':'othman','عادل':'adel','عماد':'imad','عيسى':'isa',
+  'إبراهيم':'ibrahim','ابراهيم':'ibrahim','اسماعيل':'ismail','إسماعيل':'ismail',
+  'يحيى':'yahya','رياض':'riyadh','راشد':'rashed','رائد':'raed',
+  'جاسم':'jasim','جابر':'jaber',
+  'صالح':'saleh','صقر':'saqr',
+  'قصي':'qusai','قيس':'qais',
+  'كريم':'kareem',
+  'لؤي':'luay',
+  'هاشم':'hashem','هادي':'hadi',
+  'دانيال':'daniel','داود':'dawood',
+  'باسم':'basim','بسام':'bassam',
+  // أسماء نساء
+  'فاطمة':'fatima','عائشة':'aisha','خديجة':'khadija','مريم':'mariam','سارة':'sarah','سلمى':'salma',
+  'نورة':'noura','نوف':'nouf','نجلاء':'najla','هند':'hind','هيا':'haya','منى':'mona','منيرة':'munira',
+  'لمى':'lama','لينا':'lina','ريم':'reem','رنا':'rana','روان':'rawan','رهف':'rahaf',
+  'دانة':'dana','ديم':'deem','جواهر':'jawaher','جميلة':'jamila',
+  'العنود':'alanoud','الجوهرة':'aljawhara','أمل':'amal','امل':'amal','إيمان':'eman','ايمان':'eman',
+  'شذى':'shatha','شهد':'shahad','وعد':'waad','وجدان':'wijdan',
+  'بشرى':'bushra','بدور':'budoor','بسمة':'basma',
+  'غادة':'ghada','غدير':'ghadeer',
+  'يارا':'yara','ياسمين':'yasmin',
+  'تالا':'tala','تهاني':'tahani',
+  'حنان':'hanan','حصة':'hessa',
+  'زينب':'zainab','زهرة':'zahra',
+  'سحر':'sahar','سوسن':'sawsan',
+  'عبير':'abeer','عهد':'ahd',
+  'فجر':'fajr','فل':'fol',
+  'قمر':'qamar',
+  'كوثر':'kawthar',
+  'مها':'maha','ملك':'malak','منار':'manar'
+};
+// ====== تحويل الاسم العربي لحروف إنجليزية (لاقتراح اسم المستخدم) ======
+function arabicToLatin(str){
+  // أولاً: تحقق إذا الاسم موجود في قاموس الأسماء الشائعة بكتابته المتعارفة
+  var dict = COMMON_NAME_MAP[str];
+  if(dict) return dict;
+  // إذا لم يكن موجوداً، تحويل حرفي تقريبي كحل بديل
+  var map = {
+    'ا':'a','أ':'a','إ':'i','آ':'a','ب':'b','ت':'t','ث':'th','ج':'j','ح':'h','خ':'kh',
+    'د':'d','ذ':'th','ر':'r','ز':'z','س':'s','ش':'sh','ص':'s','ض':'d','ط':'t','ظ':'z',
+    'ع':'a','غ':'gh','ف':'f','ق':'q','ك':'k','ل':'l','م':'m','ن':'n','ه':'h','و':'w',
+    'ي':'y','ى':'a','ة':'a','ء':'','ئ':'y','ؤ':'w','ـ':'',' ':''
+  };
+  var out = '';
+  for(var i=0;i<str.length;i++){
+    var ch = str[i];
+    out += (map[ch] !== undefined) ? map[ch] : ch;
+  }
+  return out;
+}
+// ====== تنقية اسم المستخدم: أحرف إنجليزية وأرقام وشرطة سفلية فقط ======
+function sanitizeUsernameInput(str){
+  return String(str||'').replace(/[^a-zA-Z0-9_]/g,'');
+}
+
+// ====== اقتراح اسم مستخدم تلقائي بناءً على الاسم ======
+(function(){
+  var nameEl = document.getElementById('regFullName');
+  var userEl = document.getElementById('regUsername');
+  var hintEl = document.getElementById('regUserHint');
+  if(!nameEl || !userEl) return;
+  var lastSuggested = ''; // آخر اقتراح تلقائي تمت تعبئته، لمعرفة إذا عدّله المستخدم بنفسه
+  nameEl.addEventListener('blur', async function(){
+    var fullName = nameEl.value.trim();
+    if(!fullName) return;
+    // إذا كان حقل اسم المستخدم فاضياً، أو لا يزال يحمل اقتراحنا السابق (لم يعدّله المستخدم يدوياً)
+    if(userEl.value.trim() !== '' && userEl.value.trim() !== lastSuggested) return;
+    var firstNameRaw = fullName.split(/\s+/)[0];
+    if(!firstNameRaw) return;
+    // تحويل لحروف إنجليزية إذا كان الاسم عربياً، ثم تنقية أي رمز غير مسموح
+    var firstName = sanitizeUsernameInput(arabicToLatin(firstNameRaw)).toLowerCase();
+    if(!firstName) return;
+    if(hintEl) hintEl.textContent = '⏳ نبحث عن اسم مستخدم مناسب...';
+    var found = '';
+    for(var i=0;i<6;i++){
+      var candidate = i===0 ? firstName : firstName + String(Math.floor(Math.random()*90)+10);
+      try{
+        var taken = await sbCheckUsernameTaken(candidate);
+        if(!taken){ found = candidate; break; }
+      }catch(e){ break; }
+    }
+    if(found){
+      userEl.value = found;
+      lastSuggested = found;
+      if(hintEl) hintEl.textContent = '✓ "'+found+'" متاح، يمكنك تعديله إذا أردت';
+    } else if(hintEl){
+      hintEl.textContent = '';
+    }
+  });
+  // إذا عدّل المستخدم اسم المستخدم يدوياً، نوقف اعتباره اقتراحاً تلقائياً
+  userEl.addEventListener('input', function(){
+    if(userEl.value.trim() !== lastSuggested && hintEl) hintEl.textContent = '';
+  });
+})();
+
+// ====== فرض إنجليزي فقط على حقول اسم المستخدم أثناء الكتابة ======
+['regUsername','editUsername'].forEach(function(id){
+  var el = document.getElementById(id);
+  if(!el) return;
+  el.addEventListener('input', function(){
+    var clean = sanitizeUsernameInput(el.value);
+    if(clean !== el.value) el.value = clean;
+  });
+});
+
 document.getElementById('doRegister').onclick=async function(){
-  var nameEl  = document.querySelector('#f-register input[placeholder="اسمك"]');
-  var userEl  = document.querySelector('#f-register input[placeholder="@username"]');
+  var nameEl  = document.getElementById('regFullName');
+  var userEl  = document.getElementById('regUsername');
   var emailEl = document.getElementById('regEmail');
   var passEl  = document.querySelector('#f-register input[type="password"]');
   var name    = nameEl  ? nameEl.value.trim()  : '';
@@ -2006,6 +2167,7 @@ document.getElementById('doRegister').onclick=async function(){
   var pass    = passEl  ? passEl.value.trim()  : '';
   if(!name||!email||!pass){ hToast('⚠️ أكمل البيانات المطلوبة'); return; }
   if(!username){ hToast('⚠️ أدخل اسم مستخدم'); return; }
+  if(!/^[a-zA-Z0-9_]+$/.test(username)){ hToast('⚠️ اسم المستخدم يجب أن يكون بالإنجليزية فقط (حروف وأرقام و _)'); return; }
   if(!email.includes('@')){ hToast('⚠️ أدخل بريد إلكتروني صحيح'); return; }
   hToast('جاري التحقق من اسم المستخدم...');
   var taken = await sbCheckUsernameTaken(username);
@@ -2232,8 +2394,8 @@ window.toggleTermsCheck = function(){
 };
 
 window.submitAfterTerms = async function(){
-  var title=document.getElementById('reqTitle').value.trim();
-  var desc=document.getElementById('reqDesc').value.trim();
+  var title=censorBadWords(document.getElementById('reqTitle').value.trim());
+  var desc=censorBadWords(document.getElementById('reqDesc').value.trim());
   var budget=document.getElementById('reqBudget').value.trim();
   var city=document.getElementById('reqCity').value;
   if(!title || !desc || !budget || !city){
@@ -2480,12 +2642,12 @@ window.profileChatReceiverId = null;
 var profileChatReceiverId = null;
 var activeChatChannel = null;
 
-function stopChatListener(){
+window.stopChatListener = function stopChatListener(){
   if(activeChatChannel){
     sb.removeChannel(activeChatChannel);
     activeChatChannel = null;
   }
-}
+};
 
 window.sendProfileMsg = async function(){
   var input = document.getElementById('chatInput');
@@ -2614,6 +2776,51 @@ window.hideConversation = async function(otherUserId){
   window._hiddenConvs = hiddenList;
   hToast('✓ '+t('convHidden'));
   loadConversations();
+};
+
+window.openDetailMenu = function(event){
+  event.stopPropagation();
+  var existing = document.getElementById('detailMenuPopup');
+  if(existing) existing.remove();
+  var menu = document.createElement('div');
+  menu.id = 'detailMenuPopup';
+  menu.style.cssText = 'position:fixed;background:var(--s1);border:1px solid var(--b);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:99999;overflow:hidden;min-width:180px';
+  var rect = event.currentTarget.getBoundingClientRect();
+  menu.style.top = (rect.bottom + 4) + 'px';
+  menu.style.left = Math.max(8, rect.right - 180) + 'px';
+  menu.innerHTML = '<div style="padding:12px 16px;font-size:.84rem;color:#ef4444;cursor:pointer;font-weight:600" onclick="document.getElementById(\'detailMenuPopup\').remove();openReportModal();">🚩 تبليغ عن هذا الطلب</div>';
+  document.body.appendChild(menu);
+  setTimeout(function(){
+    document.addEventListener('click', function closeMenu(){
+      var m = document.getElementById('detailMenuPopup');
+      if(m) m.remove();
+      document.removeEventListener('click', closeMenu);
+    });
+  }, 0);
+};
+
+window.openReportModal = async function(){
+  var user = await sbGetUser();
+  if(!user){ hToast('⚠️ يجب تسجيل الدخول للتبليغ'); openAuth('login'); return; }
+  var modal = document.getElementById('reportModal');
+  if(modal) modal.classList.add('open');
+};
+
+window.submitReport = async function(){
+  var reason = document.querySelector('input[name="reportReason"]:checked');
+  if(!reason){ hToast('⚠️ اختر سبب التبليغ'); return; }
+  var requestId = window._currentDetailId;
+  if(!requestId){ hToast('⚠️ تعذر تحديد الطلب'); return; }
+  var user = await sbGetUser();
+  if(!user){ hToast('⚠️ يجب تسجيل الدخول للتبليغ'); document.getElementById('reportModal').classList.remove('open'); openAuth('login'); return; }
+  var {error} = await sb.from('reports').insert({
+    request_id: requestId,
+    reporter_id: user.id,
+    reason: reason.value
+  });
+  document.getElementById('reportModal').classList.remove('open');
+  if(error){ hToast('⚠️ تعذر إرسال البلاغ'); return; }
+  hToast('✓ تم استلام بلاغك، شكراً لك');
 };
 
 window.openConvMenu = function(event, otherUserId, otherName){
