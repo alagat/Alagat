@@ -2365,17 +2365,31 @@ function renderReqMediaPreview(){
 }
 
 // ====== رفع الصور/الفيديو بالتوازي مع إعادة محاولة تلقائية مرة واحدة للملفات الفاشلة ======
+// ملاحظة: الصور الجديدة تُرفع الآن إلى Cloudflare R2 عبر دالة وسيطة على Vercel (/api/upload-to-r2)
+// بدل Supabase Storage مباشرة — لتجنب رسوم الخروج (egress) المرتفعة مع نمو الموقع
 async function uploadOneMediaFile(file, userId, index){
-  var ext = file.name.split('.').pop();
-  var path = userId + '_' + Date.now() + '_' + index + '_' + Math.floor(Math.random()*10000) + '.' + ext;
-  var {error} = await sb.storage.from('request-media').upload(path, file);
-  if(error){
-    // إعادة محاولة واحدة فقط (قد يكون انقطاع شبكة لحظي)
-    var retry = await sb.storage.from('request-media').upload(path, file);
-    if(retry.error) return {ok:false, name:file.name};
+  async function attempt(){
+    var res = await fetch('/api/upload-to-r2', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/octet-stream',
+        'x-file-name': file.name,
+        'x-file-type': file.type || 'application/octet-stream',
+        'x-user-id': userId
+      },
+      body: file
+    });
+    if(!res.ok) return null;
+    var data = await res.json();
+    return (data && data.ok) ? data : null;
   }
-  var {data:urlData} = sb.storage.from('request-media').getPublicUrl(path);
-  return {ok:true, url:urlData.publicUrl, type: file.type.startsWith('video/') ? 'video' : 'image'};
+  var result = await attempt();
+  if(!result){
+    // إعادة محاولة واحدة فقط (قد يكون انقطاع شبكة لحظي)
+    result = await attempt();
+  }
+  if(!result) return {ok:false, name:file.name};
+  return {ok:true, url:result.url, type:result.type};
 }
 async function uploadMediaFilesParallel(files){
   if(!files.length) return [];
