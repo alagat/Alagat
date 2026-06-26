@@ -339,6 +339,7 @@ window.I18N = {
     serviceTypeLbl:'نوع الخدمة', remote:'عن بُعد', inPerson:'حضوري', both:'كلاهما',
     regionLbl:'المنطقة *', selectRegion:'اختر المنطقة', tellClientWhy:'أخبر العميل لماذا أنت الأنسب',
     phoneOptional:'رقم جوالك (اختياري) 🔒', phoneVisibleToOwner:'يظهر لصاحب الطلب فقط، ولا يره أي شخص آخر',
+    reqPhoneOptional:'رقم جوالك (اختياري) 📞', reqPhonePublicHint:'يظهر للجميع على الإعلان، اتركه فاضي إذا تفضّل التواصل عبر رسائل الموقع فقط', phonePlaceholder:'05xxxxxxxx',
     mediaOptionalLbl:'📷 صور وفيديو (اختياري — حتى 10 صور)', addMediaBtn:'+ إضافة صور أو فيديو',
     hours24:'24 ساعة', days3:'3 أيام', week1:'أسبوع', weeks2:'أسبوعان', month1:'شهر', months3:'3 أشهر',
     cancel:'إلغاء', publishRequest:'نشر الطلب ←',
@@ -399,6 +400,7 @@ window.I18N = {
     serviceTypeLbl:'Service Type', remote:'Remote', inPerson:'In-person', both:'Both',
     regionLbl:'Region *', selectRegion:'Select region', tellClientWhy:"Tell the client why you're the best fit",
     phoneOptional:'Your phone (optional) 🔒', phoneVisibleToOwner:'Visible only to the request owner, no one else can see it',
+    reqPhoneOptional:'Your phone (optional) 📞', reqPhonePublicHint:'Visible to everyone on the listing, leave empty if you prefer messages only', phonePlaceholder:'05xxxxxxxx',
     mediaOptionalLbl:'📷 Photos & video (optional — up to 10)', addMediaBtn:'+ Add photos or video',
     hours24:'24 hours', days3:'3 days', week1:'1 week', weeks2:'2 weeks', month1:'1 month', months3:'3 months',
     cancel:'Cancel', publishRequest:'Publish Request ←',
@@ -639,6 +641,8 @@ window.onerror = function(msg, url, line, col, error){
     <span style="display:flex;align-items:center;gap:4px;color:var(--t)">🗂 <span id="detType"></span></span>
     <span id="detCitySep" style="display:none;color:var(--t3)">·</span>
     <span id="detCityCard" style="display:none;align-items:center;gap:4px;color:var(--t)">📍 <span id="detCity"></span></span>
+    <span id="detPhoneSep" style="display:none;color:var(--t3)">·</span>
+    <a id="detPhoneCard" href="#" style="display:none;align-items:center;gap:4px;color:var(--ac);font-weight:700;text-decoration:none">📞 <span id="detPhone"></span></a>
   </div>
   <!-- معرض الصور (بعد التفاصيل المنظمة، أسفل النص بالكامل) -->
   <div id="detGallery" style="display:none;margin-bottom:14px"></div>
@@ -748,7 +752,7 @@ window.onerror = function(msg, url, line, col, error){
 </div>
 
 <div class="h-overlay" id="compModal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات">🏗️ مقاولات</option><option value="سيارات">🚙 سيارات</option><option value="استشارات">⚖️ استشارات</option><option value="صحة وجمال">💆 صحة وجمال</option><option value="مناسبات">🎉 مناسبات وتنظيم</option><option value="برمجة">💻 برمجة</option><option value="تصميم">🎨 تصميم</option><option value="تسويق">📱 تسويق</option><option value="منزلية">🏠 منزلية</option><option value="صيانة عامة">🔧 صيانة عامة</option><option value="تعليم">📚 تعليم</option><option value="أخرى">خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option data-i18n="hours24">24 ساعة</option><option data-i18n="days3">3 أيام</option><option data-i18n="week1">أسبوع</option><option data-i18n="weeks2">أسبوعان</option><option data-i18n="flexible">مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option data-i18n="remote">عن بُعد</option><option data-i18n="inPerson">حضوري</option><option data-i18n="both">كلاهما</option></select></div></div><div class="fg"><label class="fgl" data-i18n="regionLbl">المنطقة *</label><select class="fi" id="reqCity"><option value="" data-i18n="selectRegion">اختر المنطقة</option><option value="الرياض">الرياض</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="القصيم">القصيم</option><option value="الشرقية">الشرقية</option><option value="عسير">عسير</option><option value="تبوك">تبوك</option><option value="حائل">حائل</option><option value="الحدود الشمالية">الحدود الشمالية</option><option value="الجوف">الجوف</option><option value="جازان">جازان</option><option value="نجران">نجران</option><option value="الباحة">الباحة</option></select></div>
+  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات">🏗️ مقاولات</option><option value="سيارات">🚙 سيارات</option><option value="استشارات">⚖️ استشارات</option><option value="صحة وجمال">💆 صحة وجمال</option><option value="مناسبات">🎉 مناسبات وتنظيم</option><option value="برمجة">💻 برمجة</option><option value="تصميم">🎨 تصميم</option><option value="تسويق">📱 تسويق</option><option value="منزلية">🏠 منزلية</option><option value="صيانة عامة">🔧 صيانة عامة</option><option value="تعليم">📚 تعليم</option><option value="أخرى">خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option data-i18n="hours24">24 ساعة</option><option data-i18n="days3">3 أيام</option><option data-i18n="week1">أسبوع</option><option data-i18n="weeks2">أسبوعان</option><option data-i18n="flexible">مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option data-i18n="remote">عن بُعد</option><option data-i18n="inPerson">حضوري</option><option data-i18n="both">كلاهما</option></select></div></div><div class="fg"><label class="fgl" data-i18n="regionLbl">المنطقة *</label><select class="fi" id="reqCity"><option value="" data-i18n="selectRegion">اختر المنطقة</option><option value="الرياض">الرياض</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="القصيم">القصيم</option><option value="الشرقية">الشرقية</option><option value="عسير">عسير</option><option value="تبوك">تبوك</option><option value="حائل">حائل</option><option value="الحدود الشمالية">الحدود الشمالية</option><option value="الجوف">الجوف</option><option value="جازان">جازان</option><option value="نجران">نجران</option><option value="الباحة">الباحة</option></select></div><div class="fg"><label class="fgl" data-i18n="reqPhoneOptional">رقم جوالك (اختياري) 📞</label><input class="fi" id="reqPhone" type="tel" placeholder="05xxxxxxxx" data-i18n-placeholder="phonePlaceholder"><div style="font-size:.7rem;color:var(--t3);margin-top:4px" data-i18n="reqPhonePublicHint">يظهر للجميع على الإعلان، اتركه فاضي إذا تفضّل التواصل عبر رسائل الموقع فقط</div></div>
   <div class="fg">
     <label class="fgl" data-i18n="mediaOptionalLbl">📷 صور وفيديو (اختياري — حتى 10 صور)</label>
     <input type="file" id="reqMediaInput" accept="image/*,video/*" multiple style="display:none" onchange="handleReqMediaSelect(this)">
@@ -1368,7 +1372,7 @@ function mapRequestRow(r){
     grad:p.avatar_color||'linear-gradient(135deg,#2563a8,#4a9fd4)',time:timeAgo(r.created_at),
     urgent:r.is_urgent||false,isNew:(Date.now()-new Date(r.created_at))<3600000,
     title:r.title,desc:r.description||'',tags:[r.category],cat:r.category,tc:'',userId:r.user_id,adNumber:r.ad_number,
-    budget:r.budget_text||'يُحدد',dur:r.duration||'مرن',type:r.work_type||'عن بُعد',city:r.city||'',
+    budget:r.budget_text||'يُحدد',dur:r.duration||'مرن',type:r.work_type||'عن بُعد',city:r.city||'',phone:r.contact_phone||'',
     offers:r.offers_count||0,ts:new Date(r.created_at).getTime(),created_at:r.created_at,lastBump:r.created_at,media:r.media_urls||[]};
 }
 
@@ -1621,18 +1625,7 @@ window.handleEditMediaSelect = function(input){
 };
 
 async function uploadEditMediaFiles(){
-  var urls = [];
-  for(var i=0; i<editNewMediaFiles.length; i++){
-    var file = editNewMediaFiles[i];
-    var user = await sbGetUser();
-    var ext = file.name.split('.').pop();
-    var path = user.id + '_' + Date.now() + '_' + i + '.' + ext;
-    var {error} = await sb.storage.from('request-media').upload(path, file);
-    if(error) continue;
-    var {data:urlData} = sb.storage.from('request-media').getPublicUrl(path);
-    urls.push({url:urlData.publicUrl, type: file.type.startsWith('video/') ? 'video' : 'image'});
-  }
-  return urls;
+  return await uploadMediaFilesParallel(editNewMediaFiles);
 }
 
 window.openEditRequest = function(requestId, r){
@@ -1648,6 +1641,7 @@ window.openEditRequest = function(requestId, r){
       +'<input id="editReqTitle" placeholder="العنوان" value="'+String(r.title||'').replace(/"/g,'&quot;')+'" style="background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:11px 14px;font-family:inherit;font-size:.86rem;color:var(--t);outline:none">'
       +'<textarea id="editReqDesc" placeholder="الوصف" style="background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:11px 14px;font-family:inherit;font-size:.84rem;color:var(--t);outline:none;height:90px;resize:none">'+String(r.desc||'')+'</textarea>'
       +'<input id="editReqBudget" placeholder="الميزانية" value="'+String(r.budget||'').replace(/"/g,'&quot;')+'" style="background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:11px 14px;font-family:inherit;font-size:.86rem;color:var(--t);outline:none">'
+      +'<input id="editReqPhone" type="tel" placeholder="رقم جوالك (اختياري)" value="'+String(r.phone||'').replace(/"/g,'&quot;')+'" style="background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:11px 14px;font-family:inherit;font-size:.86rem;color:var(--t);outline:none;direction:ltr;text-align:right">'
       +'<div>'
         +'<label style="font-size:.78rem;color:var(--t2);display:block;margin-bottom:6px">📷 الصور والفيديو (حتى 10)</label>'
         +'<input type="file" id="editMediaInput" accept="image/*,video/*" multiple style="display:none" onchange="handleEditMediaSelect(this)">'
@@ -1664,21 +1658,33 @@ window.openEditRequest = function(requestId, r){
     var newTitle = censorBadWords(document.getElementById('editReqTitle').value.trim());
     var newDesc = censorBadWords(document.getElementById('editReqDesc').value.trim());
     var newBudget = document.getElementById('editReqBudget').value.trim();
+    var newPhone = document.getElementById('editReqPhone').value.trim();
     if(!newTitle){ hToast('⚠️ العنوان مطلوب'); return; }
+    if(newPhone){
+      var cleanNewPhone = newPhone.replace(/[\s-]/g,'').replace(/^\+?966/,'').replace(/^0/,'');
+      if(!/^5\d{8}$/.test(cleanNewPhone)){ hToast('⚠️ رقم الجوال غير صحيح'); return; }
+      newPhone = '0'+cleanNewPhone;
+    }
     var saveBtn = document.getElementById('editReqSaveBtn');
     saveBtn.textContent = 'جاري الحفظ...'; saveBtn.disabled = true;
-    var uploadedUrls = [];
-    if(editNewMediaFiles.length > 0){
-      uploadedUrls = await uploadEditMediaFiles();
+    try{
+      var uploadedUrls = [];
+      if(editNewMediaFiles.length > 0){
+        uploadedUrls = await uploadEditMediaFiles();
+      }
+      var finalMedia = editExistingMedia.concat(uploadedUrls);
+      var {error} = await sb.from('requests').update({
+        title: newTitle, description: newDesc, budget_text: newBudget, media_urls: finalMedia, contact_phone: newPhone || null
+      }).eq('id', requestId);
+      if(error){ hToast('⚠️ تعذر حفظ التعديلات'); saveBtn.textContent='حفظ التعديلات'; saveBtn.disabled=false; return; }
+      hToast('✓ تم حفظ التعديلات');
+      sheet.remove();
+      openDetail(requestId);
+    } catch(e){
+      console.error('editReqSaveBtn error:', e);
+      hToast('❌ حدث خطأ أثناء الحفظ، حاول مرة أخرى');
+      saveBtn.textContent='حفظ التعديلات'; saveBtn.disabled=false;
     }
-    var finalMedia = editExistingMedia.concat(uploadedUrls);
-    var {error} = await sb.from('requests').update({
-      title: newTitle, description: newDesc, budget_text: newBudget, media_urls: finalMedia
-    }).eq('id', requestId);
-    if(error){ hToast('⚠️ تعذر حفظ التعديلات'); saveBtn.textContent='حفظ التعديلات'; saveBtn.disabled=false; return; }
-    hToast('✓ تم حفظ التعديلات');
-    sheet.remove();
-    openDetail(requestId);
   };
 };
 
@@ -1826,6 +1832,17 @@ window.openDetail=async function(id){
   } else {
     cityCard.style.display='none';
     citySep.style.display='none';
+  }
+  var phoneCard = document.getElementById('detPhoneCard');
+  var phoneSep = document.getElementById('detPhoneSep');
+  if(r.phone){
+    phoneCard.style.display='flex';
+    phoneSep.style.display='inline';
+    phoneCard.href='tel:'+r.phone;
+    document.getElementById('detPhone').textContent=r.phone;
+  } else {
+    phoneCard.style.display='none';
+    phoneSep.style.display='none';
   }
   document.getElementById('detTags').innerHTML=r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+tg+'</span>';}).join('');
   document.getElementById('detOfferBtn').onclick=function(){openOffer(id);};
@@ -2347,19 +2364,36 @@ function renderReqMediaPreview(){
   if(addBtn) addBtn.style.display = reqMediaFiles.length >= REQ_MEDIA_MAX ? 'none' : 'block';
 }
 
-async function uploadReqMediaFiles(){
+// ====== رفع الصور/الفيديو بالتوازي مع إعادة محاولة تلقائية مرة واحدة للملفات الفاشلة ======
+async function uploadOneMediaFile(file, userId, index){
+  var ext = file.name.split('.').pop();
+  var path = userId + '_' + Date.now() + '_' + index + '_' + Math.floor(Math.random()*10000) + '.' + ext;
+  var {error} = await sb.storage.from('request-media').upload(path, file);
+  if(error){
+    // إعادة محاولة واحدة فقط (قد يكون انقطاع شبكة لحظي)
+    var retry = await sb.storage.from('request-media').upload(path, file);
+    if(retry.error) return {ok:false, name:file.name};
+  }
+  var {data:urlData} = sb.storage.from('request-media').getPublicUrl(path);
+  return {ok:true, url:urlData.publicUrl, type: file.type.startsWith('video/') ? 'video' : 'image'};
+}
+async function uploadMediaFilesParallel(files){
+  if(!files.length) return [];
+  var user = await sbGetUser();
+  var results = await Promise.all(files.map(function(file, i){ return uploadOneMediaFile(file, user.id, i); }));
   var urls = [];
-  for(var i=0; i<reqMediaFiles.length; i++){
-    var file = reqMediaFiles[i];
-    var user = await sbGetUser();
-    var ext = file.name.split('.').pop();
-    var path = user.id + '_' + Date.now() + '_' + i + '.' + ext;
-    var {error} = await sb.storage.from('request-media').upload(path, file);
-    if(error) continue;
-    var {data:urlData} = sb.storage.from('request-media').getPublicUrl(path);
-    urls.push({url:urlData.publicUrl, type: file.type.startsWith('video/') ? 'video' : 'image'});
+  var failedNames = [];
+  results.forEach(function(r){
+    if(r.ok) urls.push({url:r.url, type:r.type});
+    else failedNames.push(r.name);
+  });
+  if(failedNames.length){
+    hToast('⚠️ تعذر رفع '+failedNames.length+' من الملفات، تم نشر الباقي');
   }
   return urls;
+}
+async function uploadReqMediaFiles(){
+  return await uploadMediaFilesParallel(reqMediaFiles);
 }
 
 document.getElementById('submitReq').onclick=function(){
@@ -2398,40 +2432,59 @@ window.submitAfterTerms = async function(){
   var desc=censorBadWords(document.getElementById('reqDesc').value.trim());
   var budget=document.getElementById('reqBudget').value.trim();
   var city=document.getElementById('reqCity').value;
+  var phone=document.getElementById('reqPhone').value.trim();
   if(!title || !desc || !budget || !city){
     document.getElementById('termsModal').classList.remove('open');
     hToast('⚠️ تأكد من إكمال كل الحقول المطلوبة');
     document.getElementById('compModal').classList.add('open');
     return;
   }
+  if(phone){
+    var cleanPhone = phone.replace(/[\s-]/g,'').replace(/^\+?966/,'').replace(/^0/,'');
+    if(!/^5\d{8}$/.test(cleanPhone)){
+      document.getElementById('termsModal').classList.remove('open');
+      hToast('⚠️ رقم الجوال غير صحيح، تأكد من الصيغة (05xxxxxxxx)');
+      document.getElementById('compModal').classList.add('open');
+      return;
+    }
+    phone = '0'+cleanPhone;
+  }
   document.getElementById('termsModal').classList.remove('open');
   hToast('جاري النشر...');
 
-  var mediaUrls = [];
-  if(reqMediaFiles.length > 0){
-    hToast('⏳ جاري رفع الصور...');
-    mediaUrls = await uploadReqMediaFiles();
-  }
+  try{
+    var mediaUrls = [];
+    if(reqMediaFiles.length > 0){
+      hToast('⏳ جاري رفع '+reqMediaFiles.length+' ملف...');
+      mediaUrls = await uploadReqMediaFiles();
+    }
 
-  var result = await sbCreateRequest({
-    title:title,
-    description:desc,
-    category:document.getElementById('reqCat').value,
-    budget:budget+' ريال',
-    duration:document.getElementById('reqDur').value,
-    workType:document.getElementById('reqType').value,
-    city:city,
-    media: mediaUrls
-  });
-  if(result.error){hToast('❌ '+result.error);return;}
-  document.getElementById('reqTitle').value='';
-  document.getElementById('reqDesc').value='';
-  document.getElementById('reqBudget').value='';
-  document.getElementById('reqCity').value='';
-  reqMediaFiles = [];
-  renderReqMediaPreview();
-  renderFeed();
-  hToast('✓ تم نشر طلبك! ستصلك عروض قريباً');
+    var result = await sbCreateRequest({
+      title:title,
+      description:desc,
+      category:document.getElementById('reqCat').value,
+      budget:budget+' ريال',
+      duration:document.getElementById('reqDur').value,
+      workType:document.getElementById('reqType').value,
+      city:city,
+      phone: phone || null,
+      media: mediaUrls
+    });
+    if(result.error){hToast('❌ '+result.error);return;}
+    document.getElementById('reqTitle').value='';
+    document.getElementById('reqDesc').value='';
+    document.getElementById('reqBudget').value='';
+    document.getElementById('reqCity').value='';
+    document.getElementById('reqPhone').value='';
+    reqMediaFiles = [];
+    renderReqMediaPreview();
+    renderFeed();
+    hToast('✓ تم نشر طلبك! ستصلك عروض قريباً');
+  } catch(e){
+    console.error('submitAfterTerms error:', e);
+    hToast('❌ حدث خطأ أثناء النشر، حاول مرة أخرى');
+    document.getElementById('compModal').classList.add('open');
+  }
 };
 document.getElementById('submitOffer').onclick=async function(){
   var txt=document.getElementById('offerText').value.trim();
@@ -3247,7 +3300,8 @@ async function sbCreateRequest(req) {
     work_type: req.workType,
     city: req.city || null,
     is_urgent: req.urgent || false,
-    media_urls: req.media || []
+    media_urls: req.media || [],
+    contact_phone: req.phone || null
   }).select().single();
   return { data, error };
 }
