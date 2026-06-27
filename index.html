@@ -1952,6 +1952,10 @@ window.openDetail=async function(id){
   var r=reqs.find(function(x){return String(x.id)===sid;});
   if(!r)return;
 
+  // فحص تسجيل الدخول مبكراً (بدون انتظار)، حتى تفتح نافذة "تبليغ" فوراً بدون تأخير شبكة لو ضغط عليها المستخدم لاحقاً
+  window._reportAuthChecked = false;
+  ensureReportAuthChecked();
+
   // ملء بيانات الطلب
   var av=document.getElementById('detAvatar');
   av.style.background=r.grad; av.textContent=r.av;
@@ -2939,6 +2943,12 @@ document.addEventListener('click', async function(e){
   var providerId = btn.getAttribute('data-pid');
   btn.disabled = true; btn.textContent = 'جاري القبول...';
   try{
+    // نجلب معرّف الطلب الحقيقي من العرض نفسه بقاعدة البيانات، بدل الاعتماد على window._currentDetailId
+    // (الذي قد يتغيّر لو فتح المستخدم صفحة طلب أخرى بين فتح هذي الصفحة والضغط على قبول)
+    var {data:offerRow, error:fetchErr} = await sb.from('offers').select('request_id').eq('id', offerId).single();
+    if(fetchErr || !offerRow){ hToast('⚠️ تعذر تحديد الطلب المرتبط بهذا العرض'); btn.disabled=false; btn.textContent='✓ قبول العرض'; return; }
+    var realRequestId = offerRow.request_id;
+
     var {error} = await sb.from('offers').update({status:'accepted'}).eq('id', offerId);
     if(error){ hToast('⚠️ تعذر قبول العرض'); btn.disabled=false; btn.textContent='✓ قبول العرض'; return; }
     if(providerId){
@@ -2953,7 +2963,7 @@ document.addEventListener('click', async function(e){
       if(notifErr2){ console.error('offer_accepted notification insert error:', notifErr2); logErrorToServer('offer-accept-btn notification: ' + notifErr2.message, null); }
     }
     hToast('✓ تم قبول العرض بنجاح');
-    if(window._currentDetailId) openDetail(window._currentDetailId);
+    await openDetailById(realRequestId);
   } catch(err){
     console.error('offer-accept-btn error:', err);
     logErrorToServer('offer-accept-btn: ' + (err && err.message), err && err.stack);
@@ -3194,7 +3204,7 @@ window.hideConversation = async function(otherUserId){
   }
 };
 
-window.openDetailMenu = function(event){
+window.openDetailMenu = async function(event){
   event.stopPropagation();
   var existing = document.getElementById('detailMenuPopup');
   if(existing) existing.remove();
@@ -3215,9 +3225,22 @@ window.openDetailMenu = function(event){
   }, 150);
 };
 
-window.openReportModal = async function(){
+// ====== التحقق من تسجيل الدخول مرة واحدة فقط بعد فتح صفحة الطلب، حتى تكون نافذة البلاغ جاهزة للفتح الفوري بدون أي تأخير شبكة ======
+window._reportAuthChecked = false;
+window._reportAuthOk = false;
+async function ensureReportAuthChecked(){
   var user = await sbGetUser();
-  if(!user){ hToast('⚠️ يجب تسجيل الدخول للتبليغ'); openAuth('login'); return; }
+  window._reportAuthOk = !!user;
+  window._reportAuthChecked = true;
+}
+
+window.openReportModal = function(){
+  if(!window._reportAuthChecked){
+    // احتياطي نادر: لو لم يكتمل الفحص المسبق بعد لأي سبب، نتحقق الآن (سيناريو بطيء لكنه آمن)
+    ensureReportAuthChecked().then(function(){ openReportModal(); });
+    return;
+  }
+  if(!window._reportAuthOk){ hToast('⚠️ يجب تسجيل الدخول للتبليغ'); openAuth('login'); return; }
   var modal = document.getElementById('reportModal');
   if(modal) modal.classList.add('open');
 };
