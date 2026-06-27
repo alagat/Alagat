@@ -1679,8 +1679,14 @@ function setupOwnerControls(requestId, r){
       if(bumpBtn.disabled) return;
       try{
         var nowIso = new Date().toISOString();
-        var {error} = await sb.from('requests').update({ created_at: nowIso }).eq('id', requestId);
+        var {data:updatedBumpRows, error} = await sb.from('requests').update({ created_at: nowIso }).eq('id', requestId).select('id');
         if(error){ hToast('⚠️ تعذر التحديث الآن'); return; }
+        if(!updatedBumpRows || !updatedBumpRows.length){
+          console.error('bumpBtn: update affected 0 rows');
+          logErrorToServer('bumpBtn: update affected 0 rows for request ' + requestId, null);
+          hToast('⚠️ تعذر التحديث، تأكد أنك صاحب هذا الطلب');
+          return;
+        }
         hToast('✓ تم تحديث الإعلان، أصبح الآن مع الطلبات الجديدة');
         lastBump = nowIso;
         remaining = BUMP_COOLDOWN_MS;
@@ -1809,10 +1815,16 @@ window.openEditRequest = function(requestId, r){
         uploadedUrls = await uploadEditMediaFiles();
       }
       var finalMedia = editExistingMedia.concat(uploadedUrls);
-      var {error} = await sb.from('requests').update({
+      var {data:updatedReqRows, error} = await sb.from('requests').update({
         title: newTitle, description: newDesc, budget_text: newBudget, media_urls: finalMedia, contact_phone: newPhone || null
-      }).eq('id', requestId);
+      }).eq('id', requestId).select('id');
       if(error){ hToast('⚠️ تعذر حفظ التعديلات'); saveBtn.textContent='حفظ التعديلات'; saveBtn.disabled=false; return; }
+      if(!updatedReqRows || !updatedReqRows.length){
+        console.error('editReqSaveBtn: update affected 0 rows');
+        logErrorToServer('editReqSaveBtn: update affected 0 rows for request ' + requestId, null);
+        hToast('⚠️ تعذر حفظ التعديلات، تأكد أنك صاحب هذا الطلب');
+        saveBtn.textContent='حفظ التعديلات'; saveBtn.disabled=false; return;
+      }
       hToast('✓ تم حفظ التعديلات');
       sheet.remove();
       openDetail(requestId);
@@ -1839,8 +1851,14 @@ window.openFeatureRequest = function(requestId){
   sheet.onclick = function(e){ if(e.target===sheet){ sheet.remove(); } };
   document.getElementById('confirmFeatureBtn').onclick = async function(){
     try{
-      var {error} = await sb.from('requests').update({ is_urgent: true }).eq('id', requestId);
+      var {data:updatedFeatRows, error} = await sb.from('requests').update({ is_urgent: true }).eq('id', requestId).select('id');
       if(error){ hToast('⚠️ تعذر تفضيل الطلب'); return; }
+      if(!updatedFeatRows || !updatedFeatRows.length){
+        console.error('confirmFeatureBtn: update affected 0 rows');
+        logErrorToServer('confirmFeatureBtn: update affected 0 rows for request ' + requestId, null);
+        hToast('⚠️ تعذر تفضيل الطلب، تأكد أنك صاحب هذا الطلب');
+        return;
+      }
       hToast('✓ تم تفضيل الطلب بنجاح');
       sheet.remove();
       openDetail(requestId);
@@ -1953,7 +1971,7 @@ window.openDetail=async function(id){
   if(!r)return;
 
   // فحص تسجيل الدخول مبكراً (بدون انتظار)، حتى تفتح نافذة "تبليغ" فوراً بدون تأخير شبكة لو ضغط عليها المستخدم لاحقاً
-  window._reportAuthChecked = false;
+  window._reportAuthPromise = null;
   ensureReportAuthChecked();
 
   // ملء بيانات الطلب
@@ -2949,8 +2967,16 @@ document.addEventListener('click', async function(e){
     if(fetchErr || !offerRow){ hToast('⚠️ تعذر تحديد الطلب المرتبط بهذا العرض'); btn.disabled=false; btn.textContent='✓ قبول العرض'; return; }
     var realRequestId = offerRow.request_id;
 
-    var {error} = await sb.from('offers').update({status:'accepted'}).eq('id', offerId);
+    var {data:updatedRows, error} = await sb.from('offers').update({status:'accepted'}).eq('id', offerId).select('id');
     if(error){ hToast('⚠️ تعذر قبول العرض'); btn.disabled=false; btn.textContent='✓ قبول العرض'; return; }
+    if(!updatedRows || !updatedRows.length){
+      // التحديث "نجح" بدون خطأ ظاهري لكن لم يُحدِّث أي صف فعلياً (غالباً بسبب صلاحيات RLS)
+      console.error('offer-accept-btn: update affected 0 rows (likely RLS)');
+      logErrorToServer('offer-accept-btn: update affected 0 rows for offer ' + offerId, null);
+      hToast('⚠️ تعذر قبول العرض، تأكد أنك صاحب هذا الطلب');
+      btn.disabled=false; btn.textContent='✓ قبول العرض';
+      return;
+    }
     if(providerId){
       var {error:notifErr2} = await sb.from('notifications').insert({
         user_id: providerId,
@@ -3226,23 +3252,23 @@ window.openDetailMenu = async function(event){
 };
 
 // ====== التحقق من تسجيل الدخول مرة واحدة فقط بعد فتح صفحة الطلب، حتى تكون نافذة البلاغ جاهزة للفتح الفوري بدون أي تأخير شبكة ======
-window._reportAuthChecked = false;
+window._reportAuthPromise = null;
 window._reportAuthOk = false;
-async function ensureReportAuthChecked(){
-  var user = await sbGetUser();
-  window._reportAuthOk = !!user;
-  window._reportAuthChecked = true;
+function ensureReportAuthChecked(){
+  if(!window._reportAuthPromise){
+    window._reportAuthPromise = sbGetUser().then(function(user){
+      window._reportAuthOk = !!user;
+    });
+  }
+  return window._reportAuthPromise;
 }
 
 window.openReportModal = function(){
-  if(!window._reportAuthChecked){
-    // احتياطي نادر: لو لم يكتمل الفحص المسبق بعد لأي سبب، نتحقق الآن (سيناريو بطيء لكنه آمن)
-    ensureReportAuthChecked().then(function(){ openReportModal(); });
-    return;
-  }
-  if(!window._reportAuthOk){ hToast('⚠️ يجب تسجيل الدخول للتبليغ'); openAuth('login'); return; }
-  var modal = document.getElementById('reportModal');
-  if(modal) modal.classList.add('open');
+  ensureReportAuthChecked().then(function(){
+    if(!window._reportAuthOk){ hToast('⚠️ يجب تسجيل الدخول للتبليغ'); openAuth('login'); return; }
+    var modal = document.getElementById('reportModal');
+    if(modal) modal.classList.add('open');
+  });
 };
 
 window.submitReport = async function(){
