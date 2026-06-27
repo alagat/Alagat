@@ -1186,7 +1186,7 @@ function populateProfileFromDB(p){
   var navAvEl=document.querySelector('#profile .p-nav-av');
   if(navAvEl){navAvEl.textContent=letter;if(p.avatar_color){navAvEl.style.background=p.avatar_color;navAvEl.style.color='#fff';}}
   var nameEl=document.querySelector('#profile .profile-name');
-  if(nameEl) nameEl.innerHTML=(p.full_name||'مستخدم')+' <span class="p-verified">✓</span>';
+  if(nameEl) nameEl.innerHTML=escH(p.full_name||'مستخدم')+' <span class="p-verified">✓</span>';
   var handleEl=document.querySelector('#profile .profile-handle');
   if(handleEl) handleEl.textContent='@'+(p.username||'user');
   var lastEl=document.querySelector('#profile .profile-lastseen');
@@ -1287,7 +1287,7 @@ function populateProfile(r){
   // الاسم والهاندل
   var nameEl = document.querySelector('#profile .profile-name');
   if(nameEl){
-    nameEl.innerHTML = r.name + ' <span class="p-verified">✓</span>';
+    nameEl.innerHTML = escH(r.name) + ' <span class="p-verified">✓</span>';
   }
   var handleEl = document.querySelector('#profile .profile-handle');
   if(handleEl) handleEl.textContent = r.handle;
@@ -1338,7 +1338,7 @@ window.filterFeed = function(q){
     renderFeed();
   }, 350);
 };
-function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.name+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+r.handle+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+r.title+'</div>'+'<div class="rdesc">'+r.desc+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+tg+'</span>';}).join('')+'<span class="rtag g">⏱ '+r.dur+'</span><span class="rtag">'+r.type+'</span>'+(r.city?'<span class="rtag">📍 '+r.city+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+r.budget+'</div></div>'+'<div class="rcf-r"><span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation()">'+(isSaved?t('savedBadge'):'🔖')+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation()">'+t('submitOffer')+'</button>'+'</div></div></div>';}
+function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+escH(r.name)+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+escH(r.handle)+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+escH(r.title)+'</div>'+'<div class="rdesc">'+escH(r.desc)+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+escH(tg)+'</span>';}).join('')+'<span class="rtag g">⏱ '+escH(r.dur)+'</span><span class="rtag">'+escH(r.type)+'</span>'+(r.city?'<span class="rtag">📍 '+escH(r.city)+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+escH(r.budget)+'</div></div>'+'<div class="rcf-r"><span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation()">'+(isSaved?t('savedBadge'):'🔖')+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation()">'+t('submitOffer')+'</button>'+'</div></div></div>';}
 function makeFooter(){
   return '<div class="bcta"><h3>'+t('readyToStart')+'</h3><p>'+t('ctaSubtitle')+'</p><div class="bcta-btns"><button class="btn-b" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openComp()">'+t('postFree')+'</button><button class="btn-p" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openAuth(\'register\')">'+t('startEarning')+'</button></div></div>'
   + '<div class="feed-footer">'
@@ -1405,11 +1405,13 @@ window.toggleCategoryAlert = async function(){
   var isSubscribed = myCategoryAlerts.indexOf(cat) > -1;
   try{
     if(isSubscribed){
-      await sb.from('category_alerts').delete().eq('user_id', user.id).eq('category', cat);
+      var {error:delErr} = await sb.from('category_alerts').delete().eq('user_id', user.id).eq('category', cat);
+      if(delErr){ console.error('toggleCategoryAlert delete error:', delErr); logErrorToServer('toggleCategoryAlert delete: ' + delErr.message, null); hToast('⚠️ تعذر إيقاف التنبيه'); return; }
       myCategoryAlerts = myCategoryAlerts.filter(function(c){ return c!==cat; });
       hToast('🔕 تم إيقاف التنبيه لفئة «'+cat+'»');
     } else {
-      await sb.from('category_alerts').insert({ user_id: user.id, category: cat });
+      var {error:insErr} = await sb.from('category_alerts').insert({ user_id: user.id, category: cat });
+      if(insErr){ console.error('toggleCategoryAlert insert error:', insErr); logErrorToServer('toggleCategoryAlert insert: ' + insErr.message, null); hToast('⚠️ تعذر تفعيل التنبيه'); return; }
       myCategoryAlerts.push(cat);
       hToast('🔔 سيصلك إشعار عند أي طلب جديد بفئة «'+cat+'»');
     }
@@ -1939,8 +1941,8 @@ function renderSimilarRequests(current){
       : '<div style="width:100%;height:90px;border-radius:10px;margin-bottom:6px;background:'+x.grad+';display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff">'+(x.av||'📋')+'</div>';
     return '<div onclick="openDetail('+x.id+')" style="cursor:pointer">'
       + imgHtml
-      + '<div style="font-size:.74rem;color:var(--t);font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">'+String(x.title||'').replace(/</g,'&lt;')+'</div>'
-      + '<div style="font-size:.7rem;color:var(--ac2);font-weight:700;margin-top:3px">'+(x.budget||'')+'</div>'
+      + '<div style="font-size:.74rem;color:var(--t);font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">'+escH(x.title||'')+'</div>'
+      + '<div style="font-size:.7rem;color:var(--ac2);font-weight:700;margin-top:3px">'+escH(x.budget||'')+'</div>'
       + '</div>';
   }).join('');
 }
@@ -2075,7 +2077,7 @@ window.openDetail=async function(id){
       +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">'
         +'<div style="width:28px;height:28px;border-radius:50%;background:'+grad+';display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:.72rem;cursor:pointer" onclick="openUserProfile(\''+o.provider_id+'\')">'+letter+'</div>'
         +'<div style="flex:1;min-width:0;display:flex;align-items:center;gap:6px;flex-wrap:wrap">'
-          +'<span style="font-weight:600;font-size:.78rem;color:var(--t2);cursor:pointer" onclick="openUserProfile(\''+o.provider_id+'\')">'+String(p.full_name||'مجهول').replace(/</g,'&lt;')+'</span>'
+          +'<span style="font-weight:600;font-size:.78rem;color:var(--t2);cursor:pointer" onclick="openUserProfile(\''+o.provider_id+'\')">'+escH(p.full_name||'مجهول')+'</span>'
           +'<span style="font-size:.7rem;color:#fbbf24;white-space:nowrap">'+stars+'</span>'
           +(isProviderOnline(p.last_seen) ? '<span style="font-size:.66rem;color:#22c55e;font-weight:700;white-space:nowrap">🟢 متصل الآن</span>' : '')
           +(isAccepted ? '<span style="font-size:.68rem;font-weight:800;color:#22c55e;background:rgba(34,197,94,.12);padding:2px 8px;border-radius:20px">✓ مقبول</span>' : '')
@@ -2083,14 +2085,14 @@ window.openDetail=async function(id){
         +'<div style="font-size:.68rem;color:var(--t3);flex-shrink:0">'+timeAgo(o.created_at)+'</div>'
       +'</div>'
       // نص العرض — العنصر الأهم، خط واضح وبارز للقراءة السريعة
-      +'<div style="font-size:.95rem;color:var(--t);line-height:1.75;margin-bottom:12px;font-weight:500">'+String(o.offer_text||'').replace(/</g,'&lt;')+'</div>'
+      +'<div style="font-size:.95rem;color:var(--t);line-height:1.75;margin-bottom:12px;font-weight:500">'+escH(o.offer_text||'')+'</div>'
       // رقم الجوال — يظهر فقط لصاحب الطلب
-      +(offPhone ? '<div style="display:flex;align-items:center;justify-content:space-between;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.25);border-radius:9px;padding:8px 12px;margin-bottom:12px"><span style="font-size:.82rem;color:var(--t2);font-weight:600">📱 '+String(offPhone).replace(/</g,'&lt;')+'</span><a href="tel:'+String(offPhone).replace(/</g,'')+'" style="font-size:.74rem;color:#16a34a;font-weight:800;text-decoration:none">اتصال</a></div>' : '')
+      +(offPhone ? '<div style="display:flex;align-items:center;justify-content:space-between;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.25);border-radius:9px;padding:8px 12px;margin-bottom:12px"><span style="font-size:.82rem;color:var(--t2);font-weight:600">📱 '+escH(offPhone)+'</span><a href="tel:'+String(offPhone).replace(/[^0-9+]/g,'')+'" style="font-size:.74rem;color:#16a34a;font-weight:800;text-decoration:none">اتصال</a></div>' : '')
       // السعر + المدة + زر التواصل/القبول
       +'<div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--b);gap:8px;flex-wrap:wrap">'
         +'<div style="display:flex;align-items:baseline;gap:8px">'
-          +'<span style="font-size:1.05rem;font-weight:800;color:var(--ac2)">'+(o.price||0)+' ريال</span>'
-          +'<span style="font-size:.74rem;color:var(--t3)">⏱ '+(o.duration||'مرن')+'</span>'
+          +'<span style="font-size:1.05rem;font-weight:800;color:var(--ac2)">'+(parseFloat(o.price)||0)+' ريال</span>'
+          +'<span style="font-size:.74rem;color:var(--t3)">⏱ '+escH(o.duration||'مرن')+'</span>'
         +'</div>'
         +'<div style="display:flex;gap:6px">'
         +(isOwnerView && !isAccepted && !anyAccepted ? '<button class="offer-accept-btn" data-oid="'+o.id+'" data-pid="'+o.provider_id+'" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:9px;padding:8px 14px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer;flex-shrink:0">✓ قبول العرض</button>' : '')
@@ -2126,7 +2128,7 @@ function doLoginUI(){
       var avEl=document.querySelector('#profile .p-av');
       if(avEl){avEl.textContent=letter;}
       var nameEl=document.querySelector('#profile .profile-name');
-      if(nameEl) nameEl.innerHTML=(p.full_name||'مستخدم')+' <span class="p-verified">✓</span>';
+      if(nameEl) nameEl.innerHTML=escH(p.full_name||'مستخدم')+' <span class="p-verified">✓</span>';
       var handleEl=document.querySelector('#profile .profile-handle');
       if(handleEl) handleEl.textContent='@'+(p.username||'user');
       var metaVals=document.querySelectorAll('#profile .meta-val');
@@ -2717,7 +2719,10 @@ async function notifyCategoryAlertSubscribers(category, title, requestId){
           related_id: requestId
         };
       });
-    if(notifs.length) await sb.from('notifications').insert(notifs);
+    if(notifs.length){
+      var {error} = await sb.from('notifications').insert(notifs);
+      if(error){ console.error('notifyCategoryAlertSubscribers insert error:', error); logErrorToServer('notifyCategoryAlertSubscribers insert: ' + error.message, null); }
+    }
   } catch(e){
     console.error('notifyCategoryAlertSubscribers error:', e);
     logErrorToServer('notifyCategoryAlertSubscribers: ' + (e && e.message), e && e.stack);
@@ -2738,7 +2743,7 @@ document.getElementById('submitOffer').onclick=async function(){
     // إشعار لصاحب الطلب
     var req = reqs.find(function(x){return x.id===state.currentOfferId;});
     if(req && req.userId){
-      await sb.from('notifications').insert({
+      var {error:notifErr} = await sb.from('notifications').insert({
         user_id: req.userId,
         type: 'offer',
         title: 'عرض جديد على طلبك',
@@ -2746,6 +2751,7 @@ document.getElementById('submitOffer').onclick=async function(){
         is_read: false,
         related_id: state.currentOfferId
       });
+      if(notifErr){ console.error('offer notification insert error:', notifErr); logErrorToServer('submitOffer notification: ' + notifErr.message, null); }
     }
     // تحديث عدد العروض محلياً
     if(req) req.offers = (req.offers||0)+1;
@@ -2803,8 +2809,10 @@ function startPresenceHeartbeat(){
   function pingPresence(){
     sbGetUser().then(function(user){
       if(!user) return;
-      sb.from('profiles').update({ last_seen: new Date().toISOString() }).eq('id', user.id).then(function(){});
-    }).catch(function(){});
+      sb.from('profiles').update({ last_seen: new Date().toISOString() }).eq('id', user.id).then(function(res){
+        if(res && res.error){ logErrorToServer('presence heartbeat: ' + res.error.message, null); }
+      });
+    }).catch(function(e){ logErrorToServer('presence heartbeat: ' + (e && e.message), e && e.stack); });
   }
   pingPresence(); // فوراً عند التحميل
   setInterval(pingPresence, 2*60*1000); // كل دقيقتين أثناء بقاء الصفحة مفتوحة
@@ -2847,8 +2855,8 @@ async function loadProfileData(userId){
   var reqHtml = reqs.length ? '' : '<div style="text-align:center;padding:30px;color:#9ca3af">'+t('noRequestsOnProfile')+'</div>';
   reqs.forEach(function(r){
     reqHtml+='<div class="listing-card"><div class="listing-img" style="background:#f0f4ff;font-size:1.4rem">📋</div>'
-      +'<div class="listing-body"><div class="listing-title">'+String(r.title).replace(/</g,'&lt;')+'</div>'
-      +'<div class="listing-price">'+(r.budget_text||t('toBeDetermined'))+'</div>'
+      +'<div class="listing-body"><div class="listing-title">'+escH(r.title)+'</div>'
+      +'<div class="listing-price">'+escH(r.budget_text||t('toBeDetermined'))+'</div>'
       +'<div class="listing-meta"><span>🕐 '+timeAgo(r.created_at)+'</span>'
       +'<span class="req-status '+(r.status==='open'?'open':'done')+'">'+(r.status==='open'?t('statusOpen'):t('statusDone'))+'</span>'
       +'</div></div></div>';
@@ -2861,7 +2869,7 @@ async function loadProfileData(userId){
   var offHtml = offs.length ? '' : '<div style="text-align:center;padding:30px;color:#9ca3af">'+t('noOffersOnProfile')+'</div>';
   offs.forEach(function(o){
     offHtml+='<div class="listing-card"><div class="listing-img" style="background:#f0fdf4;font-size:1.4rem">💼</div>'
-      +'<div class="listing-body"><div class="listing-title">'+(o.request?String(o.request.title).replace(/</g,'&lt;'):'—')+'</div>'
+      +'<div class="listing-body"><div class="listing-title">'+(o.request?escH(o.request.title):'—')+'</div>'
       +'<div class="listing-price">'+(o.price||0)+' '+t('sar')+'</div>'
       +'<div class="listing-meta"><span>🕐 '+timeAgo(o.created_at)+'</span>'
       +'<span class="req-status '+(o.status==='accepted'?'open':'done')+'">'+(o.status==='accepted'?t('statusAccepted'):t('statusPending'))+'</span>'
@@ -2934,7 +2942,7 @@ document.addEventListener('click', async function(e){
     var {error} = await sb.from('offers').update({status:'accepted'}).eq('id', offerId);
     if(error){ hToast('⚠️ تعذر قبول العرض'); btn.disabled=false; btn.textContent='✓ قبول العرض'; return; }
     if(providerId){
-      await sb.from('notifications').insert({
+      var {error:notifErr2} = await sb.from('notifications').insert({
         user_id: providerId,
         type: 'offer_accepted',
         title: 'تم قبول عرضك! 🎉',
@@ -2942,6 +2950,7 @@ document.addEventListener('click', async function(e){
         is_read: false,
         related_id: offerId
       });
+      if(notifErr2){ console.error('offer_accepted notification insert error:', notifErr2); logErrorToServer('offer-accept-btn notification: ' + notifErr2.message, null); }
     }
     hToast('✓ تم قبول العرض بنجاح');
     if(window._currentDetailId) openDetail(window._currentDetailId);
@@ -2967,32 +2976,50 @@ window.submitRating=async function(){
   if(!user){openAuth('login');return;}
   if(!profileChatReceiverId){hToast('⚠️ لا يمكن التقييم');return;}
   var comment=document.getElementById('ratingComment')?document.getElementById('ratingComment').value.trim():'';
-  var {error}=await sb.from('reviews').insert({
-    reviewer_id:user.id,
-    provider_id:profileChatReceiverId,
-    rating:parseInt(currentRating),
-    comment:comment||null
-  });
-  if(error){hToast('❌ '+error.message);return;}
-  // تحديث متوسط التقييم
-  var {data:reviews}=await sb.from('reviews').select('rating').eq('provider_id',profileChatReceiverId);
-  if(reviews&&reviews.length){
-    var avg=(reviews.reduce(function(s,r){return s+r.rating;},0)/reviews.length).toFixed(1);
-    await sb.from('profiles').update({rating:parseFloat(avg)}).eq('id',profileChatReceiverId);
+  try{
+    var {error}=await sb.from('reviews').insert({
+      reviewer_id:user.id,
+      provider_id:profileChatReceiverId,
+      rating:parseInt(currentRating),
+      comment:comment||null
+    });
+    if(error){
+      console.error('submitRating insert error:', error);
+      logErrorToServer('submitRating: ' + error.message, null);
+      if(error.message && error.message.indexOf('row-level security') > -1){
+        hToast('⚠️ يمكنك التقييم فقط بعد إتمام صفقة فعلية مع هذا المستخدم');
+      } else {
+        hToast('❌ تعذر إرسال التقييم، حاول مرة أخرى');
+      }
+      return;
+    }
+    // تحديث متوسط التقييم
+    var {data:reviews}=await sb.from('reviews').select('rating').eq('provider_id',profileChatReceiverId);
+    if(reviews&&reviews.length){
+      var avg=(reviews.reduce(function(s,r){return s+r.rating;},0)/reviews.length).toFixed(1);
+      var {error:avgErr} = await sb.from('profiles').update({rating:parseFloat(avg)}).eq('id',profileChatReceiverId);
+      if(avgErr){ console.error('submitRating avg update error:', avgErr); logErrorToServer('submitRating avg update: ' + avgErr.message, null); }
+    }
+    closePModal('ratingModal');
+    hToast('✓ شكراً! تم إرسال تقييمك ('+currentRating+' نجوم)');
+    // إشعار لصاحب التقييم بوجود تعليق/تقييم جديد
+    var {error:notifErr3} = await sb.from('notifications').insert({
+      user_id: profileChatReceiverId,
+      type: 'review',
+      title: 'تقييم جديد',
+      body: comment ? ('علّق شخص على ملفك: «'+comment+'»') : ('قيّمك شخص بـ '+currentRating+' نجوم'),
+      is_read: false,
+      related_id: user.id
+    });
+    if(notifErr3){ console.error('review notification insert error:', notifErr3); logErrorToServer('submitRating notification: ' + notifErr3.message, null); }
+    currentRating=0;
+    document.querySelectorAll('.star').forEach(function(s){s.classList.remove('on');});
+    document.getElementById('ratingLbl').textContent='اختر تقييمك';
+  } catch(e){
+    console.error('submitRating error:', e);
+    logErrorToServer('submitRating: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
   }
-  closePModal('ratingModal');
-  hToast('✓ شكراً! تم إرسال تقييمك ('+currentRating+' نجوم)');
-  // إشعار لصاحب التقييم بوجود تعليق/تقييم جديد
-  sb.from('notifications').insert({
-    user_id: profileChatReceiverId,
-    type: 'review',
-    title: 'تقييم جديد',
-    body: comment ? ('علّق شخص على ملفك: «'+comment+'»') : ('قيّمك شخص بـ '+currentRating+' نجوم'),
-    is_read: false
-  });
-  currentRating=0;
-  document.querySelectorAll('.star').forEach(function(s){s.classList.remove('on');});
-  document.getElementById('ratingLbl').textContent='اختر تقييمك';
 };
 window.shareVia=function(app){
   var url=window.location.href;
@@ -3028,25 +3055,33 @@ window.sendProfileMsg = async function(){
   var txt = input.value.trim();
   if(!txt) return;
   if(!profileChatReceiverId){ hToast('⚠️ لا يمكن الإرسال'); return; }
-  input.value = '';
   var user = await sbGetUser();
   if(!user){ openAuth('login'); return; }
-  var {error} = await sb.from('messages').insert({
-    sender_id: user.id,
-    receiver_id: profileChatReceiverId,
-    content: txt
-  });
-  if(error){ hToast('❌ فشل الإرسال'); return; }
-  var msgs = document.getElementById('chatMsgs');
-  var now = new Date(); var time = now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
-  var d = document.createElement('div');
-  d.className = 'msg me';
-  d.innerHTML = txt + '<div class="msg-time">'+time+' ✓</div>';
-  msgs.appendChild(d);
-  msgs.scrollTop = msgs.scrollHeight;
-  // إشعار للمستلم
-  sb.from('notifications').insert({user_id:profileChatReceiverId, type:'msgs', title:'رسالة جديدة', body:'أرسل لك شخص رسالة جديدة', is_read:false});
-  hToast('✓ تم إرسال الرسالة');
+  try{
+    input.value = '';
+    var {error} = await sb.from('messages').insert({
+      sender_id: user.id,
+      receiver_id: profileChatReceiverId,
+      content: txt
+    });
+    if(error){ hToast('❌ فشل الإرسال'); input.value = txt; return; }
+    var msgs = document.getElementById('chatMsgs');
+    var now = new Date(); var time = now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+    var d = document.createElement('div');
+    d.className = 'msg me';
+    d.innerHTML = txt + '<div class="msg-time">'+time+' ✓</div>';
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+    // إشعار للمستلم
+    var {error:notifErr4} = await sb.from('notifications').insert({user_id:profileChatReceiverId, type:'msgs', title:'رسالة جديدة', body:'أرسل لك شخص رسالة جديدة', is_read:false});
+    if(notifErr4){ console.error('sendProfileMsg notification error:', notifErr4); logErrorToServer('sendProfileMsg notification: ' + notifErr4.message, null); }
+    hToast('✓ تم إرسال الرسالة');
+  } catch(e){
+    console.error('sendProfileMsg error:', e);
+    logErrorToServer('sendProfileMsg: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ أثناء الإرسال');
+    input.value = txt; // استرجاع النص حتى لا يضيع على المستخدم
+  }
 };
 
 // load chat history when opening profile chat
@@ -3072,7 +3107,7 @@ window.openProfileChat = async function openProfileChat(receiverId, name){
       var isMe = m.sender_id === user.id;
       var d = document.createElement('div');
       d.className = 'msg ' + (isMe?'me':'them');
-      d.innerHTML = String(m.content).replace(/</g,'&lt;') + '<div class="msg-time">'+timeAgo(m.created_at)+(isMe?' ✓✓':'')+'</div>';
+      d.innerHTML = escH(m.content) + '<div class="msg-time">'+timeAgo(m.created_at)+(isMe?' ✓✓':'')+'</div>';
       msgs.appendChild(d);
     });
   }
@@ -3092,7 +3127,7 @@ window.openProfileChat = async function openProfileChat(receiverId, name){
       if(msgsEl.children.length===1 && msgsEl.textContent.indexOf('ابدأ المحادثة')>-1){ msgsEl.innerHTML=''; }
       var d = document.createElement('div');
       d.className = 'msg them';
-      d.innerHTML = String(m.content).replace(/</g,'&lt;') + '<div class="msg-time">'+timeAgo(m.created_at)+'</div>';
+      d.innerHTML = escH(m.content) + '<div class="msg-time">'+timeAgo(m.created_at)+'</div>';
       msgsEl.appendChild(d);
       msgsEl.scrollTop = msgsEl.scrollHeight;
     })
@@ -3144,12 +3179,19 @@ async function loadConversations(){
 window.hideConversation = async function(otherUserId){
   var user = await sbGetUser();
   if(!user) return;
-  var hiddenList = window._hiddenConvs || [];
-  if(hiddenList.indexOf(otherUserId) === -1) hiddenList.push(otherUserId);
-  await sb.from('profiles').update({hidden_conversations: hiddenList}).eq('id', user.id);
-  window._hiddenConvs = hiddenList;
-  hToast('✓ '+t('convHidden'));
-  loadConversations();
+  try{
+    var hiddenList = window._hiddenConvs || [];
+    if(hiddenList.indexOf(otherUserId) === -1) hiddenList.push(otherUserId);
+    var {error} = await sb.from('profiles').update({hidden_conversations: hiddenList}).eq('id', user.id);
+    if(error){ console.error('hideConversation error:', error); logErrorToServer('hideConversation: ' + error.message, null); hToast('⚠️ تعذر إخفاء المحادثة'); return; }
+    window._hiddenConvs = hiddenList;
+    hToast('✓ '+t('convHidden'));
+    loadConversations();
+  } catch(e){
+    console.error('hideConversation error:', e);
+    logErrorToServer('hideConversation: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
+  }
 };
 
 window.openDetailMenu = function(event){
@@ -3162,7 +3204,7 @@ window.openDetailMenu = function(event){
   var rect = event.currentTarget.getBoundingClientRect();
   menu.style.top = (rect.bottom + 4) + 'px';
   menu.style.left = Math.max(8, rect.right - 180) + 'px';
-  menu.innerHTML = '<div style="padding:12px 16px;font-size:.84rem;color:#ef4444;cursor:pointer;font-weight:600" onclick="document.getElementById(\'detailMenuPopup\').remove();openReportModal();">🚩 تبليغ عن هذا الطلب</div>';
+  menu.innerHTML = '<div style="padding:12px 16px;font-size:.84rem;color:#ef4444;cursor:pointer;font-weight:600" onclick="event.stopPropagation();document.getElementById(\'detailMenuPopup\').remove();openReportModal();">🚩 تبليغ عن هذا الطلب</div>';
   document.body.appendChild(menu);
   setTimeout(function(){
     document.addEventListener('click', function closeMenu(){
@@ -3170,7 +3212,7 @@ window.openDetailMenu = function(event){
       if(m) m.remove();
       document.removeEventListener('click', closeMenu);
     });
-  }, 0);
+  }, 150);
 };
 
 window.openReportModal = async function(){
@@ -3187,14 +3229,21 @@ window.submitReport = async function(){
   if(!requestId){ hToast('⚠️ تعذر تحديد الطلب'); return; }
   var user = await sbGetUser();
   if(!user){ hToast('⚠️ يجب تسجيل الدخول للتبليغ'); document.getElementById('reportModal').classList.remove('open'); openAuth('login'); return; }
-  var {error} = await sb.from('reports').insert({
-    request_id: requestId,
-    reporter_id: user.id,
-    reason: reason.value
-  });
-  document.getElementById('reportModal').classList.remove('open');
-  if(error){ hToast('⚠️ تعذر إرسال البلاغ'); return; }
-  hToast('✓ تم استلام بلاغك، شكراً لك');
+  try{
+    var {error} = await sb.from('reports').insert({
+      request_id: requestId,
+      reporter_id: user.id,
+      reason: reason.value
+    });
+    document.getElementById('reportModal').classList.remove('open');
+    if(error){ console.error('submitReport error:', error); logErrorToServer('submitReport: ' + error.message, null); hToast('⚠️ تعذر إرسال البلاغ'); return; }
+    hToast('✓ تم استلام بلاغك، شكراً لك');
+  } catch(e){
+    console.error('submitReport error:', e);
+    logErrorToServer('submitReport: ' + (e && e.message), e && e.stack);
+    document.getElementById('reportModal').classList.remove('open');
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
+  }
 };
 
 window.openConvMenu = function(event, otherUserId, otherName){
@@ -3222,30 +3271,56 @@ window.openConvMenu = function(event, otherUserId, otherName){
 window.blockUser = async function(otherUserId){
   var user = await sbGetUser();
   if(!user) return;
-  var {error} = await sb.from('blocks').insert({blocker_id:user.id, blocked_id:otherUserId});
-  if(error && error.code !== '23505'){ hToast('⚠️ حدث خطأ'); return; } // 23505 = unique violation (محظور مسبقاً)
-  // إخفاء المحادثة تلقائياً أيضاً بعد الحظر
-  var hiddenList = window._hiddenConvs || [];
-  if(hiddenList.indexOf(otherUserId) === -1) hiddenList.push(otherUserId);
-  await sb.from('profiles').update({hidden_conversations: hiddenList}).eq('id', user.id);
-  window._hiddenConvs = hiddenList;
-  hToast('🚫 '+t('userBlockedToast'));
-  loadConversations();
+  try{
+    var {error} = await sb.from('blocks').insert({blocker_id:user.id, blocked_id:otherUserId});
+    if(error && error.code !== '23505'){ console.error('blockUser error:', error); logErrorToServer('blockUser: ' + error.message, null); hToast('⚠️ حدث خطأ'); return; } // 23505 = unique violation (محظور مسبقاً)
+    // إخفاء المحادثة تلقائياً أيضاً بعد الحظر
+    var hiddenList = window._hiddenConvs || [];
+    if(hiddenList.indexOf(otherUserId) === -1) hiddenList.push(otherUserId);
+    var {error:hideErr} = await sb.from('profiles').update({hidden_conversations: hiddenList}).eq('id', user.id);
+    if(hideErr){ console.error('blockUser hide error:', hideErr); logErrorToServer('blockUser hide: ' + hideErr.message, null); }
+    window._hiddenConvs = hiddenList;
+    hToast('🚫 '+t('userBlockedToast'));
+    loadConversations();
+  } catch(e){
+    console.error('blockUser error:', e);
+    logErrorToServer('blockUser: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
+  }
 };
 
 window.unblockUser = async function(otherUserId){
   var user = await sbGetUser();
   if(!user) return;
-  await sb.from('blocks').delete().eq('blocker_id',user.id).eq('blocked_id',otherUserId);
-  hToast('✓ '+t('userUnblockedToast'));
+  try{
+    var {error} = await sb.from('blocks').delete().eq('blocker_id',user.id).eq('blocked_id',otherUserId);
+    if(error){ console.error('unblockUser error:', error); logErrorToServer('unblockUser: ' + error.message, null); hToast('⚠️ تعذر إلغاء الحظر'); return; }
+    hToast('✓ '+t('userUnblockedToast'));
+  } catch(e){
+    console.error('unblockUser error:', e);
+    logErrorToServer('unblockUser: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
+  }
 };
 
 // فحص إن كان فيه حظر متبادل بين المستخدم الحالي وشخص آخر (بأي اتجاه)
+// مهم: في حالة فشل الاستعلام، نرجّع true (الأكثر أماناً) بدل false، لتجنب السماح بالتواصل بين محظورين بسبب خطأ مؤقت
 async function isBlockedEitherWay(myId, otherId){
-  var {data} = await sb.from('blocks').select('id')
-    .or('and(blocker_id.eq.'+myId+',blocked_id.eq.'+otherId+'),and(blocker_id.eq.'+otherId+',blocked_id.eq.'+myId+')')
-    .limit(1);
-  return data && data.length > 0;
+  try{
+    var {data, error} = await sb.from('blocks').select('id')
+      .or('and(blocker_id.eq.'+myId+',blocked_id.eq.'+otherId+'),and(blocker_id.eq.'+otherId+',blocked_id.eq.'+myId+')')
+      .limit(1);
+    if(error){
+      console.error('isBlockedEitherWay error:', error);
+      logErrorToServer('isBlockedEitherWay: ' + error.message, null);
+      return true; // الأمان أولاً: نمنع التواصل عند الشك بدل السماح به
+    }
+    return data && data.length > 0;
+  } catch(e){
+    console.error('isBlockedEitherWay error:', e);
+    logErrorToServer('isBlockedEitherWay: ' + (e && e.message), e && e.stack);
+    return true;
+  }
 }
 
 function renderConvList(list, myId){
@@ -3288,70 +3363,86 @@ window.openChatWith = async function(uid, name, grad, letter){
   document.getElementById('mNavBack').onclick=function(){ msgsBack(); };
   document.getElementById('chIn').value='';
   var user=await sbGetUser();
+  if(!user){ openAuth('login'); return; }
 
-  // فحص الحظر قبل عرض المحادثة
-  var blocked = await isBlockedEitherWay(user.id, uid);
-  var inputArea = document.querySelector('.ch-input-area');
-  if(blocked){
-    if(inputArea) inputArea.style.display='none';
-    document.getElementById('chBody').innerHTML='<div style="text-align:center;padding:40px 20px;color:#9ca3af;font-size:.86rem">🚫 '+t('cannotMessageBlocked')+'</div>';
-    return;
-  } else {
-    if(inputArea) inputArea.style.display='flex';
-  }
-
-  var {data}=await sb.from('messages')
-    .select('*')
-    .or('and(sender_id.eq.'+user.id+',receiver_id.eq.'+uid+'),and(sender_id.eq.'+uid+',receiver_id.eq.'+user.id+')')
-    .order('created_at',{ascending:true});
-  var body=document.getElementById('chBody');
-  body.innerHTML='<div class="day-lbl">المحادثة</div>';
-  (data||[]).forEach(function(m){
-    var isMe=m.sender_id===user.id;
-    var d=document.createElement('div');
-    d.className='bbl '+(isMe?'me':'them');
-    var checkmark=isMe?' <span style="color:#93c5fd">✓✓</span>':'';
-    if(m.attachment_url){
-      if(m.attachment_type==='image'){
-        d.innerHTML='<div class="bbl-txt"><img src="'+m.attachment_url+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="openImagePreview(\''+m.attachment_url+'\')"></div><div class="bbl-meta">'+timeAgo(m.created_at)+checkmark+'</div>';
-      } else {
-        d.innerHTML='<div class="bbl-txt"><a href="'+m.attachment_url+'" target="_blank" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:8px"><span style="font-size:1.4rem">📄</span><span style="font-size:.82rem;word-break:break-all">'+escH(m.attachment_name||'ملف')+'</span></a></div><div class="bbl-meta">'+timeAgo(m.created_at)+checkmark+'</div>';
-      }
+  try{
+    // فحص الحظر قبل عرض المحادثة
+    var blocked = await isBlockedEitherWay(user.id, uid);
+    var inputArea = document.querySelector('.ch-input-area');
+    if(blocked){
+      if(inputArea) inputArea.style.display='none';
+      document.getElementById('chBody').innerHTML='<div style="text-align:center;padding:40px 20px;color:#9ca3af;font-size:.86rem">🚫 '+t('cannotMessageBlocked')+'</div>';
+      return;
     } else {
-      d.innerHTML='<div class="bbl-txt">'+escH(m.content)+'</div><div class="bbl-meta">'+timeAgo(m.created_at)+checkmark+'</div>';
+      if(inputArea) inputArea.style.display='flex';
     }
-    body.appendChild(d);
-  });
-  body.scrollTop=body.scrollHeight;
-  await sb.from('messages').update({is_read:true}).eq('sender_id',uid).eq('receiver_id',user.id);
 
-  // تفعيل استقبال الرسائل الفورية لهذي المحادثة بالتحديد
-  activeChatChannel = sb.channel('chatwith_'+user.id+'_'+uid)
-    .on('postgres_changes', {
-      event:'INSERT', schema:'public', table:'messages',
-      filter:'receiver_id=eq.'+user.id
-    }, function(payload){
-      var m = payload.new;
-      if(m.sender_id !== uid) return; // فقط رسائل نفس الشخص المفتوحة معه المحادثة الآن
-      var bodyEl = document.getElementById('chBody');
-      if(!bodyEl) return;
+    var {data, error:fetchErr}=await sb.from('messages')
+      .select('*')
+      .or('and(sender_id.eq.'+user.id+',receiver_id.eq.'+uid+'),and(sender_id.eq.'+uid+',receiver_id.eq.'+user.id+')')
+      .order('created_at',{ascending:true});
+    if(fetchErr){ console.error('openChatWith fetch error:', fetchErr); logErrorToServer('openChatWith fetch: ' + fetchErr.message, null); hToast('⚠️ تعذر تحميل المحادثة'); return; }
+    var body=document.getElementById('chBody');
+    body.innerHTML='<div class="day-lbl">المحادثة</div>';
+    (data||[]).forEach(function(m){
+      var isMe=m.sender_id===user.id;
       var d=document.createElement('div');
-      d.className='bbl them';
+      d.className='bbl '+(isMe?'me':'them');
+      var checkmark=isMe?' <span style="color:#93c5fd">✓✓</span>':'';
       if(m.attachment_url){
         if(m.attachment_type==='image'){
-          d.innerHTML='<div class="bbl-txt"><img src="'+m.attachment_url+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="openImagePreview(\''+m.attachment_url+'\')"></div><div class="bbl-meta">'+timeAgo(m.created_at)+'</div>';
+          d.innerHTML='<div class="bbl-txt"><img src="'+m.attachment_url+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="openImagePreview(\''+m.attachment_url+'\')"></div><div class="bbl-meta">'+timeAgo(m.created_at)+checkmark+'</div>';
         } else {
-          d.innerHTML='<div class="bbl-txt"><a href="'+m.attachment_url+'" target="_blank" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:8px"><span style="font-size:1.4rem">📄</span><span style="font-size:.82rem;word-break:break-all">'+escH(m.attachment_name||'ملف')+'</span></a></div><div class="bbl-meta">'+timeAgo(m.created_at)+'</div>';
+          d.innerHTML='<div class="bbl-txt"><a href="'+m.attachment_url+'" target="_blank" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:8px"><span style="font-size:1.4rem">📄</span><span style="font-size:.82rem;word-break:break-all">'+escH(m.attachment_name||'ملف')+'</span></a></div><div class="bbl-meta">'+timeAgo(m.created_at)+checkmark+'</div>';
         }
       } else {
-        d.innerHTML='<div class="bbl-txt">'+escH(m.content)+'</div><div class="bbl-meta">'+timeAgo(m.created_at)+'</div>';
+        d.innerHTML='<div class="bbl-txt">'+escH(m.content)+'</div><div class="bbl-meta">'+timeAgo(m.created_at)+checkmark+'</div>';
       }
-      bodyEl.appendChild(d);
-      bodyEl.scrollTop = bodyEl.scrollHeight;
-      // تعليم الرسالة كمقروءة فوراً بما إن المحادثة مفتوحة حالياً
-      sb.from('messages').update({is_read:true}).eq('id', m.id);
-    })
-    .subscribe();
+      body.appendChild(d);
+    });
+    body.scrollTop=body.scrollHeight;
+    var {error:readErr} = await sb.from('messages').update({is_read:true}).eq('sender_id',uid).eq('receiver_id',user.id);
+    if(readErr){ console.error('openChatWith mark-read error:', readErr); logErrorToServer('openChatWith mark-read: ' + readErr.message, null); }
+
+    // تفعيل استقبال الرسائل الفورية لهذي المحادثة بالتحديد
+    activeChatChannel = sb.channel('chatwith_'+user.id+'_'+uid)
+      .on('postgres_changes', {
+        event:'INSERT', schema:'public', table:'messages',
+        filter:'receiver_id=eq.'+user.id
+      }, function(payload){
+        try{
+          var m = payload.new;
+          if(m.sender_id !== uid) return; // فقط رسائل نفس الشخص المفتوحة معه المحادثة الآن
+          var bodyEl = document.getElementById('chBody');
+          if(!bodyEl) return;
+          var d=document.createElement('div');
+          d.className='bbl them';
+          if(m.attachment_url){
+            if(m.attachment_type==='image'){
+              d.innerHTML='<div class="bbl-txt"><img src="'+m.attachment_url+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="openImagePreview(\''+m.attachment_url+'\')"></div><div class="bbl-meta">'+timeAgo(m.created_at)+'</div>';
+            } else {
+              d.innerHTML='<div class="bbl-txt"><a href="'+m.attachment_url+'" target="_blank" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:8px"><span style="font-size:1.4rem">📄</span><span style="font-size:.82rem;word-break:break-all">'+escH(m.attachment_name||'ملف')+'</span></a></div><div class="bbl-meta">'+timeAgo(m.created_at)+'</div>';
+            }
+          } else {
+            d.innerHTML='<div class="bbl-txt">'+escH(m.content)+'</div><div class="bbl-meta">'+timeAgo(m.created_at)+'</div>';
+          }
+          bodyEl.appendChild(d);
+          bodyEl.scrollTop = bodyEl.scrollHeight;
+          // تعليم الرسالة كمقروءة فوراً بما إن المحادثة مفتوحة حالياً
+          sb.from('messages').update({is_read:true}).eq('id', m.id).then(function(res){
+            if(res && res.error){ logErrorToServer('realtime mark-read: ' + res.error.message, null); }
+          });
+        } catch(rtErr){
+          console.error('openChatWith realtime handler error:', rtErr);
+          logErrorToServer('openChatWith realtime: ' + (rtErr && rtErr.message), rtErr && rtErr.stack);
+        }
+      })
+      .subscribe();
+  } catch(e){
+    console.error('openChatWith error:', e);
+    logErrorToServer('openChatWith: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ أثناء فتح المحادثة');
+  }
 };
 
 window.handleChatFileSelect = async function(input){
@@ -3365,38 +3456,46 @@ window.handleChatFileSelect = async function(input){
   var user = await sbGetUser();
   if(!user){ openAuth('login'); input.value=''; return; }
 
-  hToast('⏳ جاري رفع الملف...');
+  try{
+    hToast('⏳ جاري رفع الملف...');
 
-  var ext = file.name.split('.').pop();
-  var fileName = user.id + '_' + Date.now() + '.' + ext;
-  var filePath = fileName;
+    var ext = file.name.split('.').pop();
+    var fileName = user.id + '_' + Date.now() + '.' + ext;
+    var filePath = fileName;
 
-  var {data:uploadData, error:uploadError} = await sb.storage.from('chat-attachments').upload(filePath, file);
-  if(uploadError){ hToast('❌ فشل رفع الملف'); input.value=''; return; }
+    var {data:uploadData, error:uploadError} = await sb.storage.from('chat-attachments').upload(filePath, file);
+    if(uploadError){ hToast('❌ فشل رفع الملف'); input.value=''; return; }
 
-  var {data:urlData} = sb.storage.from('chat-attachments').getPublicUrl(filePath);
-  var fileUrl = urlData.publicUrl;
-  var isImage = file.type.startsWith('image/');
+    var {data:urlData} = sb.storage.from('chat-attachments').getPublicUrl(filePath);
+    var fileUrl = urlData.publicUrl;
+    var isImage = file.type.startsWith('image/');
 
-  var {error:msgError} = await sb.from('messages').insert({
-    sender_id:user.id, receiver_id:currentReceiverId, content:'',
-    attachment_url:fileUrl, attachment_type:isImage?'image':'file', attachment_name:file.name
-  });
-  if(msgError){ hToast('❌ فشل إرسال الملف'); input.value=''; return; }
+    var {error:msgError} = await sb.from('messages').insert({
+      sender_id:user.id, receiver_id:currentReceiverId, content:'',
+      attachment_url:fileUrl, attachment_type:isImage?'image':'file', attachment_name:file.name
+    });
+    if(msgError){ hToast('❌ فشل إرسال الملف'); input.value=''; return; }
 
-  var body=document.getElementById('chBody');
-  var now=new Date(); var time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
-  var d=document.createElement('div'); d.className='bbl me';
-  if(isImage){
-    d.innerHTML='<div class="bbl-txt"><img src="'+fileUrl+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="openImagePreview(\''+fileUrl+'\')"></div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
-  } else {
-    d.innerHTML='<div class="bbl-txt"><a href="'+fileUrl+'" target="_blank" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:8px"><span style="font-size:1.4rem">📄</span><span style="font-size:.82rem;word-break:break-all">'+escH(file.name)+'</span></a></div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
+    var body=document.getElementById('chBody');
+    var now=new Date(); var time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+    var d=document.createElement('div'); d.className='bbl me';
+    if(isImage){
+      d.innerHTML='<div class="bbl-txt"><img src="'+fileUrl+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="openImagePreview(\''+fileUrl+'\')"></div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
+    } else {
+      d.innerHTML='<div class="bbl-txt"><a href="'+fileUrl+'" target="_blank" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:8px"><span style="font-size:1.4rem">📄</span><span style="font-size:.82rem;word-break:break-all">'+escH(file.name)+'</span></a></div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
+    }
+    body.appendChild(d); body.scrollTop=body.scrollHeight;
+    hToast('✓ تم إرسال الملف');
+    input.value='';
+
+    var {error:notifErr5} = await sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص ملفاً',is_read:false});
+    if(notifErr5){ console.error('handleChatFileSelect notification error:', notifErr5); logErrorToServer('handleChatFileSelect notification: ' + notifErr5.message, null); }
+  } catch(e){
+    console.error('handleChatFileSelect error:', e);
+    logErrorToServer('handleChatFileSelect: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ أثناء رفع الملف');
+    input.value='';
   }
-  body.appendChild(d); body.scrollTop=body.scrollHeight;
-  hToast('✓ تم إرسال الملف');
-  input.value='';
-
-  sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص ملفاً',is_read:false});
 };
 
 window.sendChatMsg = async function(){
@@ -3404,16 +3503,25 @@ window.sendChatMsg = async function(){
   var txt=inp.value.trim();
   if(!txt||!currentReceiverId) return;
   var user=await sbGetUser();
-  if(await isBlockedEitherWay(user.id, currentReceiverId)){ hToast('🚫 '+t('cannotMessageBlocked')); return; }
-  inp.value=''; inp.style.height='auto';
-  var {error}=await sb.from('messages').insert({sender_id:user.id,receiver_id:currentReceiverId,content:txt});
-  if(error){ hToast('❌ فشل الإرسال'); return; }
-  var body=document.getElementById('chBody');
-  var now=new Date(); var time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
-  var d=document.createElement('div'); d.className='bbl me';
-  d.innerHTML='<div class="bbl-txt">'+escH(txt)+'</div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
-  body.appendChild(d); body.scrollTop=body.scrollHeight;
-  sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص رسالة جديدة',is_read:false});
+  if(!user){ openAuth('login'); return; }
+  try{
+    if(await isBlockedEitherWay(user.id, currentReceiverId)){ hToast('🚫 '+t('cannotMessageBlocked')); return; }
+    inp.value=''; inp.style.height='auto';
+    var {error}=await sb.from('messages').insert({sender_id:user.id,receiver_id:currentReceiverId,content:txt});
+    if(error){ hToast('❌ فشل الإرسال'); inp.value=txt; return; }
+    var body=document.getElementById('chBody');
+    var now=new Date(); var time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+    var d=document.createElement('div'); d.className='bbl me';
+    d.innerHTML='<div class="bbl-txt">'+escH(txt)+'</div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
+    body.appendChild(d); body.scrollTop=body.scrollHeight;
+    var {error:notifErr6} = await sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص رسالة جديدة',is_read:false});
+    if(notifErr6){ console.error('sendChatMsg notification error:', notifErr6); logErrorToServer('sendChatMsg notification: ' + notifErr6.message, null); }
+  } catch(e){
+    console.error('sendChatMsg error:', e);
+    logErrorToServer('sendChatMsg: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ أثناء الإرسال');
+    inp.value = txt;
+  }
 };
 
 window.msgsBack = function(){
@@ -3440,15 +3548,36 @@ document.getElementById('si-msgs').onclick=function(){ if(!state.loggedIn){openA
 var currentNTab='all', NOTIFS_DATA=[];
 
 async function loadNotifications(){
-  var user=await sbGetUser(); if(!user) return;
-  var {data}=await sb.from('notifications').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(50);
-  NOTIFS_DATA=data||[];
-  renderNotifs('all'); updateNotifBadge(); updateMsgsBadge();
+  var user=await sbGetUser();
+  if(!user) return;
+  try{
+    var {data, error} = await sb.from('notifications').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(50);
+    if(error){
+      console.error('loadNotifications error:', error);
+      logErrorToServer('loadNotifications: ' + error.message, null);
+      hToast('⚠️ تعذر تحميل الإشعارات، حاول مرة أخرى');
+      return;
+    }
+    NOTIFS_DATA=data||[];
+    renderNotifs('all'); updateNotifBadge(); updateMsgsBadge();
+  } catch(e){
+    console.error('loadNotifications error:', e);
+    logErrorToServer('loadNotifications: ' + (e && e.message), e && e.stack);
+    hToast('⚠️ تعذر تحميل الإشعارات، حاول مرة أخرى');
+  }
 }
 
 function renderNotifs(tab){
   currentNTab=tab;
-  var list=tab==='all'?NOTIFS_DATA:NOTIFS_DATA.filter(function(n){return n.type===tab;});
+  var list;
+  if(tab==='all'){
+    list = NOTIFS_DATA;
+  } else if(tab==='offer'){
+    // تجميع كل الأنواع المتعلقة بالعروض تحت نفس التاب
+    list = NOTIFS_DATA.filter(function(n){ return n.type==='offer' || n.type==='category_alert' || n.type==='offer_accepted'; });
+  } else {
+    list = NOTIFS_DATA.filter(function(n){return n.type===tab;});
+  }
   var el=document.getElementById('nList');
   if(!list.length){ el.innerHTML='<div class="n-empty"><div class="n-empty-icon">🔔</div><div>'+t('noNotifsYet')+'</div></div>'; return; }
   var today=list.filter(function(n){return (Date.now()-new Date(n.created_at))<86400000;});
@@ -3460,26 +3589,89 @@ function renderNotifs(tab){
 }
 
 function makeNotif(n){
-  var icons={offer:'💼',msgs:'💬',system:'🔔',review:'⭐'};
-  var bgs={offer:'var(--glow)',msgs:'rgba(0,212,160,.1)',system:'var(--s2)',review:'rgba(251,191,36,.1)'};
+  var icons={offer:'💼',msgs:'💬',system:'🔔',review:'⭐',category_alert:'🔔',offer_accepted:'🎉'};
+  var bgs={offer:'var(--glow)',msgs:'rgba(0,212,160,.1)',system:'var(--s2)',review:'rgba(251,191,36,.1)',category_alert:'rgba(0,102,255,.1)',offer_accepted:'rgba(34,197,94,.1)'};
+  var safeText = escH(n.body||n.title||'');
   return '<div class="n-item'+(n.is_read?'':' unread')+'" id="nitem'+n.id+'" onclick="readNotif('+n.id+')">'
     +'<div class="n-icon-wrap" style="background:'+(bgs[n.type]||'#f4f6fb')+'">'+(icons[n.type]||'🔔')+'</div>'
-    +'<div class="n-body"><div class="n-text">'+(n.body||n.title)+'</div><div class="n-time">'+timeAgo(n.created_at)+'</div></div>'
+    +'<div class="n-body"><div class="n-text">'+safeText+'</div><div class="n-time">'+timeAgo(n.created_at)+'</div></div>'
     +'</div>';
 }
 
 window.readNotif=async function(id){
-  await sb.from('notifications').update({is_read:true}).eq('id',id);
-  var n=NOTIFS_DATA.find(function(x){return x.id===id;}); if(n) n.is_read=true;
-  var el=document.getElementById('nitem'+id); if(el) el.classList.remove('unread');
-  updateNotifBadge();
+  try{
+    await sb.from('notifications').update({is_read:true}).eq('id',id);
+    var n=NOTIFS_DATA.find(function(x){return x.id===id;});
+    if(n) n.is_read=true;
+    var el=document.getElementById('nitem'+id);
+    if(el) el.classList.remove('unread');
+    updateNotifBadge();
+
+    if(!n || !n.related_id) return;
+
+    // التوجيه الصحيح حسب نوع الإشعار
+    if(n.type==='offer' || n.type==='category_alert'){
+      // related_id هنا هو معرّف الطلب نفسه
+      await openDetailById(n.related_id);
+    } else if(n.type==='offer_accepted'){
+      // related_id هنا هو معرّف العرض — نحتاج جلب الطلب المرتبط به أولاً
+      var {data:offerRow} = await sb.from('offers').select('request_id').eq('id', n.related_id).single();
+      if(offerRow && offerRow.request_id){
+        await openDetailById(offerRow.request_id);
+      }
+    } else if(n.type==='msgs'){
+      var msgBtn = document.getElementById('si-msgs');
+      if(msgBtn) msgBtn.click();
+    } else if(n.type==='review'){
+      // related_id هنا هو معرّف الشخص الذي أرسل التقييم
+      openUserProfile(n.related_id);
+    }
+  } catch(e){
+    console.error('readNotif error:', e);
+    logErrorToServer('readNotif: ' + (e && e.message), e && e.stack);
+  }
 };
+
+// ====== فتح صفحة طلب من معرّفه، حتى لو لم يكن محمَّلاً مسبقاً في الفيد (نفس منطق الروابط المشتركة) ======
+async function openDetailById(requestId){
+  var existing = reqs.find(function(x){ return String(x.id)===String(requestId); });
+  if(existing){
+    openDetail(existing.id);
+    return;
+  }
+  try{
+    var {data, error} = await sb.from('requests').select('*, profiles(full_name,username,avatar_color,avatar_letter)').eq('id', requestId).single();
+    if(error || !data){
+      hToast('⚠️ الطلب غير موجود أو تم حذفه');
+      return;
+    }
+    var mapped = mapRequestRow(data);
+    reqs.push(mapped);
+    openDetail(mapped.id);
+  } catch(e){
+    console.error('openDetailById error:', e);
+    logErrorToServer('openDetailById: ' + (e && e.message), e && e.stack);
+    hToast('❌ تعذر فتح الطلب');
+  }
+}
 
 window.markAllRead=async function(){
   var user=await sbGetUser(); if(!user) return;
-  await sb.from('notifications').update({is_read:true}).eq('user_id',user.id);
-  NOTIFS_DATA.forEach(function(n){n.is_read=true;});
-  renderNotifs(currentNTab); updateNotifBadge(); hToast('✓ تم تحديد الكل كمقروء');
+  try{
+    var {error} = await sb.from('notifications').update({is_read:true}).eq('user_id',user.id);
+    if(error){
+      console.error('markAllRead error:', error);
+      logErrorToServer('markAllRead: ' + error.message, null);
+      hToast('⚠️ تعذر تحديد الإشعارات كمقروءة');
+      return;
+    }
+    NOTIFS_DATA.forEach(function(n){n.is_read=true;});
+    renderNotifs(currentNTab); updateNotifBadge(); hToast('✓ تم تحديد الكل كمقروء');
+  } catch(e){
+    console.error('markAllRead error:', e);
+    logErrorToServer('markAllRead: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
+  }
 };
 
 window.switchNTab=function(el,tab){
@@ -3499,9 +3691,15 @@ function updateNotifBadge(){
 async function updateMsgsBadge(){
   var user=await sbGetUser();
   if(!user)return;
-  var {count}=await sb.from('messages').select('id',{count:'exact',head:true}).eq('receiver_id',user.id).eq('is_read',false);
-  var mb=document.getElementById('msgsBadge');
-  if(mb){mb.textContent=count>9?'9+':count||'';mb.style.display=count?'inline-block':'none';}
+  try{
+    var {count, error} = await sb.from('messages').select('id',{count:'exact',head:true}).eq('receiver_id',user.id).eq('is_read',false);
+    if(error){ console.error('updateMsgsBadge error:', error); logErrorToServer('updateMsgsBadge: ' + error.message, null); return; }
+    var mb=document.getElementById('msgsBadge');
+    if(mb){mb.textContent=count>9?'9+':count||'';mb.style.display=count?'inline-block':'none';}
+  } catch(e){
+    console.error('updateMsgsBadge error:', e);
+    logErrorToServer('updateMsgsBadge: ' + (e && e.message), e && e.stack);
+  }
 }
 
 // offer-contact-btn handler defined above
@@ -3523,7 +3721,7 @@ window.openUserProfile = async function(userId){
   var avEl = document.querySelector('#profile .p-av');
   if(avEl){ avEl.textContent = letter; avEl.style.background = p.avatar_color||'linear-gradient(135deg,#2563a8,#4a9fd4)'; }
   var nameEl = document.querySelector('#profile .profile-name');
-  if(nameEl) nameEl.innerHTML = (p.full_name||'مستخدم') + ' <span class="p-verified">✓</span>';
+  if(nameEl) nameEl.innerHTML = escH(p.full_name||'مستخدم') + ' <span class="p-verified">✓</span>';
   var handleEl = document.getElementById('profileHandle');
   if(handleEl) handleEl.textContent = '@' + (p.username||'user');
   var ratingEl = document.getElementById('profileRating');
@@ -3643,7 +3841,8 @@ async function sbCreateOffer(requestId, text, price, duration, phone) {
   if (error) return { error };
   // حفظ رقم الجوال (اختياري) بجدول منفصل محمي بـ RLS — يراه صاحب الطلب فقط
   if (phone && data && data.id) {
-    await sb.from('offer_contacts').insert({ offer_id: data.id, phone: phone });
+    var {error:phoneErr} = await sb.from('offer_contacts').insert({ offer_id: data.id, phone: phone });
+    if(phoneErr){ console.error('sbCreateOffer phone insert error:', phoneErr); logErrorToServer('sbCreateOffer phone: ' + phoneErr.message, null); }
   }
   return { data, error };
 }
