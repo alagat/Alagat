@@ -468,8 +468,33 @@ document.addEventListener('DOMContentLoaded', function(){
 
 window.onerror = function(msg, url, line, col, error){
   alert('⚠️ خطأ في الكود:\n' + msg + '\nسطر: ' + line);
+  logErrorToServer(msg, error && error.stack);
   return false;
 };
+
+// ====== تسجيل الأخطاء في قاعدة البيانات (لمراجعتها من لوحة التحكم) ======
+// نستخدم fetch مباشرة (بدل عميل supabase-js) لأن هذا الكود قد يُستدعى قبل تجهيز sb
+function logErrorToServer(message, stack){
+  try{
+    var SUPABASE_URL = 'https://ohkgmzwpzijxcttqytrq.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oa2dtendwemlqeGN0dHF5dHJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNzA1ODgsImV4cCI6MjA5Njc0NjU4OH0.Qx2paUh-d7LTTHFSljt7cnoenOdzOdcno9PGobtRb_g';
+    fetch(SUPABASE_URL + '/rest/v1/error_logs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify({
+        message: String(message||'').slice(0, 2000),
+        stack: String(stack||'').slice(0, 4000),
+        page_url: window.location.href,
+        user_agent: navigator.userAgent
+      })
+    }).catch(function(){}); // تجاهل أي فشل بصمت، لا نريد أن يكسر تسجيل الخطأ نفسه الموقع
+  } catch(e){ /* تجاهل بصمت */ }
+}
+
 </script>
 </head>
 <body>
@@ -575,6 +600,7 @@ window.onerror = function(msg, url, line, col, error){
       <button class="fc" data-cat="تعليم">📚 تعليم</button>
       <button class="fc" data-cat="أخرى">أخرى</button>
       <span class="result-count" id="resultCount"></span>
+      <button id="catAlertBtn" style="display:none;background:var(--s2);border:1px solid var(--b);color:var(--t2);border-radius:20px;padding:5px 12px;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;margin-right:8px;white-space:nowrap" onclick="toggleCategoryAlert()">🔔 نبّهني بهذي الفئة</button>
     </div>
     <div id="feedContent"></div>
   </main>
@@ -782,7 +808,7 @@ window.onerror = function(msg, url, line, col, error){
   <div class="p-av-wrap"><div class="p-av">م</div><div class="p-av-dot"></div></div>
   <div class="profile-actions-row">
     <div class="top-actions" id="topActionsOther" style="display:none">
-      <button onclick="openPModal('ratingModal')" data-i18n="ratingAction">★ تقييم</button>
+      <button onclick="openRatingModalChecked()" data-i18n="ratingAction">★ تقييم</button>
       <button onclick="openPModal('shareModal')" data-i18n="shareAction">⤴ مشاركة</button>
     </div>
     <div class="top-actions" id="topActionsOwn" style="display:none">
@@ -1164,7 +1190,15 @@ function populateProfileFromDB(p){
   var handleEl=document.querySelector('#profile .profile-handle');
   if(handleEl) handleEl.textContent='@'+(p.username||'user');
   var lastEl=document.querySelector('#profile .profile-lastseen');
-  if(lastEl) lastEl.textContent='نشط '+timeAgo(p.last_seen||p.created_at);
+  if(lastEl){
+    var lastSeenDate = p.last_seen || p.created_at;
+    var minutesAgo = (Date.now() - new Date(lastSeenDate).getTime()) / 60000;
+    if(minutesAgo <= 5){
+      lastEl.innerHTML = '<span style="color:#22c55e;font-weight:700">🟢 متصل الآن</span>';
+    } else {
+      lastEl.textContent = 'نشط ' + timeAgo(lastSeenDate);
+    }
+  }
   // الإحصائيات الحقيقية
   var ratingEl=document.getElementById('profileRating');
   if(ratingEl) ratingEl.textContent=(p.rating||'0.0')+' ⭐';
@@ -1215,26 +1249,32 @@ document.getElementById('saveProfileBtn').onclick = async function(){
   var currentUser = await sbGetUser();
   if(!currentUser){ hToast('⚠️ يجب تسجيل الدخول'); return; }
 
-  var oldUsername = (window._currentProfileData && window._currentProfileData.username) || '';
-  if(username !== oldUsername){
-    hToast('جاري التحقق من اسم المستخدم...');
-    var taken = await sbCheckUsernameTaken(username);
-    if(taken){ hToast('❌ اسم المستخدم هذا محجوز، جرّب اسماً آخر'); return; }
+  try{
+    var oldUsername = (window._currentProfileData && window._currentProfileData.username) || '';
+    if(username !== oldUsername){
+      hToast('جاري التحقق من اسم المستخدم...');
+      var taken = await sbCheckUsernameTaken(username);
+      if(taken){ hToast('❌ اسم المستخدم هذا محجوز، جرّب اسماً آخر'); return; }
+    }
+
+    hToast('جاري حفظ التغييرات...');
+    var { error } = await sb.from('profiles').update({
+      full_name: fullName, username: username, avatar_color: avatarColor
+    }).eq('id', currentUser.id);
+
+    if(error){ hToast('❌ ' + error.message); return; }
+
+    window._currentProfileData = Object.assign({}, window._currentProfileData, {
+      full_name: fullName, username: username, avatar_color: avatarColor
+    });
+    populateProfileFromDB(window._currentProfileData);
+    closePModal('editProfileModal');
+    hToast('✓ تم حفظ التغييرات بنجاح');
+  } catch(e){
+    console.error('saveProfileBtn error:', e);
+    logErrorToServer('saveProfileBtn: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ أثناء الحفظ، حاول مرة أخرى');
   }
-
-  hToast('جاري حفظ التغييرات...');
-  var { error } = await sb.from('profiles').update({
-    full_name: fullName, username: username, avatar_color: avatarColor
-  }).eq('id', currentUser.id);
-
-  if(error){ hToast('❌ ' + error.message); return; }
-
-  window._currentProfileData = Object.assign({}, window._currentProfileData, {
-    full_name: fullName, username: username, avatar_color: avatarColor
-  });
-  populateProfileFromDB(window._currentProfileData);
-  closePModal('editProfileModal');
-  hToast('✓ تم حفظ التغييرات بنجاح');
 };
 
 function populateProfile(r){
@@ -1316,6 +1356,70 @@ function makeFooter(){
   + '</div>';
 }
 function timeAgo(d){var s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'الآن';if(s<3600)return'منذ '+Math.floor(s/60)+' دقيقة';if(s<86400)return'منذ '+Math.floor(s/3600)+' ساعة';return'منذ '+Math.floor(s/86400)+' يوم';}
+function isProviderOnline(lastSeen){
+  if(!lastSeen) return false;
+  var minutesAgo = (Date.now() - new Date(lastSeen).getTime()) / 60000;
+  return minutesAgo <= 5;
+}
+
+// ====== تنبيهات الفئة: المستخدم يحفظ فئة، ويصله إشعار عند نشر طلب جديد بها ======
+var myCategoryAlerts = []; // قائمة الفئات التي اشترك المستخدم بتنبيهاتها (تُحمَّل بعد تسجيل الدخول)
+
+async function loadMyCategoryAlerts(){
+  var user = await sbGetUser();
+  if(!user) return;
+  try{
+    var {data} = await sb.from('category_alerts').select('category').eq('user_id', user.id);
+    myCategoryAlerts = (data||[]).map(function(r){ return r.category; });
+    updateCatAlertBtn();
+  } catch(e){ /* تجاهل بصمت، الميزة اختيارية وليست حرجة */ }
+}
+
+function updateCatAlertBtn(){
+  var btn = document.getElementById('catAlertBtn');
+  if(!btn) return;
+  if(state.activeFilter==='all'){
+    btn.style.display = 'none';
+    return;
+  }
+  btn.style.display = 'inline-block';
+  var isSubscribed = myCategoryAlerts.indexOf(state.activeFilter) > -1;
+  if(isSubscribed){
+    btn.textContent = '🔔 مفعّل لهذي الفئة';
+    btn.style.background = 'var(--ac)';
+    btn.style.color = '#fff';
+    btn.style.borderColor = 'var(--ac)';
+  } else {
+    btn.textContent = '🔔 نبّهني بهذي الفئة';
+    btn.style.background = 'var(--s2)';
+    btn.style.color = 'var(--t2)';
+    btn.style.borderColor = 'var(--b)';
+  }
+}
+
+window.toggleCategoryAlert = async function(){
+  var user = await sbGetUser();
+  if(!user){ openAuth('login'); return; }
+  var cat = state.activeFilter;
+  if(!cat || cat==='all') return;
+  var isSubscribed = myCategoryAlerts.indexOf(cat) > -1;
+  try{
+    if(isSubscribed){
+      await sb.from('category_alerts').delete().eq('user_id', user.id).eq('category', cat);
+      myCategoryAlerts = myCategoryAlerts.filter(function(c){ return c!==cat; });
+      hToast('🔕 تم إيقاف التنبيه لفئة «'+cat+'»');
+    } else {
+      await sb.from('category_alerts').insert({ user_id: user.id, category: cat });
+      myCategoryAlerts.push(cat);
+      hToast('🔔 سيصلك إشعار عند أي طلب جديد بفئة «'+cat+'»');
+    }
+    updateCatAlertBtn();
+  } catch(e){
+    console.error('toggleCategoryAlert error:', e);
+    logErrorToServer('toggleCategoryAlert: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
+  }
+};
 
 function makeSkeleton(n){
   var h='';
@@ -1360,7 +1464,20 @@ function buildFeedQuery(){
     }
   }
   if(state.search){
-    q = q.ilike('title', '%'+state.search+'%');
+    var words = state.search.trim().split(/\s+/).filter(Boolean);
+    if(words.length){
+      // كل كلمة تُطابق العنوان أو الوصف أو الفئة — الكلمات مجتمعة بمنطق OR (أي كلمة كافية لإظهار النتيجة)
+      var orParts = [];
+      words.forEach(function(word){
+        var safe = word.replace(/[%,]/g,''); // تنظيف بسيط من رموز قد تكسر الاستعلام
+        if(safe){
+          orParts.push('title.ilike.%'+safe+'%');
+          orParts.push('description.ilike.%'+safe+'%');
+          orParts.push('category.ilike.%'+safe+'%');
+        }
+      });
+      if(orParts.length) q = q.or(orParts.join(','));
+    }
   }
   q = q.order('created_at',{ascending:false});
   return q;
@@ -1497,78 +1614,95 @@ function bindCardEvents(){
 }
 
 function setupOwnerControls(requestId, r){
-  var BUMP_COOLDOWN_MS = 24*60*60*1000; // 24 ساعة
-
-  // ====== تعديل ======
-  document.getElementById('ownerEditBtn').onclick = function(){
-    openEditRequest(requestId, r);
-  };
-
-  // ====== حذف ======
-  document.getElementById('ownerDeleteBtn').onclick = async function(){
-    if(!confirm('هل أنت متأكد من حذف هذا الإعلان؟ لا يمكن التراجع عن هذا الإجراء.')) return;
-    var {error} = await sb.from('requests').delete().eq('id', requestId);
-    if(error){ hToast('⚠️ حدث خطأ أثناء الحذف'); return; }
-    hToast('✓ تم حذف الإعلان');
-    window.showPage('home');
-    location.reload();
-  };
-
-  // ====== تحديث (مرة كل 24 ساعة) ======
-  var bumpBtn = document.getElementById('ownerBumpBtn');
-  var bumpHint = document.getElementById('bumpHint');
-  var lastBump = r.lastBump || r.created_at;
-  var elapsed = Date.now() - new Date(lastBump).getTime();
-  var remaining = BUMP_COOLDOWN_MS - elapsed;
-
-  function renderBumpState(){
-    if(remaining > 0){
-      bumpBtn.disabled = true;
-      bumpBtn.style.opacity = '.5';
-      bumpBtn.style.cursor = 'not-allowed';
-      var hrs = Math.ceil(remaining/(60*60*1000));
-      bumpHint.textContent = 'يمكنك تحديث الإعلان بعد '+hrs+' ساعة تقريباً';
-    } else {
-      bumpBtn.disabled = false;
-      bumpBtn.style.opacity = '1';
-      bumpBtn.style.cursor = 'pointer';
-      bumpHint.textContent = 'التحديث يرفع إعلانك ليظهر مع الطلبات الجديدة (مرة كل 24 ساعة)';
-    }
-  }
-  renderBumpState();
-
-  bumpBtn.onclick = async function(){
-    if(bumpBtn.disabled) return;
-    var nowIso = new Date().toISOString();
-    var {error} = await sb.from('requests').update({ created_at: nowIso }).eq('id', requestId);
-    if(error){ hToast('⚠️ تعذر التحديث الآن'); return; }
-    hToast('✓ تم تحديث الإعلان، أصبح الآن مع الطلبات الجديدة');
-    lastBump = nowIso;
-    remaining = BUMP_COOLDOWN_MS;
-    renderBumpState();
-  };
-
-  // ====== تفضيل الطلب ======
-  document.getElementById('ownerFeatureBtn').onclick = function(){
-    openFeatureRequest(requestId);
-  };
-
-  // ====== دفع الرسوم ======
-  document.getElementById('ownerPayBtn').onclick = function(){
-    openPaymentInfo(r.budget);
-  };
-
-  // ====== مشاركة الإعلان ======
+  // ====== مشاركة الإعلان (نربطها أولاً قبل أي شيء، لضمان عملها حتى لو فشل جزء آخر من هذي الدالة) ======
   document.getElementById('ownerShareBtn').onclick = function(){
     var url = window.location.origin + '/?req=' + requestId;
     var text = '📋 ' + r.title + '\n💰 ' + r.budget + '\n\nعبر علاقات: ' + url;
     if(navigator.share){
-      navigator.share({ title: r.title, text: text, url: url });
+      navigator.share({ title: r.title, text: text, url: url }).catch(function(){});
     } else {
       navigator.clipboard.writeText(url).catch(function(){});
       hToast('✓ تم نسخ رابط الإعلان');
     }
   };
+
+  try{
+    var BUMP_COOLDOWN_MS = 24*60*60*1000; // 24 ساعة
+
+    // ====== تعديل ======
+    document.getElementById('ownerEditBtn').onclick = function(){
+      openEditRequest(requestId, r);
+    };
+
+    // ====== حذف ======
+    document.getElementById('ownerDeleteBtn').onclick = async function(){
+      if(!confirm('هل أنت متأكد من حذف هذا الإعلان؟ لا يمكن التراجع عن هذا الإجراء.')) return;
+      try{
+        var {error} = await sb.from('requests').delete().eq('id', requestId);
+        if(error){ hToast('⚠️ حدث خطأ أثناء الحذف'); return; }
+        hToast('✓ تم حذف الإعلان');
+        window.showPage('home');
+        location.reload();
+      } catch(e){
+        console.error('ownerDeleteBtn error:', e);
+        logErrorToServer('ownerDeleteBtn: ' + (e && e.message), e && e.stack);
+        hToast('❌ حدث خطأ أثناء الحذف، حاول مرة أخرى');
+      }
+    };
+
+    // ====== تحديث (مرة كل 24 ساعة) ======
+    var bumpBtn = document.getElementById('ownerBumpBtn');
+    var bumpHint = document.getElementById('bumpHint');
+    var lastBump = r.lastBump || r.created_at;
+    var elapsed = Date.now() - new Date(lastBump).getTime();
+    var remaining = BUMP_COOLDOWN_MS - elapsed;
+
+    function renderBumpState(){
+      if(remaining > 0){
+        bumpBtn.disabled = true;
+        bumpBtn.style.opacity = '.5';
+        bumpBtn.style.cursor = 'not-allowed';
+        var hrs = Math.ceil(remaining/(60*60*1000));
+        bumpHint.textContent = 'يمكنك تحديث الإعلان بعد '+hrs+' ساعة تقريباً';
+      } else {
+        bumpBtn.disabled = false;
+        bumpBtn.style.opacity = '1';
+        bumpBtn.style.cursor = 'pointer';
+        bumpHint.textContent = 'التحديث يرفع إعلانك ليظهر مع الطلبات الجديدة (مرة كل 24 ساعة)';
+      }
+    }
+    renderBumpState();
+
+    bumpBtn.onclick = async function(){
+      if(bumpBtn.disabled) return;
+      try{
+        var nowIso = new Date().toISOString();
+        var {error} = await sb.from('requests').update({ created_at: nowIso }).eq('id', requestId);
+        if(error){ hToast('⚠️ تعذر التحديث الآن'); return; }
+        hToast('✓ تم تحديث الإعلان، أصبح الآن مع الطلبات الجديدة');
+        lastBump = nowIso;
+        remaining = BUMP_COOLDOWN_MS;
+        renderBumpState();
+      } catch(e){
+        console.error('bumpBtn error:', e);
+        logErrorToServer('bumpBtn: ' + (e && e.message), e && e.stack);
+        hToast('❌ تعذر التحديث، حاول مرة أخرى');
+      }
+    };
+
+    // ====== تفضيل الطلب ======
+    document.getElementById('ownerFeatureBtn').onclick = function(){
+      openFeatureRequest(requestId);
+    };
+
+    // ====== دفع الرسوم ======
+    document.getElementById('ownerPayBtn').onclick = function(){
+      openPaymentInfo(r.budget);
+    };
+  } catch(e){
+    console.error('setupOwnerControls error:', e);
+    logErrorToServer('setupOwnerControls: ' + (e && e.message), e && e.stack);
+  }
 }
 
 // نافذة تعديل الطلب
@@ -1682,6 +1816,7 @@ window.openEditRequest = function(requestId, r){
       openDetail(requestId);
     } catch(e){
       console.error('editReqSaveBtn error:', e);
+      logErrorToServer('editReqSaveBtn: ' + (e && e.message), e && e.stack);
       hToast('❌ حدث خطأ أثناء الحفظ، حاول مرة أخرى');
       saveBtn.textContent='حفظ التعديلات'; saveBtn.disabled=false;
     }
@@ -1701,11 +1836,17 @@ window.openFeatureRequest = function(requestId){
   document.body.appendChild(sheet);
   sheet.onclick = function(e){ if(e.target===sheet){ sheet.remove(); } };
   document.getElementById('confirmFeatureBtn').onclick = async function(){
-    var {error} = await sb.from('requests').update({ is_urgent: true }).eq('id', requestId);
-    if(error){ hToast('⚠️ تعذر تفضيل الطلب'); return; }
-    hToast('✓ تم تفضيل الطلب بنجاح');
-    sheet.remove();
-    openDetail(requestId);
+    try{
+      var {error} = await sb.from('requests').update({ is_urgent: true }).eq('id', requestId);
+      if(error){ hToast('⚠️ تعذر تفضيل الطلب'); return; }
+      hToast('✓ تم تفضيل الطلب بنجاح');
+      sheet.remove();
+      openDetail(requestId);
+    } catch(e){
+      console.error('confirmFeatureBtn error:', e);
+      logErrorToServer('confirmFeatureBtn: ' + (e && e.message), e && e.stack);
+      hToast('❌ حدث خطأ، حاول مرة أخرى');
+    }
   };
 };
 
@@ -1872,16 +2013,21 @@ window.openDetail=async function(id){
 
   // إظهار لوحة تحكم صاحب الطلب إذا كان المستخدم الحالي هو المالك
   (async function(){
-    var ownerPanel = document.getElementById('ownerControls');
-    var offerBtnBar = document.getElementById('detOfferBtn').parentElement;
-    var user = await sbGetUser();
-    if(user && r.userId && user.id === r.userId){
-      ownerPanel.style.display = 'block';
-      if(offerBtnBar) offerBtnBar.style.display = 'none';
-      setupOwnerControls(id, r);
-    } else {
-      ownerPanel.style.display = 'none';
-      if(offerBtnBar) offerBtnBar.style.display = 'block';
+    try{
+      var ownerPanel = document.getElementById('ownerControls');
+      var offerBtnBar = document.getElementById('detOfferBtn').parentElement;
+      var user = await sbGetUser();
+      if(user && r.userId && user.id === r.userId){
+        ownerPanel.style.display = 'block';
+        if(offerBtnBar) offerBtnBar.style.display = 'none';
+        setupOwnerControls(id, r);
+      } else {
+        ownerPanel.style.display = 'none';
+        if(offerBtnBar) offerBtnBar.style.display = 'block';
+      }
+    } catch(e){
+      console.error('owner controls setup error:', e);
+      logErrorToServer('owner controls setup: ' + (e && e.message), e && e.stack);
     }
   })();
 
@@ -1893,7 +2039,7 @@ window.openDetail=async function(id){
   var isOwnerView = !!(curUser && r.userId && curUser.id === r.userId);
 
   var {data:offers} = await sb.from('offers')
-    .select('id,offer_text,price,duration,created_at,provider_id,provider:profiles!provider_id(full_name,username,avatar_color,rating,deals_count)')
+    .select('id,offer_text,price,duration,created_at,provider_id,status,provider:profiles!provider_id(full_name,username,avatar_color,rating,deals_count,last_seen)')
     .eq('request_id', sid)
     .order('created_at',{ascending:false});
 
@@ -1914,6 +2060,7 @@ window.openDetail=async function(id){
     (phoneRows||[]).forEach(function(pr){ if(pr.phone) phoneMap[pr.offer_id]=pr.phone; });
   }
 
+  var anyAccepted = list.some(function(o){ return o.status==='accepted'; });
   var oh='';
   list.forEach(function(o){
     var p=o.provider||{};
@@ -1922,13 +2069,16 @@ window.openDetail=async function(id){
     var rating=p.rating||0;
     var stars='★'.repeat(Math.round(rating))+'☆'.repeat(5-Math.round(rating));
     var offPhone = phoneMap[o.id];
-    oh+='<div style="background:var(--s2);border:1px solid var(--b);border-radius:13px;padding:13px;margin-bottom:10px">'
+    var isAccepted = o.status==='accepted';
+    oh+='<div style="background:var(--s2);border:1px solid '+(isAccepted?'#22c55e':'var(--b)')+';border-radius:13px;padding:13px;margin-bottom:10px'+(isAccepted?';box-shadow:0 0 0 1px rgba(34,197,94,.15)':'')+'">'
       // رأس مصغّر: أفاتار صغير + اسم بخط عادي + الوقت
       +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">'
         +'<div style="width:28px;height:28px;border-radius:50%;background:'+grad+';display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0;font-size:.72rem;cursor:pointer" onclick="openUserProfile(\''+o.provider_id+'\')">'+letter+'</div>'
         +'<div style="flex:1;min-width:0;display:flex;align-items:center;gap:6px;flex-wrap:wrap">'
           +'<span style="font-weight:600;font-size:.78rem;color:var(--t2);cursor:pointer" onclick="openUserProfile(\''+o.provider_id+'\')">'+String(p.full_name||'مجهول').replace(/</g,'&lt;')+'</span>'
           +'<span style="font-size:.7rem;color:#fbbf24;white-space:nowrap">'+stars+'</span>'
+          +(isProviderOnline(p.last_seen) ? '<span style="font-size:.66rem;color:#22c55e;font-weight:700;white-space:nowrap">🟢 متصل الآن</span>' : '')
+          +(isAccepted ? '<span style="font-size:.68rem;font-weight:800;color:#22c55e;background:rgba(34,197,94,.12);padding:2px 8px;border-radius:20px">✓ مقبول</span>' : '')
         +'</div>'
         +'<div style="font-size:.68rem;color:var(--t3);flex-shrink:0">'+timeAgo(o.created_at)+'</div>'
       +'</div>'
@@ -1936,13 +2086,16 @@ window.openDetail=async function(id){
       +'<div style="font-size:.95rem;color:var(--t);line-height:1.75;margin-bottom:12px;font-weight:500">'+String(o.offer_text||'').replace(/</g,'&lt;')+'</div>'
       // رقم الجوال — يظهر فقط لصاحب الطلب
       +(offPhone ? '<div style="display:flex;align-items:center;justify-content:space-between;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.25);border-radius:9px;padding:8px 12px;margin-bottom:12px"><span style="font-size:.82rem;color:var(--t2);font-weight:600">📱 '+String(offPhone).replace(/</g,'&lt;')+'</span><a href="tel:'+String(offPhone).replace(/</g,'')+'" style="font-size:.74rem;color:#16a34a;font-weight:800;text-decoration:none">اتصال</a></div>' : '')
-      // السعر + المدة + زر التواصل
-      +'<div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--b)">'
+      // السعر + المدة + زر التواصل/القبول
+      +'<div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--b);gap:8px;flex-wrap:wrap">'
         +'<div style="display:flex;align-items:baseline;gap:8px">'
           +'<span style="font-size:1.05rem;font-weight:800;color:var(--ac2)">'+(o.price||0)+' ريال</span>'
           +'<span style="font-size:.74rem;color:var(--t3)">⏱ '+(o.duration||'مرن')+'</span>'
         +'</div>'
+        +'<div style="display:flex;gap:6px">'
+        +(isOwnerView && !isAccepted && !anyAccepted ? '<button class="offer-accept-btn" data-oid="'+o.id+'" data-pid="'+o.provider_id+'" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:9px;padding:8px 14px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer;flex-shrink:0">✓ قبول العرض</button>' : '')
         +(o.provider_id && !(curUser && curUser.id===o.provider_id) ? '<button class="offer-contact-btn" data-uid="'+o.provider_id+'" data-name="'+encodeURIComponent(p.full_name||'المزود')+'" style="background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;border-radius:9px;padding:8px 16px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer;flex-shrink:0">💬 تواصل</button>' : '')
+        +'</div>'
       +'</div>'
     +'</div>';
   });
@@ -2015,16 +2168,22 @@ document.getElementById('doLogin').onclick=async function(){
   var pass  = document.getElementById('loginPass')  ? document.getElementById('loginPass').value.trim()  : '';
   if(!email||!pass){ hToast('⚠️ أدخل البريد وكلمة المرور'); return; }
   hToast('جاري تسجيل الدخول...');
-  var result = await sbLogin(email, pass);
-  if(result.error){
-    if(result.error.message === 'EMAIL_NOT_CONFIRMED'){
-      hToast('⚠️ يجب تفعيل بريدك الإلكتروني أولاً');
-      openOtpModal(email);
-      return;
+  try{
+    var result = await sbLogin(email, pass);
+    if(result.error){
+      if(result.error.message === 'EMAIL_NOT_CONFIRMED'){
+        hToast('⚠️ يجب تفعيل بريدك الإلكتروني أولاً');
+        openOtpModal(email);
+        return;
+      }
+      hToast('❌ ' + result.error.message); return;
     }
-    hToast('❌ ' + result.error.message); return;
+    doLoginUI();
+  } catch(e){
+    console.error('doLogin error:', e);
+    logErrorToServer('doLogin: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ أثناء تسجيل الدخول، حاول مرة أخرى');
   }
-  doLoginUI();
 };
 
 // ====== فلتر الكلمات البذيئة (للعنوان والوصف في الطلبات) ======
@@ -2186,23 +2345,29 @@ document.getElementById('doRegister').onclick=async function(){
   if(!username){ hToast('⚠️ أدخل اسم مستخدم'); return; }
   if(!/^[a-zA-Z0-9_]+$/.test(username)){ hToast('⚠️ اسم المستخدم يجب أن يكون بالإنجليزية فقط (حروف وأرقام و _)'); return; }
   if(!email.includes('@')){ hToast('⚠️ أدخل بريد إلكتروني صحيح'); return; }
-  hToast('جاري التحقق من اسم المستخدم...');
-  var taken = await sbCheckUsernameTaken(username);
-  if(taken){ hToast('❌ اسم المستخدم هذا محجوز، جرّب اسماً آخر'); return; }
-  hToast('جاري إنشاء الحساب...');
-  var result = await sbRegister(email, pass, name, username);
-  if(result.error){
-    var msg = result.error.message || '';
-    if(msg.indexOf('duplicate') > -1 || msg.indexOf('unique') > -1){
-      hToast('❌ اسم المستخدم هذا محجوز، جرّب اسماً آخر');
-    } else {
-      hToast('❌ ' + msg);
+  try{
+    hToast('جاري التحقق من اسم المستخدم...');
+    var taken = await sbCheckUsernameTaken(username);
+    if(taken){ hToast('❌ اسم المستخدم هذا محجوز، جرّب اسماً آخر'); return; }
+    hToast('جاري إنشاء الحساب...');
+    var result = await sbRegister(email, pass, name, username);
+    if(result.error){
+      var msg = result.error.message || '';
+      if(msg.indexOf('duplicate') > -1 || msg.indexOf('unique') > -1){
+        hToast('❌ اسم المستخدم هذا محجوز، جرّب اسماً آخر');
+      } else {
+        hToast('❌ ' + msg);
+      }
+      return;
     }
-    return;
+    document.getElementById('authModal').classList.remove('open');
+    openOtpModal(email);
+    hToast('📧 أرسلنا رمز تفعيل إلى بريدك');
+  } catch(e){
+    console.error('doRegister error:', e);
+    logErrorToServer('doRegister: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ أثناء إنشاء الحساب، حاول مرة أخرى');
   }
-  document.getElementById('authModal').classList.remove('open');
-  openOtpModal(email);
-  hToast('📧 أرسلنا رمز تفعيل إلى بريدك');
 };
 
 // =====================
@@ -2221,23 +2386,35 @@ document.getElementById('doVerifyOtp').onclick=async function(){
   var email = window.pendingOtpEmail;
   if(!email){ hToast('⚠️ حدث خطأ، حاول التسجيل من جديد'); return; }
   if(!code || code.length !== 6){ hToast('⚠️ أدخل الرمز المكوّن من 6 أرقام'); return; }
-  hToast('جاري التحقق من الرمز...');
-  var result = await sbVerifyOtp(email, code);
-  if(result.error){
-    hToast('❌ الرمز غير صحيح أو منتهي الصلاحية');
-    return;
+  try{
+    hToast('جاري التحقق من الرمز...');
+    var result = await sbVerifyOtp(email, code);
+    if(result.error){
+      hToast('❌ الرمز غير صحيح أو منتهي الصلاحية');
+      return;
+    }
+    document.getElementById('otpModal').classList.remove('open');
+    hToast('🎉 تم تفعيل حسابك بنجاح!');
+    doLoginUI();
+  } catch(e){
+    console.error('doVerifyOtp error:', e);
+    logErrorToServer('doVerifyOtp: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
   }
-  document.getElementById('otpModal').classList.remove('open');
-  hToast('🎉 تم تفعيل حسابك بنجاح!');
-  doLoginUI();
 };
 document.getElementById('resendOtp').onclick=async function(){
   var email = window.pendingOtpEmail;
   if(!email){ return; }
-  hToast('جاري إعادة إرسال الرمز...');
-  var result = await sbResendOtp(email);
-  if(result.error){ hToast('❌ ' + result.error.message); return; }
-  hToast('📧 تم إرسال رمز جديد إلى بريدك');
+  try{
+    hToast('جاري إعادة إرسال الرمز...');
+    var result = await sbResendOtp(email);
+    if(result.error){ hToast('❌ ' + result.error.message); return; }
+    hToast('📧 تم إرسال رمز جديد إلى بريدك');
+  } catch(e){
+    console.error('resendOtp error:', e);
+    logErrorToServer('resendOtp: ' + (e && e.message), e && e.stack);
+    hToast('❌ تعذر إرسال الرمز، حاول مرة أخرى');
+  }
 };
 
 // =====================
@@ -2253,13 +2430,19 @@ document.getElementById('forgotPassBtn').onclick=function(){
 document.getElementById('doRequestReset').onclick=async function(){
   var email = document.getElementById('forgotPassEmail').value.trim();
   if(!email || !email.includes('@')){ hToast('⚠️ أدخل بريداً إلكترونياً صحيحاً'); return; }
-  hToast('جاري إرسال رمز التعيين...');
-  var result = await sbRequestPasswordReset(email);
-  if(result.error){ hToast('❌ ' + result.error.message); return; }
-  window.pendingResetEmail = email;
-  document.getElementById('forgotPassModal').classList.remove('open');
-  openResetPassModal(email);
-  hToast('📧 أرسلنا رمز التعيين إلى بريدك');
+  try{
+    hToast('جاري إرسال رمز التعيين...');
+    var result = await sbRequestPasswordReset(email);
+    if(result.error){ hToast('❌ ' + result.error.message); return; }
+    window.pendingResetEmail = email;
+    document.getElementById('forgotPassModal').classList.remove('open');
+    openResetPassModal(email);
+    hToast('📧 أرسلنا رمز التعيين إلى بريدك');
+  } catch(e){
+    console.error('doRequestReset error:', e);
+    logErrorToServer('doRequestReset: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
+  }
 };
 function openResetPassModal(email){
   window.pendingResetEmail = email;
@@ -2278,29 +2461,41 @@ document.getElementById('doResetPassword').onclick=async function(){
   if(!email){ hToast('⚠️ حدث خطأ، حاول من جديد'); return; }
   if(!code || code.length !== 6){ hToast('⚠️ أدخل الرمز المكوّن من 6 أرقام'); return; }
   if(!newPass || newPass.length < 6){ hToast('⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل'); return; }
-  hToast('جاري التحقق من الرمز...');
-  var verifyResult = await sbVerifyResetOtp(email, code);
-  if(verifyResult.error){
-    hToast('❌ الرمز غير صحيح أو منتهي الصلاحية');
-    return;
+  try{
+    hToast('جاري التحقق من الرمز...');
+    var verifyResult = await sbVerifyResetOtp(email, code);
+    if(verifyResult.error){
+      hToast('❌ الرمز غير صحيح أو منتهي الصلاحية');
+      return;
+    }
+    hToast('جاري تعيين كلمة المرور الجديدة...');
+    var updateResult = await sbUpdatePassword(newPass);
+    if(updateResult.error){
+      hToast('❌ ' + updateResult.error.message);
+      return;
+    }
+    document.getElementById('resetPassModal').classList.remove('open');
+    hToast('🎉 تم تعيين كلمة المرور بنجاح!');
+    doLoginUI();
+  } catch(e){
+    console.error('doResetPassword error:', e);
+    logErrorToServer('doResetPassword: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
   }
-  hToast('جاري تعيين كلمة المرور الجديدة...');
-  var updateResult = await sbUpdatePassword(newPass);
-  if(updateResult.error){
-    hToast('❌ ' + updateResult.error.message);
-    return;
-  }
-  document.getElementById('resetPassModal').classList.remove('open');
-  hToast('🎉 تم تعيين كلمة المرور بنجاح!');
-  doLoginUI();
 };
 document.getElementById('resendResetOtp').onclick=async function(){
   var email = window.pendingResetEmail;
   if(!email){ return; }
-  hToast('جاري إعادة إرسال الرمز...');
-  var result = await sbRequestPasswordReset(email);
-  if(result.error){ hToast('❌ ' + result.error.message); return; }
-  hToast('📧 تم إرسال رمز جديد إلى بريدك');
+  try{
+    hToast('جاري إعادة إرسال الرمز...');
+    var result = await sbRequestPasswordReset(email);
+    if(result.error){ hToast('❌ ' + result.error.message); return; }
+    hToast('📧 تم إرسال رمز جديد إلى بريدك');
+  } catch(e){
+    console.error('resendResetOtp error:', e);
+    logErrorToServer('resendResetOtp: ' + (e && e.message), e && e.stack);
+    hToast('❌ تعذر إرسال الرمز، حاول مرة أخرى');
+  }
 };
 document.getElementById('goRegister').onclick=function(){switchAuthTab('register');};
 document.getElementById('btnLogin').onclick=function(){openAuth('login');};
@@ -2317,12 +2512,12 @@ document.getElementById('typeClient').onclick=function(){this.classList.add('sel
 document.getElementById('typeBoth').onclick=function(){this.classList.add('sel');document.getElementById('typeClient').classList.remove('sel');};
 document.querySelectorAll('.sk-grid .sko').forEach(function(s){s.onclick=function(){this.classList.toggle('sel');};});
 document.querySelectorAll('.ftab').forEach(function(t){t.onclick=function(){document.querySelectorAll('.ftab').forEach(function(x){x.classList.remove('on');});t.classList.add('on');state.activeTab=t.getAttribute('data-tab');renderFeed();};});
-document.querySelectorAll('.fc').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fc').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.activeFilter=b.getAttribute('data-cat');renderFeed();};});
+document.querySelectorAll('.fc').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fc').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.activeFilter=b.getAttribute('data-cat');renderFeed();updateCatAlertBtn();};});
 document.getElementById('filterCity').onchange=function(){state.activeCity=this.value;renderFeed();};
 document.getElementById('filterTime').onchange=function(){state.activeTime=this.value;renderFeed();};
-document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});si.classList.add('on');var cat=si.getAttribute('data-cat');state.activeFilter=cat;document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')===cat);});renderFeed();};});
+document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});si.classList.add('on');var cat=si.getAttribute('data-cat');state.activeFilter=cat;document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')===cat);});renderFeed();updateCatAlertBtn();};});
 // search handled inline on input
-document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.activeCity='all';state.activeTime='all';state.search='';var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';var fc=document.getElementById('filterCity');if(fc)fc.value='all';var ft=document.getElementById('filterTime');if(ft)ft.value='all';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();};
+document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.activeCity='all';state.activeTime='all';state.search='';var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';var fc=document.getElementById('filterCity');if(fc)fc.value='all';var ft=document.getElementById('filterTime');if(ft)ft.value='all';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();updateCatAlertBtn();};
 document.getElementById('si-saved').onclick=function(){if(!state.loggedIn){openAuth('login');return;}document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');if(!state.saved.length){hToast(t('noSavedYet'));return;}var savedList=reqs.filter(function(r){return state.saved.indexOf(r.id)>-1;});var html='';savedList.forEach(function(r){html+=makeCard(r);});html+='<div style="margin:10px 14px"><button class="btn-g" style="width:100%;padding:9px;border-radius:9px" id="backToFeed">'+t('backToFeed')+'</button></div>';document.getElementById('feedContent').innerHTML='<div id="cardsContainer">'+html+'</div>';bindCardEvents();document.getElementById('backToFeed').onclick=renderFeed;};
 var reqMediaFiles = []; // الملفات المختارة لإرفاقها بالطلب الجديد
 var REQ_MEDIA_MAX = 10;
@@ -2485,6 +2680,7 @@ window.submitAfterTerms = async function(){
       media: mediaUrls
     });
     if(result.error){hToast('❌ '+result.error);return;}
+    notifyCategoryAlertSubscribers(document.getElementById('reqCat').value, title, result.data && result.data.id);
     document.getElementById('reqTitle').value='';
     document.getElementById('reqDesc').value='';
     document.getElementById('reqBudget').value='';
@@ -2496,37 +2692,71 @@ window.submitAfterTerms = async function(){
     hToast('✓ تم نشر طلبك! ستصلك عروض قريباً');
   } catch(e){
     console.error('submitAfterTerms error:', e);
+    logErrorToServer('submitAfterTerms: ' + (e && e.message), e && e.stack);
     hToast('❌ حدث خطأ أثناء النشر، حاول مرة أخرى');
     document.getElementById('compModal').classList.add('open');
   }
 };
+
+// ====== إشعار المشتركين بتنبيهات هذي الفئة بطلب جديد ======
+async function notifyCategoryAlertSubscribers(category, title, requestId){
+  if(!category || !requestId) return;
+  try{
+    var currentUser = await sbGetUser();
+    var {data:subscribers} = await sb.from('category_alerts').select('user_id').eq('category', category);
+    if(!subscribers || !subscribers.length) return;
+    var notifs = subscribers
+      .filter(function(s){ return !currentUser || s.user_id !== currentUser.id; }) // لا نُنبّه الناشر نفسه
+      .map(function(s){
+        return {
+          user_id: s.user_id,
+          type: 'category_alert',
+          title: 'طلب جديد بفئة «'+category+'»',
+          body: title,
+          is_read: false,
+          related_id: requestId
+        };
+      });
+    if(notifs.length) await sb.from('notifications').insert(notifs);
+  } catch(e){
+    console.error('notifyCategoryAlertSubscribers error:', e);
+    logErrorToServer('notifyCategoryAlertSubscribers: ' + (e && e.message), e && e.stack);
+    // لا نُظهر خطأ للمستخدم هنا — فشل الإشعار لا يجب أن يفسد تجربة نشر الطلب نفسه
+  }
+}
 document.getElementById('submitOffer').onclick=async function(){
   var txt=document.getElementById('offerText').value.trim();
   var price=document.getElementById('offerPrice').value.trim();
   var dur=document.getElementById('offerDur').value;
   var phone=document.getElementById('offerPhone').value.trim();
   if(!txt||!price){hToast('⚠️ أكمل العرض والسعر');return;}
-  hToast('جاري الإرسال...');
-  // حفظ العرض في Supabase
-  var result = await sbCreateOffer(state.currentOfferId, txt, parseFloat(price), dur, phone);
-  if(result.error){hToast('❌ '+result.error);return;}
-  // إشعار لصاحب الطلب
-  var req = reqs.find(function(x){return x.id===state.currentOfferId;});
-  if(req && req.userId){
-    await sb.from('notifications').insert({
-      user_id: req.userId,
-      type: 'offer',
-      title: 'عرض جديد على طلبك',
-      body: 'قدّم شخص عرضاً على طلبك «'+req.title+'»',
-      is_read: false,
-      related_id: state.currentOfferId
-    });
+  try{
+    hToast('جاري الإرسال...');
+    // حفظ العرض في Supabase
+    var result = await sbCreateOffer(state.currentOfferId, txt, parseFloat(price), dur, phone);
+    if(result.error){hToast('❌ '+result.error);return;}
+    // إشعار لصاحب الطلب
+    var req = reqs.find(function(x){return x.id===state.currentOfferId;});
+    if(req && req.userId){
+      await sb.from('notifications').insert({
+        user_id: req.userId,
+        type: 'offer',
+        title: 'عرض جديد على طلبك',
+        body: 'قدّم شخص عرضاً على طلبك «'+req.title+'»',
+        is_read: false,
+        related_id: state.currentOfferId
+      });
+    }
+    // تحديث عدد العروض محلياً
+    if(req) req.offers = (req.offers||0)+1;
+    document.getElementById('offerModal').classList.remove('open');
+    renderFeed();
+    hToast('✓ تم إرسال عرضك! سيتواصل معك صاحب الطلب');
+  } catch(e){
+    console.error('submitOffer error:', e);
+    logErrorToServer('submitOffer: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ أثناء إرسال العرض، حاول مرة أخرى');
   }
-  // تحديث عدد العروض محلياً
-  if(req) req.offers = (req.offers||0)+1;
-  document.getElementById('offerModal').classList.remove('open');
-  renderFeed();
-  hToast('✓ تم إرسال عرضك! سيتواصل معك صاحب الطلب');
 };
 function hToast(msg){var t=document.createElement('div');t.textContent=msg;Object.assign(t.style,{position:'fixed',bottom:'30px',left:'50%',transform:'translateX(-50%) translateY(8px)',background:'var(--s2)',border:'1px solid var(--b)',color:'var(--t)',padding:'10px 22px',borderRadius:'11px',fontSize:'.83rem',zIndex:'9999',opacity:'0',transition:'all .22s',boxShadow:'0 8px 28px rgba(0,0,0,.5)',whiteSpace:'nowrap'});document.body.appendChild(t);requestAnimationFrame(function(){t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';});setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove();},250);},2500);}
 // ===== THEME TOGGLE =====
@@ -2563,10 +2793,22 @@ window.openImagePreview = function(url){
 };
 // تحقق من الجلسة عند فتح الصفحة - يحافظ على تسجيل الدخول
 sb.auth.getSession().then(function(res){
-  if(res.data&&res.data.session){ doLoginUI(); }
+  if(res.data&&res.data.session){ doLoginUI(); startPresenceHeartbeat(); loadMyCategoryAlerts(); }
   else { renderFeed(); }
   handleSharedRequestLink();
 });
+
+// ====== تحديث "آخر ظهور" بشكل دوري للمستخدم المسجّل دخوله، لتغذية شارة "متصل الآن" ======
+function startPresenceHeartbeat(){
+  function pingPresence(){
+    sbGetUser().then(function(user){
+      if(!user) return;
+      sb.from('profiles').update({ last_seen: new Date().toISOString() }).eq('id', user.id).then(function(){});
+    }).catch(function(){});
+  }
+  pingPresence(); // فوراً عند التحميل
+  setInterval(pingPresence, 2*60*1000); // كل دقيقتين أثناء بقاء الصفحة مفتوحة
+}
 
 // ====== فتح رابط طلب مُشارك مباشرة (مثال: alagat.com/?req=123) ======
 function handleSharedRequestLink(){
@@ -2629,6 +2871,39 @@ async function loadProfileData(userId){
 }
 
 window.openPModal = function(id){document.getElementById(id).classList.add('open');};
+
+// ====== التحقق من وجود صفقة مكتملة قبل السماح بالتقييم (يمنع تقييمات بلا تعامل حقيقي) ======
+window.openRatingModalChecked = async function(){
+  if(!profileChatReceiverId){ hToast('⚠️ لا يمكن التقييم'); return; }
+  var user = await sbGetUser();
+  if(!user){ openAuth('login'); return; }
+  if(user.id === profileChatReceiverId){ hToast('⚠️ لا يمكنك تقييم نفسك'); return; }
+  try{
+    hToast('جاري التحقق من وجود تعامل سابق...');
+    // الحالة 1: المستخدم الحالي صاحب طلب، والشخص المُقيَّم مزوّد قُبل عرضه على أحد طلباته
+    var case1 = await sb.from('offers')
+      .select('id, request:requests(user_id)')
+      .eq('provider_id', profileChatReceiverId)
+      .eq('status', 'accepted');
+    var hasDeal1 = (case1.data||[]).some(function(o){ return o.request && o.request.user_id === user.id; });
+    // الحالة 2: المستخدم الحالي مزوّد، والشخص المُقيَّم صاحب طلب قَبِل عرض المستخدم الحالي
+    var case2 = await sb.from('offers')
+      .select('id, request:requests(user_id)')
+      .eq('provider_id', user.id)
+      .eq('status', 'accepted');
+    var hasDeal2 = (case2.data||[]).some(function(o){ return o.request && o.request.user_id === profileChatReceiverId; });
+
+    if(!hasDeal1 && !hasDeal2){
+      hToast('⚠️ يمكنك التقييم فقط بعد إتمام صفقة فعلية مع هذا المستخدم');
+      return;
+    }
+    openPModal('ratingModal');
+  } catch(e){
+    console.error('openRatingModalChecked error:', e);
+    logErrorToServer('openRatingModalChecked: ' + (e && e.message), e && e.stack);
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
+  }
+};
 window.closePModal = function(id){document.getElementById(id).classList.remove('open');};
 window.togglePlusMenu = function(){var m=document.getElementById('plusMenu');var btn=document.getElementById('pAddBtn');var isOpen=m.style.display==='block';m.style.display=isOpen?'none':'block';btn.style.transform=isOpen?'':'rotate(45deg)';};
 window.closePlusMenu = function(){document.getElementById('plusMenu').style.display='none';document.getElementById('pAddBtn').style.transform='';};
@@ -2643,6 +2918,38 @@ document.addEventListener('click', function(e){
     var uid = btn.getAttribute('data-uid');
     var name = decodeURIComponent(btn.getAttribute('data-name')||'مستخدم');
     openProfileChat(uid, name);
+  }
+});
+
+// زر قبول العرض — يظهر فقط لصاحب الطلب، يقفل باقي العروض على الطلب نفسه
+document.addEventListener('click', async function(e){
+  var btn = e.target.closest('.offer-accept-btn');
+  if(!btn) return;
+  e.preventDefault(); e.stopPropagation();
+  if(!confirm('هل تريد قبول هذا العرض؟ سيتم إغلاق باقي العروض على هذا الطلب.')) return;
+  var offerId = btn.getAttribute('data-oid');
+  var providerId = btn.getAttribute('data-pid');
+  btn.disabled = true; btn.textContent = 'جاري القبول...';
+  try{
+    var {error} = await sb.from('offers').update({status:'accepted'}).eq('id', offerId);
+    if(error){ hToast('⚠️ تعذر قبول العرض'); btn.disabled=false; btn.textContent='✓ قبول العرض'; return; }
+    if(providerId){
+      await sb.from('notifications').insert({
+        user_id: providerId,
+        type: 'offer_accepted',
+        title: 'تم قبول عرضك! 🎉',
+        body: 'وافق صاحب الطلب على عرضك، تواصل معه لإتمام التفاصيل',
+        is_read: false,
+        related_id: offerId
+      });
+    }
+    hToast('✓ تم قبول العرض بنجاح');
+    if(window._currentDetailId) openDetail(window._currentDetailId);
+  } catch(err){
+    console.error('offer-accept-btn error:', err);
+    logErrorToServer('offer-accept-btn: ' + (err && err.message), err && err.stack);
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
+    btn.disabled=false; btn.textContent='✓ قبول العرض';
   }
 });
 
