@@ -110,6 +110,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .cbtn{flex:1;padding:10px;border-radius:8px;font-family:inherit;font-size:.83rem;font-weight:600;cursor:pointer;border:none}
 .cbtn.cancel{background:#181c24;color:#8896b0;border:1px solid #252d3d}
 .cbtn.danger{background:linear-gradient(135deg,#ff4466,#ff6b6b);color:#fff}
+.bulk-range-btn{flex:1;padding:9px;border-radius:8px;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;background:#181c24;color:#8896b0;border:1px solid #252d3d;transition:.15s}
+.bulk-range-btn.sel{background:#0066ff;color:#fff;border-color:#0066ff}
 </style>
 </head>
 <body>
@@ -152,6 +154,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="tab" onclick="switchTab(this,'messages')">💬 الرسائل</div>
     <div class="tab" onclick="switchTab(this,'offers')">💼 العروض</div>
     <div class="tab" onclick="switchTab(this,'reports')">🚩 البلاغات <span id="reportsTabBadge" style="background:#ff4466;color:#fff;font-size:.68rem;padding:1px 7px;border-radius:10px;margin-right:4px;display:none"></span></div>
+    <div class="tab" onclick="switchTab(this,'errors')">🐞 الأخطاء <span id="errorsTabBadge" style="background:#ff4466;color:#fff;font-size:.68rem;padding:1px 7px;border-radius:10px;margin-right:4px;display:none"></span></div>
   </div>
 
   <!-- USERS -->
@@ -159,7 +162,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="tbl-wrap">
       <div class="tbl-head">
         <span class="tbl-title">قائمة الأعضاء</span>
-        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('usersBody',this.value)">
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('usersBody',this.value)">
+          <button class="act-btn dl" onclick="openBulkDlModal('users')">⬇ تحميل بالجملة</button>
+        </div>
       </div>
       <table>
         <thead><tr>
@@ -175,7 +181,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="tbl-wrap">
       <div class="tbl-head">
         <span class="tbl-title">قائمة الطلبات</span>
-        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('reqsBody',this.value)">
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('reqsBody',this.value)">
+          <button class="act-btn dl" onclick="openBulkDlModal('requests')">⬇ تحميل بالجملة</button>
+        </div>
       </div>
       <table>
         <thead><tr>
@@ -191,7 +200,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="tbl-wrap" style="padding:12px">
       <div class="tbl-head" style="margin:-12px -12px 12px;border-radius:12px 12px 0 0">
         <span class="tbl-title">الرسائل</span>
-        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterMsgs(this.value)">
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterMsgs(this.value)">
+          <button class="act-btn dl" onclick="openBulkDlModal('messages')">⬇ تحميل بالجملة</button>
+        </div>
       </div>
       <div id="msgsBody"><div class="loading">⏳ جاري التحميل...</div></div>
     </div>
@@ -202,7 +214,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="tbl-wrap">
       <div class="tbl-head">
         <span class="tbl-title">قائمة العروض</span>
-        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('offersBody',this.value)">
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('offersBody',this.value)">
+          <button class="act-btn dl" onclick="openBulkDlModal('offers')">⬇ تحميل بالجملة</button>
+        </div>
       </div>
       <table>
         <thead><tr>
@@ -218,13 +233,35 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="tbl-wrap">
       <div class="tbl-head">
         <span class="tbl-title">البلاغات على الطلبات</span>
-        <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('reportsBody',this.value)">
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('reportsBody',this.value)">
+          <button class="act-btn dl" onclick="openBulkDlModal('reports')">⬇ تحميل بالجملة</button>
+        </div>
       </div>
       <table>
         <thead><tr>
           <th>الطلب</th><th>السبب</th><th>المبلِّغ</th><th>الحالة</th><th>التاريخ</th><th>إجراء</th>
         </tr></thead>
         <tbody id="reportsBody"><tr><td colspan="6" class="loading">⏳ جاري التحميل...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ERRORS -->
+  <div id="tab-errors" style="display:none">
+    <div class="tbl-wrap">
+      <div class="tbl-head">
+        <span class="tbl-title">سجل الأخطاء (آخر 100 خطأ)</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="tbl-search" placeholder="🔍 ابحث..." oninput="filterTable('errorsBody',this.value)">
+          <button class="act-btn dl" onclick="openBulkDlModal('errors')">⬇ تحميل بالجملة</button>
+        </div>
+      </div>
+      <table>
+        <thead><tr>
+          <th>الرسالة</th><th>الصفحة</th><th>المستخدم</th><th>التاريخ</th><th>إجراء</th>
+        </tr></thead>
+        <tbody id="errorsBody"><tr><td colspan="5" class="loading">⏳ جاري التحميل...</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -244,8 +281,35 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
+<div class="confirm-overlay" id="bulkDlModal">
+  <div class="confirm-box" style="width:340px;text-align:right">
+    <div class="confirm-title" style="text-align:center;margin-bottom:16px">⬇ تحميل بالجملة</div>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <button class="bulk-range-btn" data-range="today" onclick="setBulkRange('today')">اليوم</button>
+      <button class="bulk-range-btn" data-range="week" onclick="setBulkRange('week')">آخر أسبوع</button>
+      <button class="bulk-range-btn" data-range="all" onclick="setBulkRange('all')">الكل</button>
+    </div>
+    <div style="font-size:.78rem;color:#8896b0;margin-bottom:6px">أو حدّد نطاقاً مخصّصاً</div>
+    <div style="display:flex;gap:8px;margin-bottom:18px">
+      <div style="flex:1">
+        <div style="font-size:.7rem;color:#8896b0;margin-bottom:4px">من</div>
+        <input type="date" id="bulkDlFrom" style="width:100%;background:#181c24;border:1px solid #252d3d;border-radius:7px;padding:8px;color:#e8ecf5;font-family:inherit;font-size:.78rem;outline:none" onchange="clearBulkRangeSelection();updateBulkCount()">
+      </div>
+      <div style="flex:1">
+        <div style="font-size:.7rem;color:#8896b0;margin-bottom:4px">إلى</div>
+        <input type="date" id="bulkDlTo" style="width:100%;background:#181c24;border:1px solid #252d3d;border-radius:7px;padding:8px;color:#e8ecf5;font-family:inherit;font-size:.78rem;outline:none" onchange="clearBulkRangeSelection();updateBulkCount()">
+      </div>
+    </div>
+    <div id="bulkDlCount" style="font-size:.78rem;color:#8896b0;text-align:center;margin-bottom:14px"></div>
+    <div class="confirm-btns">
+      <button class="cbtn cancel" onclick="closeBulkDlModal()">إلغاء</button>
+      <button class="cbtn" style="background:linear-gradient(135deg,#0066ff,#3388ff);color:#fff" onclick="downloadBulk()">تحميل الملف</button>
+    </div>
+  </div>
+</div>
+
 <script>
-var allUsers=[], allReqs=[], allMsgs=[], allOffers=[], allReports=[];
+var allUsers=[], allReqs=[], allMsgs=[], allOffers=[], allReports=[], allErrors=[];
 
 // ===== AUTH =====
 async function adminLogin(){
@@ -272,6 +336,7 @@ async function showDashboard(){
   loadStats();
   loadUsers();
   loadReportsBadgeOnly();
+  loadErrorsBadgeOnly();
 }
 
 async function loadReportsBadgeOnly(){
@@ -280,6 +345,17 @@ async function loadReportsBadgeOnly(){
   var badge = document.getElementById('reportsTabBadge');
   if(badge){
     if(pendingCount>0){ badge.textContent=pendingCount; badge.style.display='inline-block'; }
+    else { badge.style.display='none'; }
+  }
+}
+
+async function loadErrorsBadgeOnly(){
+  var since = new Date(Date.now() - 24*60*60*1000).toISOString();
+  var {data} = await sb.from('error_logs').select('id').gte('created_at', since);
+  var recentCount = (data||[]).length;
+  var badge = document.getElementById('errorsTabBadge');
+  if(badge){
+    if(recentCount>0){ badge.textContent=recentCount; badge.style.display='inline-block'; }
     else { badge.style.display='none'; }
   }
 }
@@ -301,8 +377,9 @@ async function loadStats(){
 
 // ===== USERS =====
 async function loadUsers(){
-  var {data} = await sb.from('profiles').select('*').order('created_at',{ascending:false});
-  allUsers = data||[];
+  allUsers = await fetchAllRows(function(){
+    return sb.from('profiles').select('*').order('created_at',{ascending:false});
+  });
   renderUsers(allUsers);
 }
 
@@ -330,8 +407,9 @@ window.deleteUser=function(id,name){
 
 // ===== REQUESTS =====
 async function loadRequests(){
-  var {data} = await sb.from('requests').select('*, profiles(full_name)').order('created_at',{ascending:false});
-  allReqs = data||[];
+  allReqs = await fetchAllRows(function(){
+    return sb.from('requests').select('*, profiles(full_name)').order('created_at',{ascending:false});
+  });
   renderReqs(allReqs);
 }
 
@@ -403,10 +481,9 @@ window.filterMsgs=function(q){
 
 // ===== OFFERS =====
 async function loadOffers(){
-  var {data} = await sb.from('offers')
-    .select('*, provider:profiles!provider_id(full_name), request:requests(title)')
-    .order('created_at',{ascending:false});
-  allOffers = data||[];
+  allOffers = await fetchAllRows(function(){
+    return sb.from('offers').select('*, provider:profiles!provider_id(full_name), request:requests(title)').order('created_at',{ascending:false});
+  });
   renderOffers(allOffers);
 }
 
@@ -435,10 +512,9 @@ window.deleteOffer=function(id){
 
 // ===== REPORTS =====
 async function loadReports(){
-  var {data} = await sb.from('reports')
-    .select('*, request:requests(id,title), reporter:profiles!reporter_id(full_name)')
-    .order('created_at',{ascending:false});
-  allReports = data||[];
+  allReports = await fetchAllRows(function(){
+    return sb.from('reports').select('*, request:requests(id,title), reporter:profiles!reporter_id(full_name)').order('created_at',{ascending:false});
+  });
   renderReports(allReports);
   var pendingCount = allReports.filter(function(r){ return r.status==='pending'; }).length;
   var badge = document.getElementById('reportsTabBadge');
@@ -483,17 +559,54 @@ window.deleteReportedRequest=function(requestId,reportId){
   });
 };
 
+// ===== ERRORS =====
+async function loadErrors(){
+  var {data} = await sb.from('error_logs')
+    .select('*')
+    .order('created_at',{ascending:false})
+    .limit(100);
+  allErrors = data||[];
+  renderErrors(allErrors);
+  loadErrorsBadgeOnly();
+}
+
+function renderErrors(list){
+  var html = list.length ? '' : '<tr><td colspan="5" class="empty-row">لا توجد أخطاء مسجّلة 🎉</td></tr>';
+  list.forEach(function(e){
+    var pageShort = e.page_url ? e.page_url.replace(/^https?:\/\/[^\/]+/,'') || '/' : '—';
+    html+='<tr>'
+      +'<td data-label="الرسالة"><div class="td-name" style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ff6b6b">'+escHtml(e.message||'—')+'</div></td>'
+      +'<td data-label="الصفحة"><span style="color:#4a5568;font-size:.78rem">'+escHtml(pageShort)+'</span></td>'
+      +'<td data-label="المستخدم">'+(e.user_id ? escHtml(String(e.user_id).slice(0,8))+'...' : 'زائر')+'</td>'
+      +'<td data-label="التاريخ">'+fDate(e.created_at)+'</td>'
+      +'<td data-label="إجراء" style="display:flex;gap:6px;flex-wrap:wrap">'
+        +'<button class="act-btn dl" onclick="downloadSingle(\'errors\','+e.id+')">↓ تفاصيل</button>'
+        +'<button class="act-btn" style="border-color:#ff4466;color:#ff4466" onclick="dismissError('+e.id+')">🗑 حذف</button>'
+      +'</td>'
+      +'</tr>';
+  });
+  document.getElementById('errorsBody').innerHTML=html;
+}
+
+window.dismissError=async function(errorId){
+  showConfirm('حذف السجل','هل تريد حذف سجل هذا الخطأ؟',async function(){
+    await sb.from('error_logs').delete().eq('id',errorId);
+    loadErrors(); toast('✓ تم الحذف');
+  });
+};
+
 // ===== TABS =====
 function switchTab(el,tab){
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
   el.classList.add('on');
-  ['users','requests','messages','offers','reports'].forEach(function(t){
+  ['users','requests','messages','offers','reports','errors'].forEach(function(t){
     document.getElementById('tab-'+t).style.display = t===tab?'block':'none';
   });
   if(tab==='requests'&&!allReqs.length) loadRequests();
   if(tab==='messages'&&!allMsgs.length) loadMessages();
   if(tab==='offers'&&!allOffers.length) loadOffers();
   if(tab==='reports') loadReports();
+  if(tab==='errors') loadErrors();
 }
 
 // ===== HELPERS =====
@@ -513,43 +626,175 @@ function triggerDownload(filename, content){
   document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(url);
 }
-function downloadSingle(type, id){
-  var lines = [], filename = 'سجل';
+// ====== تنسيق سجل واحد كأسطر نصية — مستخدمة في التحميل الفردي والجماعي ======
+function formatRecordLines(type, record){
   if(type==='users'){
-    var u = allUsers.find(function(x){ return String(x.id)===String(id); });
-    if(!u) return;
-    lines = ['الاسم: '+(u.full_name||'—'),'اسم المستخدم: '+(u.username||'—'),'البريد الإلكتروني: '+(u.email||'—'),'تاريخ التسجيل: '+fDate(u.created_at),'الصفقات: '+(u.deals_count||0),'التقييم: '+(u.rating||0)];
-    filename = 'عضو_'+(u.username||u.id);
+    var u = record;
+    return {
+      lines: ['الاسم: '+(u.full_name||'—'),'اسم المستخدم: '+(u.username||'—'),'البريد الإلكتروني: '+(u.email||'—'),'تاريخ التسجيل: '+fDate(u.created_at),'الصفقات: '+(u.deals_count||0),'التقييم: '+(u.rating||0)],
+      filename: 'عضو_'+(u.username||u.id)
+    };
   } else if(type==='requests'){
-    var r = allReqs.find(function(x){ return String(x.id)===String(id); });
-    if(!r) return;
-    lines = ['العنوان: '+(r.title||'—'),'','الوصف:',(r.description||'—'),'','الفئة: '+(r.category||'—'),'الميزانية: '+(r.budget_text||'—'),'المنطقة: '+(r.city||'—'),'عدد العروض: '+(r.offers_count||0),'الحالة: '+(r.status==='open'?'مفتوح':'مغلق'),'تاريخ النشر: '+fDate(r.created_at)];
-    filename = 'طلب_'+r.id;
+    var r = record;
+    return {
+      lines: ['العنوان: '+(r.title||'—'),'','الوصف:',(r.description||'—'),'','الفئة: '+(r.category||'—'),'الميزانية: '+(r.budget_text||'—'),'المنطقة: '+(r.city||'—'),'عدد العروض: '+(r.offers_count||0),'الحالة: '+(r.status==='open'?'مفتوح':'مغلق'),'تاريخ النشر: '+fDate(r.created_at)],
+      filename: 'طلب_'+r.id
+    };
   } else if(type==='messages'){
-    var m = allMsgs.find(function(x){ return String(x.id)===String(id); });
-    if(!m) return;
+    var m = record;
     var sName = m.sender&&m.sender.full_name ? m.sender.full_name : 'مجهول';
     var rName = m.receiver&&m.receiver.full_name ? m.receiver.full_name : 'مجهول';
-    lines = ['من: '+sName,'إلى: '+rName,'مقروءة: '+(m.is_read?'نعم':'لا'),'التاريخ: '+fDate(m.created_at),'','نص الرسالة:',(m.content||'—')];
-    filename = 'رسالة_'+m.id;
+    return {
+      lines: ['من: '+sName,'إلى: '+rName,'مقروءة: '+(m.is_read?'نعم':'لا'),'التاريخ: '+fDate(m.created_at),'','نص الرسالة:',(m.content||'—')],
+      filename: 'رسالة_'+m.id
+    };
   } else if(type==='offers'){
-    var o = allOffers.find(function(x){ return String(x.id)===String(id); });
-    if(!o) return;
+    var o = record;
     var pName = o.provider&&o.provider.full_name ? o.provider.full_name : '—';
     var reqTitle = o.request&&o.request.title ? o.request.title : '—';
-    lines = ['الطلب المرتبط: '+reqTitle,'المزوّد: '+pName,'السعر: '+(o.price||0)+' ريال','المدة: '+(o.duration||'—'),'الحالة: '+(o.status==='accepted'?'مقبول':'انتظار'),'التاريخ: '+fDate(o.created_at),'','نص العرض:',(o.offer_text||'—')];
-    filename = 'عرض_'+o.id;
+    return {
+      lines: ['الطلب المرتبط: '+reqTitle,'المزوّد: '+pName,'السعر: '+(o.price||0)+' ريال','المدة: '+(o.duration||'—'),'الحالة: '+(o.status==='accepted'?'مقبول':'انتظار'),'التاريخ: '+fDate(o.created_at),'','نص العرض:',(o.offer_text||'—')],
+      filename: 'عرض_'+o.id
+    };
   } else if(type==='reports'){
-    var rp = allReports.find(function(x){ return String(x.id)===String(id); });
-    if(!rp) return;
+    var rp = record;
     var reqTitle2 = rp.request&&rp.request.title ? rp.request.title : 'طلب محذوف';
     var statusLabel = rp.status==='pending' ? 'قيد المراجعة' : (rp.status==='reviewed' ? 'تمت المراجعة' : 'تم التجاهل');
     var repName = rp.reporter&&rp.reporter.full_name ? rp.reporter.full_name : '—';
-    lines = ['الطلب المبلَّغ عنه: '+reqTitle2,'السبب: '+(rp.reason||'—'),'المبلِّغ: '+repName,'الحالة: '+statusLabel,'التاريخ: '+fDate(rp.created_at)];
-    filename = 'بلاغ_'+rp.id;
-  } else { return; }
-  triggerDownload(filename+'.txt', lines.join('\r\n'));
+    return {
+      lines: ['الطلب المبلَّغ عنه: '+reqTitle2,'السبب: '+(rp.reason||'—'),'المبلِّغ: '+repName,'الحالة: '+statusLabel,'التاريخ: '+fDate(rp.created_at)],
+      filename: 'بلاغ_'+rp.id
+    };
+  } else if(type==='errors'){
+    var er = record;
+    return {
+      lines: ['الرسالة: '+(er.message||'—'),'','الصفحة: '+(er.page_url||'—'),'المستخدم: '+(er.user_id||'زائر'),'المتصفح: '+(er.user_agent||'—'),'التاريخ: '+fDate(er.created_at),'','تفاصيل الخطأ (Stack Trace):',(er.stack||'لا توجد تفاصيل إضافية')],
+      filename: 'خطأ_'+er.id
+    };
+  }
+  return null;
+}
+
+function downloadSingle(type, id){
+  var sourceArr = {users:allUsers, requests:allReqs, messages:allMsgs, offers:allOffers, reports:allReports, errors:allErrors}[type];
+  if(!sourceArr) return;
+  var record = sourceArr.find(function(x){ return String(x.id)===String(id); });
+  if(!record) return;
+  var formatted = formatRecordLines(type, record);
+  if(!formatted) return;
+  triggerDownload(formatted.filename+'.txt', formatted.lines.join('\r\n'));
   toast('✓ تم تحميل الملف');
+}
+
+// ====== التحميل بالجملة (نطاق تاريخ) ======
+var BULK_TYPE_LABELS = {users:'الأعضاء', requests:'الطلبات', messages:'الرسائل', offers:'العروض', reports:'البلاغات', errors:'الأخطاء'};
+var bulkCurrentType = null;
+var bulkSelectedRange = null; // 'today' | 'week' | 'all' | null (يعني مخصص)
+
+function openBulkDlModal(type){
+  bulkCurrentType = type;
+  bulkSelectedRange = 'today';
+  document.getElementById('bulkDlFrom').value = '';
+  document.getElementById('bulkDlTo').value = '';
+  document.querySelectorAll('.bulk-range-btn').forEach(function(b){ b.classList.toggle('sel', b.getAttribute('data-range')==='today'); });
+  updateBulkCount();
+  document.getElementById('bulkDlModal').classList.add('open');
+}
+function closeBulkDlModal(){
+  document.getElementById('bulkDlModal').classList.remove('open');
+}
+function setBulkRange(range){
+  bulkSelectedRange = range;
+  document.getElementById('bulkDlFrom').value = '';
+  document.getElementById('bulkDlTo').value = '';
+  document.querySelectorAll('.bulk-range-btn').forEach(function(b){ b.classList.toggle('sel', b.getAttribute('data-range')===range); });
+  updateBulkCount();
+}
+function clearBulkRangeSelection(){
+  bulkSelectedRange = null; // المستخدم بدأ يكتب تاريخاً مخصصاً
+  document.querySelectorAll('.bulk-range-btn').forEach(function(b){ b.classList.remove('sel'); });
+  updateBulkCount();
+}
+function getBulkDateBounds(){
+  var now = new Date();
+  if(bulkSelectedRange==='today'){
+    var start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    return {from:start, to:new Date(start.getTime()+24*60*60*1000)};
+  }
+  if(bulkSelectedRange==='week'){
+    var start2 = new Date(now.getTime()-7*24*60*60*1000);
+    return {from:start2, to:new Date(now.getTime()+24*60*60*1000)};
+  }
+  if(bulkSelectedRange==='all'){
+    return {from:null, to:null};
+  }
+  // نطاق مخصّص من الحقول
+  var fromVal = document.getElementById('bulkDlFrom').value;
+  var toVal = document.getElementById('bulkDlTo').value;
+  var fromDate = fromVal ? new Date(fromVal+'T00:00:00') : null;
+  var toDate = toVal ? new Date(toVal+'T23:59:59') : null;
+  return {from:fromDate, to:toDate};
+}
+function getFilteredBulkRecords(){
+  var sourceArr = {users:allUsers, requests:allReqs, messages:allMsgs, offers:allOffers, reports:allReports, errors:allErrors}[bulkCurrentType];
+  if(!sourceArr) return [];
+  var bounds = getBulkDateBounds();
+  if(!bounds.from && !bounds.to) return sourceArr; // "الكل"
+  return sourceArr.filter(function(rec){
+    var d = new Date(rec.created_at);
+    if(bounds.from && d < bounds.from) return false;
+    if(bounds.to && d > bounds.to) return false;
+    return true;
+  });
+}
+function updateBulkCount(){
+  var n = getFilteredBulkRecords().length;
+  document.getElementById('bulkDlCount').textContent = n + ' سجل سيتم تضمينه في الملف';
+}
+function downloadBulk(){
+  var records = getFilteredBulkRecords();
+  if(!records.length){ toast('⚠️ لا توجد سجلات في هذا النطاق'); return; }
+  var typeLabel = BULK_TYPE_LABELS[bulkCurrentType] || bulkCurrentType;
+  var bounds = getBulkDateBounds();
+  var rangeLabel = (!bounds.from && !bounds.to) ? 'الكل' : (fDate(bounds.from)+' إلى '+fDate(bounds.to));
+  var fileLines = [];
+  fileLines.push('تقرير '+typeLabel+' — علاقات');
+  fileLines.push('النطاق: '+rangeLabel);
+  fileLines.push('عدد السجلات: '+records.length);
+  fileLines.push('تاريخ التحميل: '+fDate(new Date()));
+  fileLines.push('='.repeat(50));
+  records.forEach(function(rec, i){
+    var formatted = formatRecordLines(bulkCurrentType, rec);
+    if(!formatted) return;
+    fileLines.push('');
+    fileLines.push('— سجل '+(i+1)+' من '+records.length+' —');
+    fileLines.push('');
+    fileLines = fileLines.concat(formatted.lines);
+    fileLines.push('');
+    fileLines.push('-'.repeat(50));
+  });
+  var filename = typeLabel+'_'+(bulkSelectedRange||'مخصص')+'_'+new Date().toISOString().slice(0,10);
+  triggerDownload(filename+'.txt', fileLines.join('\r\n'));
+  toast('✓ تم تحميل '+records.length+' سجل');
+  closeBulkDlModal();
+}
+
+// ====== جلب كل الصفوف بدون حد 1000 الافتراضي من Supabase، عبر صفحات متتالية ======
+async function fetchAllRows(buildQuery){
+  var pageSize = 1000;
+  var page = 0;
+  var allRows = [];
+  while(true){
+    var from = page * pageSize;
+    var to = from + pageSize - 1;
+    var {data, error} = await buildQuery().range(from, to);
+    if(error){ console.error('fetchAllRows error:', error); break; }
+    if(!data || !data.length) break;
+    allRows = allRows.concat(data);
+    if(data.length < pageSize) break; // آخر صفحة
+    page++;
+  }
+  return allRows;
 }
 
 function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
