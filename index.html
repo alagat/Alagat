@@ -2119,6 +2119,7 @@ window.openDetail=async function(id){
         +'<div style="display:flex;gap:6px">'
         +(isOwnerView && !isAccepted && !anyAccepted ? '<button class="offer-accept-btn" data-oid="'+o.id+'" data-pid="'+o.provider_id+'" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:9px;padding:8px 14px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer;flex-shrink:0">✓ قبول العرض</button>' : '')
         +(o.provider_id && !(curUser && curUser.id===o.provider_id) ? '<button class="offer-contact-btn" data-uid="'+o.provider_id+'" data-name="'+encodeURIComponent(p.full_name||'المزود')+'" style="background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;border-radius:9px;padding:8px 16px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer;flex-shrink:0">💬 تواصل</button>' : '')
+        +(curUser && curUser.id===o.provider_id ? '<button class="offer-delete-btn" data-oid="'+o.id+'" style="background:transparent;color:#ef4444;border:1px solid rgba(239,68,68,.4);border-radius:9px;padding:8px 14px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer;flex-shrink:0">🗑️ حذف</button>' : '')
         +'</div>'
       +'</div>'
     +'</div>';
@@ -2951,7 +2952,39 @@ document.addEventListener('click', function(e){
   }
 });
 
-// زر قبول العرض — يظهر فقط لصاحب الطلب، يقفل باقي العروض على الطلب نفسه
+// زر حذف العرض — يظهر فقط لمقدّم العرض نفسه، يحذف عرضه بأي حالة (مقبول أو غير مقبول)
+document.addEventListener('click', async function(e){
+  var btn = e.target.closest('.offer-delete-btn');
+  if(!btn) return;
+  e.preventDefault(); e.stopPropagation();
+  if(!confirm('هل تريد حذف هذا العرض؟ لا يمكن التراجع عن هذا الإجراء.')) return;
+  var offerId = btn.getAttribute('data-oid');
+  btn.disabled = true; btn.textContent = 'جاري الحذف...';
+  try{
+    // نجلب معرّف الطلب الحقيقي قبل الحذف لإعادة فتح الصفحة بعدها
+    var {data:offerRow} = await sb.from('offers').select('request_id').eq('id', offerId).single();
+    var realRequestId = offerRow && offerRow.request_id;
+
+    var {data:deletedRows, error} = await sb.from('offers').delete().eq('id', offerId).select('id');
+    if(error){ hToast('⚠️ تعذر حذف العرض'); btn.disabled=false; btn.textContent='🗑️ حذف'; return; }
+    if(!deletedRows || !deletedRows.length){
+      console.error('offer-delete-btn: delete affected 0 rows (likely RLS)');
+      logErrorToServer('offer-delete-btn: delete affected 0 rows for offer ' + offerId, null);
+      hToast('⚠️ تعذر حذف العرض، تأكد أنك مقدّم هذا العرض');
+      btn.disabled=false; btn.textContent='🗑️ حذف';
+      return;
+    }
+    hToast('✓ تم حذف العرض بنجاح');
+    if(realRequestId){ await openDetailById(realRequestId); }
+  } catch(err){
+    console.error('offer-delete-btn error:', err);
+    logErrorToServer('offer-delete-btn: ' + (err && err.message), err && err.stack);
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
+    btn.disabled=false; btn.textContent='🗑️ حذف';
+  }
+});
+
+
 document.addEventListener('click', async function(e){
   var btn = e.target.closest('.offer-accept-btn');
   if(!btn) return;
@@ -3264,10 +3297,16 @@ function ensureReportAuthChecked(){
 }
 
 window.openReportModal = function(){
+  // نفتح المودال فوراً (sync) لتجنّب أي تأخير في الظهور على الجوال،
+  // وفحص الصلاحية يحصل بعد الفتح مباشرة — لو فشل نقفله ونعرض رسالة الخطأ
+  var modal = document.getElementById('reportModal');
+  if(modal) modal.classList.add('open');
   ensureReportAuthChecked().then(function(){
-    if(!window._reportAuthOk){ hToast('⚠️ يجب تسجيل الدخول للتبليغ'); openAuth('login'); return; }
-    var modal = document.getElementById('reportModal');
-    if(modal) modal.classList.add('open');
+    if(!window._reportAuthOk){
+      if(modal) modal.classList.remove('open');
+      hToast('⚠️ يجب تسجيل الدخول للتبليغ');
+      openAuth('login');
+    }
   });
 };
 
