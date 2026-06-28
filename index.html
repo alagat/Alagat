@@ -3273,14 +3273,30 @@ window.openDetailMenu = async function(event){
   var rect = event.currentTarget.getBoundingClientRect();
   menu.style.top = (rect.bottom + 4) + 'px';
   menu.style.left = Math.max(8, rect.right - 180) + 'px';
-  menu.innerHTML = '<div style="padding:12px 16px;font-size:.84rem;color:#ef4444;cursor:pointer;font-weight:600" onclick="event.stopPropagation();document.getElementById(\'detailMenuPopup\').remove();openReportModal();">🚩 تبليغ عن هذا الطلب</div>';
+  var reportItem = document.createElement('div');
+  reportItem.style.cssText = 'padding:12px 16px;font-size:.84rem;color:#ef4444;cursor:pointer;font-weight:600';
+  reportItem.textContent = '🚩 تبليغ عن هذا الطلب';
+  reportItem.addEventListener('click', function(e){
+    e.stopPropagation();
+    e.preventDefault();
+    var m = document.getElementById('detailMenuPopup');
+    if(m) m.remove();
+    document.removeEventListener('click', closeMenuOnOutsideClick, true);
+    openReportModal();
+  });
+  menu.appendChild(reportItem);
   document.body.appendChild(menu);
+
+  // إغلاق القائمة فقط لو الضغط كان خارجها فعلياً (capture phase، بدون تعارض مع ضغط عناصرها الداخلية)
+  function closeMenuOnOutsideClick(e){
+    var m = document.getElementById('detailMenuPopup');
+    if(m && !m.contains(e.target)){
+      m.remove();
+      document.removeEventListener('click', closeMenuOnOutsideClick, true);
+    }
+  }
   setTimeout(function(){
-    document.addEventListener('click', function closeMenu(){
-      var m = document.getElementById('detailMenuPopup');
-      if(m) m.remove();
-      document.removeEventListener('click', closeMenu);
-    });
+    document.addEventListener('click', closeMenuOnOutsideClick, true);
   }, 150);
 };
 
