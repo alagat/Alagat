@@ -2937,7 +2937,7 @@ window.openRatingModalChecked = async function(){
     hToast('❌ حدث خطأ، حاول مرة أخرى');
   }
 };
-window.closePModal = function(id){var el=document.getElementById(id);el.classList.remove('open');el.style.display='';el.style.opacity='';el.style.pointerEvents='';};
+window.closePModal = function(id){var el=document.getElementById(id);el.classList.remove('open');el.style.display='';el.style.opacity='';el.style.pointerEvents='';el.style.position='';el.style.inset='';el.style.zIndex='';el.style.alignItems='';var sh=el.querySelector('.sheet');if(sh)sh.style.transform='';};
 window.togglePlusMenu = function(){var m=document.getElementById('plusMenu');var btn=document.getElementById('pAddBtn');var isOpen=m.style.display==='block';m.style.display=isOpen?'none':'block';btn.style.transform=isOpen?'':'rotate(45deg)';};
 window.closePlusMenu = function(){document.getElementById('plusMenu').style.display='none';document.getElementById('pAddBtn').style.transform='';};
 document.addEventListener('click',function(e){if(!e.target.closest('.bn-center'))closePlusMenu();});
@@ -3315,15 +3315,21 @@ function ensureReportAuthChecked(){
 }
 
 window.openReportModal = function(){
-  alert('TEST: openReportModal تم استدعاؤها');
   var modal = document.getElementById('reportModal');
-  alert('TEST: modal = ' + (modal ? 'موجود' : 'NULL غير موجود'));
   if(modal){
+    // ننقل المودال لنهاية body لضمان ظهوره فوق كل العناصر (تجاوز أي stacking context)
+    document.body.appendChild(modal);
     modal.classList.add('open');
-    modal.style.zIndex = '999999';
+    modal.style.position = 'fixed';
+    modal.style.inset = '0';
+    modal.style.zIndex = '2147483647';
     modal.style.opacity = '1';
     modal.style.pointerEvents = 'all';
     modal.style.display = 'flex';
+    modal.style.alignItems = 'flex-end';
+    // نتأكد أن البطاقة الداخلية ظاهرة
+    var sheet = modal.querySelector('.sheet');
+    if(sheet) sheet.style.transform = 'none';
   }
   ensureReportAuthChecked().then(function(){
     if(!window._reportAuthOk){
