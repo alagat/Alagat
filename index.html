@@ -639,7 +639,6 @@ function logErrorToServer(message, stack){
   <button onclick="window.showPage('home')" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;width:36px">←</button>
   <div style="flex:1;font-size:.95rem;font-weight:700;color:#fff" data-i18n="requestDetails">تفاصيل الطلب</div>
   <button onclick="openOffer(window._currentDetailId)" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer" data-i18n="submitOffer">قدّم عرضك</button>
-  <button onclick="openDetailMenu(event)" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;width:30px;flex-shrink:0">⋮</button>
 </nav>
 <div style="padding:16px">
   <!-- بيانات صاحب الطلب -->
@@ -700,6 +699,8 @@ function logErrorToServer(message, stack){
     <button id="ownerShareBtn" style="width:100%;margin-top:8px;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">⤴ مشاركة الطلب</button>
     <div id="bumpHint" style="font-size:.72rem;color:var(--t3);text-align:center;margin-top:8px"></div>
   </div>
+  <!-- زر التبليغ في آخر الصفحة -->
+  <button id="reportRequestBtn" onclick="openReportModal()" style="width:100%;margin-top:24px;background:transparent;border:1px solid rgba(239,68,68,.35);color:#ef4444;border-radius:10px;padding:12px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">🚩 تبليغ عن هذا الطلب</button>
 </div>
 <!-- زر قدّم عرضك في الأسفل -->
 <div style="position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:var(--bg);border-top:1px solid var(--b);display:flex;justify-content:center">
@@ -2935,7 +2936,7 @@ window.openRatingModalChecked = async function(){
     hToast('❌ حدث خطأ، حاول مرة أخرى');
   }
 };
-window.closePModal = function(id){document.getElementById(id).classList.remove('open');};
+window.closePModal = function(id){var el=document.getElementById(id);el.classList.remove('open');el.style.display='';el.style.opacity='';el.style.pointerEvents='';};
 window.togglePlusMenu = function(){var m=document.getElementById('plusMenu');var btn=document.getElementById('pAddBtn');var isOpen=m.style.display==='block';m.style.display=isOpen?'none':'block';btn.style.transform=isOpen?'':'rotate(45deg)';};
 window.closePlusMenu = function(){document.getElementById('plusMenu').style.display='none';document.getElementById('pAddBtn').style.transform='';};
 document.addEventListener('click',function(e){if(!e.target.closest('.bn-center'))closePlusMenu();});
@@ -3314,10 +3315,16 @@ function ensureReportAuthChecked(){
 
 window.openReportModal = function(){
   var modal = document.getElementById('reportModal');
-  if(modal) modal.classList.add('open');
+  if(modal){
+    modal.classList.add('open');
+    modal.style.zIndex = '999999';
+    modal.style.opacity = '1';
+    modal.style.pointerEvents = 'all';
+    modal.style.display = 'flex';
+  }
   ensureReportAuthChecked().then(function(){
     if(!window._reportAuthOk){
-      if(modal) modal.classList.remove('open');
+      if(modal){ modal.classList.remove('open'); modal.style.display=''; }
       hToast('⚠️ يجب تسجيل الدخول للتبليغ');
       openAuth('login');
     }
