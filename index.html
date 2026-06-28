@@ -3346,20 +3346,20 @@ window.submitReport = async function(){
   var requestId = window._currentDetailId;
   if(!requestId){ hToast('⚠️ تعذر تحديد الطلب'); return; }
   var user = await sbGetUser();
-  if(!user){ hToast('⚠️ يجب تسجيل الدخول للتبليغ'); document.getElementById('reportModal').classList.remove('open'); openAuth('login'); return; }
+  if(!user){ hToast('⚠️ يجب تسجيل الدخول للتبليغ'); closePModal('reportModal'); openAuth('login'); return; }
   try{
     var {error} = await sb.from('reports').insert({
       request_id: requestId,
       reporter_id: user.id,
       reason: reason.value
     });
-    document.getElementById('reportModal').classList.remove('open');
+    closePModal('reportModal');
     if(error){ console.error('submitReport error:', error); logErrorToServer('submitReport: ' + error.message, null); hToast('⚠️ تعذر إرسال البلاغ'); return; }
     hToast('✓ تم استلام بلاغك، شكراً لك');
   } catch(e){
     console.error('submitReport error:', e);
     logErrorToServer('submitReport: ' + (e && e.message), e && e.stack);
-    document.getElementById('reportModal').classList.remove('open');
+    closePModal('reportModal');
     hToast('❌ حدث خطأ، حاول مرة أخرى');
   }
 };
