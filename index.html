@@ -839,7 +839,7 @@ function logErrorToServer(message, stack){
 </div>
 
 <!-- PROFILE MODALS -->
-<div class="p-overlay" id="reportModal" onclick="if(event.target===this)closePModal('reportModal')">
+<div class="p-overlay" id="reportModal" style="z-index:9999" onclick="if(event.target===this)closePModal('reportModal')">
   <div class="sheet"><div class="sheet-handle"></div><div class="sheet-title">🚩 تبليغ عن هذا الطلب</div>
     <div style="font-size:.8rem;color:var(--t2);margin-bottom:14px;text-align:center">اختر سبب التبليغ، وسنراجعه قريباً</div>
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
@@ -3314,20 +3314,10 @@ function ensureReportAuthChecked(){
 
 window.openReportModal = function(){
   var modal = document.getElementById('reportModal');
-  // ===== تشخيص مؤقت =====
-  if(!modal){ hToast('🔴 تشخيص: المودال غير موجود في الصفحة (reportModal = null)'); return; }
-  hToast('🟢 تشخيص: المودال موجود، جاري الفتح. auth=' + String(window._reportAuthOk));
-  modal.classList.add('open');
-  // نتحقق بعد لحظة هل الكلاس فعلاً انضاف وهل المودال مرئي
-  setTimeout(function(){
-    var hasOpen = modal.classList.contains('open');
-    var vis = window.getComputedStyle(modal).opacity;
-    hToast('🔵 تشخيص: open=' + hasOpen + ' opacity=' + vis);
-  }, 300);
-  // ===== نهاية التشخيص =====
+  if(modal) modal.classList.add('open');
   ensureReportAuthChecked().then(function(){
     if(!window._reportAuthOk){
-      modal.classList.remove('open');
+      if(modal) modal.classList.remove('open');
       hToast('⚠️ يجب تسجيل الدخول للتبليغ');
       openAuth('login');
     }
