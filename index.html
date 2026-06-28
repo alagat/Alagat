@@ -3313,13 +3313,21 @@ function ensureReportAuthChecked(){
 }
 
 window.openReportModal = function(){
-  // نفتح المودال فوراً (sync) لتجنّب أي تأخير في الظهور على الجوال،
-  // وفحص الصلاحية يحصل بعد الفتح مباشرة — لو فشل نقفله ونعرض رسالة الخطأ
   var modal = document.getElementById('reportModal');
-  if(modal) modal.classList.add('open');
+  // ===== تشخيص مؤقت =====
+  if(!modal){ hToast('🔴 تشخيص: المودال غير موجود في الصفحة (reportModal = null)'); return; }
+  hToast('🟢 تشخيص: المودال موجود، جاري الفتح. auth=' + String(window._reportAuthOk));
+  modal.classList.add('open');
+  // نتحقق بعد لحظة هل الكلاس فعلاً انضاف وهل المودال مرئي
+  setTimeout(function(){
+    var hasOpen = modal.classList.contains('open');
+    var vis = window.getComputedStyle(modal).opacity;
+    hToast('🔵 تشخيص: open=' + hasOpen + ' opacity=' + vis);
+  }, 300);
+  // ===== نهاية التشخيص =====
   ensureReportAuthChecked().then(function(){
     if(!window._reportAuthOk){
-      if(modal) modal.classList.remove('open');
+      modal.classList.remove('open');
       hToast('⚠️ يجب تسجيل الدخول للتبليغ');
       openAuth('login');
     }
