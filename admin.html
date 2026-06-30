@@ -788,7 +788,11 @@ async function fetchAllRows(buildQuery){
     var from = page * pageSize;
     var to = from + pageSize - 1;
     var {data, error} = await buildQuery().range(from, to);
-    if(error){ console.error('fetchAllRows error:', error); break; }
+    if(error){
+      console.error('fetchAllRows error:', error);
+      alert('خطأ في جلب البيانات:\n' + JSON.stringify(error, null, 2));
+      break;
+    }
     if(!data || !data.length) break;
     allRows = allRows.concat(data);
     if(data.length < pageSize) break; // آخر صفحة
