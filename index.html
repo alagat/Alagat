@@ -28,7 +28,7 @@
 <meta name="twitter:image" content="https://alagat.com/og-image.png">
 
 <!-- Favicon مؤقت (نص "ع" بدون لوغو رسمي بعد) -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%237c3aed'/%3E%3Cstop offset='100%25' stop-color='%23c084fc'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23g)'/%3E%3Ctext x='50' y='70' font-family='Arial' font-size='62' font-weight='900' fill='%23ffffff' text-anchor='middle'%3Eع%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230085ff'/%3E%3Cstop offset='100%25' stop-color='%230073e6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='%230a0f14'/%3E%3Ctext x='50' y='68' font-family='Arial' font-size='55' font-weight='900' fill='url(%23g)' text-anchor='middle'%3Eع%3C/text%3E%3C/svg%3E">
 
 <style>
 /* ====== SHARED ====== */
@@ -43,8 +43,8 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 /* ====== HOME VARS ====== */
 :root{
   --bg:#0a0f14;--s1:#0f1923;--s2:#1a2332;--b:#1e2d3d;
-  --ac:#0085ff;--ac2:#0073e6;--ac3:#7c3aed;
-  --glow:rgba(0,133,255,.1);--glow3:rgba(124,58,237,.08);
+  --ac:#0085ff;--ac2:#0073e6;--ac3:#0066cc;
+  --glow:rgba(0,133,255,.1);--glow3:rgba(0,133,255,.08);
   --t:#e8edf3;--t2:#7a8fa6;--t3:#3d5269;
   --green:#00d4a0;--orange:#ffaa00;--red:#ff4466;--r:12px;
   --nav-bg:rgba(10,15,20,.96);
@@ -55,7 +55,7 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
   --bg:#f1f3f5;--s1:#ffffff;--s2:#f1f3f5;--b:#e0e4ea;
   --ac:#0085ff;--ac2:#0073e6;
   --t:#0f1923;--t2:#4a5f72;--t3:#8a9db0;
-  --glow:rgba(0,133,255,.07);--glow3:rgba(124,58,237,.05);
+  --glow:rgba(0,133,255,.07);--glow3:rgba(0,133,255,.05);
   --nav-bg:rgba(255,255,255,.97);
 }
 [data-theme="light"] body{background:#f1f3f5;color:#0f1923}
@@ -90,8 +90,8 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 .btn-g:hover{border-color:var(--ac);color:var(--ac)}
 .btn-b{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;padding:7px 16px;border-radius:8px;font-family:inherit;font-size:.79rem;font-weight:700;cursor:pointer;transition:.2s}
 .btn-b:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(0,133,255,.4)}
-.btn-p{background:linear-gradient(135deg,var(--ac3),#9d60f8);color:#fff;border:none;padding:7px 16px;border-radius:8px;font-family:inherit;font-size:.79rem;font-weight:700;cursor:pointer;transition:.2s}
-.btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(124,58,237,.4)}
+.btn-p{background:linear-gradient(135deg,var(--ac2),var(--ac3));color:#fff;border:none;padding:7px 16px;border-radius:8px;font-family:inherit;font-size:.79rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(0,133,255,.4)}
 .nav-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.8rem;cursor:pointer}
 .app{display:flex;min-height:100vh;padding-top:56px}
 .sidebar{width:220px;min-width:220px;position:fixed;top:56px;bottom:0;right:0;padding:14px 10px;border-left:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--bg)}
@@ -100,7 +100,7 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 .si:hover{background:var(--s2);color:var(--t)}
 .si.on{background:var(--glow);color:var(--ac);border-color:rgba(37,99,168,.18)}
 .si-b{margin-right:auto;background:var(--ac);color:#fff;font-size:.6rem;font-weight:700;padding:2px 6px;border-radius:9px}
-.feed{flex:1;margin-right:220px;margin-left:270px;padding:14px 0 80px;max-width:620px;min-width:0}
+.feed{flex:1;margin-right:220px;margin-left:270px;padding:14px 16px 80px;min-width:0}
 .mini-bar{display:flex;align-items:center;gap:10px;background:var(--s1);border:1px solid var(--b);border-radius:var(--r);padding:10px 14px;margin:0 14px 12px;cursor:pointer;transition:.2s}
 .mini-bar:hover{border-color:rgba(37,99,168,.4);background:var(--s2)}
 .mini-hint{flex:1;font-size:.86rem;color:var(--t3)}
@@ -140,7 +140,7 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 .ab:hover{background:var(--s2);color:var(--t);border-color:var(--ac)}
 .ab.p{background:linear-gradient(135deg,var(--ac),var(--ac2));border:none;color:#fff;font-weight:600}
 .ab.saved{color:var(--ac);border-color:var(--ac)}
-.bcta{margin:20px 14px 10px;background:linear-gradient(135deg,rgba(37,99,168,.1),rgba(124,58,237,.08));border:1px solid rgba(37,99,168,.18);border-radius:16px;padding:22px;text-align:center}
+.bcta{margin:20px 14px 10px;background:linear-gradient(135deg,rgba(37,99,168,.1),rgba(0,133,255,.08));border:1px solid rgba(37,99,168,.18);border-radius:16px;padding:22px;text-align:center}
 .bcta h3{font-size:1rem;font-weight:800;margin-bottom:7px}
 .bcta p{font-size:.79rem;color:var(--t2);margin-bottom:14px;line-height:1.6}
 .bcta-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
@@ -180,7 +180,7 @@ textarea.fi{resize:vertical;min-height:68px}
 .frow .fg{flex:1}
 .sk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:5px}
 .sko{background:var(--s2);border:1px solid var(--b);border-radius:7px;padding:7px;text-align:center;cursor:pointer;transition:.15s;font-size:.77rem;font-weight:500;color:var(--t2)}
-.sko:hover,.sko.sel{background:var(--glow3);border-color:rgba(124,58,237,.3);color:#c084fc}
+.sko:hover,.sko.sel{background:var(--glow3);border-color:rgba(0,133,255,.3);color:#3da9ff}
 .ma{display:flex;justify-content:flex-end;gap:7px;margin-top:13px}
 .or-div{display:flex;align-items:center;gap:10px;margin:12px 0}
 .or-line{flex:1;height:1px;background:var(--b)}
@@ -191,7 +191,7 @@ textarea.fi{resize:vertical;min-height:68px}
 .offer-contact{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;padding:6px 14px;border-radius:7px;font-family:inherit;font-size:.76rem;font-weight:600;cursor:pointer;transition:.2s}
 .offer-contact:hover{opacity:.88}
 .empty-state{text-align:center;padding:40px 20px;color:var(--t2)}
-@media(max-width:1050px){.rpanel{display:none}.feed{margin-left:0;max-width:100%}}
+@media(max-width:1050px){.rpanel{display:none}.feed{margin-left:0}}@media(min-width:1051px){#cardsContainer{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}}
 @media(max-width:680px){.sidebar{display:none}.feed{margin-right:0}}
 
 /* ====== PROFILE STYLES ====== */
@@ -201,7 +201,7 @@ textarea.fi{resize:vertical;min-height:68px}
 .p-nav-search{flex:1;background:rgba(255,255,255,.15);border:none;border-radius:20px;padding:7px 14px;color:#fff;font-family:inherit;font-size:.82rem;outline:none;max-width:260px}
 .p-nav-search::placeholder{color:rgba(255,255,255,.7)}
 .p-nav-av{width:34px;height:34px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--ac);font-size:.85rem;flex-shrink:0;cursor:pointer}
-.p-cover{width:100%;height:200px;display:block;background:linear-gradient(135deg,#5a9fd8,#7bb8e8,#a8d4f0);position:relative;overflow:hidden}
+.p-cover{width:100%;height:200px;display:block;background:linear-gradient(135deg,#0066cc,#0085ff,#3da9ff);position:relative;overflow:hidden}
 .p-cover-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.12) 1px,transparent 1px);background-size:28px 28px}
 .profile-section{background:var(--s1);padding:0 16px 16px;border-bottom:1px solid var(--b);text-align:center;position:relative}
 .p-top-row{display:flex;align-items:center;justify-content:flex-start;padding-top:10px;margin-top:-30px;position:relative;z-index:2;min-height:24px}
@@ -282,8 +282,8 @@ textarea.fi{resize:vertical;min-height:68px}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--s1);border-top:1px solid var(--b);display:flex;align-items:center;height:64px;padding:0 8px;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
 @media(min-width:681px){.bottom-nav{justify-content:center;gap:0}.bottom-nav .bn{flex:0 0 110px}.bottom-nav .bn-center{flex:0 0 64px}}
 .bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:.63rem;font-weight:600;color:#9ca3af;cursor:pointer;padding:6px 4px;border-radius:12px;transition:.15s;border:none;background:none;font-family:inherit;position:relative}
-.bn:hover{color:#2563a8}
-.bn.on{color:#2563a8}
+.bn:hover{color:var(--ac)}
+.bn.on{color:var(--ac)}
 .bn-iw{width:28px;height:28px;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:.15s;margin-bottom:1px}
 .bn.on .bn-iw{background:transparent}
 .bn-center{flex:1;display:flex;align-items:center;justify-content:center}
@@ -526,12 +526,12 @@ function logErrorToServer(message, stack){
   <div class="sidebar">
     <div class="ss" data-i18n="menu">القائمة</div>
     <div class="si on" id="si-home" data-i18n="home">🏠 الرئيسية</div>
-    <div class="si" id="si-logout" style="color:var(--red)" data-i18n="logout">🚪 تسجيل الخروج</div>
+    <div class="si" id="si-logout" style="color:var(--red);display:none" data-i18n="logout">🚪 تسجيل الخروج</div>
 
-    <div class="si" id="si-notif" data-i18n="notifications">🔔 الإشعارات<span class="si-b">4</span></div>
-    <div class="si" id="si-msgs" data-i18n="myMessages">💬 رسائلي</div>
+    <div class="si" id="si-notif" style="display:none" data-i18n="notifications">🔔 الإشعارات<span class="si-b" style="display:none">0</span></div>
+    <div class="si" id="si-msgs" style="display:none" data-i18n="myMessages">💬 رسائلي</div>
 
-    <div class="si" id="si-saved" data-i18n="saved">⭐ المحفوظات</div>
+    <div class="si" id="si-saved" style="display:none" data-i18n="saved">⭐ المحفوظات</div>
     <div class="ss" style="margin-top:6px" data-i18n="categories">الفئات</div>
     <div class="si cat-si" data-cat="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</div>
     <div class="si cat-si" data-cat="سيارات" data-i18n="catCars">🚙 سيارات</div>
@@ -609,11 +609,7 @@ function logErrorToServer(message, stack){
     <div class="sr-box"><span style="color:var(--t3)">🔍</span><input type="text" placeholder="ابحث في الطلبات..." id="searchInput2" oninput="filterFeed(this.value)"></div>
     <div class="pc">
       <div class="pt">🔥 الأكثر طلباً</div>
-      <div class="hti"><span class="tr2">1</span><span class="tn">تطوير موقع</span><span class="tc">312</span></div>
-      <div class="hti"><span class="tr2">2</span><span class="tn">تصميم شعار</span><span class="tc">278</span></div>
-      <div class="hti"><span class="tr2">3</span><span class="tn">إدارة سوشيال</span><span class="tc">241</span></div>
-      <div class="hti"><span class="tr2">4</span><span class="tn">دروس رياضيات</span><span class="tc">198</span></div>
-      <div class="hti"><span class="tr2">5</span><span class="tn">تركيب مكيفات</span><span class="tc">187</span></div>
+      <div id="hotCatsContainer"><div style="text-align:center;padding:16px;color:var(--t2);font-size:.8rem">جاري التحميل...</div></div>
     </div>
     <div class="pc" id="rpGuest">
       <div class="pt" style="color:var(--ac2)">🚀 جديد على علاقات؟</div>
@@ -622,8 +618,8 @@ function logErrorToServer(message, stack){
       <button class="btn-g" style="width:100%;border-radius:8px;padding:8px;font-size:.79rem" id="rpLogin">تسجيل الدخول</button>
     </div>
     <div class="pc" id="rpUser" style="display:none"></div>
-    <div class="pc" style="background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(37,99,168,.05));border-color:rgba(124,58,237,.18)">
-      <div class="pt" style="color:#c084fc">💰 عندك مهارة؟</div>
+    <div class="pc" style="background:linear-gradient(135deg,rgba(0,133,255,.08),rgba(37,99,168,.05));border-color:rgba(0,133,255,.18)">
+      <div class="pt" style="color:#3da9ff">💰 عندك مهارة؟</div>
       <p style="font-size:.78rem;color:var(--t2);line-height:1.6;margin-bottom:10px">حوّل وقتك الحر إلى دخل ثانٍ حقيقي</p>
       <button class="btn-p" style="width:100%;border-radius:8px;padding:8px;font-size:.79rem" id="btnProvider">ابدأ الكسب الآن</button>
     </div>
@@ -870,7 +866,7 @@ function logErrorToServer(message, stack){
       <label class="fgl" data-i18n="avatarColor">لون الصورة الرمزية</label>
       <div id="editAvatarColors" style="display:flex;gap:8px;flex-wrap:wrap;padding-top:4px">
         <div class="avc-dot" data-color="#0085ff" style="background:#0085ff"></div>
-        <div class="avc-dot" data-color="#7c3aed" style="background:#7c3aed"></div>
+        <div class="avc-dot" data-color="#0055cc" style="background:#0055cc"></div>
         <div class="avc-dot" data-color="#dc2626" style="background:#dc2626"></div>
         <div class="avc-dot" data-color="#16a34a" style="background:#16a34a"></div>
         <div class="avc-dot" data-color="#ea580c" style="background:#ea580c"></div>
@@ -1490,11 +1486,29 @@ function buildFeedQuery(){
 function mapRequestRow(r){
   var p=r.profiles||{};
   return{id:r.id,name:p.full_name||'مجهول',handle:'@'+(p.username||'user'),av:(p.full_name||'م')[0],
-    grad:p.avatar_color||'linear-gradient(135deg,#2563a8,#4a9fd4)',time:timeAgo(r.created_at),
+    grad:p.avatar_color||'linear-gradient(135deg,#2563a8,#0085ff)',time:timeAgo(r.created_at),
     urgent:r.is_urgent||false,isNew:(Date.now()-new Date(r.created_at))<3600000,
     title:r.title,desc:r.description||'',tags:[r.category],cat:r.category,tc:'',userId:r.user_id,adNumber:r.ad_number,
     budget:r.budget_text||'يُحدد',dur:r.duration||'مرن',type:r.work_type||'عن بُعد',city:r.city||'',phone:r.contact_phone||'',
     offers:r.offers_count||0,ts:new Date(r.created_at).getTime(),created_at:r.created_at,lastBump:r.created_at,media:r.media_urls||[]};
+}
+
+// ===== الأكثر طلباً من قاعدة البيانات الفعلية =====
+async function loadHotCategories(){
+  try{
+    var {data,error} = await sb.from('requests').select('category').eq('status','open');
+    if(error||!data||!data.length){ document.getElementById('hotCatsContainer').innerHTML='<div style="text-align:center;padding:16px;color:var(--t2);font-size:.8rem">لا توجد بيانات بعد</div>'; return; }
+    // نعدّ التكرارات لكل فئة
+    var counts={};
+    data.forEach(function(r){ if(r.category){ counts[r.category]=(counts[r.category]||0)+1; } });
+    var sorted=Object.entries(counts).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
+    if(!sorted.length){ document.getElementById('hotCatsContainer').innerHTML='<div style="text-align:center;padding:16px;color:var(--t2);font-size:.8rem">لا توجد بيانات بعد</div>'; return; }
+    var html='';
+    sorted.forEach(function(item,i){
+      html+='<div class="hti"><span class="tr2">'+(i+1)+'</span><span class="tn">'+item[0]+'</span><span class="tc">'+item[1]+'</span></div>';
+    });
+    document.getElementById('hotCatsContainer').innerHTML=html;
+  }catch(e){ document.getElementById('hotCatsContainer').innerHTML=''; }
 }
 
 function renderFeed(){
@@ -2091,7 +2105,7 @@ window.openDetail=async function(id){
   list.forEach(function(o){
     var p=o.provider||{};
     var letter=(p.full_name||'م')[0];
-    var grad=p.avatar_color||'linear-gradient(135deg,#2563a8,#4a9fd4)';
+    var grad=p.avatar_color||'linear-gradient(135deg,#2563a8,#0085ff)';
     var rating=p.rating||0;
     var stars='★'.repeat(Math.round(rating))+'☆'.repeat(5-Math.round(rating));
     var offPhone = phoneMap[o.id];
@@ -2137,6 +2151,10 @@ function doLoginUI(){
   document.getElementById('navUser').style.display='flex';
   document.getElementById('navUserLinks').style.display='flex';
   document.getElementById('miniBar').style.display='flex';
+  // إظهار عناصر الـ sidebar الخاصة بالمستخدم المسجّل
+  ['si-logout','si-notif','si-msgs','si-saved'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.style.display='';
+  });
   
   document.getElementById('rpGuest').style.display='none';
   document.getElementById('rpUser').style.display='block';
@@ -2168,7 +2186,7 @@ function doLoginUI(){
   hToast('👋 أهلاً بك في علاقات!');
 }
 function doLogin(){doLoginUI();}
-async function doLogout(){if(!confirm('هل تريد تسجيل الخروج؟'))return;await sb.auth.signOut();state.loggedIn=false;document.getElementById('navGuest').style.display='flex';document.getElementById('navUser').style.display='none';document.getElementById('navUserLinks').style.display='none';document.getElementById('miniBar').style.display='none';document.getElementById('rpGuest').style.display='block';document.getElementById('rpUser').style.display='none';renderFeed();hToast('تم تسجيل الخروج');}
+async function doLogout(){if(!confirm('هل تريد تسجيل الخروج؟'))return;await sb.auth.signOut();state.loggedIn=false;document.getElementById('navGuest').style.display='flex';document.getElementById('navUser').style.display='none';document.getElementById('navUserLinks').style.display='none';document.getElementById('miniBar').style.display='none';document.getElementById('rpGuest').style.display='block';document.getElementById('rpUser').style.display='none';['si-logout','si-notif','si-msgs','si-saved'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});renderFeed();hToast('تم تسجيل الخروج');}
 window.openComp=function(){if(!state.loggedIn){openAuth('login');return;}document.getElementById('compModal').classList.add('open');};
 window.openOffer=function openOffer(id){
   if(!state.loggedIn){ openAuth('register'); return; }
@@ -2827,6 +2845,7 @@ sb.auth.getSession().then(function(res){
   if(res.data&&res.data.session){ doLoginUI(); startPresenceHeartbeat(); loadMyCategoryAlerts(); }
   else { renderFeed(); }
   handleSharedRequestLink();
+  loadHotCategories();
 });
 
 // ====== تحديث "آخر ظهور" بشكل دوري للمستخدم المسجّل دخوله، لتغذية شارة "متصل الآن" ======
@@ -3447,7 +3466,7 @@ function renderConvList(list, myId){
   list.forEach(function(c){
     var p=c.other;
     var letter=(p.full_name||'م')[0];
-    var grad=p.avatar_color||'linear-gradient(135deg,#2563a8,#4a9fd4)';
+    var grad=p.avatar_color||'linear-gradient(135deg,#2563a8,#0085ff)';
     var preview=c.lastMsg.content.length>40?c.lastMsg.content.substring(0,40)+'...':c.lastMsg.content;
     var unread=!c.lastMsg.is_read && c.lastMsg.sender_id===p.id;
     html+='<div class="conv-item" onclick="window.openChatWith(\''+p.id+'\',\''+escJ(p.full_name||'')+'\',\''+grad+'\',\''+letter+'\')">'
@@ -3506,7 +3525,7 @@ window.openChatWith = async function(uid, name, grad, letter){
       var isMe=m.sender_id===user.id;
       var d=document.createElement('div');
       d.className='bbl '+(isMe?'me':'them');
-      var checkmark=isMe?' <span style="color:#93c5fd">✓✓</span>':'';
+      var checkmark=isMe?' <span style="color:#3da9ff">✓✓</span>':'';
       if(m.attachment_url){
         if(m.attachment_type==='image'){
           d.innerHTML='<div class="bbl-txt"><img src="'+m.attachment_url+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="openImagePreview(\''+m.attachment_url+'\')"></div><div class="bbl-meta">'+timeAgo(m.created_at)+checkmark+'</div>';
@@ -3598,9 +3617,9 @@ window.handleChatFileSelect = async function(input){
     var now=new Date(); var time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
     var d=document.createElement('div'); d.className='bbl me';
     if(isImage){
-      d.innerHTML='<div class="bbl-txt"><img src="'+fileUrl+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="openImagePreview(\''+fileUrl+'\')"></div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
+      d.innerHTML='<div class="bbl-txt"><img src="'+fileUrl+'" style="max-width:200px;max-height:200px;border-radius:10px;display:block;cursor:pointer" onclick="openImagePreview(\''+fileUrl+'\')"></div><div class="bbl-meta">'+time+' <span style="color:#3da9ff">✓</span></div>';
     } else {
-      d.innerHTML='<div class="bbl-txt"><a href="'+fileUrl+'" target="_blank" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:8px"><span style="font-size:1.4rem">📄</span><span style="font-size:.82rem;word-break:break-all">'+escH(file.name)+'</span></a></div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
+      d.innerHTML='<div class="bbl-txt"><a href="'+fileUrl+'" target="_blank" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:8px"><span style="font-size:1.4rem">📄</span><span style="font-size:.82rem;word-break:break-all">'+escH(file.name)+'</span></a></div><div class="bbl-meta">'+time+' <span style="color:#3da9ff">✓</span></div>';
     }
     body.appendChild(d); body.scrollTop=body.scrollHeight;
     hToast('✓ تم إرسال الملف');
@@ -3630,7 +3649,7 @@ window.sendChatMsg = async function(){
     var body=document.getElementById('chBody');
     var now=new Date(); var time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
     var d=document.createElement('div'); d.className='bbl me';
-    d.innerHTML='<div class="bbl-txt">'+escH(txt)+'</div><div class="bbl-meta">'+time+' <span style="color:#93c5fd">✓</span></div>';
+    d.innerHTML='<div class="bbl-txt">'+escH(txt)+'</div><div class="bbl-meta">'+time+' <span style="color:#3da9ff">✓</span></div>';
     body.appendChild(d); body.scrollTop=body.scrollHeight;
     var {error:notifErr6} = await sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص رسالة جديدة',is_read:false});
     if(notifErr6){ console.error('sendChatMsg notification error:', notifErr6); logErrorToServer('sendChatMsg notification: ' + notifErr6.message, null); }
@@ -3837,7 +3856,7 @@ window.openUserProfile = async function(userId){
   if(!p) return;
   var letter = (p.full_name||'م')[0];
   var avEl = document.querySelector('#profile .p-av');
-  if(avEl){ avEl.textContent = letter; avEl.style.background = p.avatar_color||'linear-gradient(135deg,#2563a8,#4a9fd4)'; }
+  if(avEl){ avEl.textContent = letter; avEl.style.background = p.avatar_color||'linear-gradient(135deg,#2563a8,#0085ff)'; }
   var nameEl = document.querySelector('#profile .profile-name');
   if(nameEl) nameEl.innerHTML = escH(p.full_name||'مستخدم') + ' <span class="p-verified">✓</span>';
   var handleEl = document.getElementById('profileHandle');
@@ -4059,7 +4078,7 @@ console.log('✅ Supabase متصل بنجاح');
       </div>
 
       <div class="am-item" onclick="closeAccountMenu();hToast('سياسة الاستخدام — قريباً')">
-        <span class="am-icon" style="background:rgba(124,58,237,.1)">📄</span>
+        <span class="am-icon" style="background:rgba(0,133,255,.1)">📄</span>
         <div class="am-label">سياسة موقع علاقات</div>
         <span class="am-arrow">›</span>
       </div>
@@ -4087,6 +4106,7 @@ console.log('✅ Supabase متصل بنجاح');
 
 <script>
 window.openAccountMenu = async function(){
+  if(!state.loggedIn){ openAuth('login'); return; }
   var overlay = document.getElementById('accountMenuOverlay');
   var sheet = document.getElementById('accountMenuSheet');
   overlay.style.display = 'flex';
