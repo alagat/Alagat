@@ -11,107 +11,206 @@ const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 const ADMIN_EMAIL = 'alagatsa.com@gmail.com';
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
+:root{
+  --bg:#0b0c12; --bg-2:#0e1018;
+  --panel:#13141e; --panel-2:#181a26;
+  --line:#23253344; --line-solid:#23253a;
+  --ac:#0085ff; --ac2:#3da9ff; --ac-soft:rgba(0,133,255,.12);
+  --ok:#10b981; --ok-soft:rgba(16,185,129,.12);
+  --warn:#f59e0b; --warn-soft:rgba(245,158,11,.12);
+  --bad:#ef4444; --bad-soft:rgba(239,68,68,.12);
+  --t1:#eceef5; --t2:#8b8fa3; --t3:#565a70;
+  --r-sm:8px; --r:14px; --r-lg:20px;
+  --shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 8px 24px -12px rgba(0,0,0,.5);
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#0a0d14;color:#e8ecf5;min-height:100vh}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#252d3d;border-radius:3px}
+body{font-family:'Tajawal',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:#2a2d3d;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#3a3e54}
+code,.mono{font-family:'IBM Plex Mono',monospace}
 
-/* LOGIN */
-#loginPage{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#0a0d14,#111827)}
-.login-box{background:#111318;border:1px solid #252d3d;border-radius:16px;padding:32px;width:360px;max-width:94vw;text-align:center}
-.login-logo{font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,#0066ff,#00aaff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
-.login-sub{font-size:.78rem;color:#4a5568;margin-bottom:24px}
-.lfi{width:100%;background:#181c24;border:1px solid #252d3d;border-radius:9px;padding:10px 14px;color:#e8ecf5;font-family:inherit;font-size:.88rem;margin-bottom:10px;outline:none;transition:.2s}
-.lfi:focus{border-color:#0066ff}
-.lbtn{width:100%;background:linear-gradient(135deg,#0066ff,#00aaff);color:#fff;border:none;border-radius:9px;padding:12px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;transition:.2s}
-.lbtn:hover{opacity:.9}
-.lerr{color:#ff4466;font-size:.78rem;margin-top:8px}
+/* ===== background texture: faint radial glow, signature touch ===== */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(700px 420px at 88% -8%, rgba(0,133,255,.16), transparent 60%),
+    radial-gradient(500px 360px at -5% 18%, rgba(0,133,255,.08), transparent 55%);
+}
 
-/* DASHBOARD */
-#dashboard{display:none}
-nav{background:#111318;border-bottom:1px solid #252d3d;padding:0 20px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.nav-brand{font-size:.95rem;font-weight:800;background:linear-gradient(135deg,#0066ff,#00aaff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-badge{background:rgba(255,68,102,.15);color:#ff4466;border:1px solid rgba(255,68,102,.2);font-size:.7rem;padding:3px 9px;border-radius:20px;font-weight:600}
-.logout-btn{background:none;border:1px solid #252d3d;color:#8896b0;padding:5px 12px;border-radius:7px;font-family:inherit;font-size:.75rem;cursor:pointer;transition:.15s}
-.logout-btn:hover{border-color:#ff4466;color:#ff4466}
+/* ===== LOGIN ===== */
+#loginPage{display:flex;align-items:center;justify-content:center;min-height:100vh;position:relative;z-index:1}
+.login-box{background:var(--panel);border:1px solid var(--line-solid);border-radius:var(--r-lg);padding:36px 32px;width:380px;max-width:90vw;text-align:center;box-shadow:var(--shadow)}
+.login-mark{width:52px;height:52px;border-radius:16px;margin:0 auto 16px;background:linear-gradient(135deg,var(--ac),#7ec4ff);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.3rem;color:#fff;box-shadow:0 10px 24px -8px rgba(0,133,255,.55)}
+.login-logo{font-size:1.25rem;font-weight:800;color:var(--t1);margin-bottom:2px}
+.login-sub{font-size:.78rem;color:var(--t3);margin-bottom:26px;letter-spacing:.2px}
+.lfi{width:100%;background:var(--panel-2);border:1px solid var(--line-solid);border-radius:var(--r-sm);padding:12px 14px;color:var(--t1);font-family:inherit;font-size:.88rem;margin-bottom:10px;outline:none;transition:.15s}
+.lfi:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--ac-soft)}
+.lbtn{width:100%;background:linear-gradient(135deg,var(--ac),#3da9ff);color:#fff;border:none;border-radius:var(--r-sm);padding:13px;font-family:inherit;font-size:.88rem;font-weight:700;cursor:pointer;transition:.15s;margin-top:4px}
+.lbtn:hover{filter:brightness(1.08)}
+.lbtn:active{transform:translateY(1px)}
+.lerr{color:var(--bad);font-size:.78rem;margin-top:10px}
 
-.page{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
+/* ===== APP SHELL ===== */
+#dashboard{display:none;position:relative;z-index:1;min-height:100vh}
+.app{display:flex;min-height:100vh}
 
-/* STATS */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
-@media(max-width:700px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
-.stat-card{background:#111318;border:1px solid #252d3d;border-radius:12px;padding:16px;text-align:center}
-.stat-num{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,#0066ff,#00aaff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.stat-num.g{background:linear-gradient(135deg,#00d4a0,#38ef7d);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.stat-num.o{background:linear-gradient(135deg,#ffaa00,#ffd200);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.stat-num.r{background:linear-gradient(135deg,#ff4466,#ff6b6b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.stat-lbl{font-size:.72rem;color:#4a5568;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
+/* ---- Sidebar (desktop) ---- */
+.sidebar{
+  width:240px;flex-shrink:0;background:var(--panel);border-left:1px solid var(--line-solid);
+  display:flex;flex-direction:column;position:sticky;top:0;height:100vh;padding:18px 14px;
+}
+.sb-brand{display:flex;align-items:center;gap:10px;padding:6px 8px 18px;border-bottom:1px solid var(--line);margin-bottom:14px}
+.sb-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--ac),#7ec4ff);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.95rem;flex-shrink:0}
+.sb-title{font-size:.86rem;font-weight:800;color:var(--t1);line-height:1.25}
+.sb-title small{display:block;font-size:.68rem;font-weight:500;color:var(--t3)}
+.sb-nav{display:flex;flex-direction:column;gap:2px;flex:1}
+.sb-section-lbl{font-size:.66rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;padding:14px 10px 6px}
+.tab{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:10px 12px;border-radius:var(--r-sm);font-size:.85rem;font-weight:600;color:var(--t2);cursor:pointer;
+  transition:.15s;white-space:nowrap;
+}
+.tab:hover{background:var(--panel-2);color:var(--t1)}
+.tab.on{background:var(--ac-soft);color:#5db8ff}
+.tab .tab-ic{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
+.tab .tab-lbl{flex:1;text-align:right}
+.sb-foot{padding-top:12px;border-top:1px solid var(--line)}
 
-/* TABS */
-.tabs{display:flex;border-bottom:1px solid #252d3d;margin-bottom:16px;gap:2px}
-.tab{padding:9px 16px;font-size:.83rem;font-weight:600;color:#4a5568;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.15s;white-space:nowrap}
-.tab:hover{color:#8896b0}
-.tab.on{color:#0066ff;border-bottom-color:#0066ff}
+/* ---- Main column ---- */
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{
+  background:rgba(11,12,18,.85);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line-solid);padding:0 22px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;
+}
+.topbar-title{font-size:.92rem;font-weight:700;color:var(--t1)}
+.topbar-title small{display:block;font-size:.72rem;font-weight:500;color:var(--t3);margin-top:1px}
+.nav-badge{background:var(--ok-soft);color:var(--ok);border:1px solid rgba(16,185,129,.25);font-size:.72rem;padding:4px 11px;border-radius:20px;font-weight:700;display:inline-flex;align-items:center;gap:5px}
+.nav-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px var(--ok-soft)}
+.logout-btn{background:none;border:1px solid var(--line-solid);color:var(--t2);padding:7px 14px;border-radius:var(--r-sm);font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;transition:.15s}
+.logout-btn:hover{border-color:var(--bad);color:var(--bad)}
 
-/* TABLE */
-.tbl-wrap{background:#111318;border:1px solid #252d3d;border-radius:12px;overflow:hidden}
-.tbl-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #252d3d}
-.tbl-title{font-size:.82rem;font-weight:700;color:#8896b0;text-transform:uppercase;letter-spacing:.5px}
-.tbl-search{background:#181c24;border:1px solid #252d3d;border-radius:7px;padding:6px 12px;color:#e8ecf5;font-family:inherit;font-size:.79rem;outline:none;width:200px}
-.tbl-search:focus{border-color:#0066ff}
-.act-btn.dl{margin-left:0;margin-right:4px}
-.act-btn.dl:hover{border-color:#0066ff;color:#0066ff}
+/* mobile top brand bar (shown only on mobile, sidebar collapses to bottom nav) */
+.mobile-brand{display:none}
+
+.page{max-width:1240px;margin:0 auto;padding:24px 22px 100px;width:100%}
+
+/* ===== STATS ===== */
+.stats-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:14px;margin-bottom:26px}
+@media(max-width:900px){.stats-grid{grid-template-columns:1fr 1fr}}
+.stat-card{
+  background:var(--panel);border:1px solid var(--line-solid);border-radius:var(--r);padding:18px 20px;
+  position:relative;overflow:hidden;transition:.15s;
+}
+.stat-card:hover{border-color:#33364a}
+.stat-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--ac-soft),transparent 55%);opacity:.5;pointer-events:none}
+.stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;position:relative}
+.stat-ic{font-size:1.05rem;opacity:.85}
+.stat-num{font-size:2rem;font-weight:800;color:var(--t1);line-height:1;font-family:'IBM Plex Mono',monospace;position:relative}
+.stat-num.g{color:var(--ok)}
+.stat-num.o{color:var(--warn)}
+.stat-num.r{color:var(--bad)}
+.stat-lbl{font-size:.74rem;color:var(--t3);margin-top:6px;font-weight:600}
+
+/* ===== TABS (mobile horizontal scroller fallback) ===== */
+.tabs{display:none}
+
+/* ===== TABLE / PANEL ===== */
+.tbl-wrap{background:var(--panel);border:1px solid var(--line-solid);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.tbl-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line);gap:12px;flex-wrap:wrap}
+.tbl-title{font-size:.86rem;font-weight:700;color:var(--t1)}
+.tbl-search{background:var(--panel-2);border:1px solid var(--line-solid);border-radius:var(--r-sm);padding:8px 14px;color:var(--t1);font-family:inherit;font-size:.8rem;outline:none;width:220px;transition:.15s}
+.tbl-search:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--ac-soft)}
+.act-btn.dl{margin-left:0;margin-right:0}
+.act-btn.dl:hover{border-color:var(--ac);color:var(--ac2)}
+
 table{width:100%;border-collapse:collapse}
-th{font-size:.72rem;color:#4a5568;text-transform:uppercase;letter-spacing:.5px;padding:10px 16px;text-align:right;border-bottom:1px solid #252d3d;white-space:nowrap}
-td{padding:12px 16px;font-size:.82rem;color:#8896b0;border-bottom:1px solid rgba(37,45,61,.5);vertical-align:middle}
+th{font-size:.7rem;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;font-weight:700;padding:11px 18px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:13px 18px;font-size:.83rem;color:var(--t2);border-bottom:1px solid var(--line);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,.02)}
-.td-name{color:#e8ecf5;font-weight:600}
-.td-email{color:#4a5568;font-size:.75rem}
-@media(max-width:600px){
+tr:hover td{background:rgba(255,255,255,.015)}
+.td-name{color:var(--t1);font-weight:600}
+.td-email{color:var(--t3);font-size:.74rem;font-family:'IBM Plex Mono',monospace}
+
+@media(max-width:680px){
   thead{display:none}
   table,tbody,tr,td{display:block;width:100%}
-  tr{border-bottom:1px solid #252d3d;padding:10px 0}
+  tr{border-bottom:1px solid var(--line);padding:12px 4px}
   tr:last-child{border-bottom:none}
-  td{padding:4px 16px;border:none}
-  td::before{content:attr(data-label);font-size:.68rem;color:#4a5568;display:block;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+  td{padding:5px 14px;border:none}
+  td::before{content:attr(data-label);font-size:.66rem;color:var(--t3);display:block;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;font-weight:700}
 }
-.badge{font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
-.badge.open{background:rgba(0,212,160,.1);color:#00d4a0;border:1px solid rgba(0,212,160,.2)}
-.badge.closed{background:rgba(74,85,104,.15);color:#4a5568;border:1px solid #252d3d}
-.badge.active{background:rgba(0,102,255,.1);color:#00aaff;border:1px solid rgba(0,102,255,.2)}
-.act-btn{background:none;border:1px solid #252d3d;color:#8896b0;padding:4px 10px;border-radius:6px;font-family:inherit;font-size:.72rem;cursor:pointer;transition:.15s;margin-left:4px}
-.act-btn:hover{border-color:#ff4466;color:#ff4466}
-.act-btn.view{border-color:rgba(0,102,255,.3);color:#0066ff}
-.act-btn.view:hover{background:rgba(0,102,255,.1)}
-.empty-row td{text-align:center;padding:32px;color:#4a5568}
 
-/* MSG CARD */
-.msg-card{background:#111318;border:1px solid #252d3d;border-radius:10px;padding:13px;margin-bottom:8px;transition:.15s}
-.msg-card:hover{border-color:rgba(0,102,255,.3)}
-.msg-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.msg-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0066ff,#00aaff);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;color:#fff;flex-shrink:0}
+.badge{font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;display:inline-block}
+.badge.open{background:var(--ok-soft);color:var(--ok);border:1px solid rgba(16,185,129,.25)}
+.badge.closed{background:rgba(86,90,112,.15);color:var(--t3);border:1px solid var(--line-solid)}
+.badge.active{background:var(--ac-soft);color:var(--ac2);border:1px solid rgba(0,133,255,.25)}
+
+.act-btn{background:none;border:1px solid var(--line-solid);color:var(--t2);padding:6px 13px;border-radius:var(--r-sm);font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;transition:.15s;margin-left:6px}
+.act-btn:hover{border-color:var(--bad);color:var(--bad);background:var(--bad-soft)}
+.act-btn.view{border-color:rgba(0,133,255,.3);color:var(--ac2)}
+.act-btn.view:hover{background:var(--ac-soft);border-color:var(--ac)}
+.empty-row td{text-align:center;padding:48px 20px;color:var(--t3);font-size:.85rem}
+
+/* ===== MSG CARD ===== */
+.msg-card{background:var(--panel-2);border:1px solid var(--line-solid);border-radius:var(--r-sm);padding:14px;margin-bottom:8px;transition:.15s}
+.msg-card:hover{border-color:rgba(0,133,255,.3)}
+.msg-top{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.msg-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--ac),#3da9ff);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;color:#fff;flex-shrink:0}
 .msg-meta{flex:1}
-.msg-names{font-size:.82rem;font-weight:600;color:#e8ecf5}
-.msg-time{font-size:.7rem;color:#4a5568}
-.msg-text{font-size:.82rem;color:#8896b0;line-height:1.55;padding:8px 10px;background:#181c24;border-radius:7px}
-.msg-unread{border-right:3px solid #0066ff}
+.msg-names{font-size:.83rem;font-weight:700;color:var(--t1)}
+.msg-time{font-size:.7rem;color:var(--t3);font-family:'IBM Plex Mono',monospace}
+.msg-text{font-size:.83rem;color:var(--t2);line-height:1.6;padding:10px 12px;background:var(--bg-2);border-radius:var(--r-sm);border:1px solid var(--line)}
+.msg-unread{border-right:3px solid var(--ac)}
 
-/* LOADING */
-.loading{text-align:center;padding:40px;color:#4a5568;font-size:.84rem}
+/* ===== LOADING ===== */
+.loading{text-align:center;padding:48px;color:var(--t3);font-size:.84rem}
 
-/* CONFIRM */
-.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.2s}
+/* ===== CONFIRM ===== */
+.confirm-overlay{position:fixed;inset:0;background:rgba(8,9,14,.78);backdrop-filter:blur(3px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.2s}
 .confirm-overlay.open{opacity:1;pointer-events:all}
-.confirm-box{background:#111318;border:1px solid #252d3d;border-radius:14px;padding:24px;width:320px;text-align:center}
-.confirm-title{font-size:1rem;font-weight:700;margin-bottom:8px}
-.confirm-sub{font-size:.82rem;color:#8896b0;margin-bottom:18px;line-height:1.5}
+.confirm-box{background:var(--panel);border:1px solid var(--line-solid);border-radius:var(--r-lg);padding:26px;width:340px;max-width:90vw;text-align:center;box-shadow:var(--shadow)}
+.confirm-title{font-size:1.02rem;font-weight:700;margin-bottom:8px;color:var(--t1)}
+.confirm-sub{font-size:.83rem;color:var(--t2);margin-bottom:20px;line-height:1.6}
 .confirm-btns{display:flex;gap:8px}
-.cbtn{flex:1;padding:10px;border-radius:8px;font-family:inherit;font-size:.83rem;font-weight:600;cursor:pointer;border:none}
-.cbtn.cancel{background:#181c24;color:#8896b0;border:1px solid #252d3d}
-.cbtn.danger{background:linear-gradient(135deg,#ff4466,#ff6b6b);color:#fff}
-.bulk-range-btn{flex:1;padding:9px;border-radius:8px;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;background:#181c24;color:#8896b0;border:1px solid #252d3d;transition:.15s}
-.bulk-range-btn.sel{background:#0066ff;color:#fff;border-color:#0066ff}
+.cbtn{flex:1;padding:11px;border-radius:var(--r-sm);font-family:inherit;font-size:.84rem;font-weight:700;cursor:pointer;border:none;transition:.15s}
+.cbtn.cancel{background:var(--panel-2);color:var(--t2);border:1px solid var(--line-solid)}
+.cbtn.cancel:hover{color:var(--t1)}
+.cbtn.danger{background:linear-gradient(135deg,var(--bad),#f87171);color:#fff}
+.cbtn.danger:hover{filter:brightness(1.08)}
+.bulk-range-btn{flex:1;padding:10px;border-radius:var(--r-sm);font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;background:var(--panel-2);color:var(--t2);border:1px solid var(--line-solid);transition:.15s}
+.bulk-range-btn.sel{background:var(--ac);color:#fff;border-color:var(--ac)}
+
+/* ===== MOBILE: sidebar -> bottom nav ===== */
+@media(max-width:880px){
+  .app{flex-direction:column}
+  .sidebar{display:none}
+  .mobile-brand{
+    display:flex;align-items:center;gap:10px;padding:0 16px;height:56px;
+    background:var(--panel);border-bottom:1px solid var(--line-solid);
+    position:sticky;top:0;z-index:60;
+  }
+  .topbar{display:none}
+  .page{padding:16px 14px 88px}
+  .tabs{
+    display:flex;gap:4px;overflow-x:auto;position:fixed;bottom:0;left:0;right:0;
+    background:rgba(19,20,30,.92);backdrop-filter:blur(14px);border-top:1px solid var(--line-solid);
+    padding:8px 10px;z-index:70;-webkit-overflow-scrolling:touch;
+  }
+  .tabs .tab{flex-direction:column;gap:2px;padding:7px 12px;border-radius:10px;font-size:.65rem;min-width:62px;text-align:center}
+  .tabs .tab .tab-ic{font-size:1.15rem;width:auto}
+  .tabs .tab .tab-lbl{text-align:center;white-space:nowrap}
+  .tabs .tab.on{background:var(--ac-soft)}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+  .stat-card{padding:14px}
+  .stat-num{font-size:1.55rem}
+  .tbl-search{width:100%}
+  .tbl-head{flex-direction:column;align-items:stretch}
+}
 </style>
 </head>
 <body>
@@ -119,7 +218,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <!-- LOGIN -->
 <div id="loginPage">
   <div class="login-box">
-    <div class="login-logo">⚙️ علاقات</div>
+    <div class="login-mark">ع</div>
+    <div class="login-logo">علاقات</div>
     <div class="login-sub">لوحة تحكم المالك</div>
     <input class="lfi" type="email" id="adminEmail" placeholder="البريد الإلكتروني" value="alagatsa.com@gmail.com">
     <input class="lfi" type="password" id="adminPass" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')adminLogin()">
@@ -130,32 +230,65 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 <!-- DASHBOARD -->
 <div id="dashboard">
-<nav>
-  <div class="nav-brand">⚙️ لوحة التحكم — علاقات</div>
-  <div style="display:flex;align-items:center;gap:10px">
-    <span class="nav-badge" id="onlineBadge">● يتحمل...</span>
-    <button class="logout-btn" onclick="adminLogout()">خروج</button>
-  </div>
-</nav>
+<div class="app">
 
-<div class="page">
-  <!-- STATS -->
-  <div class="stats-grid">
-    <div class="stat-card"><div class="stat-num" id="sUsers">-</div><div class="stat-lbl">إجمالي الأعضاء</div></div>
-    <div class="stat-card"><div class="stat-num g" id="sRequests">-</div><div class="stat-lbl">إجمالي الطلبات</div></div>
-    <div class="stat-card"><div class="stat-num o" id="sOffers">-</div><div class="stat-lbl">إجمالي العروض</div></div>
-    <div class="stat-card"><div class="stat-num r" id="sMsgs">-</div><div class="stat-lbl">إجمالي الرسائل</div></div>
+  <!-- SIDEBAR (desktop) -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-mark">ع</div>
+      <div class="sb-title">علاقات<small>لوحة التحكم</small></div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section-lbl">عام</div>
+      <div class="tab on" onclick="switchTab(this,'users')"><span class="tab-ic">👥</span><span class="tab-lbl">الأعضاء</span></div>
+      <div class="tab" onclick="switchTab(this,'requests')"><span class="tab-ic">📋</span><span class="tab-lbl">الطلبات</span></div>
+      <div class="tab" onclick="switchTab(this,'offers')"><span class="tab-ic">💼</span><span class="tab-lbl">العروض</span></div>
+      <div class="tab" onclick="switchTab(this,'messages')"><span class="tab-ic">💬</span><span class="tab-lbl">الرسائل</span></div>
+      <div class="sb-section-lbl">الإشراف</div>
+      <div class="tab" onclick="switchTab(this,'reports')"><span class="tab-ic">🚩</span><span class="tab-lbl">البلاغات</span><span id="reportsTabBadge" style="background:var(--bad);color:#fff;font-size:.66rem;padding:1px 7px;border-radius:10px;display:none"></span></div>
+      <div class="tab" onclick="switchTab(this,'errors')"><span class="tab-ic">🐞</span><span class="tab-lbl">الأخطاء</span><span id="errorsTabBadge" style="background:var(--bad);color:#fff;font-size:.66rem;padding:1px 7px;border-radius:10px;display:none"></span></div>
+    </nav>
+    <div class="sb-foot">
+      <button class="logout-btn" style="width:100%" onclick="adminLogout()">تسجيل الخروج</button>
+    </div>
+  </aside>
+
+  <!-- MOBILE BRAND BAR -->
+  <div class="mobile-brand">
+    <div class="sb-mark" style="width:30px;height:30px;font-size:.82rem;border-radius:9px">ع</div>
+    <div class="sb-title" style="font-size:.86rem">علاقات<small style="font-size:.64rem">لوحة التحكم</small></div>
+    <div style="flex:1"></div>
+    <span class="nav-badge" id="onlineBadge" style="font-size:.66rem;padding:3px 9px">● ...</span>
+    <button class="logout-btn" style="margin-right:8px;padding:6px 10px" onclick="adminLogout()">خروج</button>
   </div>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <div class="tab on" onclick="switchTab(this,'users')">👥 الأعضاء</div>
-    <div class="tab" onclick="switchTab(this,'requests')">📋 الطلبات</div>
-    <div class="tab" onclick="switchTab(this,'messages')">💬 الرسائل</div>
-    <div class="tab" onclick="switchTab(this,'offers')">💼 العروض</div>
-    <div class="tab" onclick="switchTab(this,'reports')">🚩 البلاغات <span id="reportsTabBadge" style="background:#ff4466;color:#fff;font-size:.68rem;padding:1px 7px;border-radius:10px;margin-right:4px;display:none"></span></div>
-    <div class="tab" onclick="switchTab(this,'errors')">🐞 الأخطاء <span id="errorsTabBadge" style="background:#ff4466;color:#fff;font-size:.68rem;padding:1px 7px;border-radius:10px;margin-right:4px;display:none"></span></div>
-  </div>
+  <!-- MAIN COLUMN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title">نظرة عامة<small>إدارة المنصة والمحتوى</small></div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="nav-badge" id="onlineBadgeDesktop">● ...</span>
+      </div>
+    </div>
+
+    <div class="page">
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-top"><span class="stat-ic">👥</span></div><div class="stat-num" id="sUsers">-</div><div class="stat-lbl">إجمالي الأعضاء</div></div>
+        <div class="stat-card"><div class="stat-top"><span class="stat-ic">📋</span></div><div class="stat-num g" id="sRequests">-</div><div class="stat-lbl">إجمالي الطلبات</div></div>
+        <div class="stat-card"><div class="stat-top"><span class="stat-ic">💼</span></div><div class="stat-num o" id="sOffers">-</div><div class="stat-lbl">إجمالي العروض</div></div>
+        <div class="stat-card"><div class="stat-top"><span class="stat-ic">💬</span></div><div class="stat-num r" id="sMsgs">-</div><div class="stat-lbl">إجمالي الرسائل</div></div>
+      </div>
+
+      <!-- TABS (mobile bottom nav) -->
+      <div class="tabs">
+        <div class="tab on" onclick="switchTab(this,'users')"><span class="tab-ic">👥</span><span class="tab-lbl">الأعضاء</span></div>
+        <div class="tab" onclick="switchTab(this,'requests')"><span class="tab-ic">📋</span><span class="tab-lbl">الطلبات</span></div>
+        <div class="tab" onclick="switchTab(this,'offers')"><span class="tab-ic">💼</span><span class="tab-lbl">العروض</span></div>
+        <div class="tab" onclick="switchTab(this,'messages')"><span class="tab-ic">💬</span><span class="tab-lbl">الرسائل</span></div>
+        <div class="tab" onclick="switchTab(this,'reports')"><span class="tab-ic">🚩</span><span class="tab-lbl">البلاغات</span><span id="reportsTabBadgeM" style="background:var(--bad);color:#fff;font-size:.62rem;padding:1px 6px;border-radius:10px;display:none;position:absolute;top:2px;left:2px"></span></div>
+        <div class="tab" onclick="switchTab(this,'errors')"><span class="tab-ic">🐞</span><span class="tab-lbl">الأخطاء</span><span id="errorsTabBadgeM" style="background:var(--bad);color:#fff;font-size:.62rem;padding:1px 6px;border-radius:10px;display:none;position:absolute;top:2px;left:2px"></span></div>
+      </div>
 
   <!-- USERS -->
   <div id="tab-users">
@@ -265,9 +398,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </table>
     </div>
   </div>
-
-</div>
-</div>
+  </div><!-- /.page -->
+  </div><!-- /.main -->
+</div><!-- /.app -->
+</div><!-- /#dashboard -->
 
 <!-- CONFIRM DIALOG -->
 <div class="confirm-overlay" id="confirmModal">
@@ -339,25 +473,25 @@ async function showDashboard(){
   loadErrorsBadgeOnly();
 }
 
+// تحدّث badge في الـ sidebar (ديسكتوب) ونسخته في الـ bottom-nav (موبايل) معاً
+function setBadgeBoth(id, count){
+  [id, id+'M'].forEach(function(elId){
+    var el = document.getElementById(elId);
+    if(!el) return;
+    if(count>0){ el.textContent=count; el.style.display='inline-block'; }
+    else { el.style.display='none'; }
+  });
+}
+
 async function loadReportsBadgeOnly(){
   var {data} = await sb.from('reports').select('id,status').eq('status','pending');
-  var pendingCount = (data||[]).length;
-  var badge = document.getElementById('reportsTabBadge');
-  if(badge){
-    if(pendingCount>0){ badge.textContent=pendingCount; badge.style.display='inline-block'; }
-    else { badge.style.display='none'; }
-  }
+  setBadgeBoth('reportsTabBadge', (data||[]).length);
 }
 
 async function loadErrorsBadgeOnly(){
   var since = new Date(Date.now() - 24*60*60*1000).toISOString();
   var {data} = await sb.from('error_logs').select('id').gte('created_at', since);
-  var recentCount = (data||[]).length;
-  var badge = document.getElementById('errorsTabBadge');
-  if(badge){
-    if(recentCount>0){ badge.textContent=recentCount; badge.style.display='inline-block'; }
-    else { badge.style.display='none'; }
-  }
+  setBadgeBoth('errorsTabBadge', (data||[]).length);
 }
 
 // ===== STATS =====
@@ -372,7 +506,9 @@ async function loadStats(){
   document.getElementById('sRequests').textContent = r.count||0;
   document.getElementById('sOffers').textContent   = o.count||0;
   document.getElementById('sMsgs').textContent     = m.count||0;
-  document.getElementById('onlineBadge').textContent = '● '+((u.count||0)+' عضو');
+  var onlineTxt = '● '+((u.count||0)+' عضو');
+  var b1 = document.getElementById('onlineBadge'); if(b1) b1.textContent = onlineTxt;
+  var b2 = document.getElementById('onlineBadgeDesktop'); if(b2) b2.textContent = onlineTxt;
 }
 
 // ===== USERS =====
@@ -517,11 +653,7 @@ async function loadReports(){
   });
   renderReports(allReports);
   var pendingCount = allReports.filter(function(r){ return r.status==='pending'; }).length;
-  var badge = document.getElementById('reportsTabBadge');
-  if(badge){
-    if(pendingCount>0){ badge.textContent=pendingCount; badge.style.display='inline-block'; }
-    else { badge.style.display='none'; }
-  }
+  setBadgeBoth('reportsTabBadge', pendingCount);
 }
 
 function renderReports(list){
@@ -597,8 +729,9 @@ window.dismissError=async function(errorId){
 
 // ===== TABS =====
 function switchTab(el,tab){
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
-  el.classList.add('on');
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.classList.toggle('on', t.getAttribute('onclick') && t.getAttribute('onclick').indexOf("'"+tab+"'") !== -1);
+  });
   ['users','requests','messages','offers','reports','errors'].forEach(function(t){
     document.getElementById('tab-'+t).style.display = t===tab?'block':'none';
   });
