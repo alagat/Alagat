@@ -38,7 +38,7 @@
 /* ====== SHARED ====== */
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Cairo','Segoe UI','Helvetica Neue',Tahoma,Arial,sans-serif;font-weight:600;overflow-x:hidden;background:var(--bg);color:var(--t);-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body{font-family:'Segoe UI','Helvetica Neue',Tahoma,Arial,sans-serif;overflow-x:hidden;background:var(--bg);color:var(--t);-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
 .page{display:none;min-height:100vh}
@@ -135,8 +135,8 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 .rck{font-size:.72rem;color:var(--t3);margin-top:1px}
 .rct{font-size:.7rem;color:var(--t3);white-space:nowrap}
 .nbadge{background:rgba(0,212,160,.1);color:var(--green);border:1px solid rgba(0,212,160,.2);font-size:.63rem;font-weight:700;padding:2px 6px;border-radius:5px}
-.rtitle{font-size:.9rem;font-weight:800;margin-bottom:4px;line-height:1.4}
-.rdesc{font-size:.8rem;color:var(--t2);font-weight:600;line-height:1.6;margin-bottom:8px}
+.rtitle{font-size:.9rem;font-weight:600;margin-bottom:4px;line-height:1.4}
+.rdesc{font-size:.8rem;color:var(--t2);line-height:1.6;margin-bottom:8px}
 .rtags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
 .rtag{background:var(--glow);color:var(--ac2);border:1px solid rgba(0,170,255,.14);padding:2px 8px;border-radius:20px;font-size:.68rem;font-weight:500}
 .rtag.g{background:rgba(0,212,160,.07);color:var(--green);border-color:rgba(0,212,160,.15)}
@@ -206,16 +206,19 @@ textarea.fi{resize:vertical;min-height:68px}
 /* ===== DESKTOP ONLY (computer) — bigger, bolder, Haraj-style. Mobile is untouched below 1051px ===== */
 @media(min-width:1051px){
   html{font-size:19px}
+  body{font-family:'Cairo','Segoe UI','Helvetica Neue',Tahoma,Arial,sans-serif;font-weight:600}
   .logo-t{font-size:1.55rem}
   .rcard{display:grid;grid-template-columns:130px 1fr;grid-template-areas:"rmedia rch" "rmedia rtitle" "rmedia rdesc" "rmedia rtags" "rmedia rcf";column-gap:16px;row-gap:5px;align-items:start;padding:16px}
   .rcard:not(:has(.rmedia)){grid-template-columns:1fr;grid-template-areas:"rch" "rtitle" "rdesc" "rtags" "rcf"}
   .rch{grid-area:rch}
-  .rtitle{grid-area:rtitle;font-size:1.15rem}
-  .rdesc{grid-area:rdesc;font-size:.92rem}
+  .rtitle{grid-area:rtitle;font-size:1.15rem;font-weight:800}
+  .rdesc{grid-area:rdesc;font-size:.92rem;font-weight:600}
   .rtags{grid-area:rtags}
   .rcf{grid-area:rcf}
   .rcard .rmedia{grid-area:rmedia;width:130px!important;height:130px!important;margin:0!important}
   .bv{font-size:1.1rem}
+  #detTitle{font-size:1.3rem!important;font-weight:900!important}
+  #detDesc{font-size:1rem!important;font-weight:600!important}
 }
 
 @media(max-width:680px){.sidebar{display:none}.feed{margin-right:0}}
@@ -683,8 +686,8 @@ function logErrorToServer(message, stack){
     </div>
   </div>
   <!-- عنوان ووصف -->
-  <div id="detTitle" style="font-size:1.2rem;font-weight:900;color:var(--t);margin-bottom:8px;line-height:1.4"></div>
-  <div id="detDesc" style="font-size:.9rem;font-weight:600;color:var(--t2);line-height:1.7;margin-bottom:12px"></div>
+  <div id="detTitle" style="font-size:1.15rem;font-weight:800;color:var(--t);margin-bottom:8px;line-height:1.4"></div>
+  <div id="detDesc" style="font-size:.86rem;color:var(--t2);line-height:1.7;margin-bottom:12px"></div>
   <div id="detTags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
   <!-- شريط التفاصيل السريعة (ميزانية / مدة / نوع / موقع) -->
   <div id="detQuickInfo" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:10px 12px;background:var(--s2);border:1px solid var(--b);border-radius:10px;margin-bottom:14px;font-size:.8rem">
