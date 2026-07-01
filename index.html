@@ -30,11 +30,15 @@
 <!-- Favicon مؤقت (نص "ع" بدون لوغو رسمي بعد) -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230085ff'/%3E%3Cstop offset='100%25' stop-color='%230073e6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='%230a0f14'/%3E%3Ctext x='50' y='68' font-family='Arial' font-size='55' font-weight='900' fill='url(%23g)' text-anchor='middle'%3Eع%3C/text%3E%3C/svg%3E">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
 <style>
 /* ====== SHARED ====== */
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Segoe UI','Helvetica Neue',Tahoma,Arial,sans-serif;overflow-x:hidden;background:var(--bg);color:var(--t);-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body{font-family:'Cairo','Segoe UI','Helvetica Neue',Tahoma,Arial,sans-serif;font-weight:600;overflow-x:hidden;background:var(--bg);color:var(--t);-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
 .page{display:none;min-height:100vh}
@@ -76,6 +80,13 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 #detailPage nav{box-shadow:0 1px 0 var(--b)}
 #detailPage > div:not(nav){max-width:680px;width:100%;margin:0 auto}
 @media(min-width:681px){#detailPage{display:flex;flex-direction:column;align-items:center}#detailPage nav{width:100%}}
+@media(min-width:993px){
+  #detailPage > div:not(nav){max-width:1080px}
+  #detailBody{display:grid;grid-template-columns:1fr 320px;align-items:start;gap:28px}
+  #detailBody > *{grid-column:1}
+  #detailBody #similarSection{grid-column:2;grid-row:1/-1;margin-top:0;padding-top:0;border-top:none;position:sticky;top:70px;align-self:start}
+  #detailBody #similarGrid{grid-template-columns:1fr!important}
+}
 
 /* ====== HOME NAV ====== */
 #home{background:var(--bg);color:var(--t)}
@@ -124,8 +135,8 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 .rck{font-size:.72rem;color:var(--t3);margin-top:1px}
 .rct{font-size:.7rem;color:var(--t3);white-space:nowrap}
 .nbadge{background:rgba(0,212,160,.1);color:var(--green);border:1px solid rgba(0,212,160,.2);font-size:.63rem;font-weight:700;padding:2px 6px;border-radius:5px}
-.rtitle{font-size:.9rem;font-weight:600;margin-bottom:4px;line-height:1.4}
-.rdesc{font-size:.8rem;color:var(--t2);line-height:1.6;margin-bottom:8px}
+.rtitle{font-size:.9rem;font-weight:800;margin-bottom:4px;line-height:1.4}
+.rdesc{font-size:.8rem;color:var(--t2);font-weight:600;line-height:1.6;margin-bottom:8px}
 .rtags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
 .rtag{background:var(--glow);color:var(--ac2);border:1px solid rgba(0,170,255,.14);padding:2px 8px;border-radius:20px;font-size:.68rem;font-weight:500}
 .rtag.g{background:rgba(0,212,160,.07);color:var(--green);border-color:rgba(0,212,160,.15)}
@@ -191,7 +202,22 @@ textarea.fi{resize:vertical;min-height:68px}
 .offer-contact{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;padding:6px 14px;border-radius:7px;font-family:inherit;font-size:.76rem;font-weight:600;cursor:pointer;transition:.2s}
 .offer-contact:hover{opacity:.88}
 .empty-state{text-align:center;padding:40px 20px;color:var(--t2)}
-@media(max-width:1050px){.rpanel{display:none}.feed{margin-left:0}}@media(min-width:1051px){#cardsContainer{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}}
+@media(max-width:1050px){.rpanel{display:none}.feed{margin-left:0}}
+/* ===== DESKTOP ONLY (computer) — bigger, bolder, Haraj-style. Mobile is untouched below 1051px ===== */
+@media(min-width:1051px){
+  html{font-size:19px}
+  .logo-t{font-size:1.55rem}
+  .rcard{display:grid;grid-template-columns:130px 1fr;grid-template-areas:"rmedia rch" "rmedia rtitle" "rmedia rdesc" "rmedia rtags" "rmedia rcf";column-gap:16px;row-gap:5px;align-items:start;padding:16px}
+  .rcard:not(:has(.rmedia)){grid-template-columns:1fr;grid-template-areas:"rch" "rtitle" "rdesc" "rtags" "rcf"}
+  .rch{grid-area:rch}
+  .rtitle{grid-area:rtitle;font-size:1.15rem}
+  .rdesc{grid-area:rdesc;font-size:.92rem}
+  .rtags{grid-area:rtags}
+  .rcf{grid-area:rcf}
+  .rcard .rmedia{grid-area:rmedia;width:130px!important;height:130px!important;margin:0!important}
+  .bv{font-size:1.1rem}
+}
+
 @media(max-width:680px){.sidebar{display:none}.feed{margin-right:0}}
 
 /* ====== PROFILE STYLES ====== */
@@ -459,12 +485,16 @@ window.setLang = function(lang){
   applyTranslations();
   var btn = document.getElementById('langBtn');
   if(btn) btn.textContent = lang === 'ar' ? 'EN' : 'AR';
+  var btn2 = document.getElementById('langBtnDetail');
+  if(btn2) btn2.textContent = lang === 'ar' ? 'EN' : 'AR';
 };
 
 document.addEventListener('DOMContentLoaded', function(){
   applyTranslations();
   var btn = document.getElementById('langBtn');
   if(btn) btn.textContent = window.currentLang === 'ar' ? 'EN' : 'AR';
+  var btn2 = document.getElementById('langBtnDetail');
+  if(btn2) btn2.textContent = window.currentLang === 'ar' ? 'EN' : 'AR';
 });
 
 window.onerror = function(msg, url, line, col, error){
@@ -635,9 +665,11 @@ function logErrorToServer(message, stack){
 <nav style="background:#2563a8;padding:0 16px;display:flex;align-items:center;gap:10px;height:54px;position:sticky;top:0;z-index:100">
   <button onclick="window.showPage('home')" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;width:36px">←</button>
   <div style="flex:1;font-size:.95rem;font-weight:700;color:#fff" data-i18n="requestDetails">تفاصيل الطلب</div>
+  <button id="langBtnDetail" onclick="setLang(window.currentLang==='ar'?'en':'ar')" title="Language" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;color:#fff">EN</button>
+  <button id="themeBtnDetail" onclick="toggleTheme()" title="تبديل الثيم" data-i18n-title="toggleTheme" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s">🌙</button>
   <button onclick="openOffer(window._currentDetailId)" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer" data-i18n="submitOffer">قدّم عرضك</button>
 </nav>
-<div style="padding:16px">
+<div style="padding:16px" id="detailBody">
   <!-- بيانات صاحب الطلب -->
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--b)">
     <div class="av sm" id="detAvatar" style="width:44px;height:44px;font-size:1rem;flex-shrink:0;cursor:pointer" onclick="goProfile(window._currentDetailId)"></div>
@@ -651,8 +683,8 @@ function logErrorToServer(message, stack){
     </div>
   </div>
   <!-- عنوان ووصف -->
-  <div id="detTitle" style="font-size:1.15rem;font-weight:800;color:var(--t);margin-bottom:8px;line-height:1.4"></div>
-  <div id="detDesc" style="font-size:.86rem;color:var(--t2);line-height:1.7;margin-bottom:12px"></div>
+  <div id="detTitle" style="font-size:1.2rem;font-weight:900;color:var(--t);margin-bottom:8px;line-height:1.4"></div>
+  <div id="detDesc" style="font-size:.9rem;font-weight:600;color:var(--t2);line-height:1.7;margin-bottom:12px"></div>
   <div id="detTags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
   <!-- شريط التفاصيل السريعة (ميزانية / مدة / نوع / موقع) -->
   <div id="detQuickInfo" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:10px 12px;background:var(--s2);border:1px solid var(--b);border-radius:10px;margin-bottom:14px;font-size:.8rem">
@@ -2815,6 +2847,8 @@ function applyTheme(t){
   document.documentElement.setAttribute('data-theme', t==='light'?'light':'');
   var btn = document.getElementById('themeBtn');
   if(btn) btn.textContent = t==='light' ? '🌙' : '☀️';
+  var btn2 = document.getElementById('themeBtnDetail');
+  if(btn2) btn2.textContent = t==='light' ? '🌙' : '☀️';
   localStorage.setItem('alagat-theme', t);
 }
 window.toggleTheme = function(){
