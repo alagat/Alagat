@@ -81,10 +81,10 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 #detailPage > div:not(nav){max-width:680px;width:100%;margin:0 auto}
 @media(min-width:681px){#detailPage.active{display:flex;flex-direction:column;align-items:center}#detailPage nav{width:100%}}
 @media(min-width:993px){
-  #detailPage > div:not(nav){max-width:1080px}
+  #detailPage > div:not(nav){max-width:1240px}
   #detailBody{display:grid;grid-template-columns:1fr 320px;align-items:start;gap:28px}
   #detailBody.no-similar{grid-template-columns:1fr}
-  #detGallery img,#detGallery video{max-height:560px!important}
+  #detGallery img,#detGallery video{max-height:760px!important}
   #detailBody > *{grid-column:1}
   #detailBody #similarSection{grid-column:2;grid-row:1/-1;margin-top:0;padding-top:0;border-top:none;position:sticky;top:70px;align-self:start}
   #detailBody #similarGrid{grid-template-columns:1fr!important}
@@ -210,14 +210,14 @@ textarea.fi{resize:vertical;min-height:68px}
   html{font-size:19px}
   body{font-family:'Cairo','Segoe UI','Helvetica Neue',Tahoma,Arial,sans-serif;font-weight:600}
   .logo-t{font-size:1.55rem}
-  .rcard{display:grid;grid-template-columns:minmax(280px,38%) 1fr;grid-template-areas:"rmedia rch" "rmedia rtitle" "rmedia rdesc" "rmedia rtags" "rmedia rcf";column-gap:16px;row-gap:5px;align-items:stretch;padding:16px}
+  .rcard{display:grid;grid-template-columns:340px 1fr;grid-template-areas:"rmedia rch" "rmedia rtitle" "rmedia rdesc" "rmedia rtags" "rmedia rcf";column-gap:16px;row-gap:5px;align-items:stretch;padding:16px}
   .rcard:not(:has(.rmedia)){grid-template-columns:1fr;grid-template-areas:"rch" "rtitle" "rdesc" "rtags" "rcf"}
   .rch{grid-area:rch}
   .rtitle{grid-area:rtitle;font-size:1.15rem;font-weight:800}
   .rdesc{grid-area:rdesc;font-size:.92rem;font-weight:600}
   .rtags{grid-area:rtags}
   .rcf{grid-area:rcf}
-  .rcard .rmedia{grid-area:rmedia;width:100%!important;height:100%!important;min-height:220px;margin:0!important;background:var(--s2)}
+  .rcard .rmedia{grid-area:rmedia;width:340px!important;height:100%!important;min-height:220px;margin:0!important;background:var(--s2)}
   .rcard .rmedia img,.rcard .rmedia video{object-fit:contain!important}
   .bv{font-size:1.1rem}
   #detTitle{font-size:1.3rem!important;font-weight:900!important}
