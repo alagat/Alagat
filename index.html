@@ -222,6 +222,11 @@ textarea.fi{resize:vertical;min-height:68px}
 }
 
 @media(max-width:680px){.sidebar{display:none}.feed{margin-right:0}}
+@media(max-width:680px){
+  .feed{padding:8px 6px 80px}
+  .rcard{margin:0 0 10px}
+  .feed-tabs{margin-bottom:6px}
+}
 
 /* ====== PROFILE STYLES ====== */
 #profile{background:var(--bg);color:var(--t)}
@@ -339,7 +344,7 @@ window.I18N = {
     myMessages:'رسائلي', saved:'المحفوظات', categories:'الفئات',
     catProgramming:'برمجة', catDesign:'تصميم', catMaintenance:'صيانة عامة', catMarketing:'تسويق',
     catConsulting:'استشارات', catTeaching:'تعليم', catConstruction:'مقاولات', catHome:'منزلية', catHealth:'صحة وجمال', catCars:'سيارات', catEvents:'مناسبات وتنظيم', catOther:'خدمات أخرى',
-    postRequest:'نشر طلب', whatDoYouNeed:'ماذا تحتاج؟', latest:'الأحدث',
+    postRequest:'نشر طلب', whatDoYouNeed:'ماذا تحتاج؟', latest:'الأحدث', mostViewed:'الأكثر مشاهدة',
     all:'الكل', searchInRequests:'ابحث في الطلبات...',
     budget:'الميزانية', duration:'المدة', serviceType:'نوع الخدمة', offer:'عرض',
     submitOffer:'قدّم عرضك', contact:'تواصل',
@@ -400,7 +405,7 @@ window.I18N = {
     myMessages:'My Messages', saved:'Saved', categories:'Categories',
     catProgramming:'Programming', catDesign:'Design', catMaintenance:'General Maintenance', catMarketing:'Marketing',
     catConsulting:'Consulting', catTeaching:'Teaching', catConstruction:'Contracting', catHome:'Home Services', catHealth:'Health & Beauty', catCars:'Cars', catEvents:'Events & Planning', catOther:'Other Services',
-    postRequest:'Post a Request', whatDoYouNeed:'What do you need?', latest:'Latest',
+    postRequest:'Post a Request', whatDoYouNeed:'What do you need?', latest:'Latest', mostViewed:'Most Viewed',
     all:'All', searchInRequests:'Search requests...',
     budget:'Budget', duration:'Duration', serviceType:'Service Type', offer:'offers',
     submitOffer:'Submit Offer', contact:'Contact',
@@ -587,7 +592,7 @@ function logErrorToServer(message, stack){
     </div>
     <div class="feed-tabs">
       <div class="ftab on" data-tab="latest" data-i18n="latest">الأحدث</div>
-
+      <div class="ftab" data-tab="mostviewed" data-i18n="mostViewed">الأكثر مشاهدة</div>
 
     </div>
     <div class="filters-row">
@@ -1371,7 +1376,7 @@ window.filterFeed = function(q){
     renderFeed();
   }, 350);
 };
-function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+escH(r.name)+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+escH(r.handle)+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+escH(r.title)+'</div>'+'<div class="rdesc">'+escH(r.desc)+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+escH(tg)+'</span>';}).join('')+'<span class="rtag g">⏱ '+escH(r.dur)+'</span><span class="rtag">'+escH(r.type)+'</span>'+(r.city?'<span class="rtag">📍 '+escH(r.city)+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+escH(r.budget)+'</div></div>'+'<div class="rcf-r"><span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation()">'+(isSaved?t('savedBadge'):'🔖')+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation()">'+t('submitOffer')+'</button>'+'</div></div></div>';}
+function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+escH(r.name)+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+escH(r.handle)+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+escH(r.title)+'</div>'+'<div class="rdesc">'+escH(r.desc)+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+escH(tg)+'</span>';}).join('')+'<span class="rtag g">⏱ '+escH(r.dur)+'</span><span class="rtag">'+escH(r.type)+'</span>'+(r.city?'<span class="rtag">📍 '+escH(r.city)+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+escH(r.budget)+'</div></div>'+'<div class="rcf-r">'+(r.views>0?'<span class="vcount" style="color:var(--t3);font-size:.72rem">👁 '+r.views+'</span>':'')+'<span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation()">'+(isSaved?t('savedBadge'):'🔖')+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation()">'+t('submitOffer')+'</button>'+'</div></div></div>';}
 function makeFooter(){
   return '<div class="bcta"><h3>'+t('readyToStart')+'</h3><p>'+t('ctaSubtitle')+'</p><div class="bcta-btns"><button class="btn-b" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openComp()">'+t('postFree')+'</button><button class="btn-p" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openAuth(\'register\')">'+t('startEarning')+'</button></div></div>'
   + '<div class="feed-footer">'
@@ -1514,7 +1519,11 @@ function buildFeedQuery(){
       if(orParts.length) q = q.or(orParts.join(','));
     }
   }
-  q = q.order('created_at',{ascending:false});
+  if(state.activeTab==='mostviewed'){
+    q = q.order('views_count',{ascending:false});
+  } else {
+    q = q.order('created_at',{ascending:false});
+  }
   return q;
 }
 
@@ -1525,7 +1534,7 @@ function mapRequestRow(r){
     urgent:r.is_urgent||false,isNew:(Date.now()-new Date(r.created_at))<3600000,
     title:r.title,desc:r.description||'',tags:[r.category],cat:r.category,tc:'',userId:r.user_id,adNumber:r.ad_number,
     budget:r.budget_text||'يُحدد',dur:r.duration||'مرن',type:r.work_type||'عن بُعد',city:r.city||'',phone:r.contact_phone||'',
-    offers:r.offers_count||0,ts:new Date(r.created_at).getTime(),created_at:r.created_at,lastBump:r.created_at,media:r.media_urls||[]};
+    offers:r.offers_count||0,views:r.views_count||0,ts:new Date(r.created_at).getTime(),created_at:r.created_at,lastBump:r.created_at,media:r.media_urls||[]};
 }
 
 // ===== الأكثر طلباً من قاعدة البيانات الفعلية =====
@@ -2020,6 +2029,11 @@ window.openDetail=async function(id){
   var sid=String(id);
   var r=reqs.find(function(x){return String(x.id)===sid;});
   if(!r)return;
+
+  // زيادة عداد المشاهدات الحقيقي (fire-and-forget، ما يوقف عرض الصفحة لو تأخر الشبكة)
+  sb.rpc('increment_request_views', { req_id: r.id }).then(function(res){
+    if(res.error) console.warn('increment_request_views failed:', res.error);
+  });
 
   // فحص تسجيل الدخول مبكراً (بدون انتظار)، حتى تفتح نافذة "تبليغ" فوراً بدون تأخير شبكة لو ضغط عليها المستخدم لاحقاً
   window._reportAuthPromise = null;
