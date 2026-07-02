@@ -28,7 +28,7 @@
 <meta name="twitter:image" content="https://alagat.com/og-image.png">
 
 <!-- Favicon مؤقت (نص "ع" بدون لوغو رسمي بعد) -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230085ff'/%3E%3Cstop offset='100%25' stop-color='%230073e6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='%230a0f14'/%3E%3Ctext x='50' y='68' font-family='Arial' font-size='55' font-weight='900' fill='url(%23g)' text-anchor='middle'%3Eع%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22%23eaf4ff%22/%3E%3Ctext%20x%3D%2250%22%20y%3D%2260%22%20font-family%3D%22Arial%22%20font-size%3D%2226%22%20font-weight%3D%22900%22%20fill%3D%22%230073e6%22%20text-anchor%3D%22middle%22%3E%D8%B9%D9%84%D8%A7%D9%82%D8%A7%D8%AA%3C/text%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1080,8 +1080,6 @@ function logErrorToServer(message, stack){
   <div class="n-tab on" onclick="switchNTab(this,'all')" data-i18n="allTab">الكل</div>
   <div class="n-tab" onclick="switchNTab(this,'offer')" data-i18n="offersTabN">عروض</div>
   <div class="n-tab" onclick="switchNTab(this,'msgs')" data-i18n="msgsTab">رسائل</div>
-  <div class="n-tab" onclick="switchNTab(this,'review')" data-i18n="reviewsTabN">تعليقات</div>
-  <div class="n-tab" onclick="switchNTab(this,'system')" data-i18n="systemTab">النظام</div>
 </div>
 
 <div class="n-list" id="nList"></div>
@@ -2056,7 +2054,7 @@ window.openDetail=async function(id){
   if(bc){
     var arrow = '<span style="color:var(--t3)">‹</span>';
     bc.innerHTML =
-      '<span onclick="window.showPage(\'home\')" style="color:var(--ac);cursor:pointer;font-weight:600;direction:ltr;display:inline-block">alagat.com</span>' +
+      '<span onclick="window.showPage(\'home\')" style="color:var(--ac);cursor:pointer;font-weight:600">'+t('appName')+'</span>' +
       arrow +
       '<span onclick="goHomeFilteredByCategory(\''+escH(r.cat)+'\')" style="color:var(--ac);cursor:pointer;font-weight:600">'+escH(r.cat)+'</span>' +
       arrow +
@@ -3243,7 +3241,7 @@ window.sendProfileMsg = async function(){
     msgs.appendChild(d);
     msgs.scrollTop = msgs.scrollHeight;
     // إشعار للمستلم
-    var {error:notifErr4} = await sb.from('notifications').insert({user_id:profileChatReceiverId, type:'msgs', title:'رسالة جديدة', body:'أرسل لك شخص رسالة جديدة', is_read:false});
+    var {error:notifErr4} = await sb.from('notifications').insert({user_id:profileChatReceiverId, type:'msgs', title:'رسالة جديدة', body:'أرسل لك شخص رسالة جديدة', is_read:false, related_id:user.id});
     if(notifErr4){ console.error('sendProfileMsg notification error:', notifErr4); logErrorToServer('sendProfileMsg notification: ' + notifErr4.message, null); }
     hToast('✓ تم إرسال الرسالة');
   } catch(e){
@@ -3705,7 +3703,7 @@ window.handleChatFileSelect = async function(input){
     hToast('✓ تم إرسال الملف');
     input.value='';
 
-    var {error:notifErr5} = await sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص ملفاً',is_read:false});
+    var {error:notifErr5} = await sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص ملفاً',is_read:false,related_id:user.id});
     if(notifErr5){ console.error('handleChatFileSelect notification error:', notifErr5); logErrorToServer('handleChatFileSelect notification: ' + notifErr5.message, null); }
   } catch(e){
     console.error('handleChatFileSelect error:', e);
@@ -3731,7 +3729,7 @@ window.sendChatMsg = async function(){
     var d=document.createElement('div'); d.className='bbl me';
     d.innerHTML='<div class="bbl-txt">'+escH(txt)+'</div><div class="bbl-meta">'+time+' <span style="color:#3da9ff">✓</span></div>';
     body.appendChild(d); body.scrollTop=body.scrollHeight;
-    var {error:notifErr6} = await sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص رسالة جديدة',is_read:false});
+    var {error:notifErr6} = await sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص رسالة جديدة',is_read:false,related_id:user.id});
     if(notifErr6){ console.error('sendChatMsg notification error:', notifErr6); logErrorToServer('sendChatMsg notification: ' + notifErr6.message, null); }
   } catch(e){
     console.error('sendChatMsg error:', e);
@@ -3837,8 +3835,23 @@ window.readNotif=async function(id){
         await openDetailById(offerRow.request_id);
       }
     } else if(n.type==='msgs'){
-      var msgBtn = document.getElementById('si-msgs');
-      if(msgBtn) msgBtn.click();
+      if(n.related_id){
+        try{
+          var {data:senderProfile} = await sb.from('profiles').select('full_name,avatar_color,avatar_letter').eq('id', n.related_id).single();
+          var pName = senderProfile ? (senderProfile.full_name||'') : '';
+          var pGrad = senderProfile ? (senderProfile.avatar_color||'linear-gradient(135deg,#2563a8,#0085ff)') : 'linear-gradient(135deg,#2563a8,#0085ff)';
+          var pLetter = senderProfile ? (senderProfile.avatar_letter|| (pName?pName[0]:'م')) : 'م';
+          goMessages();
+          await window.openChatWith(n.related_id, pName, pGrad, pLetter);
+        }catch(e){
+          console.error('openChatWith from notif failed:', e);
+          var msgBtn2 = document.getElementById('si-msgs');
+          if(msgBtn2) msgBtn2.click();
+        }
+      } else {
+        var msgBtn = document.getElementById('si-msgs');
+        if(msgBtn) msgBtn.click();
+      }
     } else if(n.type==='review'){
       // related_id هنا هو معرّف الشخص الذي أرسل التقييم
       openUserProfile(n.related_id);
