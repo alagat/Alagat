@@ -210,14 +210,14 @@ textarea.fi{resize:vertical;min-height:68px}
   html{font-size:19px}
   body{font-family:'Cairo','Segoe UI','Helvetica Neue',Tahoma,Arial,sans-serif;font-weight:600}
   .logo-t{font-size:1.55rem}
-  .rcard{display:grid;grid-template-columns:340px 1fr;grid-template-areas:"rmedia rch" "rmedia rtitle" "rmedia rdesc" "rmedia rtags" "rmedia rcf";column-gap:16px;row-gap:5px;align-items:stretch;padding:16px}
+  .rcard{display:grid;grid-template-columns:minmax(280px,38%) 1fr;grid-template-areas:"rmedia rch" "rmedia rtitle" "rmedia rdesc" "rmedia rtags" "rmedia rcf";column-gap:16px;row-gap:5px;align-items:stretch;padding:16px}
   .rcard:not(:has(.rmedia)){grid-template-columns:1fr;grid-template-areas:"rch" "rtitle" "rdesc" "rtags" "rcf"}
   .rch{grid-area:rch}
   .rtitle{grid-area:rtitle;font-size:1.15rem;font-weight:800}
   .rdesc{grid-area:rdesc;font-size:.92rem;font-weight:600}
   .rtags{grid-area:rtags}
   .rcf{grid-area:rcf}
-  .rcard .rmedia{grid-area:rmedia;width:340px!important;height:100%!important;min-height:220px;margin:0!important;background:var(--s2)}
+  .rcard .rmedia{grid-area:rmedia;width:100%!important;height:100%!important;min-height:220px;margin:0!important;background:var(--s2)}
   .rcard .rmedia img,.rcard .rmedia video{object-fit:contain!important}
   .bv{font-size:1.1rem}
   #detTitle{font-size:1.3rem!important;font-weight:900!important}
@@ -251,6 +251,12 @@ textarea.fi{resize:vertical;min-height:68px}
 .followers-badge{font-size:.78rem;color:var(--ac);font-weight:600;cursor:pointer}
 @media(min-width:681px){
   #profile .p-cover,#profile .profile-section,#profile .p-tabs,#profile .listings{max-width:680px;width:100%;margin-left:auto;margin-right:auto}
+}
+@media(min-width:1051px){
+  #profile .p-cover,#profile .profile-section,#profile .p-tabs,#profile .listings{max-width:1080px}
+  #profile .p-cover{height:280px}
+  #profile .listings{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;padding:14px 0 90px}
+  #profile .listings .listing-card{margin-bottom:0}
 }
 .profile-name{font-size:1.2rem;font-weight:800;color:var(--t);display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:3px}
 .p-verified{background:var(--ac);border-radius:50%;width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;font-size:.6rem;color:#fff}
@@ -2966,8 +2972,8 @@ function handleSharedRequestLink(){
 window.switchPTab = function(el,id){
   document.querySelectorAll('.ptab').forEach(function(t){t.classList.remove('on');});
   el.classList.add('on');
-  document.getElementById('p-offers').style.display=id==='offers'?'block':'none';
-  document.getElementById('p-requests').style.display=id==='requests'?'block':'none';
+  document.getElementById('p-offers').style.display=id==='offers'?'':'none';
+  document.getElementById('p-requests').style.display=id==='requests'?'':'none';
 };
 
 async function loadProfileData(userId){
@@ -3822,13 +3828,13 @@ window.readNotif=async function(id){
     if(el) el.classList.remove('unread');
     updateNotifBadge();
 
-    if(!n || !n.related_id) return;
+    if(!n) return;
 
     // التوجيه الصحيح حسب نوع الإشعار
-    if(n.type==='offer' || n.type==='category_alert'){
+    if((n.type==='offer' || n.type==='category_alert') && n.related_id){
       // related_id هنا هو معرّف الطلب نفسه
       await openDetailById(n.related_id);
-    } else if(n.type==='offer_accepted'){
+    } else if(n.type==='offer_accepted' && n.related_id){
       // related_id هنا هو معرّف العرض — نحتاج جلب الطلب المرتبط به أولاً
       var {data:offerRow} = await sb.from('offers').select('request_id').eq('id', n.related_id).single();
       if(offerRow && offerRow.request_id){
@@ -3852,7 +3858,7 @@ window.readNotif=async function(id){
         var msgBtn = document.getElementById('si-msgs');
         if(msgBtn) msgBtn.click();
       }
-    } else if(n.type==='review'){
+    } else if(n.type==='review' && n.related_id){
       // related_id هنا هو معرّف الشخص الذي أرسل التقييم
       openUserProfile(n.related_id);
     }
