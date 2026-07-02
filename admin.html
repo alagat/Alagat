@@ -490,8 +490,9 @@ async function loadReportsBadgeOnly(){
 
 async function loadErrorsBadgeOnly(){
   var since = new Date(Date.now() - 24*60*60*1000).toISOString();
-  var {data} = await sb.from('error_logs').select('id').gte('created_at', since);
-  setBadgeBoth('errorsTabBadge', (data||[]).length);
+  var res = await sb.from('error_logs').select('id').gte('created_at', since);
+  if(res.error){ console.error('loadErrorsBadgeOnly failed:', res.error); setBadgeBoth('errorsTabBadge', 0); return; }
+  setBadgeBoth('errorsTabBadge', (res.data||[]).length);
 }
 
 // ===== STATS =====
@@ -536,7 +537,17 @@ function renderUsers(list){
 
 window.deleteUser=function(id,name){
   showConfirm('حذف العضو','هل تريد حذف "'+name+'"؟ سيتم حذف كل بياناته.',async function(){
-    await sb.from('profiles').delete().eq('id',id);
+    var res = await sb.from('profiles').delete().eq('id',id).select();
+    if(res.error){
+      console.error('deleteUser failed:', res.error);
+      toast('⚠ فشل الحذف: '+(res.error.message||'خطأ غير معروف'));
+      return;
+    }
+    if(!res.data || res.data.length===0){
+      toast('⚠ لم يُحذف أي صف — على الأغلب صلاحيات RLS تمنع حذف هذا الجدول');
+      console.warn('deleteUser: 0 rows affected. Check RLS DELETE policy on profiles.');
+      return;
+    }
     loadUsers(); loadStats(); toast('✓ تم حذف العضو');
   });
 };
@@ -568,7 +579,17 @@ function renderReqs(list){
 
 window.deleteReq=function(id,title){
   showConfirm('حذف الطلب','هل تريد حذف "'+title+'"؟',async function(){
-    await sb.from('requests').delete().eq('id',id);
+    var res = await sb.from('requests').delete().eq('id',id).select();
+    if(res.error){
+      console.error('deleteReq failed:', res.error);
+      toast('⚠ فشل الحذف: '+(res.error.message||'خطأ غير معروف'));
+      return;
+    }
+    if(!res.data || res.data.length===0){
+      toast('⚠ لم يُحذف أي صف — على الأغلب صلاحيات RLS تمنع حذف هذا الجدول');
+      console.warn('deleteReq: 0 rows affected. Check RLS DELETE policy on requests.');
+      return;
+    }
     loadRequests(); loadStats(); toast('✓ تم حذف الطلب');
   });
 };
@@ -605,7 +626,9 @@ function renderMsgs(list){
 
 window.deleteMsg=function(id){
   showConfirm('حذف الرسالة','هل تريد حذف هذه الرسالة؟',async function(){
-    await sb.from('messages').delete().eq('id',id);
+    var res = await sb.from('messages').delete().eq('id',id).select();
+    if(res.error){ console.error('deleteMsg failed:', res.error); toast('⚠ فشل الحذف: '+(res.error.message||'خطأ غير معروف')); return; }
+    if(!res.data || res.data.length===0){ toast('⚠ لم يُحذف أي صف — راجع صلاحيات RLS'); console.warn('deleteMsg: 0 rows affected. Check RLS DELETE policy on messages.'); return; }
     loadMessages(); loadStats(); toast('✓ تم حذف الرسالة');
   });
 };
@@ -641,7 +664,9 @@ function renderOffers(list){
 
 window.deleteOffer=function(id){
   showConfirm('حذف العرض','هل تريد حذف هذا العرض؟',async function(){
-    await sb.from('offers').delete().eq('id',id);
+    var res = await sb.from('offers').delete().eq('id',id).select();
+    if(res.error){ console.error('deleteOffer failed:', res.error); toast('⚠ فشل الحذف: '+(res.error.message||'خطأ غير معروف')); return; }
+    if(!res.data || res.data.length===0){ toast('⚠ لم يُحذف أي صف — راجع صلاحيات RLS'); console.warn('deleteOffer: 0 rows affected. Check RLS DELETE policy on offers.'); return; }
     loadOffers(); loadStats(); toast('✓ تم حذف العرض');
   });
 };
@@ -686,18 +711,29 @@ window.dismissReport=async function(reportId){
 
 window.deleteReportedRequest=function(requestId,reportId){
   showConfirm('حذف الطلب المخالف','هل تريد حذف هذا الطلب نهائياً؟ سيتم حذف البلاغ أيضاً.',async function(){
-    await sb.from('requests').delete().eq('id',requestId);
+    var res = await sb.from('requests').delete().eq('id',requestId).select();
+    if(res.error){ console.error('deleteReportedRequest failed:', res.error); toast('⚠ فشل الحذف: '+(res.error.message||'خطأ غير معروف')); return; }
+    if(!res.data || res.data.length===0){ toast('⚠ لم يُحذف أي صف — راجع صلاحيات RLS'); console.warn('deleteReportedRequest: 0 rows affected.'); return; }
     loadReports(); loadStats(); toast('✓ تم حذف الطلب');
   });
 };
 
 // ===== ERRORS =====
 async function loadErrors(){
-  var {data} = await sb.from('error_logs')
+  var res = await sb.from('error_logs')
     .select('*')
     .order('created_at',{ascending:false})
     .limit(100);
-  allErrors = data||[];
+  if(res.error){
+    console.error('loadErrors failed:', res.error);
+    document.getElementById('errorsBody').innerHTML =
+      '<tr><td colspan="5" class="empty-row" style="color:#ff4466">⚠ فشل تحميل سجل الأخطاء: '+escHtml(res.error.message||'خطأ غير معروف')+
+      (res.error.hint ? ' — '+escHtml(res.error.hint) : '')+
+      '<br><span style="font-size:.72rem;color:#8a9db0">(افتح الـ Console لتفاصيل أكثر، أو راجع صلاحيات RLS على جدول error_logs)</span></td></tr>';
+    allErrors = [];
+    return;
+  }
+  allErrors = res.data||[];
   renderErrors(allErrors);
   loadErrorsBadgeOnly();
 }
@@ -722,7 +758,9 @@ function renderErrors(list){
 
 window.dismissError=async function(errorId){
   showConfirm('حذف السجل','هل تريد حذف سجل هذا الخطأ؟',async function(){
-    await sb.from('error_logs').delete().eq('id',errorId);
+    var res = await sb.from('error_logs').delete().eq('id',errorId).select();
+    if(res.error){ console.error('dismissError failed:', res.error); toast('⚠ فشل الحذف: '+(res.error.message||'خطأ غير معروف')); return; }
+    if(!res.data || res.data.length===0){ toast('⚠ لم يُحذف أي صف — راجع صلاحيات RLS'); console.warn('dismissError: 0 rows affected.'); return; }
     loadErrors(); toast('✓ تم الحذف');
   });
 };
