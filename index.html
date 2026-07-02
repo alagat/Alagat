@@ -84,8 +84,9 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
   #detailPage > div:not(nav){max-width:1240px}
   #detailBody{display:grid;grid-template-columns:1fr 320px;align-items:start;gap:28px}
   #detailBody.no-similar{grid-template-columns:1fr}
-  #detGallery img,#detGallery video{max-height:760px!important}
+  #detGallery img,#detGallery video{max-height:900px!important}
   #detailBody > *{grid-column:1}
+  #detGallery{grid-column:1/-1!important}
   #detailBody #similarSection{grid-column:2;grid-row:1/-1;margin-top:0;padding-top:0;border-top:none;position:sticky;top:70px;align-self:start}
   #detailBody #similarGrid{grid-template-columns:1fr!important}
 }
@@ -210,14 +211,14 @@ textarea.fi{resize:vertical;min-height:68px}
   html{font-size:19px}
   body{font-family:'Cairo','Segoe UI','Helvetica Neue',Tahoma,Arial,sans-serif;font-weight:600}
   .logo-t{font-size:1.55rem}
-  .rcard{display:grid;grid-template-columns:340px 1fr;grid-template-areas:"rmedia rch" "rmedia rtitle" "rmedia rdesc" "rmedia rtags" "rmedia rcf";column-gap:16px;row-gap:5px;align-items:stretch;padding:16px}
+  .rcard{display:grid;grid-template-columns:180px 1fr;grid-template-areas:"rmedia rch" "rmedia rtitle" "rmedia rdesc" "rmedia rtags" "rmedia rcf";column-gap:14px;row-gap:5px;align-items:stretch;padding:12px}
   .rcard:not(:has(.rmedia)){grid-template-columns:1fr;grid-template-areas:"rch" "rtitle" "rdesc" "rtags" "rcf"}
   .rch{grid-area:rch}
   .rtitle{grid-area:rtitle;font-size:1.15rem;font-weight:800}
   .rdesc{grid-area:rdesc;font-size:.92rem;font-weight:600}
   .rtags{grid-area:rtags}
   .rcf{grid-area:rcf}
-  .rcard .rmedia{grid-area:rmedia;width:340px!important;height:100%!important;min-height:220px;margin:0!important;background:var(--s2)}
+  .rcard .rmedia{grid-area:rmedia;width:180px!important;height:100%!important;min-height:140px;margin:0!important;background:var(--s2)}
   .rcard .rmedia img,.rcard .rmedia video{object-fit:contain!important}
   .bv{font-size:1.1rem}
   #detTitle{font-size:1.3rem!important;font-weight:900!important}
@@ -390,7 +391,7 @@ window.I18N = {
     readyToStart:'جاهز تبدأ؟', ctaSubtitle:'انشر طلبك أو زد دخلك',
     postFree:'انشر طلبك مجاناً ←', startEarning:'ابدأ بزيادة دخلك',
     noRequestsYet:'لا توجد طلبات بعد', beFirstToPost:'كن أول من ينشر طلباً!',
-    newBadge:'جديد ✨', noOffersBadge:'لا عروض بعد', savedBadge:'🔖 محفوظ',
+    newBadge:'جديد ✨', noOffersBadge:'لا عروض بعد', savedBadge:'🔖 محفوظ', saveAction:'حفظ',
     requestDetails:'تفاصيل الطلب',
     offersTab:'العروض المقدمة',
     email:'البريد الإلكتروني', password:'كلمة المرور', fullName:'الاسم الكامل', forgotPassword:'نسيت كلمة المرور؟',
@@ -451,7 +452,7 @@ window.I18N = {
     readyToStart:'Ready to start?', ctaSubtitle:'Post your request or boost your income',
     postFree:'Post your request for free ←', startEarning:'Start earning more',
     noRequestsYet:'No requests yet', beFirstToPost:'Be the first to post a request!',
-    newBadge:'New ✨', noOffersBadge:'No offers yet', savedBadge:'🔖 Saved',
+    newBadge:'New ✨', noOffersBadge:'No offers yet', savedBadge:'🔖 Saved', saveAction:'Save',
     requestDetails:'Request Details',
     offersTab:'Submitted Offers',
     email:'Email', password:'Password', fullName:'Full Name', forgotPassword:'Forgot password?',
@@ -951,7 +952,7 @@ function logErrorToServer(message, stack){
         <span class="share-lbl">تيليغرام</span>
       </div>
     </div>
-    <div class="copy-row"><span class="copy-url" id="shareUrl">alagat.vercel.app</span><button class="copy-btn" onclick="copyLink()" data-i18n="copyLink">نسخ الرابط</button></div>
+    <div class="copy-row"><span class="copy-url" id="shareUrl">alagat.com</span><button class="copy-btn" onclick="copyLink()" data-i18n="copyLink">نسخ الرابط</button></div>
   </div>
 </div>
 </div><!-- end #profile -->
@@ -1218,7 +1219,7 @@ window.toggleFollow = async function(){
 function populateProfileFromDB(p){
   // Update share URL with real username
   var shareUrlEl = document.getElementById('shareUrl');
-  if(shareUrlEl && p.username) shareUrlEl.textContent = 'alagat.vercel.app/u/' + p.username;
+  if(shareUrlEl && p.username) shareUrlEl.textContent = 'alagat.com/u/' + p.username;
   var handleEl2 = document.getElementById('profileHandle');
   if(handleEl2) handleEl2.textContent = '@' + (p.username || '—');
 
@@ -1380,7 +1381,7 @@ window.filterFeed = function(q){
     renderFeed();
   }, 350);
 };
-function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+escH(r.name)+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+escH(r.handle)+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+escH(r.title)+'</div>'+'<div class="rdesc">'+escH(r.desc)+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+escH(tg)+'</span>';}).join('')+'<span class="rtag g">⏱ '+escH(r.dur)+'</span><span class="rtag">'+escH(r.type)+'</span>'+(r.city?'<span class="rtag">📍 '+escH(r.city)+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+escH(r.budget)+'</div></div>'+'<div class="rcf-r">'+(r.views>0?'<span class="vcount" style="color:var(--t3);font-size:.72rem">👁 '+r.views+'</span>':'')+'<span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation()">'+(isSaved?t('savedBadge'):'🔖')+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation()">'+t('submitOffer')+'</button>'+'</div></div></div>';}
+function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+escH(r.name)+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+escH(r.handle)+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+escH(r.title)+'</div>'+'<div class="rdesc">'+escH(r.desc)+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+escH(tg)+'</span>';}).join('')+'<span class="rtag g">⏱ '+escH(r.dur)+'</span><span class="rtag">'+escH(r.type)+'</span>'+(r.city?'<span class="rtag">📍 '+escH(r.city)+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+escH(r.budget)+'</div></div>'+'<div class="rcf-r">'+(r.views>0?'<span class="vcount" style="color:var(--t3);font-size:.72rem">👁 '+r.views+'</span>':'')+'<span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation()">'+(isSaved?t('savedBadge'):'🔖 '+t('saveAction'))+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation()">'+t('submitOffer')+'</button>'+'</div></div></div>';}
 function makeFooter(){
   return '<div class="bcta"><h3>'+t('readyToStart')+'</h3><p>'+t('ctaSubtitle')+'</p><div class="bcta-btns"><button class="btn-b" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openComp()">'+t('postFree')+'</button><button class="btn-p" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openAuth(\'register\')">'+t('startEarning')+'</button></div></div>'
   + '<div class="feed-footer">'
@@ -1406,6 +1407,16 @@ function isProviderOnline(lastSeen){
 
 // ====== تنبيهات الفئة: المستخدم يحفظ فئة، ويصله إشعار عند نشر طلب جديد بها ======
 var myCategoryAlerts = []; // قائمة الفئات التي اشترك المستخدم بتنبيهاتها (تُحمَّل بعد تسجيل الدخول)
+
+async function loadSavedRequests(){
+  try{
+    var user = await sbGetUser();
+    if(!user) return;
+    var res = await sb.from('saved_requests').select('request_id').eq('user_id', user.id);
+    if(res.error){ console.error('loadSavedRequests failed:', res.error); return; }
+    state.saved = (res.data||[]).map(function(row){ return Number(row.request_id); });
+  }catch(e){ console.error('loadSavedRequests error:', e); }
+}
 
 async function loadMyCategoryAlerts(){
   var user = await sbGetUser();
@@ -1662,10 +1673,25 @@ function bindCardEvents(){
     if(s){
       e.preventDefault();e.stopPropagation();
       if(!state.loggedIn){openAuth('login');return;}
-      var id=s.getAttribute('data-id');
+      var id=Number(s.getAttribute('data-id'));
       var idx=state.saved.indexOf(id);
-      if(idx>-1){state.saved.splice(idx,1);s.textContent='🔖';s.classList.remove('saved');}
-      else{state.saved.push(id);s.textContent='🔖 محفوظ';s.classList.add('saved');}
+      if(idx>-1){
+        state.saved.splice(idx,1);s.textContent='🔖';s.classList.remove('saved');
+        sbGetUser().then(function(user){
+          if(!user) return;
+          sb.from('saved_requests').delete().eq('user_id',user.id).eq('request_id',id).then(function(res){
+            if(res.error) console.error('unsave failed:', res.error);
+          });
+        });
+      } else {
+        state.saved.push(id);s.textContent='🔖 محفوظ';s.classList.add('saved');
+        sbGetUser().then(function(user){
+          if(!user) return;
+          sb.from('saved_requests').insert({user_id:user.id, request_id:id}).then(function(res){
+            if(res.error) console.error('save failed:', res.error);
+          });
+        });
+      }
       hToast('✓ تم');
     } else if(o){
       e.preventDefault();e.stopPropagation();
@@ -2927,6 +2953,7 @@ sb.auth.getSession().then(function(res){
     try{ doLoginUI(); }catch(e){ console.error('doLoginUI failed:', e); }
     try{ startPresenceHeartbeat(); }catch(e){ console.error('startPresenceHeartbeat failed:', e); }
     try{ loadMyCategoryAlerts(); }catch(e){ console.error('loadMyCategoryAlerts failed:', e); }
+    try{ loadSavedRequests().then(function(){ renderFeed(); }); }catch(e){ console.error('loadSavedRequests failed:', e); }
   } else {
     try{ renderFeed(); }catch(e){ console.error('renderFeed failed:', e); }
   }
@@ -3211,7 +3238,7 @@ window.shareVia=function(app){
   }
   closePModal('shareModal');
 };
-window.copyLink=function(){var url=document.getElementById('shareUrl')?document.getElementById('shareUrl').textContent:'alagat.vercel.app';navigator.clipboard.writeText(url).catch(function(){});hToast('✓ '+t('linkCopied'));};
+window.copyLink=function(){var url=document.getElementById('shareUrl')?document.getElementById('shareUrl').textContent:'alagat.com';navigator.clipboard.writeText(url).catch(function(){});hToast('✓ '+t('linkCopied'));};
 // chatModal receiver id
 window.profileChatReceiverId = null;
 var profileChatReceiverId = null;
@@ -4176,7 +4203,7 @@ console.log('✅ Supabase متصل بنجاح');
         <span class="am-arrow">›</span>
       </div>
 
-      <div class="am-item" onclick="closeAccountMenu();hToast('سياسة الاستخدام — قريباً')">
+      <div class="am-item" onclick="closeAccountMenu();window.open('/privacy.html','_blank')">
         <span class="am-icon" style="background:rgba(0,133,255,.1)">📄</span>
         <div class="am-label">سياسة موقع علاقات</div>
         <span class="am-arrow">›</span>
