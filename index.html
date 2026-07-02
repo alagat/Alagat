@@ -208,14 +208,14 @@ textarea.fi{resize:vertical;min-height:68px}
   html{font-size:19px}
   body{font-family:'Cairo','Segoe UI','Helvetica Neue',Tahoma,Arial,sans-serif;font-weight:600}
   .logo-t{font-size:1.55rem}
-  .rcard{display:grid;grid-template-columns:130px 1fr;grid-template-areas:"rmedia rch" "rmedia rtitle" "rmedia rdesc" "rmedia rtags" "rmedia rcf";column-gap:16px;row-gap:5px;align-items:start;padding:16px}
+  .rcard{display:grid;grid-template-columns:240px 1fr;grid-template-areas:"rmedia rch" "rmedia rtitle" "rmedia rdesc" "rmedia rtags" "rmedia rcf";column-gap:16px;row-gap:5px;align-items:stretch;padding:16px}
   .rcard:not(:has(.rmedia)){grid-template-columns:1fr;grid-template-areas:"rch" "rtitle" "rdesc" "rtags" "rcf"}
   .rch{grid-area:rch}
   .rtitle{grid-area:rtitle;font-size:1.15rem;font-weight:800}
   .rdesc{grid-area:rdesc;font-size:.92rem;font-weight:600}
   .rtags{grid-area:rtags}
   .rcf{grid-area:rcf}
-  .rcard .rmedia{grid-area:rmedia;width:130px!important;height:130px!important;margin:0!important;background:var(--s2)}
+  .rcard .rmedia{grid-area:rmedia;width:240px!important;height:100%!important;margin:0!important;background:var(--s2)}
   .rcard .rmedia img,.rcard .rmedia video{object-fit:contain!important}
   .bv{font-size:1.1rem}
   #detTitle{font-size:1.3rem!important;font-weight:900!important}
@@ -657,11 +657,6 @@ function logErrorToServer(message, stack){
       <button class="btn-g" style="width:100%;border-radius:8px;padding:8px;font-size:.79rem" id="rpLogin">تسجيل الدخول</button>
     </div>
     <div class="pc" id="rpUser" style="display:none"></div>
-    <div class="pc" style="background:linear-gradient(135deg,rgba(0,133,255,.08),rgba(37,99,168,.05));border-color:rgba(0,133,255,.18)">
-      <div class="pt" style="color:#3da9ff">💰 عندك مهارة؟</div>
-      <p style="font-size:.78rem;color:var(--t2);line-height:1.6;margin-bottom:10px">حوّل وقتك الحر إلى دخل ثانٍ حقيقي</p>
-      <button class="btn-p" style="width:100%;border-radius:8px;padding:8px;font-size:.79rem" id="btnProvider">ابدأ الكسب الآن</button>
-    </div>
   </aside>
 </div>
 
@@ -670,14 +665,16 @@ function logErrorToServer(message, stack){
 </div><!-- end #home -->
 
 <!-- DETAIL PAGE -->
-<div id="detailPage" class="page" style="background:var(--bg);min-height:100vh;padding-bottom:80px">
+<div id="detailPage" class="page" style="background:var(--bg);min-height:100vh;padding-bottom:140px">
 <nav style="background:#2563a8;padding:0 16px;display:flex;align-items:center;gap:10px;height:54px;position:sticky;top:0;z-index:100">
-  <button onclick="window.showPage('home')" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;width:36px">←</button>
-  <div style="flex:1;font-size:.95rem;font-weight:700;color:#fff" data-i18n="requestDetails">تفاصيل الطلب</div>
+  <button onclick="window.showPage('home')" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;width:36px">→</button>
+  <div onclick="window.showPage('home')" style="font-size:1.05rem;font-weight:900;color:#fff;cursor:pointer;white-space:nowrap">علاقات</div>
+  <div style="flex:1;font-size:.85rem;font-weight:600;color:rgba(255,255,255,.75)" data-i18n="requestDetails">تفاصيل الطلب</div>
   <button id="langBtnDetail" onclick="setLang(window.currentLang==='ar'?'en':'ar')" title="Language" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;color:#fff">EN</button>
   <button id="themeBtnDetail" onclick="toggleTheme()" title="تبديل الثيم" data-i18n-title="toggleTheme" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s">🌙</button>
   <button onclick="openOffer(window._currentDetailId)" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer" data-i18n="submitOffer">قدّم عرضك</button>
 </nav>
+<div id="detBreadcrumb" style="padding:10px 16px;font-size:.8rem;color:var(--t2);display:flex;align-items:center;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--b)"></div>
 <div style="padding:16px" id="detailBody">
   <!-- بيانات صاحب الطلب -->
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--b)">
@@ -741,7 +738,7 @@ function logErrorToServer(message, stack){
   <button id="reportRequestBtn" onclick="openReportModal()" style="width:100%;margin-top:24px;background:transparent;border:1px solid rgba(239,68,68,.35);color:#ef4444;border-radius:10px;padding:12px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">🚩 تبليغ عن هذا الطلب</button>
 </div>
 <!-- زر قدّم عرضك في الأسفل -->
-<div style="position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:var(--bg);border-top:1px solid var(--b);display:flex;justify-content:center">
+<div style="position:fixed;bottom:64px;left:0;right:0;padding:12px 16px;background:var(--bg);border-top:1px solid var(--b);display:flex;justify-content:center;z-index:99">
   <button class="btn-b" id="detOfferBtn" style="width:100%;max-width:680px;padding:13px;font-size:.9rem;border-radius:12px" data-i18n="submitOfferOnRequest">قدّم عرضك على هذا الطلب ←</button>
 </div>
 </div>
@@ -2050,6 +2047,16 @@ window.openDetail=async function(id){
   window._currentAdNumber = r.adNumber||null;
   document.getElementById('detTitle').textContent=r.title;
   document.getElementById('detDesc').textContent=r.desc;
+  var bc = document.getElementById('detBreadcrumb');
+  if(bc){
+    var arrow = '<span style="color:var(--t3)">‹</span>';
+    bc.innerHTML =
+      '<span onclick="window.showPage(\'home\')" style="color:var(--ac);cursor:pointer;font-weight:600">'+t('appName')+'</span>' +
+      arrow +
+      '<span onclick="goHomeFilteredByCategory(\''+escH(r.cat)+'\')" style="color:var(--ac);cursor:pointer;font-weight:600">'+escH(r.cat)+'</span>' +
+      arrow +
+      '<span style="color:var(--t2)">'+escH(r.title)+'</span>';
+  }
   renderSimilarRequests(r);
   document.getElementById('detBudget').textContent=r.budget;
   document.getElementById('detDur').textContent=r.dur;
@@ -2087,9 +2094,9 @@ window.openDetail=async function(id){
       galleryEl.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px">' +
         r.media.map(function(m){
           if(m.type === 'video'){
-            return '<video src="'+m.url+'" controls style="width:100%;max-height:320px;border-radius:14px;object-fit:cover;background:#000"></video>';
+            return '<video src="'+m.url+'" controls style="width:100%;max-height:420px;border-radius:14px;object-fit:contain;background:#000"></video>';
           } else {
-            return '<img src="'+m.url+'" style="width:100%;max-height:320px;border-radius:14px;object-fit:cover;cursor:pointer" onclick="openImagePreview(\''+m.url+'\')">';
+            return '<img src="'+m.url+'" style="width:100%;max-height:420px;border-radius:14px;object-fit:contain;background:var(--s2);cursor:pointer" onclick="openImagePreview(\''+m.url+'\')">';
           }
         }).join('') +
       '</div>';
@@ -2597,7 +2604,8 @@ document.getElementById('btnLogin').onclick=function(){openAuth('login');};
 document.getElementById('btnRegister').onclick=function(){openAuth('register');};
 document.getElementById('rpLogin').onclick=function(){openAuth('login');};
 document.getElementById('rpRegister').onclick=function(){openAuth('register');};
-document.getElementById('btnProvider').onclick=function(){openAuth('register');};
+var btnProviderEl = document.getElementById('btnProvider');
+if(btnProviderEl) btnProviderEl.onclick=function(){openAuth('register');};
 document.getElementById('btnNewReq').onclick=window.openComp;
 document.getElementById('miniBar').onclick=window.openComp;
 
@@ -2613,6 +2621,16 @@ document.getElementById('filterTime').onchange=function(){state.activeTime=this.
 document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});si.classList.add('on');var cat=si.getAttribute('data-cat');state.activeFilter=cat;document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')===cat);});renderFeed();updateCatAlertBtn();};});
 // search handled inline on input
 document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.activeCity='all';state.activeTime='all';state.search='';var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';var fc=document.getElementById('filterCity');if(fc)fc.value='all';var ft=document.getElementById('filterTime');if(ft)ft.value='all';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();updateCatAlertBtn();};
+
+// فتح الرئيسية مفلترة على فئة معيّنة — تُستخدم من مسار التنقل (breadcrumb) بصفحة تفاصيل الطلب
+window.goHomeFilteredByCategory = function(cat){
+  window.showPage('home');
+  state.activeFilter = cat;
+  document.querySelectorAll('.fc').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-cat')===cat); });
+  document.querySelectorAll('.si').forEach(function(s){ s.classList.toggle('on', s.getAttribute('data-cat')===cat); });
+  renderFeed();
+  updateCatAlertBtn();
+};
 document.getElementById('si-saved').onclick=function(){if(!state.loggedIn){openAuth('login');return;}document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');if(!state.saved.length){hToast(t('noSavedYet'));return;}var savedList=reqs.filter(function(r){return state.saved.indexOf(r.id)>-1;});var html='';savedList.forEach(function(r){html+=makeCard(r);});html+='<div style="margin:10px 14px"><button class="btn-g" style="width:100%;padding:9px;border-radius:9px" id="backToFeed">'+t('backToFeed')+'</button></div>';document.getElementById('feedContent').innerHTML='<div id="cardsContainer">'+html+'</div>';bindCardEvents();document.getElementById('backToFeed').onclick=renderFeed;};
 var reqMediaFiles = []; // الملفات المختارة لإرفاقها بالطلب الجديد
 var REQ_MEDIA_MAX = 10;
