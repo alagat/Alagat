@@ -83,6 +83,8 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 @media(min-width:993px){
   #detailPage > div:not(nav){max-width:1080px}
   #detailBody{display:grid;grid-template-columns:1fr 320px;align-items:start;gap:28px}
+  #detailBody.no-similar{grid-template-columns:1fr}
+  #detGallery img,#detGallery video{max-height:560px!important}
   #detailBody > *{grid-column:1}
   #detailBody #similarSection{grid-column:2;grid-row:1/-1;margin-top:0;padding-top:0;border-top:none;position:sticky;top:70px;align-self:start}
   #detailBody #similarGrid{grid-template-columns:1fr!important}
@@ -208,14 +210,14 @@ textarea.fi{resize:vertical;min-height:68px}
   html{font-size:19px}
   body{font-family:'Cairo','Segoe UI','Helvetica Neue',Tahoma,Arial,sans-serif;font-weight:600}
   .logo-t{font-size:1.55rem}
-  .rcard{display:grid;grid-template-columns:240px 1fr;grid-template-areas:"rmedia rch" "rmedia rtitle" "rmedia rdesc" "rmedia rtags" "rmedia rcf";column-gap:16px;row-gap:5px;align-items:stretch;padding:16px}
+  .rcard{display:grid;grid-template-columns:340px 1fr;grid-template-areas:"rmedia rch" "rmedia rtitle" "rmedia rdesc" "rmedia rtags" "rmedia rcf";column-gap:16px;row-gap:5px;align-items:stretch;padding:16px}
   .rcard:not(:has(.rmedia)){grid-template-columns:1fr;grid-template-areas:"rch" "rtitle" "rdesc" "rtags" "rcf"}
   .rch{grid-area:rch}
   .rtitle{grid-area:rtitle;font-size:1.15rem;font-weight:800}
   .rdesc{grid-area:rdesc;font-size:.92rem;font-weight:600}
   .rtags{grid-area:rtags}
   .rcf{grid-area:rcf}
-  .rcard .rmedia{grid-area:rmedia;width:240px!important;height:100%!important;margin:0!important;background:var(--s2)}
+  .rcard .rmedia{grid-area:rmedia;width:340px!important;height:100%!important;min-height:220px;margin:0!important;background:var(--s2)}
   .rcard .rmedia img,.rcard .rmedia video{object-fit:contain!important}
   .bv{font-size:1.1rem}
   #detTitle{font-size:1.3rem!important;font-weight:900!important}
@@ -669,7 +671,7 @@ function logErrorToServer(message, stack){
 <nav style="background:#2563a8;padding:0 16px;display:flex;align-items:center;gap:10px;height:54px;position:sticky;top:0;z-index:100">
   <button onclick="window.showPage('home')" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;width:36px">→</button>
   <div onclick="window.showPage('home')" style="font-size:1.05rem;font-weight:900;color:#fff;cursor:pointer;white-space:nowrap">علاقات</div>
-  <div style="flex:1;font-size:.85rem;font-weight:600;color:rgba(255,255,255,.75)" data-i18n="requestDetails">تفاصيل الطلب</div>
+  <div style="flex:1"></div>
   <button id="langBtnDetail" onclick="setLang(window.currentLang==='ar'?'en':'ar')" title="Language" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;color:#fff">EN</button>
   <button id="themeBtnDetail" onclick="toggleTheme()" title="تبديل الثيم" data-i18n-title="toggleTheme" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s">🌙</button>
   <button onclick="openOffer(window._currentDetailId)" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer" data-i18n="submitOffer">قدّم عرضك</button>
@@ -1550,7 +1552,7 @@ async function loadHotCategories(){
       html+='<div class="hti"><span class="tr2">'+(i+1)+'</span><span class="tn">'+item[0]+'</span><span class="tc">'+item[1]+'</span></div>';
     });
     document.getElementById('hotCatsContainer').innerHTML=html;
-  }catch(e){ document.getElementById('hotCatsContainer').innerHTML=''; }
+  }catch(e){ console.error('loadHotCategories failed:', e); document.getElementById('hotCatsContainer').innerHTML='<div style="text-align:center;padding:16px;color:var(--t2);font-size:.8rem">تعذّر تحميل البيانات</div>'; }
 }
 
 function renderFeed(){
@@ -2005,10 +2007,13 @@ function renderSimilarRequests(current){
   }
   matches = matches.slice(0,6);
 
+  var body = document.getElementById('detailBody');
   if(!matches.length){
     section.style.display='none';
+    if(body) body.classList.add('no-similar');
     return;
   }
+  if(body) body.classList.remove('no-similar');
   section.style.display='block';
   grid.innerHTML = matches.map(function(x){
     var thumb = (x.media && x.media.length>0) ? x.media[0].url : '';
@@ -2051,7 +2056,7 @@ window.openDetail=async function(id){
   if(bc){
     var arrow = '<span style="color:var(--t3)">‹</span>';
     bc.innerHTML =
-      '<span onclick="window.showPage(\'home\')" style="color:var(--ac);cursor:pointer;font-weight:600">'+t('appName')+'</span>' +
+      '<span onclick="window.showPage(\'home\')" style="color:var(--ac);cursor:pointer;font-weight:600;direction:ltr;display:inline-block">alagat.com</span>' +
       arrow +
       '<span onclick="goHomeFilteredByCategory(\''+escH(r.cat)+'\')" style="color:var(--ac);cursor:pointer;font-weight:600">'+escH(r.cat)+'</span>' +
       arrow +
@@ -2912,10 +2917,15 @@ window.openImagePreview = function(url){
 };
 // تحقق من الجلسة عند فتح الصفحة - يحافظ على تسجيل الدخول
 sb.auth.getSession().then(function(res){
-  if(res.data&&res.data.session){ doLoginUI(); startPresenceHeartbeat(); loadMyCategoryAlerts(); }
-  else { renderFeed(); }
+  loadHotCategories(); // مستقلة عن باقي التهيئة، حتى لو فشل شي تحت ما تتأثر
   handleSharedRequestLink();
-  loadHotCategories();
+  if(res.data&&res.data.session){
+    try{ doLoginUI(); }catch(e){ console.error('doLoginUI failed:', e); }
+    try{ startPresenceHeartbeat(); }catch(e){ console.error('startPresenceHeartbeat failed:', e); }
+    try{ loadMyCategoryAlerts(); }catch(e){ console.error('loadMyCategoryAlerts failed:', e); }
+  } else {
+    try{ renderFeed(); }catch(e){ console.error('renderFeed failed:', e); }
+  }
 });
 
 // ====== تحديث "آخر ظهور" بشكل دوري للمستخدم المسجّل دخوله، لتغذية شارة "متصل الآن" ======
