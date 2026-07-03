@@ -84,9 +84,8 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
   #detailPage > div:not(nav){max-width:1240px}
   #detailBody{display:grid;grid-template-columns:1fr 320px;align-items:start;gap:28px}
   #detailBody.no-similar{grid-template-columns:1fr}
-  #detGallery img,#detGallery video{max-height:900px!important}
+  #detGallery img,#detGallery video{max-height:760px!important}
   #detailBody > *{grid-column:1}
-  #detGallery{grid-column:1/-1!important}
   #detailBody #similarSection{grid-column:2;grid-row:1/-1;margin-top:0;padding-top:0;border-top:none;position:sticky;top:70px;align-self:start}
   #detailBody #similarGrid{grid-template-columns:1fr!important}
 }
@@ -391,7 +390,19 @@ window.I18N = {
     readyToStart:'جاهز تبدأ؟', ctaSubtitle:'انشر طلبك أو زد دخلك',
     postFree:'انشر طلبك مجاناً ←', startEarning:'ابدأ بزيادة دخلك',
     noRequestsYet:'لا توجد طلبات بعد', beFirstToPost:'كن أول من ينشر طلباً!',
-    newBadge:'جديد ✨', noOffersBadge:'لا عروض بعد', savedBadge:'🔖 محفوظ', saveAction:'حفظ',
+    newBadge:'جديد ✨', noOffersBadge:'لا عروض بعد', savedBadge:'🔖 محفوظ', saveAction:'حفظ', requestSaved:'تم حفظ الطلب', requestUnsaved:'تم إلغاء الحفظ',
+    amSubtitle:'ملفي الشخصي، طلباتي', amAddRequest:'أضف طلب', amPayments:'سداد الرسوم والاشتراكات', amContactUs:'اتصل بنا', amPolicy:'سياسة موقع علاقات', amLogout:'تسجيل الخروج',
+    manageListing:'إدارة الإعلان', ownerEdit:'✏️ تعديل', ownerBump:'🔄 تحديث', ownerFeature:'⭐ تفضيل الطلب', ownerDelete:'🗑 حذف', ownerPay:'💳 دفع الرسوم', ownerShare:'⤴ مشاركة الطلب',
+    submittedOffers:'العروض المقدمة', similarRequests:'طلبات مشابهة', reportRequestBtn:'🚩 تبليغ عن هذا الطلب',
+    usernameLbl:'اسم المستخدم *', imHereFor:'أنا هنا لـ', typeClient:'🙋 أطلب خدمة', typeBoth:'💰 لدي مهارة أرغب بالربح',
+    agreeToTerms1:'بالتسجيل توافق على', agreeToTerms2:'و', termsOfUse:'شروط الاستخدام', privacyPolicy:'سياسة الخصوصية', orDivider:'أو',
+    verifyEmailTitle:'📧 تفعيل البريد الإلكتروني', otpSentTo:'أرسلنا رمز تفعيل من 6 أرقام إلى', activateAccountBtn:'تفعيل الحساب ←', didntReceiveCode:'لم يصلك الرمز؟', resendCode:'إعادة الإرسال',
+    forgotPasswordTitle:'🔑 نسيت كلمة المرور؟', forgotPasswordDesc:'أدخل بريدك الإلكتروني المسجّل وسنرسل لك رمز إعادة التعيين', sendResetCodeBtn:'إرسال رمز التعيين ←',
+    resetPasswordTitle:'🔑 إعادة تعيين كلمة المرور', resetOtpSentTo:'أرسلنا رمز تعيين من 6 أرقام إلى', setPasswordBtn:'تعيين كلمة المرور ←', newPasswordPlaceholder:'كلمة المرور الجديدة',
+    feesAgreementTitle:'« إتفاقية الرسوم', feesPledge1Pre:'أتعهد وأقسم بالله أنا طالب الخدمة أن أدفع رسوم موقع علاقات وهي', feesPledge1Post:'من قيمة المبلغ المتفق عليه سواء تم الاتفاق عن طريق الموقع أو بسببه.',
+    feesPledge2Pre:'كما أتعهد بدفع الرسوم خلال', feesPledge2Post:'من إنجاز الخدمة.', feesNoteTitle:'ملاحظة بشأن الرسوم', feesNoteBody:'رسوم الموقع هي على طالب الخدمة ولاتبرأ ذمته من الرسوم إلا في حال دفعها.',
+    feesCheckboxLabel:'اتعهد وأقسم بالله على الالتزام بهذه الاتفاقية', continueBtn:'إستمرار »',
+    followerWord:'متابع', activePrefix:'نشط', chatWithPrefix:'محادثة مع',
     requestDetails:'تفاصيل الطلب',
     offersTab:'العروض المقدمة',
     email:'البريد الإلكتروني', password:'كلمة المرور', fullName:'الاسم الكامل', forgotPassword:'نسيت كلمة المرور؟',
@@ -452,7 +463,19 @@ window.I18N = {
     readyToStart:'Ready to start?', ctaSubtitle:'Post your request or boost your income',
     postFree:'Post your request for free ←', startEarning:'Start earning more',
     noRequestsYet:'No requests yet', beFirstToPost:'Be the first to post a request!',
-    newBadge:'New ✨', noOffersBadge:'No offers yet', savedBadge:'🔖 Saved', saveAction:'Save',
+    newBadge:'New ✨', noOffersBadge:'No offers yet', savedBadge:'🔖 Saved', saveAction:'Save', requestSaved:'Request saved', requestUnsaved:'Removed from saved',
+    amSubtitle:'My profile, my requests', amAddRequest:'Add a request', amPayments:'Fees & subscriptions', amContactUs:'Contact us', amPolicy:'Alagat policy', amLogout:'Log out',
+    manageListing:'Manage listing', ownerEdit:'✏️ Edit', ownerBump:'🔄 Bump', ownerFeature:'⭐ Feature request', ownerDelete:'🗑 Delete', ownerPay:'💳 Pay fees', ownerShare:'⤴ Share request',
+    submittedOffers:'Submitted offers', similarRequests:'Similar requests', reportRequestBtn:'🚩 Report this request',
+    usernameLbl:'Username *', imHereFor:"I'm here to", typeClient:'🙋 Request a service', typeBoth:'💰 I have a skill to earn from',
+    agreeToTerms1:'By signing up you agree to the', agreeToTerms2:'and', termsOfUse:'Terms of Use', privacyPolicy:'Privacy Policy', orDivider:'or',
+    verifyEmailTitle:'📧 Verify your email', otpSentTo:'We sent a 6-digit code to', activateAccountBtn:'Activate account ←', didntReceiveCode:"Didn't get the code?", resendCode:'Resend',
+    forgotPasswordTitle:'🔑 Forgot password?', forgotPasswordDesc:"Enter your registered email and we'll send you a reset code", sendResetCodeBtn:'Send reset code ←',
+    resetPasswordTitle:'🔑 Reset password', resetOtpSentTo:'We sent a 6-digit reset code to', setPasswordBtn:'Set password ←', newPasswordPlaceholder:'New password',
+    feesAgreementTitle:'« Fees Agreement', feesPledge1Pre:'As the service requester, I pledge and swear to pay Alagat platform fees of', feesPledge1Post:'of the agreed amount, whether the agreement was made through the platform or because of it.',
+    feesPledge2Pre:'I also pledge to pay the fees within', feesPledge2Post:'of the service being completed.', feesNoteTitle:'Note on fees', feesNoteBody:'Platform fees are the responsibility of the service requester and are not waived except by payment.',
+    feesCheckboxLabel:'I pledge and swear to abide by this agreement', continueBtn:'Continue »',
+    followerWord:'followers', activePrefix:'Active', chatWithPrefix:'Chat with',
     requestDetails:'Request Details',
     offersTab:'Submitted Offers',
     email:'Email', password:'Password', fullName:'Full Name', forgotPassword:'Forgot password?',
@@ -636,18 +659,18 @@ function logErrorToServer(message, stack){
         </select>
       </div>
       <button class="fc on" data-cat="all" data-i18n="all">الكل</button>
-      <button class="fc" data-cat="مقاولات">🏗️ مقاولات</button>
-      <button class="fc" data-cat="سيارات">🚙 سيارات</button>
-      <button class="fc" data-cat="استشارات">⚖️ استشارات</button>
-      <button class="fc" data-cat="صحة وجمال">💆 صحة وجمال</button>
-      <button class="fc" data-cat="مناسبات">🎉 مناسبات</button>
-      <button class="fc" data-cat="برمجة">💻 برمجة</button>
-      <button class="fc" data-cat="تصميم">🎨 تصميم</button>
-      <button class="fc" data-cat="تسويق">📱 تسويق</button>
-      <button class="fc" data-cat="منزلية">🏠 منزلية</button>
-      <button class="fc" data-cat="صيانة عامة">🔧 صيانة عامة</button>
-      <button class="fc" data-cat="تعليم">📚 تعليم</button>
-      <button class="fc" data-cat="أخرى">أخرى</button>
+      <button class="fc" data-cat="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</button>
+      <button class="fc" data-cat="سيارات" data-i18n="catCars">🚙 سيارات</button>
+      <button class="fc" data-cat="استشارات" data-i18n="catConsulting">⚖️ استشارات</button>
+      <button class="fc" data-cat="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</button>
+      <button class="fc" data-cat="مناسبات" data-i18n="catEvents">🎉 مناسبات</button>
+      <button class="fc" data-cat="برمجة" data-i18n="catProgramming">💻 برمجة</button>
+      <button class="fc" data-cat="تصميم" data-i18n="catDesign">🎨 تصميم</button>
+      <button class="fc" data-cat="تسويق" data-i18n="catMarketing">📱 تسويق</button>
+      <button class="fc" data-cat="منزلية" data-i18n="catHome">🏠 منزلية</button>
+      <button class="fc" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</button>
+      <button class="fc" data-cat="تعليم" data-i18n="catTeaching">📚 تعليم</button>
+      <button class="fc" data-cat="أخرى" data-i18n="catOther">أخرى</button>
       <span class="result-count" id="resultCount"></span>
       <button id="catAlertBtn" style="display:none;background:var(--s2);border:1px solid var(--b);color:var(--t2);border-radius:20px;padding:5px 12px;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;margin-right:8px;white-space:nowrap" onclick="toggleCategoryAlert()">🔔 نبّهني بهذي الفئة</button>
     </div>
@@ -717,34 +740,34 @@ function logErrorToServer(message, stack){
   <div id="detGallery" style="display:none;margin-bottom:14px"></div>
   <!-- العروض -->
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-    <div style="font-size:.9rem;font-weight:700;color:var(--t)">العروض المقدمة</div>
+    <div style="font-size:.9rem;font-weight:700;color:var(--t)" data-i18n="submittedOffers">العروض المقدمة</div>
     <span id="offersCount" style="background:var(--glow);color:var(--ac2);border:1px solid rgba(37,99,168,.2);font-size:.7rem;padding:3px 10px;border-radius:10px;font-weight:600"></span>
   </div>
   <div id="offersList"></div>
 
   <!-- طلبات مشابهة -->
   <div id="similarSection" style="display:none;margin-top:24px;padding-top:18px;border-top:1px solid var(--b)">
-    <div style="font-size:.92rem;font-weight:700;color:var(--t);margin-bottom:12px">طلبات مشابهة</div>
+    <div style="font-size:.92rem;font-weight:700;color:var(--t);margin-bottom:12px" data-i18n="similarRequests">طلبات مشابهة</div>
     <div id="similarGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
   </div>
 
   <!-- لوحة تحكم صاحب الطلب -->
   <div id="ownerControls" style="display:none;margin-top:20px;padding-top:16px;border-top:1px solid var(--b)">
-    <div style="font-size:.88rem;font-weight:700;color:var(--t);margin-bottom:10px">إدارة الإعلان</div>
+    <div style="font-size:.88rem;font-weight:700;color:var(--t);margin-bottom:10px" data-i18n="manageListing">إدارة الإعلان</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-      <button id="ownerEditBtn" style="background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">✏️ تعديل</button>
-      <button id="ownerBumpBtn" style="background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">🔄 تحديث</button>
+      <button id="ownerEditBtn" style="background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" data-i18n="ownerEdit">✏️ تعديل</button>
+      <button id="ownerBumpBtn" style="background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" data-i18n="ownerBump">🔄 تحديث</button>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-      <button id="ownerFeatureBtn" style="background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">⭐ تفضيل الطلب</button>
-      <button id="ownerDeleteBtn" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#ef4444;border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">🗑 حذف</button>
+      <button id="ownerFeatureBtn" style="background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" data-i18n="ownerFeature">⭐ تفضيل الطلب</button>
+      <button id="ownerDeleteBtn" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#ef4444;border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" data-i18n="ownerDelete">🗑 حذف</button>
     </div>
-    <button id="ownerPayBtn" style="width:100%;background:linear-gradient(135deg,#16a34a,#22c55e);border:none;color:#fff;border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">💳 دفع الرسوم</button>
-    <button id="ownerShareBtn" style="width:100%;margin-top:8px;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">⤴ مشاركة الطلب</button>
+    <button id="ownerPayBtn" style="width:100%;background:linear-gradient(135deg,#16a34a,#22c55e);border:none;color:#fff;border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" data-i18n="ownerPay">💳 دفع الرسوم</button>
+    <button id="ownerShareBtn" style="width:100%;margin-top:8px;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:11px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" data-i18n="ownerShare">⤴ مشاركة الطلب</button>
     <div id="bumpHint" style="font-size:.72rem;color:var(--t3);text-align:center;margin-top:8px"></div>
   </div>
   <!-- زر التبليغ في آخر الصفحة -->
-  <button id="reportRequestBtn" onclick="openReportModal()" style="width:100%;margin-top:24px;background:transparent;border:1px solid rgba(239,68,68,.35);color:#ef4444;border-radius:10px;padding:12px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">🚩 تبليغ عن هذا الطلب</button>
+  <button id="reportRequestBtn" onclick="openReportModal()" style="width:100%;margin-top:24px;background:transparent;border:1px solid rgba(239,68,68,.35);color:#ef4444;border-radius:10px;padding:12px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" data-i18n="reportRequestBtn">🚩 تبليغ عن هذا الطلب</button>
 </div>
 <!-- زر قدّم عرضك في الأسفل -->
 <div style="position:fixed;bottom:64px;left:0;right:0;padding:12px 16px;background:var(--bg);border-top:1px solid var(--b);display:flex;justify-content:center;z-index:99">
@@ -755,47 +778,47 @@ function logErrorToServer(message, stack){
   <div class="modal">
     <div style="text-align:center;margin-bottom:16px"><div style="font-size:1.6rem;font-weight:900;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px">علاقات</div></div>
     <div class="auth-tabs"><button class="at on" id="at-login" data-i18n="login">تسجيل الدخول</button><button class="at" id="at-register" data-i18n="register">إنشاء حساب</button></div>
-    <div id="f-login"><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني</label><input class="fi" type="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور</label><input class="fi" type="password" placeholder="••••••••" id="loginPass"></div><div style="text-align:left;margin-bottom:12px"><span id="forgotPassBtn" style="font-size:.74rem;color:var(--ac);cursor:pointer" data-i18n="forgotPassword">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin" data-i18n="loginBtn">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister" data-i18n="register">إنشاء حساب جديد</button></div>
-    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك" id="regFullName"></div><div class="fg"><label class="fgl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username" id="regUsername" style="direction:ltr;text-align:right"><span id="regUserHint" style="display:block;font-size:.68rem;margin-top:4px;color:var(--t3)"></span></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px">💰 لدي مهارة أرغب بالربح</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px">بالتسجيل توافق على <a href="terms.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none">شروط الاستخدام</a> و<a href="privacy.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none">سياسة الخصوصية</a></p></div>
+    <div id="f-login"><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني</label><input class="fi" type="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور</label><input class="fi" type="password" placeholder="••••••••" id="loginPass"></div><div style="text-align:left;margin-bottom:12px"><span id="forgotPassBtn" style="font-size:.74rem;color:var(--ac);cursor:pointer" data-i18n="forgotPassword">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin" data-i18n="loginBtn">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt" data-i18n="orDivider">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister" data-i18n="register">إنشاء حساب جديد</button></div>
+    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك" id="regFullName"></div><div class="fg"><label class="fgl" data-i18n="usernameLbl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username" id="regUsername" style="direction:ltr;text-align:right"><span id="regUserHint" style="display:block;font-size:.68rem;margin-top:4px;color:var(--t3)"></span></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl" data-i18n="imHereFor">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px" data-i18n="typeClient">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px" data-i18n="typeBoth">💰 لدي مهارة أرغب بالربح</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px"><span data-i18n="agreeToTerms1">بالتسجيل توافق على</span> <a href="terms.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="termsOfUse">شروط الاستخدام</a> <span data-i18n="agreeToTerms2">و</span><a href="privacy.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="privacyPolicy">سياسة الخصوصية</a></p></div>
   </div>
 </div>
 <!-- OTP VERIFY MODAL -->
 <div class="h-overlay" id="otpModal" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal" style="max-width:380px;text-align:center">
     <div style="font-size:1.6rem;font-weight:900;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px">علاقات</div>
-    <div style="font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--t)">📧 تفعيل البريد الإلكتروني</div>
-    <div style="font-size:.85rem;color:var(--t);opacity:.85;margin-bottom:18px;line-height:1.6">أرسلنا رمز تفعيل من 6 أرقام إلى<br><span id="otpEmailDisplay" style="color:var(--ac);font-weight:700"></span></div>
+    <div style="font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--t)" data-i18n="verifyEmailTitle">📧 تفعيل البريد الإلكتروني</div>
+    <div style="font-size:.85rem;color:var(--t);opacity:.85;margin-bottom:18px;line-height:1.6"><span data-i18n="otpSentTo">أرسلنا رمز تفعيل من 6 أرقام إلى</span><br><span id="otpEmailDisplay" style="color:var(--ac);font-weight:700"></span></div>
     <input class="fi" type="text" id="otpCode" inputmode="numeric" maxlength="6" placeholder="• • • • • •" style="text-align:center;font-size:1.5rem;letter-spacing:8px;font-weight:800;margin-bottom:16px;color:var(--t)">
-    <button class="btn-b" style="width:100%;padding:13px;border-radius:10px;margin-bottom:12px;font-size:.95rem;box-shadow:0 4px 14px rgba(0,0,0,.25)" id="doVerifyOtp">تفعيل الحساب ←</button>
-    <div style="font-size:.82rem;color:var(--t);opacity:.7">لم يصلك الرمز؟ <span id="resendOtp" style="color:var(--ac);cursor:pointer;font-weight:700;opacity:1">إعادة الإرسال</span></div>
+    <button class="btn-b" style="width:100%;padding:13px;border-radius:10px;margin-bottom:12px;font-size:.95rem;box-shadow:0 4px 14px rgba(0,0,0,.25)" id="doVerifyOtp" data-i18n="activateAccountBtn">تفعيل الحساب ←</button>
+    <div style="font-size:.82rem;color:var(--t);opacity:.7"><span data-i18n="didntReceiveCode">لم يصلك الرمز؟</span> <span id="resendOtp" style="color:var(--ac);cursor:pointer;font-weight:700;opacity:1" data-i18n="resendCode">إعادة الإرسال</span></div>
   </div>
 </div>
 <!-- FORGOT PASSWORD - STEP 1: طلب الإيميل -->
 <div class="h-overlay" id="forgotPassModal" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal" style="max-width:380px;text-align:center">
     <div style="font-size:1.6rem;font-weight:900;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px">علاقات</div>
-    <div style="font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--t)">🔑 نسيت كلمة المرور؟</div>
-    <div style="font-size:.85rem;color:var(--t);opacity:.85;margin-bottom:18px;line-height:1.6">أدخل بريدك الإلكتروني المسجّل وسنرسل لك رمز إعادة التعيين</div>
+    <div style="font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--t)" data-i18n="forgotPasswordTitle">🔑 نسيت كلمة المرور؟</div>
+    <div style="font-size:.85rem;color:var(--t);opacity:.85;margin-bottom:18px;line-height:1.6" data-i18n="forgotPasswordDesc">أدخل بريدك الإلكتروني المسجّل وسنرسل لك رمز إعادة التعيين</div>
     <input class="fi" type="email" id="forgotPassEmail" placeholder="example@gmail.com" style="text-align:center;margin-bottom:16px;color:var(--t)">
-    <button class="btn-b" style="width:100%;padding:13px;border-radius:10px;font-size:.95rem;box-shadow:0 4px 14px rgba(0,0,0,.25)" id="doRequestReset">إرسال رمز التعيين ←</button>
+    <button class="btn-b" style="width:100%;padding:13px;border-radius:10px;font-size:.95rem;box-shadow:0 4px 14px rgba(0,0,0,.25)" id="doRequestReset" data-i18n="sendResetCodeBtn">إرسال رمز التعيين ←</button>
   </div>
 </div>
 <!-- FORGOT PASSWORD - STEP 2: الرمز + كلمة مرور جديدة -->
 <div class="h-overlay" id="resetPassModal" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal" style="max-width:380px;text-align:center">
     <div style="font-size:1.6rem;font-weight:900;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px">علاقات</div>
-    <div style="font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--t)">🔑 إعادة تعيين كلمة المرور</div>
-    <div style="font-size:.85rem;color:var(--t);opacity:.85;margin-bottom:16px;line-height:1.6">أرسلنا رمز تعيين من 6 أرقام إلى<br><span id="resetEmailDisplay" style="color:var(--ac);font-weight:700"></span></div>
+    <div style="font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--t)" data-i18n="resetPasswordTitle">🔑 إعادة تعيين كلمة المرور</div>
+    <div style="font-size:.85rem;color:var(--t);opacity:.85;margin-bottom:16px;line-height:1.6"><span data-i18n="resetOtpSentTo">أرسلنا رمز تعيين من 6 أرقام إلى</span><br><span id="resetEmailDisplay" style="color:var(--ac);font-weight:700"></span></div>
     <input class="fi" type="text" id="resetOtpCode" inputmode="numeric" maxlength="6" placeholder="• • • • • •" style="text-align:center;font-size:1.5rem;letter-spacing:8px;font-weight:800;margin-bottom:14px;color:var(--t)">
-    <input class="fi" type="password" id="newPassword" placeholder="كلمة المرور الجديدة" style="text-align:center;margin-bottom:16px;color:var(--t)">
-    <button class="btn-b" style="width:100%;padding:13px;border-radius:10px;margin-bottom:12px;font-size:.95rem;box-shadow:0 4px 14px rgba(0,0,0,.25)" id="doResetPassword">تعيين كلمة المرور ←</button>
-    <div style="font-size:.82rem;color:var(--t);opacity:.7">لم يصلك الرمز؟ <span id="resendResetOtp" style="color:var(--ac);cursor:pointer;font-weight:700;opacity:1">إعادة الإرسال</span></div>
+    <input class="fi" type="password" id="newPassword" placeholder="كلمة المرور الجديدة" data-i18n-placeholder="newPasswordPlaceholder" style="text-align:center;margin-bottom:16px;color:var(--t)">
+    <button class="btn-b" style="width:100%;padding:13px;border-radius:10px;margin-bottom:12px;font-size:.95rem;box-shadow:0 4px 14px rgba(0,0,0,.25)" id="doResetPassword" data-i18n="setPasswordBtn">تعيين كلمة المرور ←</button>
+    <div style="font-size:.82rem;color:var(--t);opacity:.7"><span data-i18n="didntReceiveCode">لم يصلك الرمز؟</span> <span id="resendResetOtp" style="color:var(--ac);cursor:pointer;font-weight:700;opacity:1" data-i18n="resendCode">إعادة الإرسال</span></div>
   </div>
 </div>
 <!-- TERMS MODAL -->
 <div class="h-overlay" id="termsModal" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal" style="max-width:420px;text-align:right">
-    <div style="font-size:1rem;font-weight:800;margin-bottom:4px;color:var(--t)">« إتفاقية الرسوم</div>
+    <div style="font-size:1rem;font-weight:800;margin-bottom:4px;color:var(--t)" data-i18n="feesAgreementTitle">« إتفاقية الرسوم</div>
     <div style="height:1px;background:var(--b);margin:10px 0"></div>
     <div style="font-size:.82rem;color:var(--t2);line-height:1.9;margin-bottom:14px">
       <div style="text-align:center;margin-bottom:10px;color:var(--t3);font-size:.78rem">بسم الله الرحمن الرحيم</div>
@@ -803,22 +826,22 @@ function logErrorToServer(message, stack){
       <div style="height:1px;background:var(--b);margin:10px 0"></div>
       <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px">
         <div style="width:8px;height:8px;border-radius:50%;background:var(--ac);margin-top:5px;flex-shrink:0"></div>
-        <span>أتعهد وأقسم بالله أنا طالب الخدمة أن أدفع رسوم موقع علاقات وهي <b style="color:var(--ac2)">1%</b> من قيمة المبلغ المتفق عليه سواء تم الاتفاق عن طريق الموقع أو بسببه.</span>
+        <span data-i18n="feesPledge1Pre">أتعهد وأقسم بالله أنا طالب الخدمة أن أدفع رسوم موقع علاقات وهي</span> <b style="color:var(--ac2)">1%</b> <span data-i18n="feesPledge1Post">من قيمة المبلغ المتفق عليه سواء تم الاتفاق عن طريق الموقع أو بسببه.</span>
       </div>
       <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:14px">
         <div style="width:8px;height:8px;border-radius:50%;background:var(--ac);margin-top:5px;flex-shrink:0"></div>
-        <span>كما أتعهد بدفع الرسوم خلال <b style="color:var(--ac2)">15 يوماً</b> من إنجاز الخدمة.</span>
+        <span data-i18n="feesPledge2Pre">كما أتعهد بدفع الرسوم خلال</span> <b style="color:var(--ac2)">15 يوماً</b> <span data-i18n="feesPledge2Post">من إنجاز الخدمة.</span>
       </div>
       <div style="background:rgba(0,212,160,.08);border:1px solid rgba(0,212,160,.2);border-radius:10px;padding:10px 12px">
-        <div style="font-size:.8rem;font-weight:700;color:var(--green);margin-bottom:4px">ملاحظة بشأن الرسوم</div>
-        <div style="font-size:.77rem;color:var(--t2)">رسوم الموقع هي على طالب الخدمة ولاتبرأ ذمته من الرسوم إلا في حال دفعها.</div>
+        <div style="font-size:.8rem;font-weight:700;color:var(--green);margin-bottom:4px" data-i18n="feesNoteTitle">ملاحظة بشأن الرسوم</div>
+        <div style="font-size:.77rem;color:var(--t2)" data-i18n="feesNoteBody">رسوم الموقع هي على طالب الخدمة ولاتبرأ ذمته من الرسوم إلا في حال دفعها.</div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;background:var(--s2);padding:10px 12px;border-radius:9px;cursor:pointer" onclick="toggleTermsCheck()">
       <div id="termsCheck" style="width:20px;height:20px;border-radius:5px;border:2px solid var(--b);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s"></div>
-      <span style="font-size:.8rem;color:var(--t2)">اتعهد وأقسم بالله على الالتزام بهذه الاتفاقية</span>
+      <span style="font-size:.8rem;color:var(--t2)" data-i18n="feesCheckboxLabel">اتعهد وأقسم بالله على الالتزام بهذه الاتفاقية</span>
     </div>
-    <button id="termsContinue" onclick="submitAfterTerms()" style="width:100%;padding:12px;border-radius:10px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;opacity:.5;pointer-events:none">إستمرار »</button>
+    <button id="termsContinue" onclick="submitAfterTerms()" style="width:100%;padding:12px;border-radius:10px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;opacity:.5;pointer-events:none" data-i18n="continueBtn">إستمرار »</button>
   </div>
 </div>
 
@@ -1213,7 +1236,7 @@ window.toggleFollow = async function(){
   // تحديث عدد المتابعين المعروض
   var {count} = await sb.from('follows').select('*',{count:'exact',head:true}).eq('following_id',targetUserId);
   var fb = document.getElementById('followersBadge');
-  if(fb) fb.textContent = (count||0) + ' متابع';
+  if(fb) fb.textContent = (count||0) + ' ' + t('followerWord');
 };
 
 function populateProfileFromDB(p){
@@ -1237,9 +1260,9 @@ function populateProfileFromDB(p){
     var lastSeenDate = p.last_seen || p.created_at;
     var minutesAgo = (Date.now() - new Date(lastSeenDate).getTime()) / 60000;
     if(minutesAgo <= 5){
-      lastEl.innerHTML = '<span style="color:#22c55e;font-weight:700">🟢 متصل الآن</span>';
+      lastEl.innerHTML = '<span style="color:#22c55e;font-weight:700">🟢 '+t('onlineNow')+'</span>';
     } else {
-      lastEl.textContent = 'نشط ' + timeAgo(lastSeenDate);
+      lastEl.textContent = t('activePrefix') + ' ' + timeAgo(lastSeenDate);
     }
   }
   // الإحصائيات الحقيقية
@@ -1336,7 +1359,7 @@ function populateProfile(r){
   if(handleEl) handleEl.textContent = r.handle;
   // آخر ظهور
   var lastEl = document.querySelector('#profile .profile-lastseen');
-  if(lastEl) lastEl.textContent = 'نشط ' + r.time;
+  if(lastEl) lastEl.textContent = t('activePrefix') + ' ' + r.time;
   // عنوان نشاطه في تبويب الطلبات
   var firstReqTitle = document.querySelector('#p-requests .listing-title');
   if(firstReqTitle) firstReqTitle.textContent = r.title;
@@ -1344,7 +1367,7 @@ function populateProfile(r){
   if(firstReqPrice) firstReqPrice.textContent = r.budget;
   // رسالة المحادثة
   var chatTitle = document.querySelector('#chatModal .sheet-title');
-  if(chatTitle) chatTitle.textContent = '💬 محادثة مع ' + r.name.split(' ')[0];
+  if(chatTitle) chatTitle.textContent = '💬 ' + t('chatWithPrefix') + ' ' + r.name.split(' ')[0];
   // تقييم
   var ratingTitle = document.querySelector('#ratingModal .sheet-title');
   if(ratingTitle) ratingTitle.textContent = '⭐ تقييم ' + r.name;
@@ -1381,7 +1404,7 @@ window.filterFeed = function(q){
     renderFeed();
   }, 350);
 };
-function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+escH(r.name)+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+escH(r.handle)+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+escH(r.title)+'</div>'+'<div class="rdesc">'+escH(r.desc)+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+escH(tg)+'</span>';}).join('')+'<span class="rtag g">⏱ '+escH(r.dur)+'</span><span class="rtag">'+escH(r.type)+'</span>'+(r.city?'<span class="rtag">📍 '+escH(r.city)+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+escH(r.budget)+'</div></div>'+'<div class="rcf-r">'+(r.views>0?'<span class="vcount" style="color:var(--t3);font-size:.72rem">👁 '+r.views+'</span>':'')+'<span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation()">'+(isSaved?t('savedBadge'):'🔖 '+t('saveAction'))+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation()">'+t('submitOffer')+'</button>'+'</div></div></div>';}
+function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+escH(r.name)+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+escH(r.handle)+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+escH(r.title)+'</div>'+'<div class="rdesc">'+escH(r.desc)+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+escH(tg)+'</span>';}).join('')+'<span class="rtag g">⏱ '+escH(r.dur)+'</span><span class="rtag">'+escH(r.type)+'</span>'+(r.city?'<span class="rtag">📍 '+escH(r.city)+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+escH(r.budget)+'</div></div>'+'<div class="rcf-r">'+(r.views>0?'<span class="vcount" style="color:var(--t3);font-size:.72rem">👁 '+r.views+'</span>':'')+'<span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation();window.toggleSaveCard('+r.id+',this)">'+(isSaved?t('savedBadge'):'🔖 '+t('saveAction'))+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation();window.offerFromCard('+r.id+')">'+t('submitOffer')+'</button>'+'</div></div></div>';}
 function makeFooter(){
   return '<div class="bcta"><h3>'+t('readyToStart')+'</h3><p>'+t('ctaSubtitle')+'</p><div class="bcta-btns"><button class="btn-b" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openComp()">'+t('postFree')+'</button><button class="btn-p" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openAuth(\'register\')">'+t('startEarning')+'</button></div></div>'
   + '<div class="feed-footer">'
@@ -1665,6 +1688,37 @@ function fetchMoreFromServer(){
       loadNextPage();
     });
 }
+window.toggleSaveCard = function(id, btn){
+  id = Number(id);
+  if(!state.loggedIn){openAuth('login');return;}
+  if(!btn) btn = document.querySelector('.btn-save[data-id="'+id+'"]');
+  var idx=state.saved.indexOf(id);
+  if(idx>-1){
+    state.saved.splice(idx,1);
+    if(btn){ btn.textContent='🔖 '+t('saveAction'); btn.classList.remove('saved'); }
+    sbGetUser().then(function(user){
+      if(!user) return;
+      sb.from('saved_requests').delete().eq('user_id',user.id).eq('request_id',id).then(function(res){
+        if(res.error) console.error('unsave failed:', res.error);
+      });
+    });
+    hToast('🗑 '+t('requestUnsaved'));
+  } else {
+    state.saved.push(id);
+    if(btn){ btn.textContent=t('savedBadge'); btn.classList.add('saved'); }
+    sbGetUser().then(function(user){
+      if(!user) return;
+      sb.from('saved_requests').insert({user_id:user.id, request_id:id}).then(function(res){
+        if(res.error) console.error('save failed:', res.error);
+      });
+    });
+    hToast('🔖 '+t('requestSaved'));
+  }
+};
+window.offerFromCard = function(id){
+  if(!state.loggedIn){openAuth('register');return;}
+  openOffer(id);
+};
 function bindCardEvents(){
   var c=document.getElementById('cardsContainer');
   if(!c)return;
@@ -1672,31 +1726,10 @@ function bindCardEvents(){
     var s=e.target.closest('.btn-save'),o=e.target.closest('.btn-offer');
     if(s){
       e.preventDefault();e.stopPropagation();
-      if(!state.loggedIn){openAuth('login');return;}
-      var id=Number(s.getAttribute('data-id'));
-      var idx=state.saved.indexOf(id);
-      if(idx>-1){
-        state.saved.splice(idx,1);s.textContent='🔖';s.classList.remove('saved');
-        sbGetUser().then(function(user){
-          if(!user) return;
-          sb.from('saved_requests').delete().eq('user_id',user.id).eq('request_id',id).then(function(res){
-            if(res.error) console.error('unsave failed:', res.error);
-          });
-        });
-      } else {
-        state.saved.push(id);s.textContent='🔖 محفوظ';s.classList.add('saved');
-        sbGetUser().then(function(user){
-          if(!user) return;
-          sb.from('saved_requests').insert({user_id:user.id, request_id:id}).then(function(res){
-            if(res.error) console.error('save failed:', res.error);
-          });
-        });
-      }
-      hToast('✓ تم');
+      window.toggleSaveCard(s.getAttribute('data-id'), s);
     } else if(o){
       e.preventDefault();e.stopPropagation();
-      if(!state.loggedIn){openAuth('register');return;}
-      openOffer(o.getAttribute('data-id'));
+      window.offerFromCard(o.getAttribute('data-id'));
     }
   }
   c.addEventListener('click',handleAct);
@@ -4166,7 +4199,7 @@ console.log('✅ Supabase متصل بنجاح');
         <div id="amAvatar" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:1.2rem;flex-shrink:0">أ</div>
         <div style="flex:1;min-width:0">
           <div id="amName" style="font-weight:800;font-size:.95rem;color:var(--t)">مستخدم</div>
-          <div style="font-size:.76rem;color:var(--ac);margin-top:2px">ملفي الشخصي، طلباتي</div>
+          <div style="font-size:.76rem;color:var(--ac);margin-top:2px" data-i18n="amSubtitle">ملفي الشخصي، طلباتي</div>
         </div>
         <div style="color:var(--t3);font-size:1rem">›</div>
       </div>
@@ -4177,13 +4210,13 @@ console.log('✅ Supabase متصل بنجاح');
 
       <div class="am-item" onclick="closeAccountMenu();openComp()">
         <span class="am-icon" style="background:rgba(0,133,255,.1)">➕</span>
-        <div class="am-label">أضف طلب</div>
+        <div class="am-label" data-i18n="amAddRequest">أضف طلب</div>
         <span class="am-arrow">›</span>
       </div>
 
       <div class="am-item" onclick="closeAccountMenu();document.getElementById('si-saved').click()">
         <span class="am-icon" style="background:rgba(255,170,0,.1)">🔖</span>
-        <div class="am-label">المحفوظات</div>
+        <div class="am-label" data-i18n="saved">المحفوظات</div>
         <span class="am-arrow">›</span>
       </div>
 
@@ -4191,7 +4224,7 @@ console.log('✅ Supabase متصل بنجاح');
 
       <div class="am-item" onclick="closeAccountMenu();openPaymentInfo()">
         <span class="am-icon" style="background:rgba(0,212,160,.1)">💳</span>
-        <div class="am-label">سداد الرسوم والاشتراكات</div>
+        <div class="am-label" data-i18n="amPayments">سداد الرسوم والاشتراكات</div>
         <span class="am-arrow">›</span>
       </div>
 
@@ -4199,13 +4232,13 @@ console.log('✅ Supabase متصل بنجاح');
 
       <div class="am-item" onclick="closeAccountMenu();window.open('https://wa.me/966530708077','_blank')">
         <span class="am-icon" style="background:rgba(37,211,102,.1)">📞</span>
-        <div class="am-label">اتصل بنا</div>
+        <div class="am-label" data-i18n="amContactUs">اتصل بنا</div>
         <span class="am-arrow">›</span>
       </div>
 
       <div class="am-item" onclick="closeAccountMenu();window.open('/privacy.html','_blank')">
         <span class="am-icon" style="background:rgba(0,133,255,.1)">📄</span>
-        <div class="am-label">سياسة موقع علاقات</div>
+        <div class="am-label" data-i18n="amPolicy">سياسة موقع علاقات</div>
         <span class="am-arrow">›</span>
       </div>
 
@@ -4213,7 +4246,7 @@ console.log('✅ Supabase متصل بنجاح');
 
       <div class="am-item" onclick="closeAccountMenu();doLogout()" style="color:var(--red)">
         <span class="am-icon" style="background:rgba(255,68,102,.1)">🚪</span>
-        <div class="am-label" style="color:var(--red)">تسجيل الخروج</div>
+        <div class="am-label" style="color:var(--red)" data-i18n="amLogout">تسجيل الخروج</div>
         <span class="am-arrow" style="color:var(--red)">›</span>
       </div>
 
