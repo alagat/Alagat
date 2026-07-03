@@ -2154,6 +2154,12 @@ window.openDetail=async function(id){
   document.getElementById('detOfferBtn').onclick=function(){openOffer(id);};
   window._currentDetailId = id;
 
+  // إعادة تعيين افتراضية آمنة: الزر ظاهر ولوحة الإدارة مخفية، لحد ما يتأكد فحص الملكية (يمنع بقاء حالة قديمة من طلب سابق)
+  var _offerBtnBarEarly = document.getElementById('detOfferBtn').parentElement;
+  var _ownerPanelEarly = document.getElementById('ownerControls');
+  if(_offerBtnBarEarly) _offerBtnBarEarly.style.display = 'block';
+  if(_ownerPanelEarly) _ownerPanelEarly.style.display = 'none';
+
   // عرض معرض الصور/الفيديو إن وجد
   var galleryEl = document.getElementById('detGallery');
   if(galleryEl){
@@ -2193,6 +2199,9 @@ window.openDetail=async function(id){
     } catch(e){
       console.error('owner controls setup error:', e);
       logErrorToServer('owner controls setup: ' + (e && e.message), e && e.stack);
+      // حتى لو فشل فحص الملكية، خلي الزر ظاهر بدل ما يضل مختفي بالغلط
+      if(ownerPanel) ownerPanel.style.display = 'none';
+      if(offerBtnBar) offerBtnBar.style.display = 'block';
     }
   })();
 
