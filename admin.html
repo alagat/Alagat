@@ -10,6 +10,21 @@ const SUPA_URL = 'https://ohkgmzwpzijxcttqytrq.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oa2dtendwemlqeGN0dHF5dHJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNzA1ODgsImV4cCI6MjA5Njc0NjU4OH0.Qx2paUh-d7LTTHFSljt7cnoenOdzOdcno9PGobtRb_g';
 const ADMIN_EMAIL = 'alagatsa.com@gmail.com';
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// ===== تبديل الثيم (فاتح/غامق) =====
+function applyAdminTheme(theme){
+  document.documentElement.setAttribute('data-theme', theme==='light' ? 'light' : '');
+  localStorage.setItem('alagat-admin-theme', theme);
+  ['themeToggleBtn','themeToggleBtnDesktop'].forEach(function(id){
+    var btn = document.getElementById(id);
+    if(btn) btn.textContent = theme==='light' ? '☀️' : '🌙';
+  });
+}
+function toggleAdminTheme(){
+  var current = localStorage.getItem('alagat-admin-theme') || 'dark';
+  applyAdminTheme(current==='light' ? 'dark' : 'light');
+}
+applyAdminTheme(localStorage.getItem('alagat-admin-theme') || 'dark');
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
@@ -25,6 +40,13 @@ const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
   --t1:#eceef5; --t2:#8b8fa3; --t3:#565a70;
   --r-sm:8px; --r:14px; --r-lg:20px;
   --shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 8px 24px -12px rgba(0,0,0,.5);
+}
+[data-theme="light"]{
+  --bg:#f1f3f5; --bg-2:#f8f9fa;
+  --panel:#ffffff; --panel-2:#f6f7f9;
+  --line:#e0e4ea; --line-solid:#e0e4ea;
+  --t1:#0f1923; --t2:#5a6572; --t3:#94a0ad;
+  --shadow:0 1px 0 rgba(0,0,0,.02) inset, 0 8px 24px -12px rgba(0,0,0,.12);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Tajawal',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;-webkit-font-smoothing:antialiased}
@@ -259,6 +281,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
     <div class="sb-title" style="font-size:.86rem">علاقات<small style="font-size:.64rem">لوحة التحكم</small></div>
     <div style="flex:1"></div>
     <span class="nav-badge" id="onlineBadge" style="font-size:.66rem;padding:3px 9px">● ...</span>
+    <button id="themeToggleBtn" onclick="toggleAdminTheme()" style="margin-right:8px;padding:6px 10px;background:var(--panel-2);border:1px solid var(--line-solid);border-radius:8px;color:var(--t1);cursor:pointer;font-size:.9rem">🌙</button>
     <button class="logout-btn" style="margin-right:8px;padding:6px 10px" onclick="adminLogout()">خروج</button>
   </div>
 
@@ -267,6 +290,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
     <div class="topbar">
       <div class="topbar-title">نظرة عامة<small>إدارة المنصة والمحتوى</small></div>
       <div style="display:flex;align-items:center;gap:10px">
+        <button id="themeToggleBtnDesktop" onclick="toggleAdminTheme()" style="padding:6px 12px;background:var(--panel-2);border:1px solid var(--line-solid);border-radius:8px;color:var(--t1);cursor:pointer;font-size:.9rem">🌙</button>
         <span class="nav-badge" id="onlineBadgeDesktop">● ...</span>
       </div>
     </div>
