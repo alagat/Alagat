@@ -402,7 +402,7 @@ window.I18N = {
     feesAgreementTitle:'« إتفاقية الرسوم', feesPledge1Pre:'أتعهد وأقسم بالله أنا طالب الخدمة أن أدفع رسوم موقع علاقات وهي', feesPledge1Post:'من قيمة المبلغ المتفق عليه سواء تم الاتفاق عن طريق الموقع أو بسببه.',
     feesPledge2Pre:'كما أتعهد بدفع الرسوم خلال', feesPledge2Post:'من إنجاز الخدمة.', feesNoteTitle:'ملاحظة بشأن الرسوم', feesNoteBody:'رسوم الموقع هي على طالب الخدمة ولاتبرأ ذمته من الرسوم إلا في حال دفعها.',
     feesCheckboxLabel:'اتعهد وأقسم بالله على الالتزام بهذه الاتفاقية', continueBtn:'إستمرار »',
-    followerWord:'متابع', activePrefix:'نشط', chatWithPrefix:'محادثة مع',
+    followerWord:'متابع', activePrefix:'نشط', chatWithPrefix:'محادثة مع', replyToOffer:'رد على العرض', writeReplyPlaceholder:'اكتب رد...', sendReply:'رد على العرض', replyFailed:'فشل إرسال الرد',
     requestDetails:'تفاصيل الطلب',
     offersTab:'العروض المقدمة',
     email:'البريد الإلكتروني', password:'كلمة المرور', fullName:'الاسم الكامل', forgotPassword:'نسيت كلمة المرور؟',
@@ -475,7 +475,7 @@ window.I18N = {
     feesAgreementTitle:'« Fees Agreement', feesPledge1Pre:'As the service requester, I pledge and swear to pay Alagat platform fees of', feesPledge1Post:'of the agreed amount, whether the agreement was made through the platform or because of it.',
     feesPledge2Pre:'I also pledge to pay the fees within', feesPledge2Post:'of the service being completed.', feesNoteTitle:'Note on fees', feesNoteBody:'Platform fees are the responsibility of the service requester and are not waived except by payment.',
     feesCheckboxLabel:'I pledge and swear to abide by this agreement', continueBtn:'Continue »',
-    followerWord:'followers', activePrefix:'Active', chatWithPrefix:'Chat with',
+    followerWord:'followers', activePrefix:'Active', chatWithPrefix:'Chat with', replyToOffer:'Reply to offer', writeReplyPlaceholder:'Write a reply...', sendReply:'Reply to offer', replyFailed:'Failed to send reply',
     requestDetails:'Request Details',
     offersTab:'Submitted Offers',
     email:'Email', password:'Password', fullName:'Full Name', forgotPassword:'Forgot password?',
@@ -2190,12 +2190,11 @@ window.openDetail=async function(id){
       var user = await sbGetUser();
       if(user && r.userId && user.id === r.userId){
         ownerPanel.style.display = 'block';
-        if(offerBtnBar) offerBtnBar.style.display = 'none';
         setupOwnerControls(id, r);
       } else {
         ownerPanel.style.display = 'none';
-        if(offerBtnBar) offerBtnBar.style.display = 'block';
       }
+      if(offerBtnBar) offerBtnBar.style.display = 'block';
     } catch(e){
       console.error('owner controls setup error:', e);
       logErrorToServer('owner controls setup: ' + (e && e.message), e && e.stack);
@@ -2272,9 +2271,51 @@ window.openDetail=async function(id){
         +(curUser && curUser.id===o.provider_id ? '<button class="offer-delete-btn" data-oid="'+o.id+'" style="background:transparent;color:#ef4444;border:1px solid rgba(239,68,68,.4);border-radius:9px;padding:8px 14px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer;flex-shrink:0">🗑️ حذف</button>' : '')
         +'</div>'
       +'</div>'
+      +'<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--b)">'
+        +'<div id="offerReplies-'+o.id+'" style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px"></div>'
+        +(curUser ? '<div style="display:flex;gap:6px"><input type="text" id="offerReplyInput-'+o.id+'" placeholder="'+t('writeReplyPlaceholder')+'" style="flex:1;background:var(--s1);border:1px solid var(--b);border-radius:8px;padding:8px 10px;font-family:inherit;font-size:.78rem;color:var(--t)"><button onclick="submitOfferReply('+o.id+')" style="background:var(--ac);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer;flex-shrink:0">'+t('sendReply')+'</button></div>' : '')
+      +'</div>'
     +'</div>';
   });
   document.getElementById('offersList').innerHTML=oh;
+  list.forEach(function(o){ loadOfferReplies(o.id); });
+};
+
+// ===== ردود على العروض (تعليقات تبان تحت كل عرض بنفس الصفحة) =====
+window.loadOfferReplies = async function(offerId){
+  var container = document.getElementById('offerReplies-'+offerId);
+  if(!container) return;
+  try{
+    var {data, error} = await sb.from('offer_replies')
+      .select('id,reply_text,created_at,user_id,profiles(full_name,avatar_color)')
+      .eq('offer_id', offerId)
+      .order('created_at',{ascending:true});
+    if(error){ console.error('loadOfferReplies failed:', error); return; }
+    container.innerHTML = (data||[]).map(function(rep){
+      var rp = rep.profiles || {};
+      var letter = (rp.full_name||'م')[0];
+      var grad = rp.avatar_color || 'linear-gradient(135deg,#2563a8,#0085ff)';
+      return '<div style="display:flex;gap:8px;align-items:flex-start">'
+        +'<div style="width:22px;height:22px;border-radius:50%;background:'+grad+';display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.62rem;flex-shrink:0">'+letter+'</div>'
+        +'<div style="flex:1;background:var(--s1);border-radius:8px;padding:6px 10px">'
+          +'<div style="font-size:.72rem;font-weight:700;color:var(--t2)">'+escH(rp.full_name||'مستخدم')+' <span style="font-weight:400;color:var(--t3)">· '+timeAgo(rep.created_at)+'</span></div>'
+          +'<div style="font-size:.8rem;color:var(--t);margin-top:2px">'+escH(rep.reply_text)+'</div>'
+        +'</div>'
+      +'</div>';
+    }).join('');
+  }catch(e){ console.error('loadOfferReplies error:', e); }
+};
+window.submitOfferReply = async function(offerId){
+  var input = document.getElementById('offerReplyInput-'+offerId);
+  if(!input) return;
+  var text = input.value.trim();
+  if(!text) return;
+  var user = await sbGetUser();
+  if(!user){ openAuth('login'); return; }
+  input.value='';
+  var res = await sb.from('offer_replies').insert({offer_id:offerId, user_id:user.id, reply_text:text});
+  if(res.error){ console.error('submitOfferReply failed:', res.error); hToast('⚠ '+t('replyFailed')); return; }
+  loadOfferReplies(offerId);
 };
 function openAuth(tab){switchAuthTab(tab||'login');document.getElementById('authModal').classList.add('open');}
 function switchAuthTab(tab){['login','register'].forEach(function(t){document.getElementById('f-'+t).style.display=t===tab?'block':'none';var b=document.getElementById('at-'+t);b.className='at'+(t===tab?' on':'');});}
