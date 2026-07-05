@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>من نحن | علاقات</title>
+<style>
+  :root{
+    --bg:#f1f3f5; --s1:#ffffff; --s2:#f1f3f5; --b:#e0e4ea;
+    --ac:#c9a227; --ac2:#7f1d3d;
+    --t:#0f1923; --t2:#4a5f72; --t3:#8a9db0;
+  }
+  *{box-sizing:border-box}
+  body{
+    font-family:'Segoe UI','Helvetica Neue',Tahoma,Arial,sans-serif;
+    background:var(--bg); color:var(--t); margin:0; line-height:1.8;
+  }
+  header{
+    background:linear-gradient(135deg,var(--ac),var(--ac2));
+    padding:28px 20px; text-align:center;
+  }
+  header .logo{font-size:1.8rem;font-weight:900;color:#fff}
+  main{max-width:720px;margin:0 auto;padding:28px 20px 60px}
+  h1{font-size:1.3rem;font-weight:800;margin:28px 0 10px;color:var(--t)}
+  h1:first-of-type{margin-top:0}
+  p{font-size:.95rem;color:var(--t2);margin:0 0 14px}
+  .highlight{
+    background:var(--s1);border:1px solid var(--b);border-radius:14px;
+    padding:20px;margin:20px 0;
+  }
+  .value-list{display:flex;flex-direction:column;gap:14px;margin-top:14px}
+  .value-item{display:flex;gap:12px;align-items:flex-start}
+  .value-icon{
+    width:38px;height:38px;flex-shrink:0;border-radius:10px;
+    background:rgba(201,162,39,.12);display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+  }
+  .value-text b{color:var(--t);font-size:.9rem;display:block;margin-bottom:2px}
+  .value-text span{color:var(--t2);font-size:.85rem}
+  footer{
+    text-align:center;padding:20px;color:var(--t3);font-size:.8rem;
+    border-top:1px solid var(--b);
+  }
+  a{color:var(--ac2)}
+  .back-link{
+    display:inline-block;margin-top:20px;color:var(--ac2);text-decoration:none;font-size:.85rem;font-weight:600;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">علاقات</div>
+  </header>
+
+  <main>
+    <h1>من نحن</h1>
+    <p>
+      "علاقات" منصة سعودية تربط بين الأشخاص اللي يحتاجون خدمة، والأشخاص القادرين على تقديمها —
+      بطريقة بسيطة ومباشرة: تنشر طلبك، وتستقبل عروض حقيقية من مزودي خدمة، وتختار الأنسب لك من حيث السعر والخبرة.
+    </p>
+
+    <div class="highlight">
+      <p style="margin:0">
+        بدل ما تبحث بحث طويل عن مقاول، مصمم، معلّم خصوصي، أو أي خدمة ثانية — تنشر وش تحتاجه بالضبط،
+        وتخلي أصحاب الخبرة يتنافسون على تقديم أفضل عرض لك.
+      </p>
+    </div>
+
+    <h1>وش يميّزنا</h1>
+    <div class="value-list">
+      <div class="value-item">
+        <div class="value-icon">🎯</div>
+        <div class="value-text"><b>مباشر وبسيط</b><span>تنشر طلبك بدقائق، وتستقبل عروض حقيقية من ناس مهتمين فعلاً.</span></div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">🤝</div>
+        <div class="value-text"><b>فرصة للجميع</b><span>سواء كنت تدور خدمة، أو عندك مهارة تبي تربح منها — المنصة مفتوحة للطرفين.</span></div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">💳</div>
+        <div class="value-text"><b>عمولة بسيطة وواضحة</b><span>1% بس من قيمة الاتفاق، بدون رسوم مخفية أو تعقيد.</span></div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">🇸🇦</div>
+        <div class="value-text"><b>سعودية بالكامل</b><span>مبنية لتناسب احتياجات السوق المحلي والمستخدم السعودي تحديداً.</span></div>
+      </div>
+    </div>
+
+    <h1>تواصل معنا</h1>
+    <p>
+      لأي استفسار أو اقتراح، تقدر تتواصل معنا عبر البريد الإلكتروني
+      <a href="mailto:supportalagat@gmail.com">supportalagat@gmail.com</a>
+      أو عبر <a href="https://wa.me/966530708077" target="_blank">واتساب</a>.
+    </p>
+
+    <a href="/" class="back-link">← الرجوع للرئيسية</a>
+  </main>
+
+  <footer>
+    © <span id="year"></span> علاقات — جميع الحقوق محفوظة
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
