@@ -353,7 +353,7 @@ window.I18N = {
     catProgramming:'برمجة', catDesign:'تصميم', catMaintenance:'صيانة عامة', catMarketing:'تسويق',
     catConsulting:'استشارات', catTeaching:'تعليم', catConstruction:'مقاولات', catHome:'منزلية', catHealth:'صحة وجمال', catCars:'سيارات', catEvents:'مناسبات وتنظيم', catOther:'خدمات أخرى',
     postRequest:'نشر طلب', whatDoYouNeed:'ماذا تحتاج؟', latest:'الأحدث', mostViewed:'الأكثر مشاهدة',
-    all:'الكل', searchInRequests:'ابحث في الطلبات...',
+    all:'الكل', searchInRequests:'ابحث في الموقع...',
     budget:'الميزانية', duration:'المدة', serviceType:'نوع الخدمة', offer:'عرض',
     submitOffer:'قدّم عرضك', contact:'تواصل',
     follow:'+ متابعة', following:'✓ تتابعه', followers:'متابع', chat:'محادثة',
@@ -426,7 +426,7 @@ window.I18N = {
     catProgramming:'Programming', catDesign:'Design', catMaintenance:'General Maintenance', catMarketing:'Marketing',
     catConsulting:'Consulting', catTeaching:'Teaching', catConstruction:'Contracting', catHome:'Home Services', catHealth:'Health & Beauty', catCars:'Cars', catEvents:'Events & Planning', catOther:'Other Services',
     postRequest:'Post a Request', whatDoYouNeed:'What do you need?', latest:'Latest', mostViewed:'Most Viewed',
-    all:'All', searchInRequests:'Search requests...',
+    all:'All', searchInRequests:'Search the site...',
     budget:'Budget', duration:'Duration', serviceType:'Service Type', offer:'offers',
     submitOffer:'Submit Offer', contact:'Contact',
     follow:'+ Follow', following:'✓ Following', followers:'Followers', chat:'Chat',
@@ -576,9 +576,7 @@ function logErrorToServer(message, stack){
   <div class="logo" onclick="goHome()">
     <div><div class="logo-t" data-i18n="appName">علاقات</div></div>
   </div>
-  <div class="nav-mid" id="navUserLinks" style="display:none">
-    <button class="nl on" data-i18n="requests">الطلبات</button>
-  </div>
+  <div class="nav-mid" id="navUserLinks" style="display:none"></div>
   <div class="nav-r" style="display:flex;align-items:center;gap:7px">
     <button id="langBtn" onclick="setLang(window.currentLang==='ar'?'en':'ar')" title="Language" style="background:var(--s2);border:1px solid var(--b);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;color:var(--t)">EN</button>
     <button id="themeBtn" onclick="toggleTheme()" title="تبديل الثيم" data-i18n-title="toggleTheme" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s">🌙</button>
@@ -630,7 +628,7 @@ function logErrorToServer(message, stack){
     <div class="filters-row">
       <div style="display:flex;align-items:center;gap:7px;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:6px 11px;width:100%;margin-bottom:6px">
         <span style="color:var(--t3);font-size:.85rem">🔍</span>
-        <input type="text" placeholder="ابحث في الطلبات..." data-i18n-placeholder="searchInRequests" id="searchInput" style="flex:1;background:none;border:none;outline:none;color:var(--t);font-family:inherit;font-size:.82rem" oninput="filterFeed(this.value)">
+        <input type="text" placeholder="ابحث في الموقع..." data-i18n-placeholder="searchInRequests" id="searchInput" style="flex:1;background:none;border:none;outline:none;color:var(--t);font-family:inherit;font-size:.82rem" oninput="filterFeed(this.value)">
       </div>
       <div style="display:flex;gap:8px;width:100%;margin-bottom:8px">
         <select id="filterCity" style="flex:1;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:7px 9px;color:var(--t);font-family:inherit;font-size:.78rem">
@@ -676,7 +674,7 @@ function logErrorToServer(message, stack){
     <div id="feedContent"></div>
   </main>
   <aside class="rpanel">
-    <div class="sr-box"><span style="color:var(--t3)">🔍</span><input type="text" placeholder="ابحث في الطلبات..." id="searchInput2" oninput="filterFeed(this.value)"></div>
+    <div class="sr-box"><span style="color:var(--t3)">🔍</span><input type="text" placeholder="ابحث في الموقع..." data-i18n-placeholder="searchInRequests" id="searchInput2" oninput="filterFeed(this.value)"></div>
     <div class="pc">
       <div class="pt">🔥 الأكثر طلباً</div>
       <div id="hotCatsContainer"><div style="text-align:center;padding:16px;color:var(--t2);font-size:.8rem">جاري التحميل...</div></div>
@@ -1425,7 +1423,7 @@ function makeFooter(){
   + '<span>supportalagat@gmail.com</span></a>'
   + '</div>'
   + '<div class="ff-bot"><span class="ff-copy">© '+new Date().getFullYear()+' علاقات</span><span class="ff-copy">كل خبرة عندك تساوي فلوس أكثر</span></div>'
-  + '<div style="display:flex;justify-content:center;gap:14px;margin-top:8px"><a href="terms.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">شروط الاستخدام</a><span style="color:var(--t3);font-size:.74rem">·</span><a href="privacy.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">سياسة الخصوصية</a></div>'
+  + '<div style="display:flex;justify-content:center;gap:14px;margin-top:8px"><a href="about.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">من نحن</a><span style="color:var(--t3);font-size:.74rem">·</span><a href="terms.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">شروط الاستخدام</a><span style="color:var(--t3);font-size:.74rem">·</span><a href="privacy.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">سياسة الخصوصية</a></div>'
   + '</div>';
 }
 function timeAgo(d){var s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'الآن';if(s<3600)return'منذ '+Math.floor(s/60)+' دقيقة';if(s<86400)return'منذ '+Math.floor(s/3600)+' ساعة';return'منذ '+Math.floor(s/86400)+' يوم';}
