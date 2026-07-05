@@ -82,11 +82,10 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 @media(min-width:681px){#detailPage.active{display:flex;flex-direction:column;align-items:center}#detailPage nav{width:100%}}
 @media(min-width:993px){
   #detailPage > div:not(nav){max-width:1240px}
-  #detailBody{display:grid;grid-template-columns:1fr 320px;align-items:start;gap:28px}
-  #detailBody.no-similar{grid-template-columns:1fr}
+  #detailBody{display:flex;align-items:flex-start;gap:28px}
+  #detMainCol{flex:1;min-width:0}
   #detGallery img,#detGallery video{max-height:760px!important}
-  #detailBody > *{grid-column:1}
-  #detailBody #similarSection{grid-column:2;grid-row:1/-1;margin-top:0;padding-top:0;border-top:none;position:sticky;top:70px;align-self:start}
+  #detailBody #similarSection{flex:0 0 320px;width:320px;margin-top:0;padding-top:0;border-top:none;position:sticky;top:70px}
   #detailBody #similarGrid{grid-template-columns:1fr!important}
 }
 
@@ -402,7 +401,7 @@ window.I18N = {
     feesAgreementTitle:'« إتفاقية الرسوم', feesPledge1Pre:'أتعهد وأقسم بالله أنا طالب الخدمة أن أدفع رسوم موقع علاقات وهي', feesPledge1Post:'من قيمة المبلغ المتفق عليه سواء تم الاتفاق عن طريق الموقع أو بسببه.',
     feesPledge2Pre:'كما أتعهد بدفع الرسوم خلال', feesPledge2Post:'من إنجاز الخدمة.', feesNoteTitle:'ملاحظة بشأن الرسوم', feesNoteBody:'رسوم الموقع هي على طالب الخدمة ولاتبرأ ذمته من الرسوم إلا في حال دفعها.',
     feesCheckboxLabel:'اتعهد وأقسم بالله على الالتزام بهذه الاتفاقية', continueBtn:'إستمرار »',
-    followerWord:'متابع', activePrefix:'نشط', chatWithPrefix:'محادثة مع', replyToOffer:'رد على العرض', writeReplyPlaceholder:'اكتب رد...', sendReply:'رد على العرض', replyFailed:'فشل إرسال الرد', deleteReply:'حذف الرد', deleteReplyFailed:'فشل حذف الرد', replyDeleted:'تم حذف الرد',
+    followerWord:'متابع', activePrefix:'نشط', chatWithPrefix:'محادثة مع', replyToOffer:'رد على العرض', writeReplyPlaceholder:'اكتب رد...', sendReply:'رد على العرض', replyFailed:'فشل إرسال الرد', deleteReply:'حذف الرد', deleteReplyFailed:'فشل حذف الرد', replyDeleted:'تم حذف الرد', continueWithGoogle:'المتابعة عبر جوجل', continueWithApple:'المتابعة عبر آبل',
     requestDetails:'تفاصيل الطلب',
     offersTab:'العروض المقدمة',
     email:'البريد الإلكتروني', password:'كلمة المرور', fullName:'الاسم الكامل', forgotPassword:'نسيت كلمة المرور؟',
@@ -475,7 +474,7 @@ window.I18N = {
     feesAgreementTitle:'« Fees Agreement', feesPledge1Pre:'As the service requester, I pledge and swear to pay Alagat platform fees of', feesPledge1Post:'of the agreed amount, whether the agreement was made through the platform or because of it.',
     feesPledge2Pre:'I also pledge to pay the fees within', feesPledge2Post:'of the service being completed.', feesNoteTitle:'Note on fees', feesNoteBody:'Platform fees are the responsibility of the service requester and are not waived except by payment.',
     feesCheckboxLabel:'I pledge and swear to abide by this agreement', continueBtn:'Continue »',
-    followerWord:'followers', activePrefix:'Active', chatWithPrefix:'Chat with', replyToOffer:'Reply to offer', writeReplyPlaceholder:'Write a reply...', sendReply:'Reply to offer', replyFailed:'Failed to send reply', deleteReply:'Delete reply', deleteReplyFailed:'Failed to delete reply', replyDeleted:'Reply deleted',
+    followerWord:'followers', activePrefix:'Active', chatWithPrefix:'Chat with', replyToOffer:'Reply to offer', writeReplyPlaceholder:'Write a reply...', sendReply:'Reply to offer', replyFailed:'Failed to send reply', deleteReply:'Delete reply', deleteReplyFailed:'Failed to delete reply', replyDeleted:'Reply deleted', continueWithGoogle:'Continue with Google', continueWithApple:'Continue with Apple',
     requestDetails:'Request Details',
     offersTab:'Submitted Offers',
     email:'Email', password:'Password', fullName:'Full Name', forgotPassword:'Forgot password?',
@@ -708,6 +707,7 @@ function logErrorToServer(message, stack){
 </nav>
 <div id="detBreadcrumb" style="padding:10px 16px;font-size:.8rem;color:var(--t2);display:flex;align-items:center;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--b)"></div>
 <div style="padding:16px" id="detailBody">
+<div id="detMainCol">
   <!-- بيانات صاحب الطلب -->
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--b)">
     <div class="av sm" id="detAvatar" style="width:44px;height:44px;font-size:1rem;flex-shrink:0;cursor:pointer" onclick="goProfile(window._currentDetailId)"></div>
@@ -745,12 +745,6 @@ function logErrorToServer(message, stack){
   </div>
   <div id="offersList"></div>
 
-  <!-- طلبات مشابهة -->
-  <div id="similarSection" style="display:none;margin-top:24px;padding-top:18px;border-top:1px solid var(--b)">
-    <div style="font-size:.92rem;font-weight:700;color:var(--t);margin-bottom:12px" data-i18n="similarRequests">طلبات مشابهة</div>
-    <div id="similarGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
-  </div>
-
   <!-- لوحة تحكم صاحب الطلب -->
   <div id="ownerControls" style="display:none;margin-top:20px;padding-top:16px;border-top:1px solid var(--b)">
     <div style="font-size:.88rem;font-weight:700;color:var(--t);margin-bottom:10px" data-i18n="manageListing">إدارة الإعلان</div>
@@ -769,6 +763,13 @@ function logErrorToServer(message, stack){
   <!-- زر التبليغ في آخر الصفحة -->
   <button id="reportRequestBtn" onclick="openReportModal()" style="width:100%;margin-top:24px;background:transparent;border:1px solid rgba(239,68,68,.35);color:#ef4444;border-radius:10px;padding:12px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" data-i18n="reportRequestBtn">🚩 تبليغ عن هذا الطلب</button>
 </div>
+
+  <!-- طلبات مشابهة -->
+  <div id="similarSection" style="display:none;margin-top:24px;padding-top:18px;border-top:1px solid var(--b)">
+    <div style="font-size:.92rem;font-weight:700;color:var(--t);margin-bottom:12px" data-i18n="similarRequests">طلبات مشابهة</div>
+    <div id="similarGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
+  </div>
+</div>
 <!-- زر قدّم عرضك في الأسفل -->
 <div style="position:fixed;bottom:64px;left:0;right:0;padding:12px 16px;background:var(--bg);border-top:1px solid var(--b);display:flex;justify-content:center;z-index:99">
   <button class="btn-b" id="detOfferBtn" style="width:100%;max-width:680px;padding:13px;font-size:.9rem;border-radius:12px" data-i18n="submitOfferOnRequest">قدّم عرضك على هذا الطلب ←</button>
@@ -778,8 +779,14 @@ function logErrorToServer(message, stack){
   <div class="modal">
     <div style="text-align:center;margin-bottom:16px"><div style="font-size:1.6rem;font-weight:900;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px">علاقات</div></div>
     <div class="auth-tabs"><button class="at on" id="at-login" data-i18n="login">تسجيل الدخول</button><button class="at" id="at-register" data-i18n="register">إنشاء حساب</button></div>
-    <div id="f-login"><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني</label><input class="fi" type="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور</label><input class="fi" type="password" placeholder="••••••••" id="loginPass"></div><div style="text-align:left;margin-bottom:12px"><span id="forgotPassBtn" style="font-size:.74rem;color:var(--ac);cursor:pointer" data-i18n="forgotPassword">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin" data-i18n="loginBtn">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt" data-i18n="orDivider">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister" data-i18n="register">إنشاء حساب جديد</button></div>
-    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" placeholder="اسمك" id="regFullName"></div><div class="fg"><label class="fgl" data-i18n="usernameLbl">اسم المستخدم *</label><input class="fi" type="text" placeholder="@username" id="regUsername" style="direction:ltr;text-align:right"><span id="regUserHint" style="display:block;font-size:.68rem;margin-top:4px;color:var(--t3)"></span></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl" data-i18n="imHereFor">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px" data-i18n="typeClient">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px" data-i18n="typeBoth">💰 لدي مهارة أرغب بالربح</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px"><span data-i18n="agreeToTerms1">بالتسجيل توافق على</span> <a href="terms.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="termsOfUse">شروط الاستخدام</a> <span data-i18n="agreeToTerms2">و</span><a href="privacy.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="privacyPolicy">سياسة الخصوصية</a></p></div>
+    <div id="f-login">
+      <button class="btn-g" style="width:100%;padding:11px;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px" onclick="signInWithProvider('google')">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.9 6.1 29.7 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.9 6.1 29.7 4 24 4c-7.6 0-14.1 4.3-17.4 10.7z"/><path fill="#4CAF50" d="M24 44c5.6 0 10.7-2.1 14.5-5.6l-6.7-5.7C29.7 34.6 27 35.5 24 35.5c-5.2 0-9.6-3.3-11.3-8l-6.6 5.1C9.9 39.6 16.4 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.3-4.1 5.7l6.7 5.7C41.7 36 44 30.5 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>
+        <span data-i18n="continueWithGoogle">المتابعة عبر جوجل</span>
+      </button>
+      <div class="or-div"><div class="or-line"></div><span class="or-txt" data-i18n="orDivider">أو</span><div class="or-line"></div></div>
+      <div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني</label><input class="fi" type="email" name="email" autocomplete="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور</label><input class="fi" type="password" name="current-password" autocomplete="current-password" placeholder="••••••••" id="loginPass"></div><div style="text-align:left;margin-bottom:12px"><span id="forgotPassBtn" style="font-size:.74rem;color:var(--ac);cursor:pointer" data-i18n="forgotPassword">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin" data-i18n="loginBtn">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt" data-i18n="orDivider">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister" data-i18n="register">إنشاء حساب جديد</button></div>
+    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" name="name" autocomplete="name" placeholder="اسمك" id="regFullName"></div><div class="fg"><label class="fgl" data-i18n="usernameLbl">اسم المستخدم *</label><input class="fi" type="text" name="username" autocomplete="username" placeholder="@username" id="regUsername" style="direction:ltr;text-align:right"><span id="regUserHint" style="display:block;font-size:.68rem;margin-top:4px;color:var(--t3)"></span></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" name="email" autocomplete="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" name="new-password" autocomplete="new-password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl" data-i18n="imHereFor">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px" data-i18n="typeClient">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px" data-i18n="typeBoth">💰 لدي مهارة أرغب بالربح</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px"><span data-i18n="agreeToTerms1">بالتسجيل توافق على</span> <a href="terms.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="termsOfUse">شروط الاستخدام</a> <span data-i18n="agreeToTerms2">و</span><a href="privacy.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="privacyPolicy">سياسة الخصوصية</a></p></div>
   </div>
 </div>
 <!-- OTP VERIFY MODAL -->
@@ -799,7 +806,7 @@ function logErrorToServer(message, stack){
     <div style="font-size:1.6rem;font-weight:900;color:var(--ac);background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px">علاقات</div>
     <div style="font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--t)" data-i18n="forgotPasswordTitle">🔑 نسيت كلمة المرور؟</div>
     <div style="font-size:.85rem;color:var(--t);opacity:.85;margin-bottom:18px;line-height:1.6" data-i18n="forgotPasswordDesc">أدخل بريدك الإلكتروني المسجّل وسنرسل لك رمز إعادة التعيين</div>
-    <input class="fi" type="email" id="forgotPassEmail" placeholder="example@gmail.com" style="text-align:center;margin-bottom:16px;color:var(--t)">
+    <input class="fi" type="email" name="email" autocomplete="email" id="forgotPassEmail" placeholder="example@gmail.com" style="text-align:center;margin-bottom:16px;color:var(--t)">
     <button class="btn-b" style="width:100%;padding:13px;border-radius:10px;font-size:.95rem;box-shadow:0 4px 14px rgba(0,0,0,.25)" id="doRequestReset" data-i18n="sendResetCodeBtn">إرسال رمز التعيين ←</button>
   </div>
 </div>
@@ -2395,6 +2402,24 @@ var siLogout = document.getElementById('si-logout');
 if(siLogout) siLogout.onclick = function(){ doLogout(); };
 document.getElementById('at-login').onclick=function(){switchAuthTab('login');};
 document.getElementById('at-register').onclick=function(){switchAuthTab('register');};
+// ====== تسجيل الدخول عبر جوجل/آبل (OAuth) ======
+window.signInWithProvider = async function(provider){
+  try{
+    var { error } = await sb.auth.signInWithOAuth({
+      provider: provider,
+      options: { redirectTo: window.location.origin }
+    });
+    if(error){
+      console.error('OAuth sign-in failed:', error);
+      hToast('❌ فشل تسجيل الدخول عبر ' + (provider==='google'?'جوجل':'آبل'));
+    }
+    // ملاحظة: نجاح العملية يعيد توجيه المستخدم كاملاً لصفحة الموافقة، فما فيه كود يشتغل بعد هذا السطر عادةً
+  }catch(e){
+    console.error('signInWithProvider error:', e);
+    hToast('❌ حدث خطأ، حاول مرة أخرى');
+  }
+};
+
 document.getElementById('doLogin').onclick=async function(){
   var email = document.getElementById('loginEmail') ? document.getElementById('loginEmail').value.trim() : '';
   var pass  = document.getElementById('loginPass')  ? document.getElementById('loginPass').value.trim()  : '';
@@ -2411,6 +2436,13 @@ document.getElementById('doLogin').onclick=async function(){
       hToast('❌ ' + result.error.message); return;
     }
     doLoginUI();
+    // اطلب من المتصفح يعرض نافذة "حفظ كلمة المرور؟" الأصلية (يشتغل بمعظم المتصفحات الحديثة)
+    if(window.PasswordCredential){
+      try{
+        var cred = new PasswordCredential({ id: email, password: pass, name: email });
+        navigator.credentials.store(cred);
+      }catch(e){ console.warn('credential store failed:', e); }
+    }
   } catch(e){
     console.error('doLogin error:', e);
     logErrorToServer('doLogin: ' + (e && e.message), e && e.stack);
@@ -2595,6 +2627,13 @@ document.getElementById('doRegister').onclick=async function(){
     document.getElementById('authModal').classList.remove('open');
     openOtpModal(email);
     hToast('📧 أرسلنا رمز تفعيل إلى بريدك');
+    // اطلب من المتصفح يعرض نافذة "حفظ كلمة المرور؟" الأصلية
+    if(window.PasswordCredential){
+      try{
+        var cred = new PasswordCredential({ id: email, password: pass, name: name });
+        navigator.credentials.store(cred);
+      }catch(e){ console.warn('credential store failed:', e); }
+    }
   } catch(e){
     console.error('doRegister error:', e);
     logErrorToServer('doRegister: ' + (e && e.message), e && e.stack);
