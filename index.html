@@ -33,6 +33,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 
 <style>
 /* ====== SHARED ====== */
@@ -398,10 +399,10 @@ window.I18N = {
     verifyEmailTitle:'📧 تفعيل البريد الإلكتروني', otpSentTo:'أرسلنا رمز تفعيل من 6 أرقام إلى', activateAccountBtn:'تفعيل الحساب ←', didntReceiveCode:'لم يصلك الرمز؟', resendCode:'إعادة الإرسال',
     forgotPasswordTitle:'🔑 نسيت كلمة المرور؟', forgotPasswordDesc:'أدخل بريدك الإلكتروني المسجّل وسنرسل لك رمز إعادة التعيين', sendResetCodeBtn:'إرسال رمز التعيين ←',
     resetPasswordTitle:'🔑 إعادة تعيين كلمة المرور', resetOtpSentTo:'أرسلنا رمز تعيين من 6 أرقام إلى', setPasswordBtn:'تعيين كلمة المرور ←', newPasswordPlaceholder:'كلمة المرور الجديدة',
-    feesAgreementTitle:'« إتفاقية الرسوم', feesPledge1Pre:'أتعهد وأقسم بالله أنا طالب الخدمة أن أدفع رسوم موقع علاقات وهي', feesPledge1Post:'من قيمة المبلغ المتفق عليه سواء تم الاتفاق عن طريق الموقع أو بسببه.',
-    feesPledge2Pre:'كما أتعهد بدفع الرسوم خلال', feesPledge2Post:'من إنجاز الخدمة.', feesNoteTitle:'ملاحظة بشأن الرسوم', feesNoteBody:'رسوم الموقع هي على طالب الخدمة ولاتبرأ ذمته من الرسوم إلا في حال دفعها.',
-    feesCheckboxLabel:'اتعهد وأقسم بالله على الالتزام بهذه الاتفاقية', continueBtn:'إستمرار »',
-    followerWord:'متابع', activePrefix:'نشط', chatWithPrefix:'محادثة مع', replyToOffer:'رد على العرض', writeReplyPlaceholder:'اكتب رد...', sendReply:'رد على العرض', replyFailed:'فشل إرسال الرد', deleteReply:'حذف الرد', deleteReplyFailed:'فشل حذف الرد', replyDeleted:'تم حذف الرد', continueWithGoogle:'المتابعة عبر جوجل', continueWithApple:'المتابعة عبر آبل',
+    feesAgreementTitle:'« الإقرار بالرسوم', feesPledge1Pre:'بصفتي طالب الخدمة، اتعهد امام الله بسداد رسوم استخدام منصة علاقات، والمقدّرة بنسبة', feesPledge1Post:'من إجمالي المبلغ المتفَق عليه، سواء تم التوافق عبر المنصة أو نتيجة له.',
+    feesPledge2Pre:'وألتزم بسداد هذه الرسوم خلال مدة أقصاها', feesPledge2Post:'من تاريخ اكتمال الخدمة المطلوبة.', feesNoteTitle:'بخصوص الرسوم', feesNoteBody:'المسؤولية عن سداد رسوم المنصة تقع على عاتق طالب الخدمة، ولا تُعتبر ذمته بريئة منها إلا بعد السداد الفعلي.',
+    feesCheckboxLabel:'أقرّ بأنني اطّلعت على هذا الالتزام وألتزم به بالكامل', continueBtn:'متابعة »',
+    followerWord:'متابع', activePrefix:'نشط', chatWithPrefix:'محادثة مع', replyToOffer:'رد على العرض', writeReplyPlaceholder:'اكتب رد...', sendReply:'رد على العرض', replyFailed:'فشل إرسال الرد', deleteReply:'حذف الرد', deleteReplyFailed:'فشل حذف الرد', replyDeleted:'تم حذف الرد', continueWithGoogle:'المتابعة عبر جوجل', continueWithApple:'المتابعة عبر آبل', popularSearchesLabel:'🔥 الأكثر بحثاً:',
     requestDetails:'تفاصيل الطلب',
     offersTab:'العروض المقدمة',
     email:'البريد الإلكتروني', password:'كلمة المرور', fullName:'الاسم الكامل', forgotPassword:'نسيت كلمة المرور؟',
@@ -471,10 +472,10 @@ window.I18N = {
     verifyEmailTitle:'📧 Verify your email', otpSentTo:'We sent a 6-digit code to', activateAccountBtn:'Activate account ←', didntReceiveCode:"Didn't get the code?", resendCode:'Resend',
     forgotPasswordTitle:'🔑 Forgot password?', forgotPasswordDesc:"Enter your registered email and we'll send you a reset code", sendResetCodeBtn:'Send reset code ←',
     resetPasswordTitle:'🔑 Reset password', resetOtpSentTo:'We sent a 6-digit reset code to', setPasswordBtn:'Set password ←', newPasswordPlaceholder:'New password',
-    feesAgreementTitle:'« Fees Agreement', feesPledge1Pre:'As the service requester, I pledge and swear to pay Alagat platform fees of', feesPledge1Post:'of the agreed amount, whether the agreement was made through the platform or because of it.',
-    feesPledge2Pre:'I also pledge to pay the fees within', feesPledge2Post:'of the service being completed.', feesNoteTitle:'Note on fees', feesNoteBody:'Platform fees are the responsibility of the service requester and are not waived except by payment.',
-    feesCheckboxLabel:'I pledge and swear to abide by this agreement', continueBtn:'Continue »',
-    followerWord:'followers', activePrefix:'Active', chatWithPrefix:'Chat with', replyToOffer:'Reply to offer', writeReplyPlaceholder:'Write a reply...', sendReply:'Reply to offer', replyFailed:'Failed to send reply', deleteReply:'Delete reply', deleteReplyFailed:'Failed to delete reply', replyDeleted:'Reply deleted', continueWithGoogle:'Continue with Google', continueWithApple:'Continue with Apple',
+    feesAgreementTitle:'« Fees Acknowledgment', feesPledge1Pre:'As the party requesting the service, I acknowledge and commit to paying the Alagat platform usage fee, set at', feesPledge1Post:'of the total agreed amount, whether the agreement was reached through the platform or as a result of it.',
+    feesPledge2Pre:'I also commit to paying these fees within a maximum period of', feesPledge2Post:'from the date the requested service is completed.', feesNoteTitle:'Regarding fees', feesNoteBody:'Responsibility for paying the platform fee lies with the service requester, and this obligation is not discharged until actual payment is made.',
+    feesCheckboxLabel:'I acknowledge that I have reviewed this commitment and fully agree to it', continueBtn:'Continue »',
+    followerWord:'followers', activePrefix:'Active', chatWithPrefix:'Chat with', replyToOffer:'Reply to offer', writeReplyPlaceholder:'Write a reply...', sendReply:'Reply to offer', replyFailed:'Failed to send reply', deleteReply:'Delete reply', deleteReplyFailed:'Failed to delete reply', replyDeleted:'Reply deleted', continueWithGoogle:'Continue with Google', continueWithApple:'Continue with Apple', popularSearchesLabel:'🔥 Popular searches:',
     requestDetails:'Request Details',
     offersTab:'Submitted Offers',
     email:'Email', password:'Password', fullName:'Full Name', forgotPassword:'Forgot password?',
@@ -628,7 +629,10 @@ function logErrorToServer(message, stack){
     <div class="filters-row">
       <div style="display:flex;align-items:center;gap:7px;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:6px 11px;width:100%;margin-bottom:6px">
         <span style="color:var(--t3);font-size:.85rem">🔍</span>
-        <input type="text" placeholder="ابحث في الموقع..." data-i18n-placeholder="searchInRequests" id="searchInput" style="flex:1;background:none;border:none;outline:none;color:var(--t);font-family:inherit;font-size:.82rem" oninput="filterFeed(this.value)">
+        <input type="text" placeholder="ابحث في الموقع..." data-i18n-placeholder="searchInRequests" id="searchInput" style="flex:1;background:none;border:none;outline:none;color:var(--t);font-family:inherit;font-size:.82rem" oninput="filterFeed(this.value)" onkeydown="if(event.key==='Enter')logSearchTerm(this.value)" onblur="logSearchTerm(this.value)">
+      </div>
+      <div id="popularSearches" style="display:none;flex-wrap:wrap;gap:6px;width:100%;margin-bottom:8px;align-items:center">
+        <span style="font-size:.72rem;color:var(--t3);font-weight:600" data-i18n="popularSearchesLabel">🔥 الأكثر بحثاً:</span>
       </div>
       <div style="display:flex;gap:8px;width:100%;margin-bottom:8px">
         <select id="filterCity" style="flex:1;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:7px 9px;color:var(--t);font-family:inherit;font-size:.78rem">
@@ -784,7 +788,7 @@ function logErrorToServer(message, stack){
       </button>
       <div class="or-div"><div class="or-line"></div><span class="or-txt" data-i18n="orDivider">أو</span><div class="or-line"></div></div>
       <div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني</label><input class="fi" type="email" name="email" autocomplete="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور</label><input class="fi" type="password" name="current-password" autocomplete="current-password" placeholder="••••••••" id="loginPass"></div><div style="text-align:left;margin-bottom:12px"><span id="forgotPassBtn" style="font-size:.74rem;color:var(--ac);cursor:pointer" data-i18n="forgotPassword">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin" data-i18n="loginBtn">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt" data-i18n="orDivider">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister" data-i18n="register">إنشاء حساب جديد</button></div>
-    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" name="name" autocomplete="name" placeholder="اسمك" id="regFullName"></div><div class="fg"><label class="fgl" data-i18n="usernameLbl">اسم المستخدم *</label><input class="fi" type="text" name="username" autocomplete="username" placeholder="@username" id="regUsername" style="direction:ltr;text-align:right"><span id="regUserHint" style="display:block;font-size:.68rem;margin-top:4px;color:var(--t3)"></span></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" name="email" autocomplete="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" name="new-password" autocomplete="new-password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl" data-i18n="imHereFor">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px" data-i18n="typeClient">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px" data-i18n="typeBoth">💰 لدي مهارة أرغب بالربح</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px"><span data-i18n="agreeToTerms1">بالتسجيل توافق على</span> <a href="terms.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="termsOfUse">شروط الاستخدام</a> <span data-i18n="agreeToTerms2">و</span><a href="privacy.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="privacyPolicy">سياسة الخصوصية</a></p></div>
+    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" name="name" autocomplete="name" placeholder="اسمك" id="regFullName"></div><div class="fg"><label class="fgl" data-i18n="usernameLbl">اسم المستخدم *</label><input class="fi" type="text" name="username" autocomplete="username" placeholder="@username" id="regUsername" style="direction:ltr;text-align:right"><span id="regUserHint" style="display:block;font-size:.68rem;margin-top:4px;color:var(--t3)"></span></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" name="email" autocomplete="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" name="new-password" autocomplete="new-password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl" data-i18n="imHereFor">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px" data-i18n="typeClient">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px" data-i18n="typeBoth">💰 لدي مهارة أرغب بالربح</div></div></div><div style="display:flex;justify-content:center;margin-bottom:12px"><div class="h-captcha" data-sitekey="b47600d4-78a6-4914-9b38-2dc4ac862f50" id="regCaptcha"></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px"><span data-i18n="agreeToTerms1">بالتسجيل توافق على</span> <a href="terms.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="termsOfUse">شروط الاستخدام</a> <span data-i18n="agreeToTerms2">و</span><a href="privacy.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="privacyPolicy">سياسة الخصوصية</a></p></div>
   </div>
 </div>
 <!-- OTP VERIFY MODAL -->
@@ -823,30 +827,30 @@ function logErrorToServer(message, stack){
 <!-- TERMS MODAL -->
 <div class="h-overlay" id="termsModal" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal" style="max-width:420px;text-align:right">
-    <div style="font-size:1rem;font-weight:800;margin-bottom:4px;color:var(--t)" data-i18n="feesAgreementTitle">« إتفاقية الرسوم</div>
+    <div style="font-size:1rem;font-weight:800;margin-bottom:4px;color:var(--t)" data-i18n="feesAgreementTitle">« الإقرار بالرسوم</div>
     <div style="height:1px;background:var(--b);margin:10px 0"></div>
     <div style="font-size:.82rem;color:var(--t2);line-height:1.9;margin-bottom:14px">
-      <div style="text-align:center;margin-bottom:10px;color:var(--t3);font-size:.78rem">بسم الله الرحمن الرحيم</div>
-      <div style="text-align:center;margin-bottom:12px;font-size:.8rem;color:var(--t2);font-style:italic">قال الله تعالى: " وَأَوْفُوا بِعَهْدِ اللَّهِ إِذَا عَاهَدتُّمْ وَلَا تَنقُضُوا الْأَيْمَانَ بَعْدَ تَوْكِيدِهَا وَقَدْ جَعَلْتُمُ اللَّهَ عَلَيْكُمْ كَفِيلًا " صدق الله العظيم</div>
+      <div style="text-align:center;margin-bottom:10px;color:var(--t3);font-size:.78rem">أعوذ بالله من الشيطان الرجيم</div>
+      <div style="text-align:center;margin-bottom:12px;font-size:.8rem;color:var(--t2);font-style:italic">قال الله تعالى: " وَأَوْفُوا بِعَهْدِ اللَّهِ إِذَا عَاهَدتُّمْ وَلَا تَنقُضُوا الْأَيْمَانَ بَعْدَ تَوْكِيدِهَا وَقَدْ جَعَلْتُمُ اللَّهَ عَلَيْكُمْ كَفِيلًا "</div>
       <div style="height:1px;background:var(--b);margin:10px 0"></div>
       <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px">
         <div style="width:8px;height:8px;border-radius:50%;background:var(--ac);margin-top:5px;flex-shrink:0"></div>
-        <span data-i18n="feesPledge1Pre">أتعهد وأقسم بالله أنا طالب الخدمة أن أدفع رسوم موقع علاقات وهي</span> <b style="color:var(--ac2)">1%</b> <span data-i18n="feesPledge1Post">من قيمة المبلغ المتفق عليه سواء تم الاتفاق عن طريق الموقع أو بسببه.</span>
+        <span data-i18n="feesPledge1Pre">بصفتي طالب الخدمة، اتعهد امام الله بسداد رسوم استخدام منصة علاقات، والمقدّرة بنسبة</span> <b style="color:var(--ac2)">1%</b> <span data-i18n="feesPledge1Post">من إجمالي المبلغ المتفَق عليه، سواء تم التوافق عبر المنصة أو نتيجة له.</span>
       </div>
       <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:14px">
         <div style="width:8px;height:8px;border-radius:50%;background:var(--ac);margin-top:5px;flex-shrink:0"></div>
-        <span data-i18n="feesPledge2Pre">كما أتعهد بدفع الرسوم خلال</span> <b style="color:var(--ac2)">15 يوماً</b> <span data-i18n="feesPledge2Post">من إنجاز الخدمة.</span>
+        <span data-i18n="feesPledge2Pre">وألتزم بسداد هذه الرسوم خلال مدة أقصاها</span> <b style="color:var(--ac2)">15 يوماً</b> <span data-i18n="feesPledge2Post">من تاريخ اكتمال الخدمة المطلوبة.</span>
       </div>
       <div style="background:rgba(0,212,160,.08);border:1px solid rgba(0,212,160,.2);border-radius:10px;padding:10px 12px">
-        <div style="font-size:.8rem;font-weight:700;color:var(--green);margin-bottom:4px" data-i18n="feesNoteTitle">ملاحظة بشأن الرسوم</div>
-        <div style="font-size:.77rem;color:var(--t2)" data-i18n="feesNoteBody">رسوم الموقع هي على طالب الخدمة ولاتبرأ ذمته من الرسوم إلا في حال دفعها.</div>
+        <div style="font-size:.8rem;font-weight:700;color:var(--green);margin-bottom:4px" data-i18n="feesNoteTitle">بخصوص الرسوم</div>
+        <div style="font-size:.77rem;color:var(--t2)" data-i18n="feesNoteBody">المسؤولية عن سداد رسوم المنصة تقع على عاتق طالب الخدمة، ولا تُعتبر ذمته بريئة منها إلا بعد السداد الفعلي.</div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;background:var(--s2);padding:10px 12px;border-radius:9px;cursor:pointer" onclick="toggleTermsCheck()">
       <div id="termsCheck" style="width:20px;height:20px;border-radius:5px;border:2px solid var(--b);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s"></div>
-      <span style="font-size:.8rem;color:var(--t2)" data-i18n="feesCheckboxLabel">اتعهد وأقسم بالله على الالتزام بهذه الاتفاقية</span>
+      <span style="font-size:.8rem;color:var(--t2)" data-i18n="feesCheckboxLabel">أقرّ بأنني اطّلعت على هذا الالتزام وألتزم به بالكامل</span>
     </div>
-    <button id="termsContinue" onclick="submitAfterTerms()" style="width:100%;padding:12px;border-radius:10px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;opacity:.5;pointer-events:none" data-i18n="continueBtn">إستمرار »</button>
+    <button id="termsContinue" onclick="submitAfterTerms()" style="width:100%;padding:12px;border-radius:10px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;opacity:.5;pointer-events:none" data-i18n="continueBtn">متابعة »</button>
   </div>
 </div>
 
@@ -1394,6 +1398,31 @@ window.showPage = function showPage(id){
 /* ===== HOME LOGIC ===== */
 var state = { loggedIn:false, activeTab:'latest', activeFilter:'all', activeCity:'all', activeTime:'all', search:'', saved:[], currentOfferId:null };
 window.state = state;
+
+// ===== استرجاع الفلاتر المحفوظة (فئة + مدينة + وقت) من زيارة سابقة =====
+try{
+  var _savedFilters = JSON.parse(localStorage.getItem('alagat-filters') || '{}');
+  if(_savedFilters.activeFilter) state.activeFilter = _savedFilters.activeFilter;
+  if(_savedFilters.activeCity) state.activeCity = _savedFilters.activeCity;
+  if(_savedFilters.activeTime) state.activeTime = _savedFilters.activeTime;
+  // مزامنة الواجهة (الشرائح، القوائم المنسدلة) مع الفلاتر المستعادة
+  if(state.activeFilter !== 'all'){
+    document.querySelectorAll('.fc').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-cat')===state.activeFilter); });
+    document.querySelectorAll('.si').forEach(function(s){ s.classList.toggle('on', s.getAttribute('data-cat')===state.activeFilter); });
+  }
+  var _fc = document.getElementById('filterCity'); if(_fc && state.activeCity!=='all') _fc.value = state.activeCity;
+  var _ft = document.getElementById('filterTime'); if(_ft && state.activeTime!=='all') _ft.value = state.activeTime;
+}catch(e){ console.warn('failed to load saved filters:', e); }
+
+function saveFiltersToStorage(){
+  try{
+    localStorage.setItem('alagat-filters', JSON.stringify({
+      activeFilter: state.activeFilter,
+      activeCity: state.activeCity,
+      activeTime: state.activeTime
+    }));
+  }catch(e){ console.warn('failed to save filters:', e); }
+}
 var ALL_REQS = [
 ];
 var PAGE_SIZE=10, currentPage=0, reqs=ALL_REQS.slice();
@@ -1408,6 +1437,38 @@ window.filterFeed = function(q){
   searchDebounceTimer = setTimeout(function(){
     renderFeed();
   }, 350);
+};
+
+// ===== تسجيل كلمات البحث الحقيقية + عرض "الأكثر بحثاً" =====
+var _lastLoggedSearch = '';
+window.logSearchTerm = function(term){
+  term = (term||'').trim();
+  if(!term || term.length<2 || term===_lastLoggedSearch) return;
+  _lastLoggedSearch = term;
+  sb.rpc('log_search_term', { p_term: term }).then(function(res){
+    if(res.error) console.warn('logSearchTerm failed:', res.error);
+    else loadPopularSearches();
+  });
+};
+window.loadPopularSearches = async function(){
+  var container = document.getElementById('popularSearches');
+  if(!container) return;
+  try{
+    var {data, error} = await sb.from('search_terms').select('term').order('search_count',{ascending:false}).limit(8);
+    if(error){ console.error('loadPopularSearches failed:', error); return; }
+    if(!data || data.length===0){ container.style.display='none'; return; }
+    var label = '<span style="font-size:.72rem;color:var(--t3);font-weight:600" data-i18n="popularSearchesLabel">🔥 الأكثر بحثاً:</span>';
+    container.innerHTML = label + data.map(function(row){
+      return '<span onclick="applyPopularSearch(\''+escJ(row.term)+'\')" style="background:var(--s2);border:1px solid var(--b);border-radius:20px;padding:4px 12px;font-size:.74rem;color:var(--t);cursor:pointer">'+escH(row.term)+'</span>';
+    }).join('');
+    container.style.display = 'flex';
+  }catch(e){ console.error('loadPopularSearches error:', e); }
+};
+window.applyPopularSearch = function(term){
+  var si = document.getElementById('searchInput'); if(si) si.value = term;
+  var si2 = document.getElementById('searchInput2'); if(si2) si2.value = term;
+  filterFeed(term);
+  logSearchTerm(term);
 };
 function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+escH(r.name)+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+escH(r.handle)+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+escH(r.title)+'</div>'+'<div class="rdesc">'+escH(r.desc)+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+escH(tg)+'</span>';}).join('')+'<span class="rtag g">⏱ '+escH(r.dur)+'</span><span class="rtag">'+escH(r.type)+'</span>'+(r.city?'<span class="rtag">📍 '+escH(r.city)+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+escH(r.budget)+'</div></div>'+'<div class="rcf-r">'+(r.views>0?'<span class="vcount" style="color:var(--t3);font-size:.72rem">👁 '+r.views+'</span>':'')+'<span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation();window.toggleSaveCard('+r.id+',this)">'+(isSaved?t('savedBadge'):'🔖 '+t('saveAction'))+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation();window.offerFromCard('+r.id+')">'+t('submitOffer')+'</button>'+'</div></div></div>';}
 function makeFooter(){
@@ -1603,30 +1664,50 @@ function renderFeed(){
   hasMoreFromServer=true;
   var el=document.getElementById('feedContent');
   el.innerHTML='<div id="feedSkeleton" style="padding:14px">'+makeSkeleton(6)+'</div>';
-  buildFeedQuery()
-    .range(0, FETCH_SIZE-1)
-    .then(function(res){
-      if(res.error){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--t3)">❌ خطأ في التحميل</div>';return;}
-      hasMoreFromServer = (res.data||[]).length >= FETCH_SIZE;
-      reqs=(res.data||[]).map(mapRequestRow);
-      var list=getList();
-      document.getElementById('resultCount').textContent=list.length+' طلب';
-      if(!list.length){
-        el.innerHTML='<div class="empty-state" style="padding:60px 20px;text-align:center;color:var(--t2)"><div style="font-size:3rem;margin-bottom:10px">📋</div><div style="font-weight:700;margin-bottom:6px">'+t('noRequestsYet')+'</div><div style="font-size:.84rem;color:var(--t3)">'+t('beFirstToPost')+'</div></div>';
-        return;
-      }
-      var shown=Math.min(PAGE_SIZE,list.length);
-      var html='<div id="cardsContainer">';
-      list.slice(0,shown).forEach(function(r){html+=makeCard(r);});
-      html+='</div>';
-      if(list.length>shown || hasMoreFromServer){
-        html+='<div id="feedSkeleton" style="padding:0 14px">'+makeSkeleton(3)+'</div><div id="loadSentinel" style="height:1px;opacity:0"></div>';
-      }
-      html+='<div id="feedFooter">'+makeFooter()+'</div>';
-      el.innerHTML=html;
-      bindCardEvents();
-      setupInfiniteScroll();
-    });
+
+  function attemptFetch(retriesLeft){
+    buildFeedQuery()
+      .range(0, FETCH_SIZE-1)
+      .then(function(res){
+        if(res.error){
+          if(retriesLeft > 0){
+            // إعادة محاولة تلقائية (قد يكون انقطاع شبكة لحظي بجوال المستخدم)
+            setTimeout(function(){ attemptFetch(retriesLeft - 1); }, 1200);
+            return;
+          }
+          el.innerHTML='<div style="text-align:center;padding:40px;color:var(--t3)">❌ تعذّر تحميل الطلبات — تأكد من الاتصال<br><span onclick="renderFeed()" style="color:var(--ac);cursor:pointer;font-weight:600;font-size:.85rem">🔄 إعادة المحاولة</span></div>';
+          return;
+        }
+        hasMoreFromServer = (res.data||[]).length >= FETCH_SIZE;
+        reqs=(res.data||[]).map(mapRequestRow);
+        var list=getList();
+        document.getElementById('resultCount').textContent=list.length+' طلب';
+        if(!list.length){
+          el.innerHTML='<div class="empty-state" style="padding:60px 20px;text-align:center;color:var(--t2)"><div style="font-size:3rem;margin-bottom:10px">📋</div><div style="font-weight:700;margin-bottom:6px">'+t('noRequestsYet')+'</div><div style="font-size:.84rem;color:var(--t3)">'+t('beFirstToPost')+'</div></div>';
+          return;
+        }
+        var shown=Math.min(PAGE_SIZE,list.length);
+        var html='<div id="cardsContainer">';
+        list.slice(0,shown).forEach(function(r){html+=makeCard(r);});
+        html+='</div>';
+        if(list.length>shown || hasMoreFromServer){
+          html+='<div id="feedSkeleton" style="padding:0 14px">'+makeSkeleton(3)+'</div><div id="loadSentinel" style="height:1px;opacity:0"></div>';
+        }
+        html+='<div id="feedFooter">'+makeFooter()+'</div>';
+        el.innerHTML=html;
+        bindCardEvents();
+        setupInfiniteScroll();
+      })
+      .catch(function(e){
+        console.error('renderFeed network error:', e);
+        if(retriesLeft > 0){
+          setTimeout(function(){ attemptFetch(retriesLeft - 1); }, 1200);
+        } else {
+          el.innerHTML='<div style="text-align:center;padding:40px;color:var(--t3)">❌ تعذّر تحميل الطلبات — تأكد من الاتصال<br><span onclick="renderFeed()" style="color:var(--ac);cursor:pointer;font-weight:600;font-size:.85rem">🔄 إعادة المحاولة</span></div>';
+        }
+      });
+  }
+  attemptFetch(2);
 }
 // Infinite scroll with IntersectionObserver
 var scrollObserver = null;
@@ -2175,7 +2256,7 @@ window.openDetail=async function(id){
           if(m.type === 'video'){
             return '<video src="'+m.url+'" controls style="width:100%;max-height:420px;border-radius:14px;object-fit:contain;background:#000"></video>';
           } else {
-            return '<img src="'+m.url+'" style="width:100%;max-height:420px;border-radius:14px;object-fit:contain;background:var(--s2);cursor:pointer" onclick="openImagePreview(\''+m.url+'\')">';
+            return '<img src="'+m.url+'" loading="lazy" style="width:100%;max-height:420px;border-radius:14px;object-fit:contain;background:var(--s2);cursor:pointer" onclick="openImagePreview(\''+m.url+'\')">';
           }
         }).join('') +
       '</div>';
@@ -2607,12 +2688,15 @@ document.getElementById('doRegister').onclick=async function(){
   if(!username){ hToast('⚠️ أدخل اسم مستخدم'); return; }
   if(!/^[a-zA-Z0-9_]+$/.test(username)){ hToast('⚠️ اسم المستخدم يجب أن يكون بالإنجليزية فقط (حروف وأرقام و _)'); return; }
   if(!email.includes('@')){ hToast('⚠️ أدخل بريد إلكتروني صحيح'); return; }
+  var captchaToken = (window.hcaptcha && document.getElementById('regCaptcha')) ? hcaptcha.getResponse() : '';
+  if(!captchaToken){ hToast('⚠️ أكمل التحقق (أنا لست روبوت) قبل إنشاء الحساب'); return; }
   try{
     hToast('جاري التحقق من اسم المستخدم...');
     var taken = await sbCheckUsernameTaken(username);
     if(taken){ hToast('❌ اسم المستخدم هذا محجوز، جرّب اسماً آخر'); return; }
     hToast('جاري إنشاء الحساب...');
-    var result = await sbRegister(email, pass, name, username);
+    var result = await sbRegister(email, pass, name, username, captchaToken);
+    if(window.hcaptcha) hcaptcha.reset();
     if(result.error){
       var msg = result.error.message || '';
       if(msg.indexOf('duplicate') > -1 || msg.indexOf('unique') > -1){
@@ -2782,12 +2866,12 @@ document.getElementById('typeClient').onclick=function(){this.classList.add('sel
 document.getElementById('typeBoth').onclick=function(){this.classList.add('sel');document.getElementById('typeClient').classList.remove('sel');};
 document.querySelectorAll('.sk-grid .sko').forEach(function(s){s.onclick=function(){this.classList.toggle('sel');};});
 document.querySelectorAll('.ftab').forEach(function(t){t.onclick=function(){document.querySelectorAll('.ftab').forEach(function(x){x.classList.remove('on');});t.classList.add('on');state.activeTab=t.getAttribute('data-tab');renderFeed();};});
-document.querySelectorAll('.fc').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fc').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.activeFilter=b.getAttribute('data-cat');renderFeed();updateCatAlertBtn();};});
-document.getElementById('filterCity').onchange=function(){state.activeCity=this.value;renderFeed();};
-document.getElementById('filterTime').onchange=function(){state.activeTime=this.value;renderFeed();};
-document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});si.classList.add('on');var cat=si.getAttribute('data-cat');state.activeFilter=cat;document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')===cat);});renderFeed();updateCatAlertBtn();};});
+document.querySelectorAll('.fc').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fc').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.activeFilter=b.getAttribute('data-cat');saveFiltersToStorage();renderFeed();updateCatAlertBtn();};});
+document.getElementById('filterCity').onchange=function(){state.activeCity=this.value;saveFiltersToStorage();renderFeed();};
+document.getElementById('filterTime').onchange=function(){state.activeTime=this.value;saveFiltersToStorage();renderFeed();};
+document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});si.classList.add('on');var cat=si.getAttribute('data-cat');state.activeFilter=cat;saveFiltersToStorage();document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')===cat);});renderFeed();updateCatAlertBtn();};});
 // search handled inline on input
-document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.activeCity='all';state.activeTime='all';state.search='';var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';var fc=document.getElementById('filterCity');if(fc)fc.value='all';var ft=document.getElementById('filterTime');if(ft)ft.value='all';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();updateCatAlertBtn();};
+document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.activeCity='all';state.activeTime='all';state.search='';try{localStorage.removeItem('alagat-filters');}catch(e){}var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';var fc=document.getElementById('filterCity');if(fc)fc.value='all';var ft=document.getElementById('filterTime');if(ft)ft.value='all';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();updateCatAlertBtn();};
 
 // فتح الرئيسية مفلترة على فئة معيّنة — تُستخدم من مسار التنقل (breadcrumb) بصفحة تفاصيل الطلب
 window.goHomeFilteredByCategory = function(cat){
@@ -2839,29 +2923,69 @@ function renderReqMediaPreview(){
   if(addBtn) addBtn.style.display = reqMediaFiles.length >= REQ_MEDIA_MAX ? 'none' : 'block';
 }
 
-// ====== رفع الصور/الفيديو بالتوازي مع إعادة محاولة تلقائية مرة واحدة للملفات الفاشلة ======
+// ====== ضغط الصور تلقائياً قبل الرفع (تصغير للعرض الأقصى 1280px + جودة 80%) ======
+// يقلل حجم الملف بشكل كبير خصوصاً لصور الجوال (قد تكون 8-10 ميجا)، بدون فرق يُلاحظ بالعين
+function compressImageFile(file){
+  return new Promise(function(resolve){
+    if(!file.type || file.type.indexOf('image/')!==0){ resolve(file); return; } // الفيديو ما يُضغط هنا
+    var img = new Image();
+    var url = URL.createObjectURL(file);
+    img.onload = function(){
+      URL.revokeObjectURL(url);
+      var maxDim = 1280;
+      var w = img.width, h = img.height;
+      if(w > maxDim || h > maxDim){
+        if(w > h){ h = Math.round(h * maxDim / w); w = maxDim; }
+        else { w = Math.round(w * maxDim / h); h = maxDim; }
+      }
+      var canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      canvas.toBlob(function(blob){
+        if(!blob){ resolve(file); return; }
+        // لو الضغط طلع أكبر من الأصل (نادر لصور صغيرة أصلاً)، استخدم الأصل
+        if(blob.size >= file.size){ resolve(file); return; }
+        var compressedFile = new File([blob], file.name, {type:'image/jpeg'});
+        resolve(compressedFile);
+      }, 'image/jpeg', 0.8);
+    };
+    img.onerror = function(){ URL.revokeObjectURL(url); resolve(file); }; // لو فشل الضغط، ارفع الملف الأصلي
+    img.src = url;
+  });
+}
+
+// ====== رفع الصور/الفيديو بالتوازي مع إعادة محاولة تلقائية للملفات الفاشلة ======
 // ملاحظة: الصور الجديدة تُرفع الآن إلى Cloudflare R2 عبر دالة وسيطة على Vercel (/api/upload-to-r2)
 // بدل Supabase Storage مباشرة — لتجنب رسوم الخروج (egress) المرتفعة مع نمو الموقع
 async function uploadOneMediaFile(file, userId, index){
+  var fileToUpload = await compressImageFile(file);
   async function attempt(){
-    var res = await fetch('/api/upload-to-r2', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/octet-stream',
-        'x-file-name': file.name,
-        'x-file-type': file.type || 'application/octet-stream',
-        'x-user-id': userId
-      },
-      body: file
-    });
-    if(!res.ok) return null;
-    var data = await res.json();
-    return (data && data.ok) ? data : null;
+    try{
+      var res = await fetch('/api/upload-to-r2', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/octet-stream',
+          'x-file-name': fileToUpload.name,
+          'x-file-type': fileToUpload.type || 'application/octet-stream',
+          'x-user-id': userId
+        },
+        body: fileToUpload
+      });
+      if(!res.ok) return null;
+      var data = await res.json();
+      return (data && data.ok) ? data : null;
+    }catch(e){
+      console.warn('upload attempt failed (network?):', e);
+      return null;
+    }
   }
   var result = await attempt();
   if(!result){
-    // إعادة محاولة واحدة فقط (قد يكون انقطاع شبكة لحظي)
-    result = await attempt();
+    // إعادة محاولتين إضافيتين مع تأخير بسيط (شبكات جوال ضعيفة تحتاج فرصة أكبر)
+    for(var i=0; i<2 && !result; i++){
+      await new Promise(function(r){ setTimeout(r, 1000 * (i+1)); });
+      result = await attempt();
+    }
   }
   if(!result) return {ok:false, name:file.name};
   return {ok:true, url:result.url, type:result.type};
@@ -2959,7 +3083,15 @@ window.submitAfterTerms = async function(){
       phone: phone || null,
       media: mediaUrls
     });
-    if(result.error){hToast('❌ '+result.error);return;}
+    if(result.error){
+      var errMsg = String(result.error.message || result.error);
+      if(errMsg.indexOf('RATE_LIMIT_EXCEEDED')>-1){
+        hToast('⏳ وصلت الحد الأقصى (5 طلبات بالساعة) — حاول بعد شوي');
+      } else {
+        hToast('❌ '+errMsg);
+      }
+      return;
+    }
     notifyCategoryAlertSubscribers(document.getElementById('reqCat').value, title, result.data && result.data.id);
     document.getElementById('reqTitle').value='';
     document.getElementById('reqDesc').value='';
@@ -3080,6 +3212,7 @@ window.openImagePreview = function(url){
 // تحقق من الجلسة عند فتح الصفحة - يحافظ على تسجيل الدخول
 sb.auth.getSession().then(function(res){
   loadHotCategories(); // مستقلة عن باقي التهيئة، حتى لو فشل شي تحت ما تتأثر
+  loadPopularSearches();
   handleSharedRequestLink();
   if(res.data&&res.data.session){
     try{ doLoginUI(); }catch(e){ console.error('doLoginUI failed:', e); }
@@ -4146,10 +4279,10 @@ async function sbCheckUsernameTaken(username) {
   return !!data;
 }
 
-async function sbRegister(email, password, fullName, username) {
+async function sbRegister(email, password, fullName, username, captchaToken) {
   const { data, error } = await sb.auth.signUp({
     email, password,
-    options: { data: { full_name: fullName, username } }
+    options: { data: { full_name: fullName, username }, captchaToken: captchaToken }
   });
   return { data, error };
 }
