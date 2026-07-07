@@ -34,6 +34,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+<script src="https://cdn.moyasar.com/mpf/1.14.0/moyasar.js"></script>
+<link rel="stylesheet" href="https://cdn.moyasar.com/mpf/1.14.0/moyasar.css">
+<!-- مفتاح Moyasar العلني: بدّل القيمة تحت بمفتاحك الحقيقي (Publishable API Key) لما يوصلك من Moyasar بعد الموافقة على حسابك -->
+<script>window.MOYASAR_PUBLISHABLE_KEY = 'pk_test_YOUR_MOYASAR_KEY_HERE';</script>
 
 <style>
 /* ====== SHARED ====== */
@@ -2099,6 +2103,11 @@ window.openPaymentInfo = function(requestBudget){
       +'</div>'
     +'</div>'
 
+    +'<button id="payOnlineBtn" style="width:100%;background:linear-gradient(135deg,var(--ac),var(--ac2));border:none;color:#fff;border-radius:10px;padding:12px;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:6px">💳 ادفع الآن (مدى / Apple Pay / فيزا)</button>'
+    +'<div id="moyasarFormContainer" style="display:none;margin-bottom:14px"></div>'
+
+    +'<div style="display:flex;align-items:center;gap:10px;margin:16px 0"><div style="flex:1;height:1px;background:var(--b)"></div><span style="font-size:.72rem;color:var(--t3)">أو حوّل يدوياً</span><div style="flex:1;height:1px;background:var(--b)"></div></div>'
+
     +'<div style="background:var(--s2);border:1px solid var(--b);border-radius:12px;padding:14px;margin-bottom:12px">'
       +'<div style="font-size:.74rem;color:var(--t3);margin-bottom:4px">اسم البنك</div>'
       +'<div style="font-size:.88rem;font-weight:700;color:var(--t);margin-bottom:10px" id="bankNameText">—</div>'
@@ -2127,6 +2136,45 @@ window.openPaymentInfo = function(requestBudget){
     var iban = document.getElementById('ibanText').textContent;
     navigator.clipboard.writeText(iban).catch(function(){});
     hToast('✓ تم نسخ رقم الآيبان');
+  };
+
+  // ===== الدفع الإلكتروني عبر Moyasar (مدى / فيزا / Apple Pay) =====
+  document.getElementById('payOnlineBtn').onclick = function(){
+    var amount = parseFloat(feeInput.value) || 0;
+    if(amount <= 0){ hToast('⚠️ أدخل المبلغ بالحاسبة أعلاه أول'); return; }
+
+    // لو المفتاح لسه placeholder (ما تفعّل حساب Moyasar بعد)، نوضح للمستخدم بدل ما نكسر الصفحة
+    if(!window.MOYASAR_PUBLISHABLE_KEY || window.MOYASAR_PUBLISHABLE_KEY.indexOf('YOUR_MOYASAR_KEY_HERE')>-1){
+      hToast('⚠️ الدفع الإلكتروني قيد التفعيل حالياً، استخدم التحويل البنكي بالأسفل مؤقتاً');
+      return;
+    }
+    if(!window.Moyasar){
+      hToast('⚠️ تعذّر تحميل بوابة الدفع، تأكد من اتصالك بالإنترنت وحاول مرة أخرى');
+      return;
+    }
+
+    var feeAmount = Math.round(amount * FEE_RATE * 100); // Moyasar تتوقع المبلغ بالهللة (أصغر وحدة)
+    var container = document.getElementById('moyasarFormContainer');
+    container.style.display = 'block';
+    container.innerHTML = '';
+    this.style.display = 'none';
+
+    Moyasar.init({
+      element: '#moyasarFormContainer',
+      amount: feeAmount,
+      currency: 'SAR',
+      description: 'رسوم منصة علاقات (1%)',
+      publishable_api_key: window.MOYASAR_PUBLISHABLE_KEY,
+      callback_url: window.location.origin + '/payment-complete.html',
+      methods: ['creditcard', 'applepay', 'stcpay'],
+      on_completed: function(payment){
+        hToast('✓ تمت عملية الدفع بنجاح');
+        // TODO: بعد ربط الباك اند، سجّل عملية الدفع بجدول payments مرتبطة بالطلب
+      },
+      on_failure: function(error){
+        hToast('❌ فشلت عملية الدفع، حاول مرة أخرى');
+      }
+    });
   };
 };
 
