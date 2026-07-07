@@ -3149,6 +3149,8 @@ window.submitAfterTerms = async function(){
     reqMediaFiles = [];
     renderReqMediaPreview();
     renderFeed();
+    // إغلاق احترازي لأي نافذة منبثقة ضلت عالقة (يمنع تداخل النقرات مع الصفحة الأساسية)
+    document.querySelectorAll('.h-overlay.open').forEach(function(el){ el.classList.remove('open'); });
     hToast('✓ تم نشر طلبك! ستصلك عروض قريباً');
   } catch(e){
     console.error('submitAfterTerms error:', e);
