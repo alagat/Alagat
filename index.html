@@ -111,7 +111,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(201,162,39,.4)}
 .nav-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.8rem;cursor:pointer}
 .app{display:flex;min-height:100vh;padding-top:56px}
-.sidebar{width:220px;min-width:220px;position:fixed;top:56px;bottom:0;right:0;padding:14px 10px;border-left:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--bg)}
+.sidebar{width:220px;min-width:220px;min-height:calc(100vh - 56px);position:sticky;top:56px;align-self:flex-start;max-height:calc(100vh - 56px);padding:14px 10px;border-left:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--bg)}
 .ss{font-size:.65rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;padding:11px 10px 4px}
 .si{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;color:var(--t2);cursor:pointer;transition:.15s;font-size:.85rem;font-weight:500;border:1px solid transparent}
 .si:hover{background:var(--s2);color:var(--t)}
@@ -618,12 +618,12 @@ function logErrorToServer(message, stack){
   <div class="sidebar">
     <div class="ss" data-i18n="menu">القائمة</div>
     <div class="si on" id="si-home" data-i18n="home">🏠 الرئيسية</div>
-    <div class="si" id="si-logout" style="color:var(--red);display:none" data-i18n="logout">🚪 تسجيل الخروج</div>
 
     <div class="si" id="si-notif" style="display:none" data-i18n="notifications">🔔 الإشعارات<span class="si-b" style="display:none">0</span></div>
     <div class="si" id="si-msgs" style="display:none" data-i18n="myMessages">💬 رسائلي</div>
 
     <div class="si" id="si-saved" style="display:none" data-i18n="saved">⭐ المحفوظات</div>
+    <div class="si" id="si-logout" style="color:var(--red);display:none;margin-top:6px;border-top:1px solid var(--b);padding-top:12px" data-i18n="logout">🚪 تسجيل الخروج</div>
     <div class="ss" style="margin-top:6px" data-i18n="categories">الفئات</div>
     <div class="si cat-si" data-cat="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</div>
     <div class="si cat-si" data-cat="سيارات" data-i18n="catCars">🚙 سيارات</div>
