@@ -133,9 +133,12 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .filters-scroll{display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:14px;margin-bottom:-14px}
 .filters-scroll::-webkit-scrollbar{display:none}
 .filters-scroll.expanded{flex-wrap:wrap;overflow-x:visible}
-.fc-more{flex-shrink:0;font-weight:700}
+.fc-more{flex-shrink:0;font-weight:700;display:none}
+.fc-more.needed{display:inline-block}
 .fc{background:var(--s1);border:1px solid var(--b);color:var(--t2);padding:4px 11px;border-radius:20px;font-size:.74rem;cursor:pointer;white-space:nowrap;transition:.15s;font-family:inherit;outline:none}
 .fc:hover{border-color:var(--ac);color:var(--ac)}
+.fc:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+.fc:focus:not(:focus-visible){outline:none}
 .fc.on{background:var(--ac);border-color:var(--ac);color:#fff}
 .result-count{font-size:.71rem;color:var(--t3);white-space:nowrap;margin-right:4px}
 .rcard{background:var(--s1);border:1px solid var(--b);border-radius:var(--r);padding:14px;margin:0 14px 9px;cursor:pointer;transition:.2s;animation:fu .3s ease both;-webkit-user-select:none;user-select:none}
@@ -539,6 +542,10 @@ window.setLang = function(lang){
   if(btn) btn.textContent = lang === 'ar' ? 'EN' : 'AR';
   var btn2 = document.getElementById('langBtnDetail');
   if(btn2) btn2.textContent = lang === 'ar' ? 'EN' : 'AR';
+  var moreBtn = document.getElementById('moreFiltersBtn');
+  var scrollEl = document.getElementById('filtersScroll');
+  if(moreBtn && scrollEl){ moreBtn.textContent = scrollEl.classList.contains('expanded') ? t('fewerFilters') : t('moreFilters'); }
+  setTimeout(updateMoreFiltersVisibility, 50); // عرض النصوص يتغيّر بين العربي/الإنجليزي، لازم نعيد فحص الحاجة لزر "المزيد"
 };
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -3039,6 +3046,24 @@ window.toggleMoreFilters=function(){
   if(clip) clip.classList.toggle('expanded', isExpanded);
   btn.textContent = isExpanded ? t('fewerFilters') : t('moreFilters');
 };
+function updateMoreFiltersVisibility(){
+  var row = document.getElementById('filtersScroll');
+  var btn = document.getElementById('moreFiltersBtn');
+  if(!row || !btn) return;
+  // نظهر زر "المزيد" فقط لو فعلاً فيه فلاتر مخفية عن الرؤية (المحتوى أعرض من المساحة المتاحة)
+  var needed = row.scrollWidth > row.clientWidth + 2; // +2 هامش بسيط لفروقات التقريب بين المتصفحات
+  btn.classList.toggle('needed', needed);
+  if(!needed && row.classList.contains('expanded')){
+    // لو صار فيه مساحة كافية (تكبير الشاشة مثلاً) نرجّع الوضع الطبيعي تلقائياً
+    row.classList.remove('expanded');
+    var clip = document.getElementById('filtersScrollClip');
+    if(clip) clip.classList.remove('expanded');
+    btn.textContent = t('moreFilters');
+  }
+}
+window.addEventListener('resize', updateMoreFiltersVisibility);
+window.addEventListener('load', updateMoreFiltersVisibility);
+setTimeout(updateMoreFiltersVisibility, 300); // احتياطي لو الخطوط/المحتوى تأخرت بالتحميل
 document.getElementById('filterCity').onchange=function(){state.activeCity=this.value;saveFiltersToStorage();renderFeed();};
 document.getElementById('filterTime').onchange=function(){state.activeTime=this.value;saveFiltersToStorage();renderFeed();};
 document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});si.classList.add('on');var cat=si.getAttribute('data-cat');state.activeFilter=cat;saveFiltersToStorage();document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')===cat);});renderFeed();updateCatAlertBtn();};});
