@@ -562,6 +562,39 @@ document.addEventListener('DOMContentLoaded', function(){
     window.addEventListener('resize', updateFiltersScrollThumb);
     setTimeout(updateFiltersScrollThumb, 200);
     setTimeout(updateFiltersScrollThumb, 800); // احتياطي لو الخطوط تأخرت وأثرت على عرض الفلاتر
+
+    // سحب بالفأرة للابتوب (ما فيه لمس، وشريط المتصفح مخفي، فهذي الطريقة الوحيدة يقدر فيها يسحب الصف)
+    var isDragging = false, dragStartX = 0, dragStartScroll = 0, dragMoved = false;
+    fRow.style.cursor = 'grab';
+    fRow.addEventListener('mousedown', function(e){
+      isDragging = true; dragMoved = false;
+      dragStartX = e.pageX;
+      dragStartScroll = fRow.scrollLeft;
+      fRow.style.cursor = 'grabbing';
+    });
+    window.addEventListener('mousemove', function(e){
+      if(!isDragging) return;
+      var delta = e.pageX - dragStartX;
+      if(Math.abs(delta) > 3) dragMoved = true; // نفرّق بين سحب حقيقي وضغطة عادية على فلتر
+      fRow.scrollLeft = dragStartScroll + delta; // + مو - لأن الصفحة RTL وscrollLeft يتحرك بالسالب
+    });
+    window.addEventListener('mouseup', function(){
+      if(!isDragging) return;
+      isDragging = false;
+      fRow.style.cursor = 'grab';
+    });
+    // نمنع الضغط على فلتر إذا كانت المستخدم يسحب فعلياً (يمنع فتح فلتر غلط أثناء السحب)
+    fRow.addEventListener('click', function(e){
+      if(dragMoved){ e.preventDefault(); e.stopPropagation(); }
+    }, true);
+
+    // عجلة الفأرة/التاتش باد: التمرير العمودي العادي فوق الصف يحرّكه أفقياً (سلوك متوقع بمعظم المواقع)
+    fRow.addEventListener('wheel', function(e){
+      if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+        fRow.scrollLeft -= e.deltaY; // - مو + لأن الصفحة RTL وscrollLeft يتحرك بالسالب
+        e.preventDefault();
+      }
+    }, {passive:false});
   }
 });
 
