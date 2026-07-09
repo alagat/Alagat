@@ -540,6 +540,29 @@ document.addEventListener('DOMContentLoaded', function(){
   if(btn) btn.textContent = window.currentLang === 'ar' ? 'EN' : 'AR';
   var btn2 = document.getElementById('langBtnDetail');
   if(btn2) btn2.textContent = window.currentLang === 'ar' ? 'EN' : 'AR';
+
+  // مؤشر تمرير الفلاتر المرسوم بالكود (بديل موثوق عن شريط تمرير المتصفح الافتراضي، يظهر بنفس الشكل على كل الأجهزة)
+  var fRow = document.querySelector('.filters-row');
+  var fTrack = document.getElementById('filtersScrollTrack');
+  var fThumb = document.getElementById('filtersScrollThumb');
+  function updateFiltersScrollThumb(){
+    if(!fRow || !fThumb || !fTrack) return;
+    var maxScroll = fRow.scrollWidth - fRow.clientWidth;
+    if(maxScroll <= 1){ fTrack.style.display = 'none'; return; } // ما فيه شي مخفي، نخفي المؤشر كامل
+    fTrack.style.display = 'block';
+    var thumbWidthPct = Math.max(15, (fRow.clientWidth / fRow.scrollWidth) * 100);
+    // بما إن الصفحة RTL، نحسب النسبة من scrollLeft المطلق (يدعم القيم السالبة اللي تصير بمتصفحات RTL مختلفة)
+    var scrolled = Math.abs(fRow.scrollLeft);
+    var scrollPct = maxScroll > 0 ? (scrolled / maxScroll) * 100 : 0;
+    fThumb.style.width = thumbWidthPct + '%';
+    fThumb.style.marginRight = Math.max(0, Math.min(100 - thumbWidthPct, scrollPct)) + '%';
+  }
+  if(fRow){
+    fRow.addEventListener('scroll', updateFiltersScrollThumb);
+    window.addEventListener('resize', updateFiltersScrollThumb);
+    setTimeout(updateFiltersScrollThumb, 200);
+    setTimeout(updateFiltersScrollThumb, 800); // احتياطي لو الخطوط تأخرت وأثرت على عرض الفلاتر
+  }
 });
 
 window.onerror = function(msg, url, line, col, error){
@@ -678,6 +701,9 @@ function logErrorToServer(message, stack){
       <button class="fc" data-cat="أخرى" data-i18n="catOther">أخرى</button>
       <span class="result-count" id="resultCount"></span>
       <button id="catAlertBtn" style="display:none;background:var(--s2);border:1px solid var(--b);color:var(--t2);border-radius:20px;padding:5px 12px;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;margin-right:8px;white-space:nowrap" onclick="toggleCategoryAlert()">🔔 نبّهني بهذي الفئة</button>
+    </div>
+    <div id="filtersScrollTrack" style="height:4px;background:var(--b);border-radius:3px;margin:0 14px 12px;overflow:hidden">
+      <div id="filtersScrollThumb" style="height:100%;width:30%;background:var(--ac);border-radius:3px;transition:.1s"></div>
     </div>
     <div id="feedContent"></div>
   </main>
