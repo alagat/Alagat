@@ -33,7 +33,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 <script src="https://cdn.moyasar.com/mpf/1.14.0/moyasar.js"></script>
 <link rel="stylesheet" href="https://cdn.moyasar.com/mpf/1.14.0/moyasar.css">
 <!-- مفتاح Moyasar العلني: بدّل القيمة تحت بمفتاحك الحقيقي (Publishable API Key) لما يوصلك من Moyasar بعد الموافقة على حسابك -->
@@ -48,6 +47,7 @@ button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:n
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
 .page{display:none;min-height:100vh}
 .page.active{display:block}
+button:disabled{opacity:.6;cursor:not-allowed}
 
 /* ====== HOME VARS ====== */
 :root{
@@ -791,8 +791,14 @@ function logErrorToServer(message, stack){
         <span data-i18n="continueWithGoogle">المتابعة عبر جوجل</span>
       </button>
       <div class="or-div"><div class="or-line"></div><span class="or-txt" data-i18n="orDivider">أو</span><div class="or-line"></div></div>
-      <div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني</label><input class="fi" type="email" name="email" autocomplete="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور</label><input class="fi" type="password" name="current-password" autocomplete="current-password" placeholder="••••••••" id="loginPass"></div><div style="text-align:left;margin-bottom:12px"><span id="forgotPassBtn" style="font-size:.74rem;color:var(--ac);cursor:pointer" data-i18n="forgotPassword">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin" data-i18n="loginBtn">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt" data-i18n="orDivider">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister" data-i18n="register">إنشاء حساب جديد</button></div>
-    <div id="f-register" style="display:none"><div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" name="name" autocomplete="name" placeholder="اسمك" id="regFullName"></div><div class="fg"><label class="fgl" data-i18n="usernameLbl">اسم المستخدم *</label><input class="fi" type="text" name="username" autocomplete="username" placeholder="@username" id="regUsername" style="direction:ltr;text-align:right"><span id="regUserHint" style="display:block;font-size:.68rem;margin-top:4px;color:var(--t3)"></span></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" name="email" autocomplete="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><input class="fi" type="password" name="new-password" autocomplete="new-password" placeholder="٨ أحرف على الأقل"></div><div class="fg"><label class="fgl" data-i18n="imHereFor">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px" data-i18n="typeClient">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px" data-i18n="typeBoth">💰 لدي مهارة أرغب بالربح</div></div></div><div style="display:flex;justify-content:center;margin-bottom:12px"><div class="h-captcha" data-sitekey="b47600d4-78a6-4914-9b38-2dc4ac862f50" id="regCaptcha"></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px"><span data-i18n="agreeToTerms1">بالتسجيل توافق على</span> <a href="terms.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="termsOfUse">شروط الاستخدام</a> <span data-i18n="agreeToTerms2">و</span><a href="privacy.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="privacyPolicy">سياسة الخصوصية</a></p></div>
+      <div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني</label><input class="fi" type="email" name="email" autocomplete="email" placeholder="example@gmail.com" id="loginEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور</label><div style="position:relative"><input class="fi" type="text" name="current-password" autocomplete="current-password" placeholder="••••••••" id="loginPass" style="padding-left:38px"><span onclick="togglePwVis('loginPass',this)" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:.95rem;opacity:.6;user-select:none">👁️</span></div></div><div style="text-align:left;margin-bottom:12px"><span id="forgotPassBtn" style="font-size:.74rem;color:var(--ac);cursor:pointer" data-i18n="forgotPassword">نسيت كلمة المرور؟</span></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doLogin" data-i18n="loginBtn">تسجيل الدخول ←</button><div class="or-div"><div class="or-line"></div><span class="or-txt" data-i18n="orDivider">أو</span><div class="or-line"></div></div><button class="btn-g" style="width:100%;padding:10px;border-radius:10px" id="goRegister" data-i18n="register">إنشاء حساب جديد</button></div>
+    <div id="f-register" style="display:none">
+      <button class="btn-g" style="width:100%;padding:11px;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px" onclick="signInWithProvider('google')">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.9 6.1 29.7 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.9 6.1 29.7 4 24 4c-7.6 0-14.1 4.3-17.4 10.7z"/><path fill="#4CAF50" d="M24 44c5.6 0 10.7-2.1 14.5-5.6l-6.7-5.7C29.7 34.6 27 35.5 24 35.5c-5.2 0-9.6-3.3-11.3-8l-6.6 5.1C9.9 39.6 16.4 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.3-4.1 5.7l6.7 5.7C41.7 36 44 30.5 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>
+        <span data-i18n="continueWithGoogle">المتابعة عبر جوجل</span>
+      </button>
+      <div class="or-div"><div class="or-line"></div><span class="or-txt" data-i18n="orDivider">أو</span><div class="or-line"></div></div>
+      <div class="frow"><div class="fg"><label class="fgl" data-i18n="fullName">الاسم الكامل *</label><input class="fi" type="text" name="name" autocomplete="name" placeholder="اسمك" id="regFullName"></div><div class="fg"><label class="fgl" data-i18n="usernameLbl">اسم المستخدم *</label><input class="fi" type="text" name="username" autocomplete="username" placeholder="@username" id="regUsername" style="direction:ltr;text-align:right"><span id="regUserHint" style="display:block;font-size:.68rem;margin-top:4px;color:var(--t3)"></span></div></div><div class="fg"><label class="fgl" data-i18n="email">البريد الإلكتروني *</label><input class="fi" type="email" name="email" autocomplete="email" placeholder="example@gmail.com" id="regEmail"></div><div class="fg"><label class="fgl" data-i18n="password">كلمة المرور *</label><div style="position:relative"><input class="fi" type="text" name="new-password" autocomplete="new-password" placeholder="٨ أحرف على الأقل" id="regPassword" style="padding-left:38px"><span onclick="togglePwVis('regPassword',this)" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:.95rem;opacity:.6;user-select:none">👁️</span></div></div><div class="fg"><label class="fgl" data-i18n="imHereFor">أنا هنا لـ</label><div style="display:flex;gap:8px"><div class="sko sel" id="typeClient" style="flex:1;padding:10px" data-i18n="typeClient">🙋 أطلب خدمة</div><div class="sko" id="typeBoth" style="flex:1;padding:10px" data-i18n="typeBoth">💰 لدي مهارة أرغب بالربح</div></div></div><button class="btn-b" style="width:100%;padding:11px;border-radius:10px" id="doRegister" data-i18n="createAccountBtn">إنشاء الحساب ←</button><p style="text-align:center;font-size:.71rem;color:var(--t3);margin-top:9px"><span data-i18n="agreeToTerms1">بالتسجيل توافق على</span> <a href="terms.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="termsOfUse">شروط الاستخدام</a> <span data-i18n="agreeToTerms2">و</span><a href="privacy.html" target="_blank" style="color:var(--ac);cursor:pointer;text-decoration:none" data-i18n="privacyPolicy">سياسة الخصوصية</a></p></div>
   </div>
 </div>
 <!-- OTP VERIFY MODAL -->
@@ -823,9 +829,13 @@ function logErrorToServer(message, stack){
     <div style="font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--t)" data-i18n="resetPasswordTitle">🔑 إعادة تعيين كلمة المرور</div>
     <div style="font-size:.85rem;color:var(--t);opacity:.85;margin-bottom:16px;line-height:1.6"><span data-i18n="resetOtpSentTo">أرسلنا رمز تعيين من 6 أرقام إلى</span><br><span id="resetEmailDisplay" style="color:var(--ac);font-weight:700"></span></div>
     <input class="fi" type="text" id="resetOtpCode" inputmode="numeric" maxlength="6" placeholder="• • • • • •" style="text-align:center;font-size:1.5rem;letter-spacing:8px;font-weight:800;margin-bottom:14px;color:var(--t)">
-    <input class="fi" type="password" id="newPassword" placeholder="كلمة المرور الجديدة" data-i18n-placeholder="newPasswordPlaceholder" style="text-align:center;margin-bottom:16px;color:var(--t)">
+    <div style="position:relative;margin-bottom:16px"><input class="fi" type="text" id="newPassword" placeholder="كلمة المرور الجديدة" data-i18n-placeholder="newPasswordPlaceholder" style="text-align:center;color:var(--t);padding-left:38px;padding-right:38px"><span onclick="togglePwVis('newPassword',this)" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:.95rem;opacity:.6;user-select:none">👁️</span></div>
     <button class="btn-b" style="width:100%;padding:13px;border-radius:10px;margin-bottom:12px;font-size:.95rem;box-shadow:0 4px 14px rgba(0,0,0,.25)" id="doResetPassword" data-i18n="setPasswordBtn">تعيين كلمة المرور ←</button>
     <div style="font-size:.82rem;color:var(--t);opacity:.7"><span data-i18n="didntReceiveCode">لم يصلك الرمز؟</span> <span id="resendResetOtp" style="color:var(--ac);cursor:pointer;font-weight:700;opacity:1" data-i18n="resendCode">إعادة الإرسال</span></div>
+    <div id="resetNoCodeHint" style="display:none;margin-top:14px;padding:12px;background:var(--s2);border:1px solid var(--b);border-radius:10px;text-align:right">
+      <div style="font-size:.78rem;color:var(--t2);line-height:1.7;margin-bottom:10px">لم يصلك الرمز؟ تأكد من:<br>· مجلد الرسائل غير المرغوب فيها (Spam)<br>· كتابة البريد الإلكتروني بشكل صحيح<br>· أنك تملك حساب مسجّل بهذا البريد أصلاً</div>
+      <a href="https://wa.me/966553803441" target="_blank" style="display:block;text-align:center;font-size:.8rem;font-weight:700;color:var(--ac);text-decoration:none">📱 تواصل مع الدعم</a>
+    </div>
   </div>
 </div>
 <!-- TERMS MODAL -->
@@ -1138,6 +1148,7 @@ function logErrorToServer(message, stack){
 /* ===== NAV BETWEEN PAGES ===== */
 window.goHome = function(){ stopChatListener(); showPage('home'); var bn=document.querySelector('.bottom-nav'); if(bn) bn.style.display='flex'; };
 window.goProfile = async function(reqId){
+ try{
   showPage('profile');
   profileChatReceiverId = null;
   // إخفاء كل الأزرار أولاً
@@ -1217,39 +1228,54 @@ window.goProfile = async function(reqId){
       if(followBtn) followBtn.style.display='none';
     }
   }
+ } catch(e){
+   console.error('goProfile error:', e);
+   logErrorToServer('goProfile: ' + (e && e.message), e && e.stack);
+   hToast('⚠️ تعذر تحميل الملف الشخصي، حاول مرة أخرى');
+ }
 };
 
 window.toggleFollow = async function(){
   var followBtn = document.getElementById('followBtn');
   if(!followBtn) return;
+  if(followBtn.dataset.busy === 'true') return;
   var targetUserId = followBtn.dataset.targetId;
   if(!targetUserId){ hToast('⚠️ تعذر تحديد المستخدم'); return; }
 
   var currentUser = await sbGetUser();
   if(!currentUser){ openAuth('login'); return; }
 
-  var isFollowing = followBtn.dataset.following === 'true';
+  followBtn.dataset.busy = 'true';
+  try{
+    var isFollowing = followBtn.dataset.following === 'true';
 
-  if(isFollowing){
-    // إلغاء المتابعة
-    var {error} = await sb.from('follows').delete().eq('follower_id',currentUser.id).eq('following_id',targetUserId);
-    if(error){ hToast('⚠️ حدث خطأ'); return; }
-    followBtn.textContent = t('follow');
-    followBtn.dataset.following = 'false';
-    hToast(t('unfollowedToast'));
-  } else {
-    // متابعة
-    var {error} = await sb.from('follows').insert({follower_id:currentUser.id, following_id:targetUserId});
-    if(error){ hToast('⚠️ حدث خطأ'); return; }
-    followBtn.textContent = t('following');
-    followBtn.dataset.following = 'true';
-    hToast(t('followedToast'));
+    if(isFollowing){
+      // إلغاء المتابعة
+      var {error} = await sb.from('follows').delete().eq('follower_id',currentUser.id).eq('following_id',targetUserId);
+      if(error){ hToast('⚠️ حدث خطأ'); return; }
+      followBtn.textContent = t('follow');
+      followBtn.dataset.following = 'false';
+      hToast(t('unfollowedToast'));
+    } else {
+      // متابعة
+      var {error} = await sb.from('follows').insert({follower_id:currentUser.id, following_id:targetUserId});
+      if(error){ hToast('⚠️ حدث خطأ'); return; }
+      followBtn.textContent = t('following');
+      followBtn.dataset.following = 'true';
+      hToast(t('followedToast'));
+    }
+
+    // تحديث عدد المتابعين المعروض
+    var {count} = await sb.from('follows').select('*',{count:'exact',head:true}).eq('following_id',targetUserId);
+    var fb = document.getElementById('followersBadge');
+    if(fb) fb.textContent = (count||0) + ' ' + t('followerWord');
+  } catch(e){
+    console.error('toggleFollow error:', e);
+    logErrorToServer('toggleFollow: ' + (e && e.message), e && e.stack);
+    hToast('⚠️ حدث خطأ، حاول مرة أخرى');
+  } finally {
+    followBtn.dataset.busy = 'false';
   }
-
-  // تحديث عدد المتابعين المعروض
-  var {count} = await sb.from('follows').select('*',{count:'exact',head:true}).eq('following_id',targetUserId);
-  var fb = document.getElementById('followersBadge');
-  if(fb) fb.textContent = (count||0) + ' ' + t('followerWord');
 };
 
 function populateProfileFromDB(p){
@@ -1648,16 +1674,13 @@ function mapRequestRow(r){
 // ===== الأكثر طلباً من قاعدة البيانات الفعلية =====
 async function loadHotCategories(){
   try{
-    var {data,error} = await sb.from('requests').select('category').eq('status','open');
+    // نستخدم دالة تجميع بقاعدة البيانات (RPC) بدل جلب كل الطلبات المفتوحة للمتصفح —
+    // مهم جداً مع نمو عدد الطلبات (بدون هذا التغيير، Supabase يقتصّ النتيجة عند 1000 صف تلقائياً وتصير الإحصائية غلط)
+    var {data,error} = await sb.rpc('get_hot_categories');
     if(error||!data||!data.length){ document.getElementById('hotCatsContainer').innerHTML='<div style="text-align:center;padding:16px;color:var(--t2);font-size:.8rem">لا توجد بيانات بعد</div>'; return; }
-    // نعدّ التكرارات لكل فئة
-    var counts={};
-    data.forEach(function(r){ if(r.category){ counts[r.category]=(counts[r.category]||0)+1; } });
-    var sorted=Object.entries(counts).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
-    if(!sorted.length){ document.getElementById('hotCatsContainer').innerHTML='<div style="text-align:center;padding:16px;color:var(--t2);font-size:.8rem">لا توجد بيانات بعد</div>'; return; }
     var html='';
-    sorted.forEach(function(item,i){
-      html+='<div class="hti"><span class="tr2">'+(i+1)+'</span><span class="tn">'+item[0]+'</span><span class="tc">'+item[1]+'</span></div>';
+    data.forEach(function(item,i){
+      html+='<div class="hti"><span class="tr2">'+(i+1)+'</span><span class="tn">'+escH(item.category)+'</span><span class="tc">'+item.cnt+'</span></div>';
     });
     document.getElementById('hotCatsContainer').innerHTML=html;
   }catch(e){ console.error('loadHotCategories failed:', e); document.getElementById('hotCatsContainer').innerHTML='<div style="text-align:center;padding:16px;color:var(--t2);font-size:.8rem">تعذّر تحميل البيانات</div>'; }
@@ -2412,10 +2435,27 @@ window.openDetail=async function(id){
     +'</div>';
   });
   document.getElementById('offersList').innerHTML=oh;
-  list.forEach(function(o){ loadOfferReplies(o.id); });
+  loadAllOfferRepliesBatch(list.map(function(o){ return o.id; }));
 };
 
 // ===== ردود على العروض (تعليقات تبان تحت كل عرض بنفس الصفحة) =====
+function renderOfferReplyRow(rep, offerId, curUser){
+  var rp = rep.profiles || {};
+  var letter = (rp.full_name||'م')[0];
+  var grad = rp.avatar_color || 'linear-gradient(135deg,#7f1d3d,#c9a227)';
+  var isMine = curUser && curUser.id === rep.user_id;
+  return '<div style="display:flex;gap:8px;align-items:flex-start">'
+    +'<div style="width:22px;height:22px;border-radius:50%;background:'+grad+';display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.62rem;flex-shrink:0">'+letter+'</div>'
+    +'<div style="flex:1;background:var(--s1);border-radius:8px;padding:6px 10px">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;gap:6px">'
+        +'<div style="font-size:.72rem;font-weight:700;color:var(--t2)">'+escH(rp.full_name||'مستخدم')+' <span style="font-weight:400;color:var(--t3)">· '+timeAgo(rep.created_at)+'</span></div>'
+        +(isMine ? '<span onclick="deleteOfferReply('+rep.id+','+offerId+')" style="color:#ef4444;font-size:.72rem;cursor:pointer;flex-shrink:0" title="'+t('deleteReply')+'">🗑️</span>' : '')
+      +'</div>'
+      +'<div style="font-size:.8rem;color:var(--t);margin-top:2px">'+escH(rep.reply_text)+'</div>'
+    +'</div>'
+  +'</div>';
+}
+// تحميل ردود عرض واحد بعينه (تُستخدم بعد إرسال/حذف رد لتحديث نفس العرض بس)
 window.loadOfferReplies = async function(offerId){
   var container = document.getElementById('offerReplies-'+offerId);
   if(!container) return;
@@ -2423,48 +2463,93 @@ window.loadOfferReplies = async function(offerId){
     var {data, error} = await sb.from('offer_replies')
       .select('id,reply_text,created_at,user_id,profiles(full_name,avatar_color)')
       .eq('offer_id', offerId)
-      .order('created_at',{ascending:true});
+      .order('created_at',{ascending:true})
+      .limit(200);
     if(error){ console.error('loadOfferReplies failed:', error); return; }
     var curUser = await sbGetUser();
-    container.innerHTML = (data||[]).map(function(rep){
-      var rp = rep.profiles || {};
-      var letter = (rp.full_name||'م')[0];
-      var grad = rp.avatar_color || 'linear-gradient(135deg,#7f1d3d,#c9a227)';
-      var isMine = curUser && curUser.id === rep.user_id;
-      return '<div style="display:flex;gap:8px;align-items:flex-start">'
-        +'<div style="width:22px;height:22px;border-radius:50%;background:'+grad+';display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.62rem;flex-shrink:0">'+letter+'</div>'
-        +'<div style="flex:1;background:var(--s1);border-radius:8px;padding:6px 10px">'
-          +'<div style="display:flex;align-items:center;justify-content:space-between;gap:6px">'
-            +'<div style="font-size:.72rem;font-weight:700;color:var(--t2)">'+escH(rp.full_name||'مستخدم')+' <span style="font-weight:400;color:var(--t3)">· '+timeAgo(rep.created_at)+'</span></div>'
-            +(isMine ? '<span onclick="deleteOfferReply('+rep.id+','+offerId+')" style="color:#ef4444;font-size:.72rem;cursor:pointer;flex-shrink:0" title="'+t('deleteReply')+'">🗑️</span>' : '')
-          +'</div>'
-          +'<div style="font-size:.8rem;color:var(--t);margin-top:2px">'+escH(rep.reply_text)+'</div>'
-        +'</div>'
-      +'</div>';
-    }).join('');
+    container.innerHTML = (data||[]).map(function(rep){ return renderOfferReplyRow(rep, offerId, curUser); }).join('');
   }catch(e){ console.error('loadOfferReplies error:', e); }
 };
+// تحميل ردود كل عروض الطلب بضربة واحدة (استعلام واحد بدل استعلام لكل عرض) —
+// مهم جداً مع الطلبات اللي عندها عروض كثيرة، يمنع إبطاء الصفحة أو إغراق Supabase بطلبات متوازية
+async function loadAllOfferRepliesBatch(offerIds){
+  if(!offerIds || !offerIds.length) return;
+  try{
+    var {data, error} = await sb.from('offer_replies')
+      .select('id,offer_id,reply_text,created_at,user_id,profiles(full_name,avatar_color)')
+      .in('offer_id', offerIds)
+      .order('created_at',{ascending:true})
+      .limit(2000);
+    if(error){ console.error('loadAllOfferRepliesBatch failed:', error); return; }
+    var curUser = await sbGetUser();
+    var grouped = {};
+    (data||[]).forEach(function(rep){
+      if(!grouped[rep.offer_id]) grouped[rep.offer_id] = [];
+      grouped[rep.offer_id].push(rep);
+    });
+    offerIds.forEach(function(oid){
+      var container = document.getElementById('offerReplies-'+oid);
+      if(!container) return;
+      var reps = grouped[oid] || [];
+      container.innerHTML = reps.map(function(rep){ return renderOfferReplyRow(rep, oid, curUser); }).join('');
+    });
+  } catch(e){
+    console.error('loadAllOfferRepliesBatch error:', e);
+    logErrorToServer('loadAllOfferRepliesBatch: ' + (e && e.message), e && e.stack);
+  }
+}
 window.deleteOfferReply = async function(replyId, offerId){
-  var res = await sb.from('offer_replies').delete().eq('id', replyId).select();
-  if(res.error){ console.error('deleteOfferReply failed:', res.error); hToast('⚠ '+t('deleteReplyFailed')); return; }
-  if(!res.data || res.data.length===0){ hToast('⚠ '+t('deleteReplyFailed')); return; }
-  hToast('✓ '+t('replyDeleted'));
-  loadOfferReplies(offerId);
+  try{
+    var res = await sb.from('offer_replies').delete().eq('id', replyId).select();
+    if(res.error){ console.error('deleteOfferReply failed:', res.error); hToast('⚠ '+t('deleteReplyFailed')); return; }
+    if(!res.data || res.data.length===0){ hToast('⚠ '+t('deleteReplyFailed')); return; }
+    hToast('✓ '+t('replyDeleted'));
+    loadOfferReplies(offerId);
+  } catch(e){
+    console.error('deleteOfferReply error:', e);
+    logErrorToServer('deleteOfferReply: ' + (e && e.message), e && e.stack);
+    hToast('⚠ '+t('deleteReplyFailed'));
+  }
 };
 window.submitOfferReply = async function(offerId){
   var input = document.getElementById('offerReplyInput-'+offerId);
   if(!input) return;
-  var text = input.value.trim();
+  if(input.dataset.busy === 'true') return;
+  var text = censorBadWords(input.value.trim());
   if(!text) return;
   var user = await sbGetUser();
   if(!user){ openAuth('login'); return; }
+  input.dataset.busy = 'true';
+  var originalText = input.value;
   input.value='';
-  var res = await sb.from('offer_replies').insert({offer_id:offerId, user_id:user.id, reply_text:text});
-  if(res.error){ console.error('submitOfferReply failed:', res.error); hToast('⚠ '+t('replyFailed')); return; }
-  loadOfferReplies(offerId);
+  input.disabled = true;
+  try{
+    var res = await sb.from('offer_replies').insert({offer_id:offerId, user_id:user.id, reply_text:text});
+    if(res.error){
+      console.error('submitOfferReply failed:', res.error);
+      hToast('⚠ '+t('replyFailed'));
+      input.value = originalText; // نرجّع النص اللي كتبه المستخدم عشان ما يضيع
+      return;
+    }
+    loadOfferReplies(offerId);
+  } catch(e){
+    console.error('submitOfferReply error:', e);
+    logErrorToServer('submitOfferReply: ' + (e && e.message), e && e.stack);
+    hToast('⚠ '+t('replyFailed'));
+    input.value = originalText;
+  } finally {
+    input.disabled = false;
+    input.dataset.busy = 'false';
+  }
 };
-function openAuth(tab){switchAuthTab(tab||'login');document.getElementById('authModal').classList.add('open');}
+function openAuth(tab){switchAuthTab(tab||'login');var lp=document.getElementById('loginPass');if(lp)lp.type='password';var rp=document.getElementById('regPassword');if(rp)rp.type='password';document.getElementById('authModal').classList.add('open');}
 function switchAuthTab(tab){['login','register'].forEach(function(t){document.getElementById('f-'+t).style.display=t===tab?'block':'none';var b=document.getElementById('at-'+t);b.className='at'+(t===tab?' on':'');});}
+window.togglePwVis=function(fieldId,iconEl){
+  var el=document.getElementById(fieldId);
+  if(!el) return;
+  if(el.type==='password'){ el.type='text'; iconEl.textContent='🙈'; }
+  else { el.type='password'; iconEl.textContent='👁️'; }
+};
 function doLoginUI(){
   state.loggedIn=true;
   document.getElementById('authModal').classList.remove('open');
@@ -2551,6 +2636,9 @@ document.getElementById('doLogin').onclick=async function(){
   var email = document.getElementById('loginEmail') ? document.getElementById('loginEmail').value.trim() : '';
   var pass  = document.getElementById('loginPass')  ? document.getElementById('loginPass').value.trim()  : '';
   if(!email||!pass){ hToast('⚠️ أدخل البريد وكلمة المرور'); return; }
+  var btn = document.getElementById('doLogin');
+  var origText = btn.textContent;
+  btn.disabled = true; btn.textContent = 'جاري تسجيل الدخول...';
   hToast('جاري تسجيل الدخول...');
   try{
     var result = await sbLogin(email, pass);
@@ -2574,6 +2662,8 @@ document.getElementById('doLogin').onclick=async function(){
     console.error('doLogin error:', e);
     logErrorToServer('doLogin: ' + (e && e.message), e && e.stack);
     hToast('❌ حدث خطأ أثناء تسجيل الدخول، حاول مرة أخرى');
+  } finally {
+    btn.disabled = false; btn.textContent = origText;
   }
 };
 
@@ -2727,7 +2817,7 @@ document.getElementById('doRegister').onclick=async function(){
   var nameEl  = document.getElementById('regFullName');
   var userEl  = document.getElementById('regUsername');
   var emailEl = document.getElementById('regEmail');
-  var passEl  = document.querySelector('#f-register input[type="password"]');
+  var passEl  = document.getElementById('regPassword');
   var name    = nameEl  ? nameEl.value.trim()  : '';
   var username= userEl  ? userEl.value.trim()  : '';
   var email   = emailEl ? emailEl.value.trim() : '';
@@ -2736,15 +2826,16 @@ document.getElementById('doRegister').onclick=async function(){
   if(!username){ hToast('⚠️ أدخل اسم مستخدم'); return; }
   if(!/^[a-zA-Z0-9_]+$/.test(username)){ hToast('⚠️ اسم المستخدم يجب أن يكون بالإنجليزية فقط (حروف وأرقام و _)'); return; }
   if(!email.includes('@')){ hToast('⚠️ أدخل بريد إلكتروني صحيح'); return; }
-  var captchaToken = (window.hcaptcha && document.getElementById('regCaptcha')) ? hcaptcha.getResponse() : '';
-  if(!captchaToken){ hToast('⚠️ أكمل التحقق (أنا لست روبوت) قبل إنشاء الحساب'); return; }
+  var btn = document.getElementById('doRegister');
+  var origText = btn.textContent;
+  btn.disabled = true;
   try{
     hToast('جاري التحقق من اسم المستخدم...');
     var taken = await sbCheckUsernameTaken(username);
     if(taken){ hToast('❌ اسم المستخدم هذا محجوز، جرّب اسماً آخر'); return; }
+    btn.textContent = 'جاري إنشاء الحساب...';
     hToast('جاري إنشاء الحساب...');
-    var result = await sbRegister(email, pass, name, username, captchaToken);
-    if(window.hcaptcha) hcaptcha.reset();
+    var result = await sbRegister(email, pass, name, username);
     if(result.error){
       var msg = result.error.message || '';
       if(msg.indexOf('duplicate') > -1 || msg.indexOf('unique') > -1){
@@ -2768,6 +2859,8 @@ document.getElementById('doRegister').onclick=async function(){
     console.error('doRegister error:', e);
     logErrorToServer('doRegister: ' + (e && e.message), e && e.stack);
     hToast('❌ حدث خطأ أثناء إنشاء الحساب، حاول مرة أخرى');
+  } finally {
+    btn.disabled = false; btn.textContent = origText;
   }
 };
 
@@ -2852,7 +2945,14 @@ function openResetPassModal(email){
   var codeEl = document.getElementById('resetOtpCode');
   if(codeEl) codeEl.value = '';
   var passEl = document.getElementById('newPassword');
-  if(passEl) passEl.value = '';
+  if(passEl){ passEl.value = ''; passEl.type = 'password'; }
+  var hintEl = document.getElementById('resetNoCodeHint');
+  if(hintEl) hintEl.style.display = 'none';
+  if(window.resetHintTimer) clearTimeout(window.resetHintTimer);
+  window.resetHintTimer = setTimeout(function(){
+    var h = document.getElementById('resetNoCodeHint');
+    if(h) h.style.display = 'block';
+  }, 60000);
   document.getElementById('resetPassModal').classList.add('open');
 }
 document.getElementById('doResetPassword').onclick=async function(){
@@ -2876,6 +2976,7 @@ document.getElementById('doResetPassword').onclick=async function(){
       return;
     }
     document.getElementById('resetPassModal').classList.remove('open');
+    if(window.resetHintTimer) clearTimeout(window.resetHintTimer);
     hToast('🎉 تم تعيين كلمة المرور بنجاح!');
     doLoginUI();
   } catch(e){
@@ -3165,7 +3266,8 @@ async function notifyCategoryAlertSubscribers(category, title, requestId){
   if(!category || !requestId) return;
   try{
     var currentUser = await sbGetUser();
-    var {data:subscribers} = await sb.from('category_alerts').select('user_id').eq('category', category);
+    // حد أقصى احترازي (2000 مشترك) — يمنع سحب قائمة ضخمة جداً لو صار فئة مشهورة جداً مستقبلاً
+    var {data:subscribers} = await sb.from('category_alerts').select('user_id').eq('category', category).limit(2000);
     if(!subscribers || !subscribers.length) return;
     var notifs = subscribers
       .filter(function(s){ return !currentUser || s.user_id !== currentUser.id; }) // لا نُنبّه الناشر نفسه
@@ -3179,9 +3281,13 @@ async function notifyCategoryAlertSubscribers(category, title, requestId){
           related_id: requestId
         };
       });
-    if(notifs.length){
-      var {error} = await sb.from('notifications').insert(notifs);
-      if(error){ console.error('notifyCategoryAlertSubscribers insert error:', error); logErrorToServer('notifyCategoryAlertSubscribers insert: ' + error.message, null); }
+    // ندرج على دفعات (200 بكل مرة) بدل عملية واحدة ضخمة —
+    // كذا لو دفعة فشلت الباقي يكمل، بدل ما يفشل الكل أو لا شي
+    var BATCH_SIZE = 200;
+    for(var i=0; i<notifs.length; i+=BATCH_SIZE){
+      var batch = notifs.slice(i, i+BATCH_SIZE);
+      var {error} = await sb.from('notifications').insert(batch);
+      if(error){ console.error('notifyCategoryAlertSubscribers insert error (batch '+(i/BATCH_SIZE)+'):', error); logErrorToServer('notifyCategoryAlertSubscribers insert: ' + error.message, null); }
     }
   } catch(e){
     console.error('notifyCategoryAlertSubscribers error:', e);
@@ -3598,7 +3704,7 @@ window.sendProfileMsg = async function(){
     var now = new Date(); var time = now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
     var d = document.createElement('div');
     d.className = 'msg me';
-    d.innerHTML = txt + '<div class="msg-time">'+time+' ✓</div>';
+    d.innerHTML = escH(txt) + '<div class="msg-time">'+time+' ✓</div>';
     msgs.appendChild(d);
     msgs.scrollTop = msgs.scrollHeight;
     // إشعار للمستلم
@@ -3615,6 +3721,7 @@ window.sendProfileMsg = async function(){
 
 // load chat history when opening profile chat
 window.openProfileChat = async function openProfileChat(receiverId, name){
+ try{
   stopChatListener();
   profileChatReceiverId = receiverId;
   document.getElementById('chatModalTitle').textContent = '💬 محادثة مع ' + name;
@@ -3661,6 +3768,11 @@ window.openProfileChat = async function openProfileChat(receiverId, name){
       msgsEl.scrollTop = msgsEl.scrollHeight;
     })
     .subscribe();
+ } catch(e){
+   console.error('openProfileChat error:', e);
+   logErrorToServer('openProfileChat: ' + (e && e.message), e && e.stack);
+   hToast('⚠️ تعذر فتح المحادثة، حاول مرة أخرى');
+ }
 }
 
 /* ===== MESSAGES LOGIC - SUPABASE ===== */
@@ -3724,6 +3836,7 @@ window.hideConversation = async function(otherUserId){
 };
 
 window.openDetailMenu = async function(event){
+ try{
   event.stopPropagation();
   var existing = document.getElementById('detailMenuPopup');
   if(existing) existing.remove();
@@ -3758,6 +3871,10 @@ window.openDetailMenu = async function(event){
   setTimeout(function(){
     document.addEventListener('click', closeMenuOnOutsideClick, true);
   }, 150);
+ } catch(e){
+   console.error('openDetailMenu error:', e);
+   logErrorToServer('openDetailMenu: ' + (e && e.message), e && e.stack);
+ }
 };
 
 // ====== التحقق من تسجيل الدخول مرة واحدة فقط بعد فتح صفحة الطلب، حتى تكون نافذة البلاغ جاهزة للفتح الفوري بدون أي تأخير شبكة ======
@@ -4299,7 +4416,8 @@ document.getElementById('si-notif').onclick=function(){ if(!state.loggedIn){open
 
 // فتح ملف شخصي بواسطة UUID المستخدم (من عروض أو رسائل)
 window.openUserProfile = async function(userId){
-  if(!userId) return;
+ if(!userId) return;
+ try{
   showPage('profile');
   // إخفاء أزرار المالك وإظهار أزرار الزائر
   document.getElementById('topActionsOwn').style.display = 'none';
@@ -4324,6 +4442,11 @@ window.openUserProfile = async function(userId){
   window.profileChatReceiverId = userId;
   // تحميل الطلبات والعروض
   loadProfileData(userId);
+ } catch(e){
+   console.error('openUserProfile error:', e);
+   logErrorToServer('openUserProfile: ' + (e && e.message), e && e.stack);
+   hToast('⚠️ تعذر تحميل الملف الشخصي، حاول مرة أخرى');
+ }
 };
 
 
@@ -4342,10 +4465,10 @@ async function sbCheckUsernameTaken(username) {
   return !!data;
 }
 
-async function sbRegister(email, password, fullName, username, captchaToken) {
+async function sbRegister(email, password, fullName, username) {
   const { data, error } = await sb.auth.signUp({
     email, password,
-    options: { data: { full_name: fullName, username }, captchaToken: captchaToken }
+    options: { data: { full_name: fullName, username } }
   });
   return { data, error };
 }
@@ -4565,17 +4688,23 @@ window.openAccountMenu = async function(){
   var sheet = document.getElementById('accountMenuSheet');
   overlay.style.display = 'flex';
   requestAnimationFrame(function(){ sheet.style.transform = 'translateY(0)'; });
-  // تحديث بيانات المستخدم
-  var user = await sbGetUser();
-  if(user){
-    var {data:p} = await sb.from('profiles').select('full_name,avatar_color').eq('id',user.id).maybeSingle();
-    if(p){
-      var letter = (p.full_name||'م')[0];
-      document.getElementById('amAvatar').textContent = letter;
-      document.getElementById('amAvatar').style.background = p.avatar_color||'linear-gradient(135deg,var(--ac),var(--ac2))';
-      document.getElementById('amName').textContent = p.full_name||'مستخدم';
-      document.getElementById('userAvatar').textContent = letter;
+  try{
+    // تحديث بيانات المستخدم
+    var user = await sbGetUser();
+    if(user){
+      var {data:p} = await sb.from('profiles').select('full_name,avatar_color').eq('id',user.id).maybeSingle();
+      if(p){
+        var letter = (p.full_name||'م')[0];
+        document.getElementById('amAvatar').textContent = letter;
+        document.getElementById('amAvatar').style.background = p.avatar_color||'linear-gradient(135deg,var(--ac),var(--ac2))';
+        document.getElementById('amName').textContent = p.full_name||'مستخدم';
+        document.getElementById('userAvatar').textContent = letter;
+      }
     }
+  } catch(e){
+    console.error('openAccountMenu error:', e);
+    logErrorToServer('openAccountMenu: ' + (e && e.message), e && e.stack);
+    // القائمة نفسها فاتحة أصلاً، بس ما قدرنا نحدّث بيانات المستخدم — لا داعي لإغلاقها
   }
 };
 window.closeAccountMenu = function(){
