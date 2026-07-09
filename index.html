@@ -135,6 +135,11 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .filters-scroll.expanded{flex-wrap:wrap;overflow-x:visible}
 .fc-more{flex-shrink:0;font-weight:700;display:none}
 .fc-more.needed{display:inline-block}
+@media(min-width:1024px){
+  .filters-scroll{flex-wrap:wrap!important;overflow-x:visible!important}
+  .filters-scroll-clip{overflow:visible!important;height:auto!important}
+  .fc-more{display:none!important}
+}
 .fc{background:var(--s1);border:1px solid var(--b);color:var(--t2);padding:4px 11px;border-radius:20px;font-size:.74rem;cursor:pointer;white-space:nowrap;transition:.15s;font-family:inherit;outline:none}
 .fc:hover{border-color:var(--ac);color:var(--ac)}
 .fc:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
