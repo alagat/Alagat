@@ -126,9 +126,14 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .ftab{padding:8px 12px;font-size:.82rem;font-weight:500;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.15s}
 .ftab:hover{color:var(--t2)}
 .ftab.on{color:var(--ac);border-bottom-color:var(--ac)}
-.filters-row{display:flex;gap:5px;flex-wrap:nowrap;margin:0 0 11px;align-items:center;overflow-x:auto;padding:2px 14px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.filters-row::-webkit-scrollbar{display:none}
-.filters-row.expanded{flex-wrap:wrap;overflow-x:visible}
-.fc-more{background:transparent;border:1px dashed var(--b);font-weight:700}
+.filters-row{margin:0 0 11px}
+.chips-container{display:flex;align-items:flex-start;gap:5px;padding:2px 14px 6px}
+.filters-scroll-clip{overflow:hidden;flex:1;min-width:0;height:32px}
+.filters-scroll-clip.expanded{overflow:visible;height:auto}
+.filters-scroll{display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:14px;margin-bottom:-14px}
+.filters-scroll::-webkit-scrollbar{display:none}
+.filters-scroll.expanded{flex-wrap:wrap;overflow-x:visible}
+.fc-more{flex-shrink:0;font-weight:700}
 .fc{background:var(--s1);border:1px solid var(--b);color:var(--t2);padding:4px 11px;border-radius:20px;font-size:.74rem;cursor:pointer;white-space:nowrap;transition:.15s;font-family:inherit;outline:none}
 .fc:hover{border-color:var(--ac);color:var(--ac)}
 .fc.on{background:var(--ac);border-color:var(--ac);color:#fff}
@@ -358,7 +363,7 @@ window.I18N = {
     menu:'القائمة', home:'الرئيسية', logout:'تسجيل الخروج', notifications:'الإشعارات',
     myMessages:'رسائلي', saved:'المحفوظات', categories:'الفئات',
     catProgramming:'برمجة', catDesign:'تصميم', catMaintenance:'صيانة عامة', catMarketing:'تسويق',
-    catConsulting:'استشارات', catTeaching:'تعليم', catConstruction:'مقاولات', catHome:'منزلية', catHealth:'صحة وجمال', catCars:'سيارات', catEvents:'مناسبات وتنظيم', catOther:'خدمات أخرى', moreFilters:'المزيد ▾', fewerFilters:'أقل ▲',
+    catConsulting:'استشارات', catTeaching:'تعليم', catConstruction:'مقاولات', catHome:'منزلية', catHealth:'صحة وجمال', catCars:'سيارات', catEvents:'مناسبات وتنظيم', catOther:'خدمات أخرى', moreFilters:'المزيد 🔽', fewerFilters:'أقل 🔼',
     postRequest:'نشر طلب', whatDoYouNeed:'ماذا تحتاج؟', latest:'الأحدث', mostViewed:'الأكثر مشاهدة',
     all:'الكل', searchInRequests:'ابحث في الموقع...',
     budget:'الميزانية', duration:'المدة', serviceType:'نوع الخدمة', offer:'عرض',
@@ -431,7 +436,7 @@ window.I18N = {
     menu:'Menu', home:'Home', logout:'Log Out', notifications:'Notifications',
     myMessages:'My Messages', saved:'Saved', categories:'Categories',
     catProgramming:'Programming', catDesign:'Design', catMaintenance:'General Maintenance', catMarketing:'Marketing',
-    catConsulting:'Consulting', catTeaching:'Teaching', catConstruction:'Contracting', catHome:'Home Services', catHealth:'Health & Beauty', catCars:'Cars', catEvents:'Events & Planning', catOther:'Other Services', moreFilters:'More ▾', fewerFilters:'Less ▲',
+    catConsulting:'Consulting', catTeaching:'Teaching', catConstruction:'Contracting', catHome:'Home Services', catHealth:'Health & Beauty', catCars:'Cars', catEvents:'Events & Planning', catOther:'Other Services', moreFilters:'More 🔽', fewerFilters:'Less 🔼',
     postRequest:'Post a Request', whatDoYouNeed:'What do you need?', latest:'Latest', mostViewed:'Most Viewed',
     all:'All', searchInRequests:'Search the site...',
     budget:'Budget', duration:'Duration', serviceType:'Service Type', offer:'offers',
@@ -665,20 +670,26 @@ function logErrorToServer(message, stack){
           <option value="month">آخر شهر</option>
         </select>
       </div>
-      <button class="fc on" data-cat="all" data-i18n="all">الكل</button>
-      <button class="fc" data-cat="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</button>
-      <button class="fc" data-cat="سيارات" data-i18n="catCars">🚙 سيارات</button>
-      <button class="fc" data-cat="استشارات" data-i18n="catConsulting">⚖️ استشارات</button>
-      <button class="fc" data-cat="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</button>
-      <button class="fc" data-cat="مناسبات" data-i18n="catEvents">🎉 مناسبات</button>
-      <button class="fc" data-cat="برمجة" data-i18n="catProgramming">💻 برمجة</button>
-      <button class="fc" data-cat="تصميم" data-i18n="catDesign">🎨 تصميم</button>
-      <button class="fc" data-cat="تسويق" data-i18n="catMarketing">📱 تسويق</button>
-      <button class="fc" data-cat="منزلية" data-i18n="catHome">🏠 منزلية</button>
-      <button class="fc" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</button>
-      <button class="fc" data-cat="تعليم" data-i18n="catTeaching">📚 تعليم</button>
-      <button class="fc" data-cat="أخرى" data-i18n="catOther">أخرى</button>
-      <button class="fc fc-more" id="moreFiltersBtn" type="button" onclick="toggleMoreFilters()" data-i18n="moreFilters">المزيد ▾</button>
+      <div class="chips-container">
+        <div class="filters-scroll-clip" id="filtersScrollClip">
+        <div class="filters-scroll" id="filtersScroll">
+          <button class="fc on" data-cat="all" data-i18n="all">الكل</button>
+          <button class="fc" data-cat="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</button>
+          <button class="fc" data-cat="سيارات" data-i18n="catCars">🚙 سيارات</button>
+          <button class="fc" data-cat="استشارات" data-i18n="catConsulting">⚖️ استشارات</button>
+          <button class="fc" data-cat="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</button>
+          <button class="fc" data-cat="مناسبات" data-i18n="catEvents">🎉 مناسبات</button>
+          <button class="fc" data-cat="برمجة" data-i18n="catProgramming">💻 برمجة</button>
+          <button class="fc" data-cat="تصميم" data-i18n="catDesign">🎨 تصميم</button>
+          <button class="fc" data-cat="تسويق" data-i18n="catMarketing">📱 تسويق</button>
+          <button class="fc" data-cat="منزلية" data-i18n="catHome">🏠 منزلية</button>
+          <button class="fc" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</button>
+          <button class="fc" data-cat="تعليم" data-i18n="catTeaching">📚 تعليم</button>
+          <button class="fc" data-cat="أخرى" data-i18n="catOther">أخرى</button>
+        </div>
+        </div>
+        <button class="fc fc-more" id="moreFiltersBtn" type="button" onclick="toggleMoreFilters()" data-i18n="moreFilters">المزيد 🔽</button>
+      </div>
       <span class="result-count" id="resultCount"></span>
       <button id="catAlertBtn" style="display:none;background:var(--s2);border:1px solid var(--b);color:var(--t2);border-radius:20px;padding:5px 12px;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;margin-right:8px;white-space:nowrap" onclick="toggleCategoryAlert()">🔔 نبّهني بهذي الفئة</button>
     </div>
@@ -3020,10 +3031,12 @@ document.querySelectorAll('.sk-grid .sko').forEach(function(s){s.onclick=functio
 document.querySelectorAll('.ftab').forEach(function(t){t.onclick=function(){document.querySelectorAll('.ftab').forEach(function(x){x.classList.remove('on');});t.classList.add('on');state.activeTab=t.getAttribute('data-tab');renderFeed();};});
 document.querySelectorAll('.fc:not(.fc-more)').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fc').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.activeFilter=b.getAttribute('data-cat');saveFiltersToStorage();renderFeed();updateCatAlertBtn();};});
 window.toggleMoreFilters=function(){
-  var row = document.querySelector('.filters-row');
+  var row = document.getElementById('filtersScroll');
+  var clip = document.getElementById('filtersScrollClip');
   var btn = document.getElementById('moreFiltersBtn');
   if(!row || !btn) return;
   var isExpanded = row.classList.toggle('expanded');
+  if(clip) clip.classList.toggle('expanded', isExpanded);
   btn.textContent = isExpanded ? t('fewerFilters') : t('moreFilters');
 };
 document.getElementById('filterCity').onchange=function(){state.activeCity=this.value;saveFiltersToStorage();renderFeed();};
