@@ -111,7 +111,8 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(201,162,39,.4)}
 .nav-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.8rem;cursor:pointer}
 .app{display:flex;min-height:100vh;padding-top:56px}
-.sidebar{width:220px;min-width:220px;position:fixed;top:56px;bottom:0;right:0;padding:14px 10px;border-left:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--bg)}
+.sidebar{width:220px;min-width:220px;position:fixed;top:56px;bottom:0;right:0;padding:14px 10px;border-left:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--bg);scrollbar-width:none}
+.sidebar::-webkit-scrollbar{display:none}
 .ss{font-size:.65rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;padding:11px 10px 4px}
 .si{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;color:var(--t2);cursor:pointer;transition:.15s;font-size:.85rem;font-weight:500;border:1px solid transparent}
 .si:hover{background:var(--s2);color:var(--t)}
@@ -127,6 +128,12 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .ftab:hover{color:var(--t2)}
 .ftab.on{color:var(--ac);border-bottom-color:var(--ac)}
 .filters-row{display:flex;gap:5px;flex-wrap:nowrap;margin:0 0 11px;align-items:center;overflow-x:auto;padding:2px 14px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.filters-row::-webkit-scrollbar{display:none}
+@media(min-width:681px){
+  .filters-row{scrollbar-width:thin;scrollbar-color:var(--b) transparent;padding-bottom:4px}
+  .filters-row::-webkit-scrollbar{display:block;height:5px}
+  .filters-row::-webkit-scrollbar-track{background:transparent}
+  .filters-row::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
+}
 .fc{background:var(--s1);border:1px solid var(--b);color:var(--t2);padding:4px 11px;border-radius:20px;font-size:.74rem;cursor:pointer;white-space:nowrap;transition:.15s;font-family:inherit;outline:none}
 .fc:hover{border-color:var(--ac);color:var(--ac)}
 .fc.on{background:var(--ac);border-color:var(--ac);color:#fff}
@@ -353,10 +360,10 @@ window.I18N = {
   ar: {
     appName:'علاقات', requests:'الطلبات', toggleTheme:'تبديل الثيم',
     login:'تسجيل الدخول', register:'إنشاء حساب', newRequest:'+ طلب جديد',
-    menu:'القائمة', home:'الرئيسية', logout:'تسجيل الخروج', notifications:'الإشعارات',
-    myMessages:'رسائلي', saved:'المحفوظات', categories:'الفئات',
-    catProgramming:'برمجة', catDesign:'تصميم', catMaintenance:'صيانة عامة', catMarketing:'تسويق',
-    catConsulting:'استشارات', catTeaching:'تعليم', catConstruction:'مقاولات', catHome:'منزلية', catHealth:'صحة وجمال', catCars:'سيارات', catEvents:'مناسبات وتنظيم', catOther:'خدمات أخرى',
+    menu:'القائمة', home:'🏠 الرئيسية', logout:'🚪 تسجيل الخروج', notifications:'🔔 الإشعارات',
+    myMessages:'💬 رسائلي', saved:'⭐ المحفوظات', categories:'الفئات',
+    catProgramming:'💻 برمجة', catDesign:'🎨 تصميم', catMaintenance:'🔧 صيانة عامة', catMarketing:'📱 تسويق',
+    catConsulting:'⚖️ استشارات', catTeaching:'📚 تعليم', catConstruction:'🏗️ مقاولات', catHome:'🏠 منزلية', catHealth:'💆 صحة وجمال', catCars:'🚙 سيارات', catEvents:'🎉 مناسبات وتنظيم', catOther:'خدمات أخرى',
     postRequest:'نشر طلب', whatDoYouNeed:'ماذا تحتاج؟', latest:'الأحدث', mostViewed:'الأكثر مشاهدة',
     all:'الكل', searchInRequests:'ابحث في الموقع...',
     budget:'الميزانية', duration:'المدة', serviceType:'نوع الخدمة', offer:'عرض',
@@ -426,10 +433,10 @@ window.I18N = {
   en: {
     appName:'Alagat', requests:'Requests', toggleTheme:'Toggle theme',
     login:'Log In', register:'Sign Up', newRequest:'+ New Request',
-    menu:'Menu', home:'Home', logout:'Log Out', notifications:'Notifications',
-    myMessages:'My Messages', saved:'Saved', categories:'Categories',
-    catProgramming:'Programming', catDesign:'Design', catMaintenance:'General Maintenance', catMarketing:'Marketing',
-    catConsulting:'Consulting', catTeaching:'Teaching', catConstruction:'Contracting', catHome:'Home Services', catHealth:'Health & Beauty', catCars:'Cars', catEvents:'Events & Planning', catOther:'Other Services',
+    menu:'Menu', home:'🏠 Home', logout:'🚪 Log Out', notifications:'🔔 Notifications',
+    myMessages:'💬 My Messages', saved:'⭐ Saved', categories:'Categories',
+    catProgramming:'💻 Programming', catDesign:'🎨 Design', catMaintenance:'🔧 General Maintenance', catMarketing:'📱 Marketing',
+    catConsulting:'⚖️ Consulting', catTeaching:'📚 Teaching', catConstruction:'🏗️ Contracting', catHome:'🏠 Home Services', catHealth:'💆 Health & Beauty', catCars:'🚙 Cars', catEvents:'🎉 Events & Planning', catOther:'Other Services',
     postRequest:'Post a Request', whatDoYouNeed:'What do you need?', latest:'Latest', mostViewed:'Most Viewed',
     all:'All', searchInRequests:'Search the site...',
     budget:'Budget', duration:'Duration', serviceType:'Service Type', offer:'offers',
@@ -1680,9 +1687,13 @@ async function loadHotCategories(){
     if(error||!data||!data.length){ document.getElementById('hotCatsContainer').innerHTML='<div style="text-align:center;padding:16px;color:var(--t2);font-size:.8rem">لا توجد بيانات بعد</div>'; return; }
     var html='';
     data.forEach(function(item,i){
-      html+='<div class="hti"><span class="tr2">'+(i+1)+'</span><span class="tn">'+escH(item.category)+'</span><span class="tc">'+item.cnt+'</span></div>';
+      html+='<div class="hti" data-cat="'+escH(item.category)+'"><span class="tr2">'+(i+1)+'</span><span class="tn">'+escH(item.category)+'</span><span class="tc">'+item.cnt+'</span></div>';
     });
     document.getElementById('hotCatsContainer').innerHTML=html;
+    // النقر على فئة في "الأكثر طلباً" يفتح فلتر تلك الفئة في الخلاصة
+    document.querySelectorAll('#hotCatsContainer .hti').forEach(function(el){
+      el.onclick=function(){ window.filterByCategory(this.getAttribute('data-cat')); };
+    });
   }catch(e){ console.error('loadHotCategories failed:', e); document.getElementById('hotCatsContainer').innerHTML='<div style="text-align:center;padding:16px;color:var(--t2);font-size:.8rem">تعذّر تحميل البيانات</div>'; }
 }
 
@@ -3016,9 +3027,28 @@ document.getElementById('typeBoth').onclick=function(){this.classList.add('sel')
 document.querySelectorAll('.sk-grid .sko').forEach(function(s){s.onclick=function(){this.classList.toggle('sel');};});
 document.querySelectorAll('.ftab').forEach(function(t){t.onclick=function(){document.querySelectorAll('.ftab').forEach(function(x){x.classList.remove('on');});t.classList.add('on');state.activeTab=t.getAttribute('data-tab');renderFeed();};});
 document.querySelectorAll('.fc').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fc').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.activeFilter=b.getAttribute('data-cat');saveFiltersToStorage();renderFeed();updateCatAlertBtn();};});
+// في الكمبيوتر: عجلة الماوس فوق صف الفلاتر تمرره أفقياً (بدون لمس ما يوجد طريقة أخرى للوصول لبقية الشرائح)
+document.querySelectorAll('.filters-row').forEach(function(row){
+  row.addEventListener('wheel',function(e){
+    if(row.scrollWidth<=row.clientWidth)return; // ما فيه فائض للتمرير
+    if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){ e.preventDefault(); row.scrollLeft-=e.deltaY; }
+  },{passive:false});
+});
 document.getElementById('filterCity').onchange=function(){state.activeCity=this.value;saveFiltersToStorage();renderFeed();};
 document.getElementById('filterTime').onchange=function(){state.activeTime=this.value;saveFiltersToStorage();renderFeed();};
 document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});si.classList.add('on');var cat=si.getAttribute('data-cat');state.activeFilter=cat;saveFiltersToStorage();document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')===cat);});renderFeed();updateCatAlertBtn();};});
+// فلترة بالفئة من أي مكان (مثل قائمة الأكثر طلباً) — تزامن الشرائح والقائمة الجانبية ثم ترجع لأعلى الخلاصة
+window.filterByCategory=function(cat){
+  if(!cat)return;
+  state.activeFilter=cat;
+  saveFiltersToStorage();
+  document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')===cat);});
+  document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});
+  document.querySelectorAll('.cat-si').forEach(function(s){s.classList.toggle('on',s.getAttribute('data-cat')===cat);});
+  renderFeed();
+  updateCatAlertBtn();
+  window.scrollTo({top:0,behavior:'smooth'});
+};
 // search handled inline on input
 document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.activeCity='all';state.activeTime='all';state.search='';try{localStorage.removeItem('alagat-filters');}catch(e){}var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';var fc=document.getElementById('filterCity');if(fc)fc.value='all';var ft=document.getElementById('filterTime');if(ft)ft.value='all';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();updateCatAlertBtn();};
 
