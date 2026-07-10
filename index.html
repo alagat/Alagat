@@ -111,7 +111,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(201,162,39,.4)}
 .nav-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.8rem;cursor:pointer}
 .app{display:flex;min-height:100vh;padding-top:56px}
-.sidebar{width:220px;min-width:220px;position:fixed;top:56px;bottom:0;right:0;padding:14px 10px;border-left:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--bg)}
+.sidebar{width:220px;min-width:220px;min-height:calc(100vh - 56px);position:sticky;top:56px;align-self:flex-start;max-height:calc(100vh - 56px);padding:14px 10px;border-left:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--bg)}
 .ss{font-size:.65rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;padding:11px 10px 4px}
 .si{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;color:var(--t2);cursor:pointer;transition:.15s;font-size:.85rem;font-weight:500;border:1px solid transparent}
 .si:hover{background:var(--s2);color:var(--t)}
@@ -126,7 +126,8 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .ftab{padding:8px 12px;font-size:.82rem;font-weight:500;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.15s}
 .ftab:hover{color:var(--t2)}
 .ftab.on{color:var(--ac);border-bottom-color:var(--ac)}
-.filters-row{display:flex;gap:5px;flex-wrap:nowrap;margin:0 0 11px;align-items:center;overflow-x:auto;padding:2px 14px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.filters-row::-webkit-scrollbar{display:none}
+.filters-row{display:flex;gap:5px;flex-wrap:nowrap;margin:0 0 4px;align-items:center;overflow-x:auto;padding:2px 14px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.filters-row::-webkit-scrollbar{display:none}
+@media(min-width:1024px){.filters-row{flex-wrap:wrap;overflow-x:visible}}
 .fc{background:var(--s1);border:1px solid var(--b);color:var(--t2);padding:4px 11px;border-radius:20px;font-size:.74rem;cursor:pointer;white-space:nowrap;transition:.15s;font-family:inherit;outline:none}
 .fc:hover{border-color:var(--ac);color:var(--ac)}
 .fc.on{background:var(--ac);border-color:var(--ac);color:#fff}
@@ -164,7 +165,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .feed-footer{margin:16px 14px 90px;padding:16px;background:var(--s1);border:1px solid var(--b);border-radius:12px}
 .ff-bot{border-top:1px solid var(--b);padding-top:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:5px}
 .ff-copy{font-size:.68rem;color:var(--t3)}
-.rpanel{width:270px;min-width:270px;position:fixed;top:56px;bottom:0;left:0;padding:14px 12px;border-right:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
+.rpanel{width:270px;min-width:270px;min-height:calc(100vh - 56px);position:sticky;top:56px;align-self:flex-start;max-height:calc(100vh - 56px);padding:14px 12px;border-right:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
 .pc{background:var(--s1);border:1px solid var(--b);border-radius:var(--r);padding:13px}
 .pt{font-size:.8rem;font-weight:600;margin-bottom:9px}
 .sr-box{display:flex;align-items:center;gap:7px;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:7px 10px;transition:.2s}
@@ -735,7 +736,7 @@ function logErrorToServer(message, stack){
       <span class="result-count" id="resultCount"></span>
       <button id="catAlertBtn" style="display:none;background:var(--s2);border:1px solid var(--b);color:var(--t2);border-radius:20px;padding:5px 12px;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;margin-right:8px;white-space:nowrap" onclick="toggleCategoryAlert()">🔔 نبّهني بهذي الفئة</button>
     </div>
-    <div id="filtersScrollTrack" style="height:4px;background:var(--b);border-radius:3px;margin:0 14px 12px;overflow:hidden">
+    <div id="filtersScrollTrack" style="height:4px;background:var(--b);border-radius:3px;margin:0 14px 8px;overflow:hidden">
       <div id="filtersScrollThumb" style="height:100%;width:30%;background:var(--ac);border-radius:3px;transition:.1s"></div>
     </div>
     <div id="feedContent"></div>
