@@ -111,7 +111,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(201,162,39,.4)}
 .nav-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.8rem;cursor:pointer}
 .app{display:flex;min-height:100vh;padding-top:56px}
-.sidebar{width:220px;min-width:220px;min-height:calc(100vh - 56px);position:sticky;top:56px;align-self:flex-start;max-height:calc(100vh - 56px);padding:14px 10px;border-left:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--bg)}
+.sidebar{width:220px;min-width:220px;position:fixed;top:56px;bottom:0;right:0;padding:14px 10px;border-left:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--bg)}
 .ss{font-size:.65rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;padding:11px 10px 4px}
 .si{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;color:var(--t2);cursor:pointer;transition:.15s;font-size:.85rem;font-weight:500;border:1px solid transparent}
 .si:hover{background:var(--s2);color:var(--t)}
@@ -126,8 +126,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .ftab{padding:8px 12px;font-size:.82rem;font-weight:500;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:.15s}
 .ftab:hover{color:var(--t2)}
 .ftab.on{color:var(--ac);border-bottom-color:var(--ac)}
-.filters-row{display:flex;gap:5px;flex-wrap:nowrap;margin:0 0 4px;align-items:center;overflow-x:auto;padding:2px 14px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.filters-row::-webkit-scrollbar{display:none}
-@media(min-width:1024px){.filters-row{flex-wrap:wrap;overflow-x:visible}}
+.filters-row{display:flex;gap:5px;flex-wrap:nowrap;margin:0 0 11px;align-items:center;overflow-x:auto;padding:2px 14px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.filters-row::-webkit-scrollbar{display:none}
 .fc{background:var(--s1);border:1px solid var(--b);color:var(--t2);padding:4px 11px;border-radius:20px;font-size:.74rem;cursor:pointer;white-space:nowrap;transition:.15s;font-family:inherit;outline:none}
 .fc:hover{border-color:var(--ac);color:var(--ac)}
 .fc.on{background:var(--ac);border-color:var(--ac);color:#fff}
@@ -165,7 +164,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .feed-footer{margin:16px 14px 90px;padding:16px;background:var(--s1);border:1px solid var(--b);border-radius:12px}
 .ff-bot{border-top:1px solid var(--b);padding-top:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:5px}
 .ff-copy{font-size:.68rem;color:var(--t3)}
-.rpanel{width:270px;min-width:270px;min-height:calc(100vh - 56px);position:sticky;top:56px;align-self:flex-start;max-height:calc(100vh - 56px);padding:14px 12px;border-right:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
+.rpanel{width:270px;min-width:270px;position:fixed;top:56px;bottom:0;left:0;padding:14px 12px;border-right:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
 .pc{background:var(--s1);border:1px solid var(--b);border-radius:var(--r);padding:13px}
 .pt{font-size:.8rem;font-weight:600;margin-bottom:9px}
 .sr-box{display:flex;align-items:center;gap:7px;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:7px 10px;transition:.2s}
@@ -541,62 +540,6 @@ document.addEventListener('DOMContentLoaded', function(){
   if(btn) btn.textContent = window.currentLang === 'ar' ? 'EN' : 'AR';
   var btn2 = document.getElementById('langBtnDetail');
   if(btn2) btn2.textContent = window.currentLang === 'ar' ? 'EN' : 'AR';
-
-  // مؤشر تمرير الفلاتر المرسوم بالكود (بديل موثوق عن شريط تمرير المتصفح الافتراضي، يظهر بنفس الشكل على كل الأجهزة)
-  var fRow = document.querySelector('.filters-row');
-  var fTrack = document.getElementById('filtersScrollTrack');
-  var fThumb = document.getElementById('filtersScrollThumb');
-  function updateFiltersScrollThumb(){
-    if(!fRow || !fThumb || !fTrack) return;
-    var maxScroll = fRow.scrollWidth - fRow.clientWidth;
-    if(maxScroll <= 1){ fTrack.style.display = 'none'; return; } // ما فيه شي مخفي، نخفي المؤشر كامل
-    fTrack.style.display = 'block';
-    var thumbWidthPct = Math.max(15, (fRow.clientWidth / fRow.scrollWidth) * 100);
-    // بما إن الصفحة RTL، نحسب النسبة من scrollLeft المطلق (يدعم القيم السالبة اللي تصير بمتصفحات RTL مختلفة)
-    var scrolled = Math.abs(fRow.scrollLeft);
-    var scrollPct = maxScroll > 0 ? (scrolled / maxScroll) * 100 : 0;
-    fThumb.style.width = thumbWidthPct + '%';
-    fThumb.style.marginRight = Math.max(0, Math.min(100 - thumbWidthPct, scrollPct)) + '%';
-  }
-  if(fRow){
-    fRow.addEventListener('scroll', updateFiltersScrollThumb);
-    window.addEventListener('resize', updateFiltersScrollThumb);
-    setTimeout(updateFiltersScrollThumb, 200);
-    setTimeout(updateFiltersScrollThumb, 800); // احتياطي لو الخطوط تأخرت وأثرت على عرض الفلاتر
-
-    // سحب بالفأرة للابتوب (ما فيه لمس، وشريط المتصفح مخفي، فهذي الطريقة الوحيدة يقدر فيها يسحب الصف)
-    var isDragging = false, dragStartX = 0, dragStartScroll = 0, dragMoved = false;
-    fRow.style.cursor = 'grab';
-    fRow.addEventListener('mousedown', function(e){
-      isDragging = true; dragMoved = false;
-      dragStartX = e.pageX;
-      dragStartScroll = fRow.scrollLeft;
-      fRow.style.cursor = 'grabbing';
-    });
-    window.addEventListener('mousemove', function(e){
-      if(!isDragging) return;
-      var delta = e.pageX - dragStartX;
-      if(Math.abs(delta) > 3) dragMoved = true; // نفرّق بين سحب حقيقي وضغطة عادية على فلتر
-      fRow.scrollLeft = dragStartScroll + delta; // + مو - لأن الصفحة RTL وscrollLeft يتحرك بالسالب
-    });
-    window.addEventListener('mouseup', function(){
-      if(!isDragging) return;
-      isDragging = false;
-      fRow.style.cursor = 'grab';
-    });
-    // نمنع الضغط على فلتر إذا كانت المستخدم يسحب فعلياً (يمنع فتح فلتر غلط أثناء السحب)
-    fRow.addEventListener('click', function(e){
-      if(dragMoved){ e.preventDefault(); e.stopPropagation(); }
-    }, true);
-
-    // عجلة الفأرة/التاتش باد: التمرير العمودي العادي فوق الصف يحرّكه أفقياً (سلوك متوقع بمعظم المواقع)
-    fRow.addEventListener('wheel', function(e){
-      if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
-        fRow.scrollLeft -= e.deltaY; // - مو + لأن الصفحة RTL وscrollLeft يتحرك بالسالب
-        e.preventDefault();
-      }
-    }, {passive:false});
-  }
 });
 
 window.onerror = function(msg, url, line, col, error){
@@ -667,9 +610,9 @@ function logErrorToServer(message, stack){
     <div class="si cat-si" data-cat="سيارات" data-i18n="catCars">🚙 سيارات</div>
     <div class="si cat-si" data-cat="استشارات" data-i18n="catConsulting">⚖️ استشارات</div>
     <div class="si cat-si" data-cat="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</div>
-    <div class="si cat-si" data-cat="مناسبات" data-i18n="catEvents">🎉 مناسبات وتنظيم</div>
-    <div class="si cat-si" data-cat="برمجة" data-i18n="catProgramming">💻 برمجة</div>
     <div class="si cat-si" data-cat="تصميم" data-i18n="catDesign">🎨 تصميم</div>
+    <div class="si cat-si" data-cat="برمجة" data-i18n="catProgramming">💻 برمجة</div>
+    <div class="si cat-si" data-cat="مناسبات" data-i18n="catEvents">🎉 مناسبات وتنظيم</div>
     <div class="si cat-si" data-cat="تسويق" data-i18n="catMarketing">📱 تسويق</div>
     <div class="si cat-si" data-cat="منزلية" data-i18n="catHome">🏠 منزلية</div>
     <div class="si cat-si" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</div>
@@ -725,9 +668,9 @@ function logErrorToServer(message, stack){
       <button class="fc" data-cat="سيارات" data-i18n="catCars">🚙 سيارات</button>
       <button class="fc" data-cat="استشارات" data-i18n="catConsulting">⚖️ استشارات</button>
       <button class="fc" data-cat="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</button>
-      <button class="fc" data-cat="مناسبات" data-i18n="catEvents">🎉 مناسبات</button>
-      <button class="fc" data-cat="برمجة" data-i18n="catProgramming">💻 برمجة</button>
       <button class="fc" data-cat="تصميم" data-i18n="catDesign">🎨 تصميم</button>
+      <button class="fc" data-cat="برمجة" data-i18n="catProgramming">💻 برمجة</button>
+      <button class="fc" data-cat="مناسبات" data-i18n="catEvents">🎉 مناسبات</button>
       <button class="fc" data-cat="تسويق" data-i18n="catMarketing">📱 تسويق</button>
       <button class="fc" data-cat="منزلية" data-i18n="catHome">🏠 منزلية</button>
       <button class="fc" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</button>
@@ -735,9 +678,6 @@ function logErrorToServer(message, stack){
       <button class="fc" data-cat="أخرى" data-i18n="catOther">أخرى</button>
       <span class="result-count" id="resultCount"></span>
       <button id="catAlertBtn" style="display:none;background:var(--s2);border:1px solid var(--b);color:var(--t2);border-radius:20px;padding:5px 12px;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;margin-right:8px;white-space:nowrap" onclick="toggleCategoryAlert()">🔔 نبّهني بهذي الفئة</button>
-    </div>
-    <div id="filtersScrollTrack" style="height:4px;background:var(--b);border-radius:3px;margin:0 14px 8px;overflow:hidden">
-      <div id="filtersScrollThumb" style="height:100%;width:30%;background:var(--ac);border-radius:3px;transition:.1s"></div>
     </div>
     <div id="feedContent"></div>
   </main>
