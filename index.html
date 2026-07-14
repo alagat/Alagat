@@ -111,8 +111,14 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .btn-p:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(201,162,39,.4)}
 .nav-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.8rem;cursor:pointer}
 .app{display:flex;min-height:100vh;padding-top:56px}
-.sidebar{width:220px;min-width:220px;position:fixed;top:56px;bottom:0;right:0;padding:14px 10px;border-left:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--bg);scrollbar-width:none}
-.sidebar::-webkit-scrollbar{display:none}
+.sidebar{width:220px;min-width:220px;position:fixed;top:56px;bottom:0;right:0;padding:14px 10px;border-left:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--bg)}
+/* منع انضغاط عناصر القائمة حتى يعمل التمرير الداخلي، مع شريط رفيع بدل الافتراضي العريض */
+.sidebar>*{flex-shrink:0}
+.sidebar{scrollbar-width:thin;scrollbar-color:var(--b) transparent}
+.sidebar::-webkit-scrollbar{width:5px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
+.sidebar::-webkit-scrollbar-thumb:hover{background:var(--t3)}
 .ss{font-size:.65rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;padding:11px 10px 4px}
 .si{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;color:var(--t2);cursor:pointer;transition:.15s;font-size:.85rem;font-weight:500;border:1px solid transparent}
 .si:hover{background:var(--s2);color:var(--t)}
@@ -128,12 +134,6 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .ftab:hover{color:var(--t2)}
 .ftab.on{color:var(--ac);border-bottom-color:var(--ac)}
 .filters-row{display:flex;gap:5px;flex-wrap:nowrap;margin:0 0 11px;align-items:center;overflow-x:auto;padding:2px 14px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.filters-row::-webkit-scrollbar{display:none}
-@media(min-width:681px){
-  .filters-row{scrollbar-width:thin;scrollbar-color:var(--b) transparent;padding-bottom:4px}
-  .filters-row::-webkit-scrollbar{display:block;height:5px}
-  .filters-row::-webkit-scrollbar-track{background:transparent}
-  .filters-row::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
-}
 .fc{background:var(--s1);border:1px solid var(--b);color:var(--t2);padding:4px 11px;border-radius:20px;font-size:.74rem;cursor:pointer;white-space:nowrap;transition:.15s;font-family:inherit;outline:none}
 .fc:hover{border-color:var(--ac);color:var(--ac)}
 .fc.on{background:var(--ac);border-color:var(--ac);color:#fff}
@@ -360,10 +360,10 @@ window.I18N = {
   ar: {
     appName:'علاقات', requests:'الطلبات', toggleTheme:'تبديل الثيم',
     login:'تسجيل الدخول', register:'إنشاء حساب', newRequest:'+ طلب جديد',
-    menu:'القائمة', home:'🏠 الرئيسية', logout:'🚪 تسجيل الخروج', notifications:'🔔 الإشعارات',
+    menu:'القائمة', reqUnit:'طلب', hotTitle:'🔥 الأكثر طلباً', allRegions:'📍 كل المناطق', allTimes:'🕐 كل الأوقات', tWithinDay:'خلال يوم', tLast3Days:'آخر 3 أيام', tLastWeek:'آخر أسبوع', tLastMonth:'آخر شهر', regRiyadh:'الرياض', regMakkah:'مكة المكرمة', regMadinah:'المدينة المنورة', regQassim:'القصيم', regEastern:'الشرقية', regAsir:'عسير', regTabuk:'تبوك', regHail:'حائل', regNBorders:'الحدود الشمالية', regJouf:'الجوف', regJazan:'جازان', regNajran:'نجران', regBaha:'الباحة', home:'🏠 الرئيسية', logout:'🚪 تسجيل الخروج', notifications:'🔔 الإشعارات',
     myMessages:'💬 رسائلي', saved:'⭐ المحفوظات', categories:'الفئات',
     catProgramming:'💻 برمجة', catDesign:'🎨 تصميم', catMaintenance:'🔧 صيانة عامة', catMarketing:'📱 تسويق',
-    catConsulting:'⚖️ استشارات', catTeaching:'📚 تعليم', catConstruction:'🏗️ مقاولات', catHome:'🏠 منزلية', catHealth:'💆 صحة وجمال', catCars:'🚙 سيارات', catEvents:'🎉 مناسبات وتنظيم', catOther:'خدمات أخرى',
+    catConsulting:'⚖️ استشارات', catTeaching:'📚 تعليم', catConstruction:'🏗️ مقاولات', catHome:'🏠 منزلية', catHealth:'💆 صحة وجمال', catCars:'🚙 سيارات', catEvents:'🎉 مناسبات وتنظيم', catEventsShort:'🎉 مناسبات', catOther:'✨ خدمات أخرى',
     postRequest:'نشر طلب', whatDoYouNeed:'ماذا تحتاج؟', latest:'الأحدث', mostViewed:'الأكثر مشاهدة',
     all:'الكل', searchInRequests:'ابحث في الموقع...',
     budget:'الميزانية', duration:'المدة', serviceType:'نوع الخدمة', offer:'عرض',
@@ -433,10 +433,10 @@ window.I18N = {
   en: {
     appName:'Alagat', requests:'Requests', toggleTheme:'Toggle theme',
     login:'Log In', register:'Sign Up', newRequest:'+ New Request',
-    menu:'Menu', home:'🏠 Home', logout:'🚪 Log Out', notifications:'🔔 Notifications',
+    menu:'Menu', reqUnit:'requests', hotTitle:'🔥 Most Requested', allRegions:'📍 All Regions', allTimes:'🕐 All Times', tWithinDay:'Past day', tLast3Days:'Last 3 days', tLastWeek:'Last week', tLastMonth:'Last month', regRiyadh:'Riyadh', regMakkah:'Makkah', regMadinah:'Madinah', regQassim:'Qassim', regEastern:'Eastern', regAsir:'Asir', regTabuk:'Tabuk', regHail:'Hail', regNBorders:'N. Borders', regJouf:'Jouf', regJazan:'Jazan', regNajran:'Najran', regBaha:'Baha', home:'🏠 Home', logout:'🚪 Log Out', notifications:'🔔 Notifications',
     myMessages:'💬 My Messages', saved:'⭐ Saved', categories:'Categories',
     catProgramming:'💻 Programming', catDesign:'🎨 Design', catMaintenance:'🔧 General Maintenance', catMarketing:'📱 Marketing',
-    catConsulting:'⚖️ Consulting', catTeaching:'📚 Teaching', catConstruction:'🏗️ Contracting', catHome:'🏠 Home Services', catHealth:'💆 Health & Beauty', catCars:'🚙 Cars', catEvents:'🎉 Events & Planning', catOther:'Other Services',
+    catConsulting:'⚖️ Consulting', catTeaching:'📚 Teaching', catConstruction:'🏗️ Contracting', catHome:'🏠 Home Services', catHealth:'💆 Health & Beauty', catCars:'🚙 Cars', catEvents:'🎉 Events & Planning', catEventsShort:'🎉 Events', catOther:'✨ Other Services',
     postRequest:'Post a Request', whatDoYouNeed:'What do you need?', latest:'Latest', mostViewed:'Most Viewed',
     all:'All', searchInRequests:'Search the site...',
     budget:'Budget', duration:'Duration', serviceType:'Service Type', offer:'offers',
@@ -531,10 +531,22 @@ function applyTranslations(){
   });
 }
 
+// ترجمة القيم الثابتة القادمة من قاعدة البيانات عند العرض فقط (مختصرة) — البيانات تبقى عربية
+window.VAL_EN = {
+  'مقاولات':'Contracting','سيارات':'Cars','استشارات':'Consulting','صحة وجمال':'Health & Beauty','تصميم':'Design','برمجة':'Programming','مناسبات':'Events','تسويق':'Marketing','منزلية':'Home','صيانة عامة':'Maintenance','تعليم':'Teaching','أخرى':'Other',
+  '24 ساعة':'24h','3 أيام':'3d','أسبوع':'1w','أسبوعان':'2w','مرن':'Flexible',
+  'عن بُعد':'Remote','عن بعد':'Remote','حضوري':'On-site','كلاهما':'Both',
+  'الرياض':'Riyadh','مكة المكرمة':'Makkah','المدينة المنورة':'Madinah','القصيم':'Qassim','الشرقية':'Eastern','عسير':'Asir','تبوك':'Tabuk','حائل':'Hail','الحدود الشمالية':'N. Borders','الجوف':'Jouf','جازان':'Jazan','نجران':'Najran','الباحة':'Baha'
+};
+window.trVal = function(v){ if(window.currentLang!=='en'||!v) return v; return window.VAL_EN[v]||v; };
+
 window.setLang = function(lang){
   window.currentLang = lang;
   localStorage.setItem('alagat_lang', lang);
   applyTranslations();
+  // إعادة رسم المحتوى الديناميكي حتى تنطبق ترجمة القيم فوراً
+  try{ if(typeof renderFeed==='function') renderFeed(); }catch(e){}
+  try{ if(typeof loadHotCategories==='function') loadHotCategories(); }catch(e){}
   var btn = document.getElementById('langBtn');
   if(btn) btn.textContent = lang === 'ar' ? 'EN' : 'AR';
   var btn2 = document.getElementById('langBtnDetail');
@@ -606,12 +618,13 @@ function logErrorToServer(message, stack){
   <div class="sidebar">
     <div class="ss" data-i18n="menu">القائمة</div>
     <div class="si on" id="si-home" data-i18n="home">🏠 الرئيسية</div>
-    <div class="si" id="si-logout" style="color:var(--red);display:none" data-i18n="logout">🚪 تسجيل الخروج</div>
 
     <div class="si" id="si-notif" style="display:none" data-i18n="notifications">🔔 الإشعارات<span class="si-b" style="display:none">0</span></div>
     <div class="si" id="si-msgs" style="display:none" data-i18n="myMessages">💬 رسائلي</div>
 
     <div class="si" id="si-saved" style="display:none" data-i18n="saved">⭐ المحفوظات</div>
+    <div class="si" id="si-logout" style="color:var(--red);display:none" data-i18n="logout">🚪 تسجيل الخروج</div>
+    <div style="border-top:1px solid var(--b);margin:8px 6px 2px"></div>
     <div class="ss" style="margin-top:6px" data-i18n="categories">الفئات</div>
     <div class="si cat-si" data-cat="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</div>
     <div class="si cat-si" data-cat="سيارات" data-i18n="catCars">🚙 سيارات</div>
@@ -624,7 +637,7 @@ function logErrorToServer(message, stack){
     <div class="si cat-si" data-cat="منزلية" data-i18n="catHome">🏠 منزلية</div>
     <div class="si cat-si" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</div>
     <div class="si cat-si" data-cat="تعليم" data-i18n="catTeaching">📚 تعليم</div>
-    <div class="si cat-si" data-cat="أخرى" data-i18n="catOther">خدمات أخرى</div>
+    <div class="si cat-si" data-cat="أخرى" data-i18n="catOther">✨ خدمات أخرى</div>
   </div>
   <main class="feed">
     <div class="mini-bar" id="miniBar" style="display:none">
@@ -647,27 +660,27 @@ function logErrorToServer(message, stack){
       </div>
       <div style="display:flex;gap:8px;width:100%;margin-bottom:8px">
         <select id="filterCity" style="flex:1;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:7px 9px;color:var(--t);font-family:inherit;font-size:.78rem">
-          <option value="all">📍 كل المناطق</option>
-          <option value="الرياض">الرياض</option>
-          <option value="مكة المكرمة">مكة المكرمة</option>
-          <option value="المدينة المنورة">المدينة المنورة</option>
-          <option value="القصيم">القصيم</option>
-          <option value="الشرقية">الشرقية</option>
-          <option value="عسير">عسير</option>
-          <option value="تبوك">تبوك</option>
-          <option value="حائل">حائل</option>
-          <option value="الحدود الشمالية">الحدود الشمالية</option>
-          <option value="الجوف">الجوف</option>
-          <option value="جازان">جازان</option>
-          <option value="نجران">نجران</option>
-          <option value="الباحة">الباحة</option>
+          <option value="all" data-i18n="allRegions">📍 كل المناطق</option>
+          <option value="الرياض" data-i18n="regRiyadh">الرياض</option>
+          <option value="مكة المكرمة" data-i18n="regMakkah">مكة المكرمة</option>
+          <option value="المدينة المنورة" data-i18n="regMadinah">المدينة المنورة</option>
+          <option value="القصيم" data-i18n="regQassim">القصيم</option>
+          <option value="الشرقية" data-i18n="regEastern">الشرقية</option>
+          <option value="عسير" data-i18n="regAsir">عسير</option>
+          <option value="تبوك" data-i18n="regTabuk">تبوك</option>
+          <option value="حائل" data-i18n="regHail">حائل</option>
+          <option value="الحدود الشمالية" data-i18n="regNBorders">الحدود الشمالية</option>
+          <option value="الجوف" data-i18n="regJouf">الجوف</option>
+          <option value="جازان" data-i18n="regJazan">جازان</option>
+          <option value="نجران" data-i18n="regNajran">نجران</option>
+          <option value="الباحة" data-i18n="regBaha">الباحة</option>
         </select>
         <select id="filterTime" style="flex:1;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:7px 9px;color:var(--t);font-family:inherit;font-size:.78rem">
-          <option value="all">🕐 كل الأوقات</option>
-          <option value="day">خلال يوم</option>
-          <option value="3days">آخر 3 أيام</option>
-          <option value="week">آخر أسبوع</option>
-          <option value="month">آخر شهر</option>
+          <option value="all" data-i18n="allTimes">🕐 كل الأوقات</option>
+          <option value="day" data-i18n="tWithinDay">خلال يوم</option>
+          <option value="3days" data-i18n="tLast3Days">آخر 3 أيام</option>
+          <option value="week" data-i18n="tLastWeek">آخر أسبوع</option>
+          <option value="month" data-i18n="tLastMonth">آخر شهر</option>
         </select>
       </div>
       <button class="fc on" data-cat="all" data-i18n="all">الكل</button>
@@ -677,12 +690,12 @@ function logErrorToServer(message, stack){
       <button class="fc" data-cat="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</button>
       <button class="fc" data-cat="تصميم" data-i18n="catDesign">🎨 تصميم</button>
       <button class="fc" data-cat="برمجة" data-i18n="catProgramming">💻 برمجة</button>
-      <button class="fc" data-cat="مناسبات" data-i18n="catEvents">🎉 مناسبات</button>
+      <button class="fc" data-cat="مناسبات" data-i18n="catEventsShort">🎉 مناسبات</button>
       <button class="fc" data-cat="تسويق" data-i18n="catMarketing">📱 تسويق</button>
       <button class="fc" data-cat="منزلية" data-i18n="catHome">🏠 منزلية</button>
       <button class="fc" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</button>
       <button class="fc" data-cat="تعليم" data-i18n="catTeaching">📚 تعليم</button>
-      <button class="fc" data-cat="أخرى" data-i18n="catOther">أخرى</button>
+      <button class="fc" data-cat="أخرى" data-i18n="catOther">✨ خدمات أخرى</button>
       <span class="result-count" id="resultCount"></span>
       <button id="catAlertBtn" style="display:none;background:var(--s2);border:1px solid var(--b);color:var(--t2);border-radius:20px;padding:5px 12px;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;margin-right:8px;white-space:nowrap" onclick="toggleCategoryAlert()">🔔 نبّهني بهذي الفئة</button>
     </div>
@@ -691,7 +704,7 @@ function logErrorToServer(message, stack){
   <aside class="rpanel">
     <div class="sr-box"><span style="color:var(--t3)">🔍</span><input type="text" placeholder="ابحث في الموقع..." data-i18n-placeholder="searchInRequests" id="searchInput2" oninput="filterFeed(this.value)"></div>
     <div class="pc">
-      <div class="pt">🔥 الأكثر طلباً</div>
+      <div class="pt" data-i18n="hotTitle">🔥 الأكثر طلباً</div>
       <div id="hotCatsContainer"><div style="text-align:center;padding:16px;color:var(--t2);font-size:.8rem">جاري التحميل...</div></div>
     </div>
     <div class="pc" id="rpGuest">
@@ -876,7 +889,7 @@ function logErrorToServer(message, stack){
 </div>
 
 <div class="h-overlay" id="compModal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات">🏗️ مقاولات</option><option value="سيارات">🚙 سيارات</option><option value="استشارات">⚖️ استشارات</option><option value="صحة وجمال">💆 صحة وجمال</option><option value="مناسبات">🎉 مناسبات وتنظيم</option><option value="برمجة">💻 برمجة</option><option value="تصميم">🎨 تصميم</option><option value="تسويق">📱 تسويق</option><option value="منزلية">🏠 منزلية</option><option value="صيانة عامة">🔧 صيانة عامة</option><option value="تعليم">📚 تعليم</option><option value="أخرى">خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option data-i18n="hours24">24 ساعة</option><option data-i18n="days3">3 أيام</option><option data-i18n="week1">أسبوع</option><option data-i18n="weeks2">أسبوعان</option><option data-i18n="flexible">مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option data-i18n="remote">عن بُعد</option><option data-i18n="inPerson">حضوري</option><option data-i18n="both">كلاهما</option></select></div></div><div class="fg"><label class="fgl" data-i18n="regionLbl">المنطقة *</label><select class="fi" id="reqCity"><option value="" data-i18n="selectRegion">اختر المنطقة</option><option value="الرياض">الرياض</option><option value="مكة المكرمة">مكة المكرمة</option><option value="المدينة المنورة">المدينة المنورة</option><option value="القصيم">القصيم</option><option value="الشرقية">الشرقية</option><option value="عسير">عسير</option><option value="تبوك">تبوك</option><option value="حائل">حائل</option><option value="الحدود الشمالية">الحدود الشمالية</option><option value="الجوف">الجوف</option><option value="جازان">جازان</option><option value="نجران">نجران</option><option value="الباحة">الباحة</option></select></div><div class="fg"><label class="fgl" data-i18n="reqPhoneOptional">رقم جوالك (اختياري) 📞</label><input class="fi" id="reqPhone" type="tel" placeholder="05xxxxxxxx" data-i18n-placeholder="phonePlaceholder"><div style="font-size:.7rem;color:var(--t3);margin-top:4px" data-i18n="reqPhonePublicHint">يظهر للجميع على الإعلان، اتركه فاضي إذا تفضّل التواصل عبر رسائل الموقع فقط</div></div>
+  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</option><option value="سيارات" data-i18n="catCars">🚙 سيارات</option><option value="استشارات" data-i18n="catConsulting">⚖️ استشارات</option><option value="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</option><option value="مناسبات" data-i18n="catEvents">🎉 مناسبات وتنظيم</option><option value="برمجة" data-i18n="catProgramming">💻 برمجة</option><option value="تصميم" data-i18n="catDesign">🎨 تصميم</option><option value="تسويق" data-i18n="catMarketing">📱 تسويق</option><option value="منزلية" data-i18n="catHome">🏠 منزلية</option><option value="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</option><option value="تعليم" data-i18n="catTeaching">📚 تعليم</option><option value="أخرى" data-i18n="catOther">خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option data-i18n="hours24">24 ساعة</option><option data-i18n="days3">3 أيام</option><option data-i18n="week1">أسبوع</option><option data-i18n="weeks2">أسبوعان</option><option data-i18n="flexible">مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option data-i18n="remote">عن بُعد</option><option data-i18n="inPerson">حضوري</option><option data-i18n="both">كلاهما</option></select></div></div><div class="fg"><label class="fgl" data-i18n="regionLbl">المنطقة *</label><select class="fi" id="reqCity"><option value="" data-i18n="selectRegion">اختر المنطقة</option><option value="الرياض" data-i18n="regRiyadh">الرياض</option><option value="مكة المكرمة" data-i18n="regMakkah">مكة المكرمة</option><option value="المدينة المنورة" data-i18n="regMadinah">المدينة المنورة</option><option value="القصيم" data-i18n="regQassim">القصيم</option><option value="الشرقية" data-i18n="regEastern">الشرقية</option><option value="عسير" data-i18n="regAsir">عسير</option><option value="تبوك" data-i18n="regTabuk">تبوك</option><option value="حائل" data-i18n="regHail">حائل</option><option value="الحدود الشمالية" data-i18n="regNBorders">الحدود الشمالية</option><option value="الجوف" data-i18n="regJouf">الجوف</option><option value="جازان" data-i18n="regJazan">جازان</option><option value="نجران" data-i18n="regNajran">نجران</option><option value="الباحة" data-i18n="regBaha">الباحة</option></select></div><div class="fg"><label class="fgl" data-i18n="reqPhoneOptional">رقم جوالك (اختياري) 📞</label><input class="fi" id="reqPhone" type="tel" placeholder="05xxxxxxxx" data-i18n-placeholder="phonePlaceholder"><div style="font-size:.7rem;color:var(--t3);margin-top:4px" data-i18n="reqPhonePublicHint">يظهر للجميع على الإعلان، اتركه فاضي إذا تفضّل التواصل عبر رسائل الموقع فقط</div></div>
   <div class="fg">
     <label class="fgl" data-i18n="mediaOptionalLbl">📷 صور وفيديو (اختياري — حتى 10 صور)</label>
     <input type="file" id="reqMediaInput" accept="image/*,video/*" multiple style="display:none" onchange="handleReqMediaSelect(this)">
@@ -1181,8 +1194,11 @@ window.goProfile = async function(reqId){
 
         // هل هو نفس المستخدم الحالي؟
         if(currentUser && currentUser.id === targetUserId){
-          // ملفك أنت
+          // ملفك أنت — إخفاء صريح لعناصر ملفات الآخرين (زر المتابعة/المحادثة) لمنع بقائها من زيارة سابقة
           document.getElementById('topActionsOwn').style.display='flex';
+          var oa=document.getElementById('topActionsOther'); if(oa) oa.style.display='none';
+          var fbn=document.getElementById('followBtn'); if(fbn){ fbn.style.display='none'; fbn.dataset.targetId=''; }
+          if(cb) cb.style.display='none';
           if(fb){fb.style.display='block';fb.textContent=(prof&&prof.followers_count||0)+' '+t('followers');}
         } else {
           // فحص الحظر المتبادل قبل عرض الملف
@@ -1251,6 +1267,7 @@ window.toggleFollow = async function(){
 
   var currentUser = await sbGetUser();
   if(!currentUser){ openAuth('login'); return; }
+  if(String(targetUserId) === String(currentUser.id)){ hToast('⚠️ لا يمكنك متابعة نفسك'); followBtn.style.display='none'; return; }
 
   followBtn.dataset.busy = 'true';
   try{
@@ -1507,7 +1524,7 @@ window.applyPopularSearch = function(term){
   filterFeed(term);
   logSearchTerm(term);
 };
-function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+escH(r.name)+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+escH(r.handle)+'</div></div>'+'<div class="rct">'+r.time+'</div></div>'+'<div class="rtitle">'+escH(r.title)+'</div>'+'<div class="rdesc">'+escH(r.desc)+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+escH(tg)+'</span>';}).join('')+'<span class="rtag g">⏱ '+escH(r.dur)+'</span><span class="rtag">'+escH(r.type)+'</span>'+(r.city?'<span class="rtag">📍 '+escH(r.city)+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+escH(r.budget)+'</div></div>'+'<div class="rcf-r">'+(r.views>0?'<span class="vcount" style="color:var(--t3);font-size:.72rem">👁 '+r.views+'</span>':'')+'<span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation();window.toggleSaveCard('+r.id+',this)">'+(isSaved?t('savedBadge'):'🔖 '+t('saveAction'))+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation();window.offerFromCard('+r.id+')">'+t('submitOffer')+'</button>'+'</div></div></div>';}
+function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+escH(r.name)+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+escH(r.handle)+'</div></div>'+'<div class="rct">'+timeAgo(r.created_at)+'</div></div>'+'<div class="rtitle">'+escH(r.title)+'</div>'+'<div class="rdesc">'+escH(r.desc)+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+escH(trVal(tg))+'</span>';}).join('')+'<span class="rtag g">⏱ '+escH(trVal(r.dur))+'</span><span class="rtag">'+escH(trVal(r.type))+'</span>'+(r.city?'<span class="rtag">📍 '+escH(trVal(r.city))+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+escH(r.budget)+'</div></div>'+'<div class="rcf-r">'+(r.views>0?'<span class="vcount" style="color:var(--t3);font-size:.72rem">👁 '+r.views+'</span>':'')+'<span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation();window.toggleSaveCard('+r.id+',this)">'+(isSaved?t('savedBadge'):'🔖 '+t('saveAction'))+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation();window.offerFromCard('+r.id+')">'+t('submitOffer')+'</button>'+'</div></div></div>';}
 function makeFooter(){
   return (state.loggedIn ? '' : '<div class="bcta"><h3>'+t('readyToStart')+'</h3><p>'+t('ctaSubtitle')+'</p><div class="bcta-btns"><button class="btn-b" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openComp()">'+t('postFree')+'</button><button class="btn-p" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openAuth(\'register\')">'+t('startEarning')+'</button></div></div>')
   + '<div class="feed-footer">'
@@ -1524,7 +1541,7 @@ function makeFooter(){
   + '<div style="display:flex;justify-content:center;gap:14px;margin-top:20px;padding-top:14px;border-top:1px solid var(--b)"><a href="about.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">من نحن</a><span style="color:var(--t3);font-size:.74rem">·</span><a href="terms.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">شروط الاستخدام</a><span style="color:var(--t3);font-size:.74rem">·</span><a href="privacy.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">سياسة الخصوصية</a></div>'
   + '</div>';
 }
-function timeAgo(d){var s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'الآن';if(s<3600)return'منذ '+Math.floor(s/60)+' دقيقة';if(s<86400)return'منذ '+Math.floor(s/3600)+' ساعة';return'منذ '+Math.floor(s/86400)+' يوم';}
+function timeAgo(d){var s=Math.floor((Date.now()-new Date(d))/1000);if(window.currentLang==='en'){if(s<60)return'now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';}if(s<60)return'الآن';if(s<3600)return'منذ '+Math.floor(s/60)+' دقيقة';if(s<86400)return'منذ '+Math.floor(s/3600)+' ساعة';return'منذ '+Math.floor(s/86400)+' يوم';}
 function isProviderOnline(lastSeen){
   if(!lastSeen) return false;
   var minutesAgo = (Date.now() - new Date(lastSeen).getTime()) / 60000;
@@ -1621,9 +1638,11 @@ function makeSkeleton(n){
 var FETCH_SIZE=50, hasMoreFromServer=true, isLoadingMore=false;
 
 // بناء استعلام Supabase بناءً على الفلاتر النشطة حالياً (تبويب/فئة/بحث)
-function buildFeedQuery(){
-  var q = sb.from('requests')
-    .select('*, profiles(full_name,username,avatar_color,avatar_letter)')
+function buildFeedQuery(forCount){
+  // forCount=true: نفس الفلاتر لكن عدّ فقط داخل القاعدة (count exact, head:true) — لا يجلب أي صفوف
+  var q = (forCount
+    ? sb.from('requests').select('id',{count:'exact',head:true})
+    : sb.from('requests').select('*, profiles(full_name,username,avatar_color,avatar_letter)'))
     .eq('status','open');
   if(state.activeTab==='nooffers'){
     q = q.eq('offers_count', 0);
@@ -1687,7 +1706,7 @@ async function loadHotCategories(){
     if(error||!data||!data.length){ document.getElementById('hotCatsContainer').innerHTML='<div style="text-align:center;padding:16px;color:var(--t2);font-size:.8rem">لا توجد بيانات بعد</div>'; return; }
     var html='';
     data.forEach(function(item,i){
-      html+='<div class="hti" data-cat="'+escH(item.category)+'"><span class="tr2">'+(i+1)+'</span><span class="tn">'+escH(item.category)+'</span><span class="tc">'+item.cnt+'</span></div>';
+      html+='<div class="hti" data-cat="'+escH(item.category)+'"><span class="tr2">'+(i+1)+'</span><span class="tn">'+escH(trVal(item.category))+'</span><span class="tc">'+item.cnt+'</span></div>';
     });
     document.getElementById('hotCatsContainer').innerHTML=html;
     // النقر على فئة في "الأكثر طلباً" يفتح فلتر تلك الفئة في الخلاصة
@@ -1719,7 +1738,14 @@ function renderFeed(){
         hasMoreFromServer = (res.data||[]).length >= FETCH_SIZE;
         reqs=(res.data||[]).map(mapRequestRow);
         var list=getList();
-        document.getElementById('resultCount').textContent=list.length+' طلب';
+        document.getElementById('resultCount').textContent=list.length+' '+t('reqUnit');
+        // الإجمالي الحقيقي المطابق للفلاتر من القاعدة — عند الفشل يبقى عدد المحمّل كاحتياط
+        buildFeedQuery(true).then(function(cr){
+          if(!cr.error && typeof cr.count==='number'){
+            var rc=document.getElementById('resultCount');
+            if(rc) rc.textContent=cr.count+' '+t('reqUnit');
+          }
+        });
         if(!list.length){
           el.innerHTML='<div class="empty-state" style="padding:60px 20px;text-align:center;color:var(--t2)"><div style="font-size:3rem;margin-bottom:10px">📋</div><div style="font-weight:700;margin-bottom:6px">'+t('noRequestsYet')+'</div><div style="font-size:.84rem;color:var(--t3)">'+t('beFirstToPost')+'</div></div>';
           return;
@@ -2278,7 +2304,7 @@ window.openDetail=async function(id){
   av.style.background=r.grad; av.textContent=r.av;
   document.getElementById('detName').textContent=r.name;
   document.getElementById('detHandle').textContent=r.handle;
-  document.getElementById('detTime').textContent=r.time;
+  document.getElementById('detTime').textContent=timeAgo(r.created_at);
   document.getElementById('detAdNumber').textContent=r.adNumber?('🔖 #'+r.adNumber):'';
   window._currentAdNumber = r.adNumber||null;
   document.getElementById('detTitle').textContent=r.title;
@@ -2289,20 +2315,20 @@ window.openDetail=async function(id){
     bc.innerHTML =
       '<span onclick="window.showPage(\'home\')" style="color:var(--ac);cursor:pointer;font-weight:600">'+t('appName')+'</span>' +
       arrow +
-      '<span onclick="goHomeFilteredByCategory(\''+escH(r.cat)+'\')" style="color:var(--ac);cursor:pointer;font-weight:600">'+escH(r.cat)+'</span>' +
+      '<span onclick="goHomeFilteredByCategory(\''+escH(r.cat)+'\')" style="color:var(--ac);cursor:pointer;font-weight:600">'+escH(trVal(r.cat))+'</span>' +
       arrow +
       '<span style="color:var(--t2)">'+escH(r.title)+'</span>';
   }
   renderSimilarRequests(r);
   document.getElementById('detBudget').textContent=r.budget;
-  document.getElementById('detDur').textContent=r.dur;
-  document.getElementById('detType').textContent=r.type;
+  document.getElementById('detDur').textContent=trVal(r.dur);
+  document.getElementById('detType').textContent=trVal(r.type);
   var cityCard = document.getElementById('detCityCard');
   var citySep = document.getElementById('detCitySep');
   if(r.city){
     cityCard.style.display='flex';
     citySep.style.display='inline';
-    document.getElementById('detCity').textContent=r.city;
+    document.getElementById('detCity').textContent=trVal(r.city);
   } else {
     cityCard.style.display='none';
     citySep.style.display='none';
@@ -3027,13 +3053,6 @@ document.getElementById('typeBoth').onclick=function(){this.classList.add('sel')
 document.querySelectorAll('.sk-grid .sko').forEach(function(s){s.onclick=function(){this.classList.toggle('sel');};});
 document.querySelectorAll('.ftab').forEach(function(t){t.onclick=function(){document.querySelectorAll('.ftab').forEach(function(x){x.classList.remove('on');});t.classList.add('on');state.activeTab=t.getAttribute('data-tab');renderFeed();};});
 document.querySelectorAll('.fc').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fc').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.activeFilter=b.getAttribute('data-cat');saveFiltersToStorage();renderFeed();updateCatAlertBtn();};});
-// في الكمبيوتر: عجلة الماوس فوق صف الفلاتر تمرره أفقياً (بدون لمس ما يوجد طريقة أخرى للوصول لبقية الشرائح)
-document.querySelectorAll('.filters-row').forEach(function(row){
-  row.addEventListener('wheel',function(e){
-    if(row.scrollWidth<=row.clientWidth)return; // ما فيه فائض للتمرير
-    if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){ e.preventDefault(); row.scrollLeft-=e.deltaY; }
-  },{passive:false});
-});
 document.getElementById('filterCity').onchange=function(){state.activeCity=this.value;saveFiltersToStorage();renderFeed();};
 document.getElementById('filterTime').onchange=function(){state.activeTime=this.value;saveFiltersToStorage();renderFeed();};
 document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});si.classList.add('on');var cat=si.getAttribute('data-cat');state.activeFilter=cat;saveFiltersToStorage();document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')===cat);});renderFeed();updateCatAlertBtn();};});
