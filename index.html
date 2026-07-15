@@ -134,6 +134,13 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .ftab:hover{color:var(--t2)}
 .ftab.on{color:var(--ac);border-bottom-color:var(--ac)}
 .filters-row{display:flex;gap:5px;flex-wrap:nowrap;margin:0 0 11px;align-items:center;overflow-x:auto;padding:2px 14px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.filters-row::-webkit-scrollbar{display:none}
+@media(min-width:681px){
+  .filters-row{scrollbar-width:thin;scrollbar-color:var(--b) transparent;padding-bottom:4px}
+  .filters-row::-webkit-scrollbar{display:block;height:5px}
+  .filters-row::-webkit-scrollbar-track{background:transparent}
+  .filters-row::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
+  .filters-row::-webkit-scrollbar-thumb:hover{background:var(--t3)}
+}
 .fc{background:var(--s1);border:1px solid var(--b);color:var(--t2);padding:4px 11px;border-radius:20px;font-size:.74rem;cursor:pointer;white-space:nowrap;transition:.15s;font-family:inherit;outline:none}
 .fc:hover{border-color:var(--ac);color:var(--ac)}
 .fc.on{background:var(--ac);border-color:var(--ac);color:#fff}
@@ -3053,6 +3060,13 @@ document.getElementById('typeBoth').onclick=function(){this.classList.add('sel')
 document.querySelectorAll('.sk-grid .sko').forEach(function(s){s.onclick=function(){this.classList.toggle('sel');};});
 document.querySelectorAll('.ftab').forEach(function(t){t.onclick=function(){document.querySelectorAll('.ftab').forEach(function(x){x.classList.remove('on');});t.classList.add('on');state.activeTab=t.getAttribute('data-tab');renderFeed();};});
 document.querySelectorAll('.fc').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fc').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.activeFilter=b.getAttribute('data-cat');saveFiltersToStorage();renderFeed();updateCatAlertBtn();};});
+// في الكمبيوتر: عجلة الماوس فوق صف الفلاتر تمرره أفقياً
+document.querySelectorAll('.filters-row').forEach(function(row){
+  row.addEventListener('wheel',function(e){
+    if(row.scrollWidth<=row.clientWidth)return;
+    if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){ e.preventDefault(); row.scrollLeft-=e.deltaY; }
+  },{passive:false});
+});
 document.getElementById('filterCity').onchange=function(){state.activeCity=this.value;saveFiltersToStorage();renderFeed();};
 document.getElementById('filterTime').onchange=function(){state.activeTime=this.value;saveFiltersToStorage();renderFeed();};
 document.querySelectorAll('.cat-si').forEach(function(si){si.onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});si.classList.add('on');var cat=si.getAttribute('data-cat');state.activeFilter=cat;saveFiltersToStorage();document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')===cat);});renderFeed();updateCatAlertBtn();};});
