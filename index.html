@@ -51,12 +51,13 @@ button:disabled{opacity:.6;cursor:not-allowed}
 
 /* ====== HOME VARS ====== */
 :root{
-  --bg:#0a0f14;--s1:#0f1923;--s2:#1a2332;--b:#1e2d3d;
+  /* الوضع الغامق: عنابي داكن — الخلفية من عائلة العنابي، والذهبي/العنابي هوية ثابتة */
+  --bg:#140609;--s1:#1d0a0f;--s2:#2a1017;--b:#3d1822;
   --ac:#c9a227;--ac2:#7f1d3d;--ac3:#5c1029;
   --glow:rgba(201,162,39,.1);--glow3:rgba(201,162,39,.08);
-  --t:#e8edf3;--t2:#7a8fa6;--t3:#3d5269;
+  --t:#f0e8ea;--t2:#a88b93;--t3:#5f3d47;
   --green:#00d4a0;--orange:#ffaa00;--red:#ff4466;--r:12px;
-  --nav-bg:rgba(10,15,20,.96);
+  --nav-bg:rgba(20,6,9,.96);
 }
 
 /* ===== وضع فاتح ===== */
@@ -383,7 +384,7 @@ window.I18N = {
   ar: {
     appName:'علاقات', requests:'الطلبات', toggleTheme:'تبديل الثيم',
     login:'تسجيل الدخول', register:'إنشاء حساب', newRequest:'+ طلب جديد',
-    menu:'القائمة', chRefHint:'اضغط لفتح الطلب', reqUnit:'طلب', hotTitle:'🔥 الأكثر طلباً', allRegions:'📍 كل المناطق', allTimes:'🕐 كل الأوقات', tWithinDay:'خلال يوم', tLast3Days:'آخر 3 أيام', tLastWeek:'آخر أسبوع', tLastMonth:'آخر شهر', regRiyadh:'الرياض', regMakkah:'مكة المكرمة', regMadinah:'المدينة المنورة', regQassim:'القصيم', regEastern:'الشرقية', regAsir:'عسير', regTabuk:'تبوك', regHail:'حائل', regNBorders:'الحدود الشمالية', regJouf:'الجوف', regJazan:'جازان', regNajran:'نجران', regBaha:'الباحة', home:'🏠 الرئيسية', logout:'🚪 تسجيل الخروج', notifications:'🔔 الإشعارات',
+    menu:'القائمة', reviewsSecTitle:'⭐ التقييمات', revAbout:'بخصوص:', chRefHint:'اضغط لفتح الطلب', reqUnit:'طلب', hotTitle:'🔥 الأكثر طلباً', allRegions:'📍 كل المناطق', allTimes:'🕐 كل الأوقات', tWithinDay:'خلال يوم', tLast3Days:'آخر 3 أيام', tLastWeek:'آخر أسبوع', tLastMonth:'آخر شهر', regRiyadh:'الرياض', regMakkah:'مكة المكرمة', regMadinah:'المدينة المنورة', regQassim:'القصيم', regEastern:'الشرقية', regAsir:'عسير', regTabuk:'تبوك', regHail:'حائل', regNBorders:'الحدود الشمالية', regJouf:'الجوف', regJazan:'جازان', regNajran:'نجران', regBaha:'الباحة', home:'🏠 الرئيسية', logout:'🚪 تسجيل الخروج', notifications:'🔔 الإشعارات',
     myMessages:'💬 رسائلي', saved:'⭐ المحفوظات', categories:'الفئات',
     catProgramming:'💻 برمجة', catDesign:'🎨 تصميم', catMaintenance:'🔧 صيانة عامة', catMarketing:'📱 تسويق',
     catConsulting:'⚖️ استشارات', catTeaching:'📚 تعليم', catConstruction:'🏗️ مقاولات', catHome:'🏠 منزلية', catHealth:'💆 صحة وجمال', catCars:'🚙 سيارات', catEvents:'🎉 مناسبات وتنظيم', catEventsShort:'🎉 مناسبات', catOther:'✨ خدمات أخرى',
@@ -456,7 +457,7 @@ window.I18N = {
   en: {
     appName:'Alagat', requests:'Requests', toggleTheme:'Toggle theme',
     login:'Log In', register:'Sign Up', newRequest:'+ New Request',
-    menu:'Menu', chRefHint:'Tap to open the request', reqUnit:'requests', hotTitle:'🔥 Most Requested', allRegions:'📍 All Regions', allTimes:'🕐 All Times', tWithinDay:'Past day', tLast3Days:'Last 3 days', tLastWeek:'Last week', tLastMonth:'Last month', regRiyadh:'Riyadh', regMakkah:'Makkah', regMadinah:'Madinah', regQassim:'Qassim', regEastern:'Eastern', regAsir:'Asir', regTabuk:'Tabuk', regHail:'Hail', regNBorders:'N. Borders', regJouf:'Jouf', regJazan:'Jazan', regNajran:'Najran', regBaha:'Baha', home:'🏠 Home', logout:'🚪 Log Out', notifications:'🔔 Notifications',
+    menu:'Menu', reviewsSecTitle:'⭐ Reviews', revAbout:'About:', chRefHint:'Tap to open the request', reqUnit:'requests', hotTitle:'🔥 Most Requested', allRegions:'📍 All Regions', allTimes:'🕐 All Times', tWithinDay:'Past day', tLast3Days:'Last 3 days', tLastWeek:'Last week', tLastMonth:'Last month', regRiyadh:'Riyadh', regMakkah:'Makkah', regMadinah:'Madinah', regQassim:'Qassim', regEastern:'Eastern', regAsir:'Asir', regTabuk:'Tabuk', regHail:'Hail', regNBorders:'N. Borders', regJouf:'Jouf', regJazan:'Jazan', regNajran:'Najran', regBaha:'Baha', home:'🏠 Home', logout:'🚪 Log Out', notifications:'🔔 Notifications',
     myMessages:'💬 My Messages', saved:'⭐ Saved', categories:'Categories',
     catProgramming:'💻 Programming', catDesign:'🎨 Design', catMaintenance:'🔧 General Maintenance', catMarketing:'📱 Marketing',
     catConsulting:'⚖️ Consulting', catTeaching:'📚 Teaching', catConstruction:'🏗️ Contracting', catHome:'🏠 Home Services', catHealth:'💆 Health & Beauty', catCars:'🚙 Cars', catEvents:'🎉 Events & Planning', catEventsShort:'🎉 Events', catOther:'✨ Other Services',
@@ -952,14 +953,18 @@ function logErrorToServer(message, stack){
   </div>
   <div class="profile-name"> <span class="p-verified">✓</span></div>
   <div class="profile-handle" id="profileHandle">@—</div>
-  <div class="profile-lastseen">آخر ظهور قبل ٢٢ دقيقة</div>
+  <div class="profile-lastseen">—</div>
   <div class="meta-row">
-    <div class="meta-item"><div class="meta-val" id="profileRating">0.0 ⭐</div><div class="meta-lbl" data-i18n="ratingLbl">تقييم</div></div>
+    <div class="meta-item"><div class="meta-val" id="profileRating">— ⭐</div><div class="meta-lbl" data-i18n="ratingLbl">تقييم</div></div>
   </div>
   <!-- زر متابعة -->
   <button id="followBtn" onclick="window.toggleFollow()" style="display:none;margin:0 auto 14px;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:22px;padding:8px 28px;font-family:inherit;font-size:.84rem;font-weight:600;cursor:pointer;transition:.2s" data-i18n="followAction">+ متابعة</button>
-  <div class="joined"><div class="joined-icon">📅</div><div class="joined-txt" data-i18n="joinedLbl">انضم</div><div class="joined-val">قبل سنة</div></div>
+  <div class="joined"><div class="joined-icon">📅</div><div class="joined-txt" data-i18n="joinedLbl">انضم</div><div class="joined-val">—</div></div>
   <button class="chat-btn" onclick="openPModal('chatModal')" data-i18n="chatAction">💬 محادثة</button>
+</div>
+<div id="pReviewsSec" style="display:none;padding:0 14px 8px">
+  <div style="font-size:.88rem;font-weight:800;margin:4px 2px 10px" data-i18n="reviewsSecTitle">⭐ التقييمات</div>
+  <div id="pReviewsList"></div>
 </div>
 <div class="p-tabs">
   <div class="ptab on" onclick="switchPTab(this,'offers')" data-i18n="offersTabP">العروض</div>
@@ -3513,7 +3518,49 @@ window.switchPTab = function(el,id){
   document.getElementById('p-requests').style.display=id==='requests'?'':'none';
 };
 
+// ====== بطاقات التقييمات في الملف الشخصي ======
+async function loadProfileReviews(userId){
+  var sec=document.getElementById('pReviewsSec'), list=document.getElementById('pReviewsList');
+  if(!sec||!list) return;
+  sec.style.display='none'; list.innerHTML='';
+  try{
+    var {data:revs,error}=await sb.from('reviews')
+      .select('rating,comment,created_at,reviewer_id,request_id')
+      .eq('provider_id',userId).order('created_at',{ascending:false}).limit(20);
+    if(error||!revs||!revs.length) return;
+    var rids=[]; var qids=[];
+    revs.forEach(function(r){ if(r.reviewer_id&&rids.indexOf(r.reviewer_id)<0)rids.push(r.reviewer_id); if(r.request_id&&qids.indexOf(r.request_id)<0)qids.push(r.request_id); });
+    var profs={}, reqs={};
+    if(rids.length){ var pr=await sb.from('profiles').select('id,full_name,avatar_color,avatar_letter').in('id',rids); (pr.data||[]).forEach(function(p){profs[p.id]=p;}); }
+    if(qids.length){ var rq=await sb.from('requests').select('id,title').in('id',qids); (rq.data||[]).forEach(function(r){reqs[r.id]=r;}); }
+    var html='';
+    revs.forEach(function(r){
+      var p=profs[r.reviewer_id]||{};
+      var nm=p.full_name||'مستخدم';
+      var grad=p.avatar_color||'linear-gradient(135deg,#7f1d3d,#c9a227)';
+      var letter=p.avatar_letter||nm.charAt(0);
+      var stars='<span style="color:var(--ac);letter-spacing:1px">'+'★'.repeat(r.rating)+'</span><span style="color:var(--t3);letter-spacing:1px">'+'☆'.repeat(Math.max(0,5-r.rating))+'</span>';
+      var reqLine='';
+      if(r.request_id&&reqs[r.request_id]){
+        reqLine='<div onclick="openDetailById('+r.request_id+')" style="margin-top:8px;font-size:.75rem;color:var(--ac);cursor:pointer">📋 '+t('revAbout')+' '+escH(reqs[r.request_id].title||'')+'</div>';
+      }
+      html+='<div style="background:var(--s1);border:1px solid var(--b);border-radius:12px;padding:12px 14px;margin-bottom:10px">'
+        +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'
+        +'<div style="font-size:.9rem">'+stars+'</div>'
+        +'<div style="font-size:.72rem;color:var(--t3)">'+timeAgo(r.created_at)+'</div></div>'
+        +(r.comment?'<div style="font-size:.82rem;color:var(--t);line-height:1.7;margin-bottom:8px">'+escH(r.comment)+'</div>':'')
+        +'<div onclick="openUserProfile(\''+escJ(r.reviewer_id)+'\')" style="display:flex;align-items:center;gap:8px;cursor:pointer">'
+        +'<div style="width:26px;height:26px;border-radius:50%;background:'+grad+';display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700">'+escH(letter)+'</div>'
+        +'<div style="font-size:.78rem;color:var(--t2);font-weight:600">'+escH(nm)+'</div></div>'
+        +reqLine+'</div>';
+    });
+    list.innerHTML=html;
+    sec.style.display='';
+  }catch(e){ console.error('loadProfileReviews:', e); }
+}
+
 async function loadProfileData(userId){
+  loadProfileReviews(userId);
   // طلبات المستخدم
   var r1 = await sb.from('requests').select('*').eq('user_id',userId).order('created_at',{ascending:false}).limit(20);
   var reqs = r1.data||[];
@@ -3555,16 +3602,20 @@ window.openRatingModalChecked = async function(){
     hToast('جاري التحقق من وجود تعامل سابق...');
     // الحالة 1: المستخدم الحالي صاحب طلب، والشخص المُقيَّم مزوّد قُبل عرضه على أحد طلباته
     var case1 = await sb.from('offers')
-      .select('id, request:requests(user_id)')
+      .select('id, request_id, request:requests(user_id)')
       .eq('provider_id', profileChatReceiverId)
       .eq('status', 'accepted');
     var hasDeal1 = (case1.data||[]).some(function(o){ return o.request && o.request.user_id === user.id; });
     // الحالة 2: المستخدم الحالي مزوّد، والشخص المُقيَّم صاحب طلب قَبِل عرض المستخدم الحالي
     var case2 = await sb.from('offers')
-      .select('id, request:requests(user_id)')
+      .select('id, request_id, request:requests(user_id)')
       .eq('provider_id', user.id)
       .eq('status', 'accepted');
     var hasDeal2 = (case2.data||[]).some(function(o){ return o.request && o.request.user_id === profileChatReceiverId; });
+    // التقاط طلب التعامل لربط التقييم به
+    var dealReqId=null;
+    (case1.data||[]).forEach(function(o){ if(!dealReqId && o.request && o.request.user_id===user.id) dealReqId=o.request_id; });
+    if(!dealReqId)(case2.data||[]).forEach(function(o){ if(!dealReqId && o.request && o.request.user_id===profileChatReceiverId) dealReqId=o.request_id; });
 
     if(!hasDeal1 && !hasDeal2){
       hToast('⚠️ يمكنك التقييم فقط بعد إتمام صفقة فعلية مع هذا المستخدم');
@@ -3688,12 +3739,20 @@ window.submitRating=async function(){
   if(!profileChatReceiverId){hToast('⚠️ لا يمكن التقييم');return;}
   var comment=document.getElementById('ratingComment')?document.getElementById('ratingComment').value.trim():'';
   try{
-    var {error}=await sb.from('reviews').insert({
+    var insRow={
       reviewer_id:user.id,
       provider_id:profileChatReceiverId,
       rating:parseInt(currentRating),
       comment:comment||null
-    });
+    };
+    if(typeof dealReqId!=='undefined' && dealReqId) insRow.request_id=dealReqId;
+    var {error}=await sb.from('reviews').insert(insRow);
+    // احتياط: لو عمود الربط غير موجود في القاعدة بعد، نعيد الإدخال بدونه
+    if(error && error.message && error.message.indexOf('request_id')>-1){
+      delete insRow.request_id;
+      var retry=await sb.from('reviews').insert(insRow);
+      error=retry.error;
+    }
     if(error){
       console.error('submitRating insert error:', error);
       logErrorToServer('submitRating: ' + error.message, null);
