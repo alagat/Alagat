@@ -2641,10 +2641,11 @@ function doLoginUI(){
       if(metaVals[2]) metaVals[2].textContent=p.followers_count||0;
     });
   });
-  renderFeed();
-  loadNotifications();
-  startNotifRealtime();
-  updateMsgsBadge();
+  // كل خطوة معزولة: فشل واحدة لا يمنع البقية، وأي فشل يُسجل باسمه في error_logs
+  [['renderFeed',renderFeed],['loadNotifications',loadNotifications],['startNotifRealtime',startNotifRealtime],['updateMsgsBadge',updateMsgsBadge]].forEach(function(step){
+    try{ var r=step[1](); if(r&&r.catch) r.catch(function(e){ logErrorToServer('init:'+step[0]+': '+(e&&e.message), e&&e.stack); }); }
+    catch(e){ console.error('init:'+step[0], e); logErrorToServer('init:'+step[0]+': '+(e&&e.message), e&&e.stack); }
+  });
   hToast('👋 أهلاً بك في علاقات!');
 }
 function doLogin(){doLoginUI();}
@@ -4482,13 +4483,20 @@ window.switchNTab=function(el,tab){
 };
 
 function updateNotifBadge(){
-  var count=NOTIFS_DATA.filter(function(n){return !n.is_read;}).length;
-  // sidebar badge
-  var badge=document.querySelector('#si-notif .si-b');
-  if(badge){badge.textContent=count||'';badge.style.display=count?'':'none';}
-  // bottom nav badge
-  var nb=document.getElementById('notifsBadge');
-  if(nb){nb.textContent=count>9?'9+':count||'';nb.style.display=count?'inline-block':'none';}
+  try{
+    var count=(NOTIFS_DATA||[]).filter(function(n){return !n.is_read;}).length;
+    // شارة القائمة الجانبية — تُعاد صناعتها لو فُقدت لأي سبب (ترجمة/إعادة بناء)
+    var host=document.getElementById('si-notif');
+    if(host){
+      var badge=host.querySelector('.si-b');
+      if(!badge){ badge=document.createElement('span'); badge.className='si-b'; host.appendChild(badge); }
+      badge.textContent=count||'';
+      badge.style.display=count?'inline-block':'none';
+    }
+    // شارة الشريط السفلي
+    var nb=document.getElementById('notifsBadge');
+    if(nb){nb.textContent=count>9?'9+':count||'';nb.style.display=count?'inline-block':'none';}
+  }catch(e){ console.error('updateNotifBadge:', e); logErrorToServer('updateNotifBadge: '+(e&&e.message), e&&e.stack); }
 }
 
 async function updateMsgsBadge(){
