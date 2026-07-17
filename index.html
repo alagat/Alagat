@@ -383,7 +383,7 @@ window.I18N = {
   ar: {
     appName:'علاقات', requests:'الطلبات', toggleTheme:'تبديل الثيم',
     login:'تسجيل الدخول', register:'إنشاء حساب', newRequest:'+ طلب جديد',
-    menu:'القائمة', reqUnit:'طلب', hotTitle:'🔥 الأكثر طلباً', allRegions:'📍 كل المناطق', allTimes:'🕐 كل الأوقات', tWithinDay:'خلال يوم', tLast3Days:'آخر 3 أيام', tLastWeek:'آخر أسبوع', tLastMonth:'آخر شهر', regRiyadh:'الرياض', regMakkah:'مكة المكرمة', regMadinah:'المدينة المنورة', regQassim:'القصيم', regEastern:'الشرقية', regAsir:'عسير', regTabuk:'تبوك', regHail:'حائل', regNBorders:'الحدود الشمالية', regJouf:'الجوف', regJazan:'جازان', regNajran:'نجران', regBaha:'الباحة', home:'🏠 الرئيسية', logout:'🚪 تسجيل الخروج', notifications:'🔔 الإشعارات',
+    menu:'القائمة', chRefHint:'اضغط لفتح الطلب', reqUnit:'طلب', hotTitle:'🔥 الأكثر طلباً', allRegions:'📍 كل المناطق', allTimes:'🕐 كل الأوقات', tWithinDay:'خلال يوم', tLast3Days:'آخر 3 أيام', tLastWeek:'آخر أسبوع', tLastMonth:'آخر شهر', regRiyadh:'الرياض', regMakkah:'مكة المكرمة', regMadinah:'المدينة المنورة', regQassim:'القصيم', regEastern:'الشرقية', regAsir:'عسير', regTabuk:'تبوك', regHail:'حائل', regNBorders:'الحدود الشمالية', regJouf:'الجوف', regJazan:'جازان', regNajran:'نجران', regBaha:'الباحة', home:'🏠 الرئيسية', logout:'🚪 تسجيل الخروج', notifications:'🔔 الإشعارات',
     myMessages:'💬 رسائلي', saved:'⭐ المحفوظات', categories:'الفئات',
     catProgramming:'💻 برمجة', catDesign:'🎨 تصميم', catMaintenance:'🔧 صيانة عامة', catMarketing:'📱 تسويق',
     catConsulting:'⚖️ استشارات', catTeaching:'📚 تعليم', catConstruction:'🏗️ مقاولات', catHome:'🏠 منزلية', catHealth:'💆 صحة وجمال', catCars:'🚙 سيارات', catEvents:'🎉 مناسبات وتنظيم', catEventsShort:'🎉 مناسبات', catOther:'✨ خدمات أخرى',
@@ -456,7 +456,7 @@ window.I18N = {
   en: {
     appName:'Alagat', requests:'Requests', toggleTheme:'Toggle theme',
     login:'Log In', register:'Sign Up', newRequest:'+ New Request',
-    menu:'Menu', reqUnit:'requests', hotTitle:'🔥 Most Requested', allRegions:'📍 All Regions', allTimes:'🕐 All Times', tWithinDay:'Past day', tLast3Days:'Last 3 days', tLastWeek:'Last week', tLastMonth:'Last month', regRiyadh:'Riyadh', regMakkah:'Makkah', regMadinah:'Madinah', regQassim:'Qassim', regEastern:'Eastern', regAsir:'Asir', regTabuk:'Tabuk', regHail:'Hail', regNBorders:'N. Borders', regJouf:'Jouf', regJazan:'Jazan', regNajran:'Najran', regBaha:'Baha', home:'🏠 Home', logout:'🚪 Log Out', notifications:'🔔 Notifications',
+    menu:'Menu', chRefHint:'Tap to open the request', reqUnit:'requests', hotTitle:'🔥 Most Requested', allRegions:'📍 All Regions', allTimes:'🕐 All Times', tWithinDay:'Past day', tLast3Days:'Last 3 days', tLastWeek:'Last week', tLastMonth:'Last month', regRiyadh:'Riyadh', regMakkah:'Makkah', regMadinah:'Madinah', regQassim:'Qassim', regEastern:'Eastern', regAsir:'Asir', regTabuk:'Tabuk', regHail:'Hail', regNBorders:'N. Borders', regJouf:'Jouf', regJazan:'Jazan', regNajran:'Najran', regBaha:'Baha', home:'🏠 Home', logout:'🚪 Log Out', notifications:'🔔 Notifications',
     myMessages:'💬 My Messages', saved:'⭐ Saved', categories:'Categories',
     catProgramming:'💻 Programming', catDesign:'🎨 Design', catMaintenance:'🔧 General Maintenance', catMarketing:'📱 Marketing',
     catConsulting:'⚖️ Consulting', catTeaching:'📚 Teaching', catConstruction:'🏗️ Contracting', catHome:'🏠 Home Services', catHealth:'💆 Health & Beauty', catCars:'🚙 Cars', catEvents:'🎉 Events & Planning', catEventsShort:'🎉 Events', catOther:'✨ Other Services',
@@ -4122,15 +4122,24 @@ function renderConvList(list, myId){
 function escJ(s){ return String(s).replace(/['"\\/]/g,''); }
 function escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-window.openChatWith = async function(uid, name, grad, letter){
+window.openChatWith = async function(uid, name, grad, letter, reqCtx){
   stopChatListener();
   currentReceiverId = uid;
   var avEl=document.getElementById('chAv');
   avEl.style.background=grad; avEl.innerHTML=letter+'<div class="ch-av-dot"></div>';
   document.getElementById('chName').textContent=name;
   document.getElementById('chStat').textContent='';
-  document.getElementById('chRefT').textContent='';
-  document.getElementById('chRefS').textContent='';
+  // شريط مرجع الطلب: يظهر فقط لما تُفتح المحادثة بسياق طلب معين، والنقر عليه يفتح صفحة الطلب
+  var chRef=document.getElementById('chRef');
+  if(reqCtx && reqCtx.reqId){
+    document.getElementById('chRefT').textContent='📋 '+(reqCtx.reqTitle||'');
+    document.getElementById('chRefS').textContent=' — '+t('chRefHint');
+    if(chRef){ chRef.style.display=''; chRef.style.cursor='pointer'; chRef.onclick=function(){ openDetailById(reqCtx.reqId); }; }
+  } else {
+    document.getElementById('chRefT').textContent='';
+    document.getElementById('chRefS').textContent='';
+    if(chRef){ chRef.style.display='none'; chRef.onclick=null; }
+  }
   document.getElementById('convList').style.display='none';
   document.getElementById('chatView').style.display='block';
   document.getElementById('mNavTitle').textContent=name;
@@ -4408,10 +4417,22 @@ window.readNotif=async function(id){
       // related_id هنا هو معرّف الطلب نفسه
       await openDetailById(n.related_id);
     } else if(n.type==='offer_accepted' && n.related_id){
-      // related_id هنا هو معرّف العرض — نحتاج جلب الطلب المرتبط به أولاً
+      // قبول العرض: نفتح المحادثة مع صاحب الطلب مباشرة، ومرجع الطلب في ترويستها
       var {data:offerRow} = await sb.from('offers').select('request_id').eq('id', n.related_id).single();
       if(offerRow && offerRow.request_id){
-        await openDetailById(offerRow.request_id);
+        try{
+          var {data:reqRow} = await sb.from('requests').select('user_id,title').eq('id', offerRow.request_id).single();
+          if(reqRow && reqRow.user_id){
+            var {data:ownerP} = await sb.from('profiles').select('full_name,avatar_color,avatar_letter').eq('id', reqRow.user_id).single();
+            var oName = ownerP ? (ownerP.full_name||'') : '';
+            var oGrad = ownerP ? (ownerP.avatar_color||'linear-gradient(135deg,#7f1d3d,#c9a227)') : 'linear-gradient(135deg,#7f1d3d,#c9a227)';
+            var oLetter = ownerP ? (ownerP.avatar_letter||(oName?oName[0]:'م')) : 'م';
+            goMessages();
+            await window.openChatWith(reqRow.user_id, oName, oGrad, oLetter, {reqId: offerRow.request_id, reqTitle: reqRow.title||''});
+            return;
+          }
+        }catch(e2){ console.error('offer_accepted chat open failed:', e2); logErrorToServer('offerAcceptedChat: '+(e2&&e2.message), e2&&e2.stack); }
+        await openDetailById(offerRow.request_id); // احتياط لو تعذر فتح المحادثة
       }
     } else if(n.type==='msgs'){
       if(n.related_id){
