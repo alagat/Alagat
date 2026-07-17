@@ -356,6 +356,17 @@ textarea.fi{resize:vertical;min-height:68px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// خطة بديلة: لو فشل jsdelivr نحمّل من unpkg بشكل متزامن قبل إكمال الصفحة
+if(!window.supabase){ document.write('<scr'+'ipt src="https://unpkg.com/@supabase/supabase-js@2"><\/scr'+'ipt>'); }
+</script>
+<script>
+// لو فشل المصدران: رسالة واضحة للزائر بدل موقع ميت بصمت
+if(!window.supabase){
+  document.addEventListener('DOMContentLoaded',function(){
+    document.body.innerHTML='<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:inherit;text-align:center;padding:20px"><div style="font-size:2rem">⚠️</div><div style="font-size:1rem;font-weight:700">تعذر الاتصال بالخدمة</div><div style="font-size:.85rem;color:#7a8fa6">تحقق من اتصالك بالإنترنت ثم أعد المحاولة</div><button onclick="location.reload()" style="background:linear-gradient(135deg,#c9a227,#7f1d3d);color:#fff;border:none;border-radius:10px;padding:10px 22px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit">إعادة المحاولة</button></div>';
+  });
+  throw new Error('supabase-js failed to load from both CDNs');
+}
 const SUPA_URL = 'https://ohkgmzwpzijxcttqytrq.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oa2dtendwemlqeGN0dHF5dHJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNzA1ODgsImV4cCI6MjA5Njc0NjU4OH0.Qx2paUh-d7LTTHFSljt7cnoenOdzOdcno9PGobtRb_g';
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
@@ -875,12 +886,12 @@ function logErrorToServer(message, stack){
       <div style="text-align:center;margin-bottom:12px;font-size:.8rem;color:var(--t2);font-style:italic">قال الله تعالى: " وَأَوْفُوا بِعَهْدِ اللَّهِ إِذَا عَاهَدتُّمْ وَلَا تَنقُضُوا الْأَيْمَانَ بَعْدَ تَوْكِيدِهَا وَقَدْ جَعَلْتُمُ اللَّهَ عَلَيْكُمْ كَفِيلًا "</div>
       <div style="height:1px;background:var(--b);margin:10px 0"></div>
       <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--ac);margin-top:5px;flex-shrink:0"></div>
-        <span data-i18n="feesPledge1Pre">بصفتي طالب الخدمة، اتعهد امام الله بسداد رسوم استخدام منصة علاقات، والمقدّرة بنسبة</span> <b style="color:var(--ac2)">1%</b> <span data-i18n="feesPledge1Post">من إجمالي المبلغ المتفَق عليه، سواء تم التوافق عبر المنصة أو نتيجة له.</span>
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--ac);margin-top:9px;flex-shrink:0"></div>
+        <div style="flex:1"><span data-i18n="feesPledge1Pre">بصفتي طالب الخدمة، اتعهد امام الله بسداد رسوم استخدام منصة علاقات، والمقدّرة بنسبة</span> <b style="color:var(--ac2)">1%</b> <span data-i18n="feesPledge1Post">من إجمالي المبلغ المتفَق عليه، سواء تم التوافق عبر المنصة أو نتيجة له.</span></div>
       </div>
       <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:14px">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--ac);margin-top:5px;flex-shrink:0"></div>
-        <span data-i18n="feesPledge2Pre">وألتزم بسداد هذه الرسوم خلال مدة أقصاها</span> <b style="color:var(--ac2)">15 يوماً</b> <span data-i18n="feesPledge2Post">من تاريخ اكتمال الخدمة المطلوبة.</span>
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--ac);margin-top:9px;flex-shrink:0"></div>
+        <div style="flex:1"><span data-i18n="feesPledge2Pre">وألتزم بسداد هذه الرسوم خلال مدة أقصاها</span> <b style="color:var(--ac2)">15 يوماً</b> <span data-i18n="feesPledge2Post">من تاريخ اكتمال الخدمة المطلوبة.</span></div>
       </div>
       <div style="background:rgba(0,212,160,.08);border:1px solid rgba(0,212,160,.2);border-radius:10px;padding:10px 12px">
         <div style="font-size:.8rem;font-weight:700;color:var(--green);margin-bottom:4px" data-i18n="feesNoteTitle">بخصوص الرسوم</div>
@@ -2632,6 +2643,7 @@ function doLoginUI(){
   });
   renderFeed();
   loadNotifications();
+  startNotifRealtime();
   updateMsgsBadge();
   hToast('👋 أهلاً بك في علاقات!');
 }
@@ -4302,6 +4314,26 @@ document.getElementById('si-msgs').onclick=function(){ if(!state.loggedIn){openA
 
 /* ===== NOTIFICATIONS - SUPABASE ===== */
 var currentNTab='all', NOTIFS_DATA=[];
+
+// ====== استقبال الإشعارات لحظياً + مزامنة دورية احتياطية ======
+var notifChannel=null;
+function startNotifRealtime(){
+  sbGetUser().then(function(user){
+    if(!user || notifChannel) return;
+    notifChannel = sb.channel('notifs_'+user.id)
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:'user_id=eq.'+user.id},function(payload){
+        try{
+          var n=payload.new;
+          NOTIFS_DATA.unshift(n);
+          updateNotifBadge();
+          renderNotifs(currentNTab);
+          hToast('🔔 '+(n.title||'إشعار جديد'));
+        }catch(e){ console.error('notif realtime:', e); }
+      }).subscribe();
+    // مزامنة كل دقيقة كاحتياط لو انقطع الاشتراك اللحظي
+    setInterval(function(){ try{ loadNotifications(); }catch(e){} }, 60000);
+  }).catch(function(e){ console.error('startNotifRealtime:', e); });
+}
 
 async function loadNotifications(){
   var user=await sbGetUser();
