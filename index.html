@@ -370,6 +370,11 @@ if(!window.supabase){
 const SUPA_URL = 'https://ohkgmzwpzijxcttqytrq.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oa2dtendwemlqeGN0dHF5dHJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNzA1ODgsImV4cCI6MjA5Njc0NjU4OH0.Qx2paUh-d7LTTHFSljt7cnoenOdzOdcno9PGobtRb_g';
 const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+// معرّفة هنا مبكراً (وليس في المقاطع اللاحقة) حتى تكون جاهزة قبل أي تهيئة — إصلاح سباق "sbGetUser is not defined"
+async function sbGetUser() {
+  const { data: { user } } = await sb.auth.getUser();
+  return user;
+}
 </script>
 
 <script>
@@ -4615,10 +4620,6 @@ async function sbLogin(email, password) {
   return { data, error };
 }
 
-async function sbGetUser() {
-  const { data: { user } } = await sb.auth.getUser();
-  return user;
-}
 
 // =====================
 // REQUESTS — الطلبات
