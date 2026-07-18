@@ -4268,7 +4268,18 @@ window.openChatWith = async function(uid, name, grad, letter, reqCtx){
       }
       body.appendChild(d);
     });
-    body.scrollTop=body.scrollHeight;
+    // تمرير لآخر المحادثة — scrollIntoView يعمل سواء كان المسكرول هو الحاوية أو الصفحة كاملة
+    function chScrollBottom(){
+      body.scrollTop = body.scrollHeight;
+      var last = body.lastElementChild;
+      if(last && last.scrollIntoView) last.scrollIntoView({block:'end'});
+    }
+    chScrollBottom();
+    requestAnimationFrame(chScrollBottom);
+    setTimeout(chScrollBottom, 150);
+    body.querySelectorAll('img').forEach(function(im){
+      if(!im.complete){ im.addEventListener('load', chScrollBottom); im.addEventListener('error', chScrollBottom); }
+    });
     var {error:readErr} = await sb.from('messages').update({is_read:true}).eq('sender_id',uid).eq('receiver_id',user.id);
     if(readErr){ console.error('openChatWith mark-read error:', readErr); logErrorToServer('openChatWith mark-read: ' + readErr.message, null); }
 
@@ -4296,6 +4307,7 @@ window.openChatWith = async function(uid, name, grad, letter, reqCtx){
           }
           bodyEl.appendChild(d);
           bodyEl.scrollTop = bodyEl.scrollHeight;
+          if(bodyEl.lastElementChild) bodyEl.lastElementChild.scrollIntoView({block:'end'});
           // تعليم الرسالة كمقروءة فوراً بما إن المحادثة مفتوحة حالياً
           sb.from('messages').update({is_read:true}).eq('id', m.id).then(function(res){
             if(res && res.error){ logErrorToServer('realtime mark-read: ' + res.error.message, null); }
@@ -4352,7 +4364,7 @@ window.handleChatFileSelect = async function(input){
     } else {
       d.innerHTML='<div class="bbl-txt"><a href="'+fileUrl+'" target="_blank" style="color:inherit;text-decoration:none;display:flex;align-items:center;gap:8px"><span style="font-size:1.4rem">📄</span><span style="font-size:.82rem;word-break:break-all">'+escH(file.name)+'</span></a></div><div class="bbl-meta">'+time+' <span style="color:#e0b83a">✓</span></div>';
     }
-    body.appendChild(d); body.scrollTop=body.scrollHeight;
+    body.appendChild(d); body.scrollTop=body.scrollHeight; if(body.lastElementChild) body.lastElementChild.scrollIntoView({block:'end'});
     hToast('✓ تم إرسال الملف');
     input.value='';
 
@@ -4381,7 +4393,7 @@ window.sendChatMsg = async function(){
     var now=new Date(); var time=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
     var d=document.createElement('div'); d.className='bbl me';
     d.innerHTML='<div class="bbl-txt">'+escH(txt)+'</div><div class="bbl-meta">'+time+' <span style="color:#e0b83a">✓</span></div>';
-    body.appendChild(d); body.scrollTop=body.scrollHeight;
+    body.appendChild(d); body.scrollTop=body.scrollHeight; if(body.lastElementChild) body.lastElementChild.scrollIntoView({block:'end'});
     var {error:notifErr6} = await sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص رسالة جديدة',is_read:false,related_id:user.id});
     if(notifErr6){ console.error('sendChatMsg notification error:', notifErr6); logErrorToServer('sendChatMsg notification: ' + notifErr6.message, null); }
   } catch(e){
