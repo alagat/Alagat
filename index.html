@@ -2433,13 +2433,20 @@ window.openDetail=async function(id){
   var curUser = await sbGetUser();
   var isOwnerView = !!(curUser && r.userId && curUser.id === r.userId);
 
-  var {data:offers} = await sb.from('offers')
-    .select('id,offer_text,price,duration,created_at,provider_id,status,provider:profiles!provider_id(full_name,username,avatar_color,rating,deals_count,last_seen)')
-    .eq('request_id', sid)
-    .order('created_at',{ascending:false});
+  // جلب أحدث 100 عرض + العدد الحقيقي الكامل بالتوازي (العدّ head:true لا يجلب صفوفاً)
+  var offersRes = await Promise.all([
+    sb.from('offers')
+      .select('id,offer_text,price,duration,created_at,provider_id,status,provider:profiles!provider_id(full_name,username,avatar_color,rating,deals_count,last_seen)')
+      .eq('request_id', sid)
+      .order('created_at',{ascending:false})
+      .limit(100),
+    sb.from('offers').select('id',{count:'exact',head:true}).eq('request_id', sid)
+  ]);
+  var offers = offersRes[0].data;
+  var realCount = (typeof offersRes[1].count === 'number') ? offersRes[1].count : (offers||[]).length;
 
   var list = offers||[];
-  document.getElementById('offersCount').textContent=list.length+' عرض';
+  document.getElementById('offersCount').textContent=realCount+' عرض';
 
   if(!list.length){
     document.getElementById('offersList').innerHTML='<div style="text-align:center;padding:30px;color:var(--t3);font-size:.9rem">🤝 لا توجد عروض بعد!</div>';
@@ -3117,7 +3124,22 @@ window.goHomeFilteredByCategory = function(cat){
   renderFeed();
   updateCatAlertBtn();
 };
-document.getElementById('si-saved').onclick=function(){if(!state.loggedIn){openAuth('login');return;}document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');if(!state.saved.length){hToast(t('noSavedYet'));return;}var savedList=reqs.filter(function(r){return state.saved.indexOf(r.id)>-1;});var html='';savedList.forEach(function(r){html+=makeCard(r);});html+='<div style="margin:10px 14px"><button class="btn-g" style="width:100%;padding:9px;border-radius:9px" id="backToFeed">'+t('backToFeed')+'</button></div>';document.getElementById('feedContent').innerHTML='<div id="cardsContainer">'+html+'</div>';bindCardEvents();document.getElementById('backToFeed').onclick=renderFeed;};
+document.getElementById('si-saved').onclick=async function(){if(!state.loggedIn){openAuth('login');return;}document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');if(!state.saved.length){hToast(t('noSavedYet'));return;}
+  // جلب المحفوظات من القاعدة مباشرة — فلترة الفيد المحمّل كانت تُخفي أي محفوظ خارج الصفحة الحالية
+  try{
+    var savedRes = await sb.from('requests')
+      .select('*, profiles(full_name,username,avatar_color,avatar_letter)')
+      .in('id', state.saved)
+      .order('created_at',{ascending:false})
+      .limit(100);
+    if(savedRes.error) throw savedRes.error;
+    var savedList=(savedRes.data||[]).map(mapRequestRow);
+    var html='';savedList.forEach(function(r){html+=makeCard(r);});
+    if(!savedList.length){html='<div style="text-align:center;padding:30px;color:var(--t3);font-size:.9rem">'+t('noSavedYet')+'</div>';}
+    html+='<div style="margin:10px 14px"><button class="btn-g" style="width:100%;padding:9px;border-radius:9px" id="backToFeed">'+t('backToFeed')+'</button></div>';
+    document.getElementById('feedContent').innerHTML='<div id="cardsContainer">'+html+'</div>';bindCardEvents();document.getElementById('backToFeed').onclick=renderFeed;
+  }catch(e){console.error('saved list load error:',e);logErrorToServer('savedList: '+(e&&e.message||e),null);hToast('⚠️ تعذر تحميل المحفوظات');}
+};
 var reqMediaFiles = []; // الملفات المختارة لإرفاقها بالطلب الجديد
 var REQ_MEDIA_MAX = 10;
 
@@ -3601,21 +3623,26 @@ window.openRatingModalChecked = async function(){
   try{
     hToast('جاري التحقق من وجود تعامل سابق...');
     // الحالة 1: المستخدم الحالي صاحب طلب، والشخص المُقيَّم مزوّد قُبل عرضه على أحد طلباته
+    // الفلترة تتم داخل القاعدة عبر inner join — يرجع صف واحد كحد أقصى بدل جلب كل الصفقات
     var case1 = await sb.from('offers')
-      .select('id, request_id, request:requests(user_id)')
+      .select('id, request_id, request:requests!inner(user_id)')
       .eq('provider_id', profileChatReceiverId)
-      .eq('status', 'accepted');
-    var hasDeal1 = (case1.data||[]).some(function(o){ return o.request && o.request.user_id === user.id; });
+      .eq('status', 'accepted')
+      .eq('request.user_id', user.id)
+      .limit(1);
+    var hasDeal1 = !!(case1.data && case1.data.length);
     // الحالة 2: المستخدم الحالي مزوّد، والشخص المُقيَّم صاحب طلب قَبِل عرض المستخدم الحالي
     var case2 = await sb.from('offers')
-      .select('id, request_id, request:requests(user_id)')
+      .select('id, request_id, request:requests!inner(user_id)')
       .eq('provider_id', user.id)
-      .eq('status', 'accepted');
-    var hasDeal2 = (case2.data||[]).some(function(o){ return o.request && o.request.user_id === profileChatReceiverId; });
+      .eq('status', 'accepted')
+      .eq('request.user_id', profileChatReceiverId)
+      .limit(1);
+    var hasDeal2 = !!(case2.data && case2.data.length);
     // التقاط طلب التعامل لربط التقييم به
     var dealReqId=null;
-    (case1.data||[]).forEach(function(o){ if(!dealReqId && o.request && o.request.user_id===user.id) dealReqId=o.request_id; });
-    if(!dealReqId)(case2.data||[]).forEach(function(o){ if(!dealReqId && o.request && o.request.user_id===profileChatReceiverId) dealReqId=o.request_id; });
+    if(hasDeal1) dealReqId = case1.data[0].request_id;
+    if(!dealReqId && hasDeal2) dealReqId = case2.data[0].request_id;
 
     if(!hasDeal1 && !hasDeal2){
       hToast('⚠️ يمكنك التقييم فقط بعد إتمام صفقة فعلية مع هذا المستخدم');
@@ -3763,13 +3790,9 @@ window.submitRating=async function(){
       }
       return;
     }
-    // تحديث متوسط التقييم
-    var {data:reviews}=await sb.from('reviews').select('rating').eq('provider_id',profileChatReceiverId);
-    if(reviews&&reviews.length){
-      var avg=(reviews.reduce(function(s,r){return s+r.rating;},0)/reviews.length).toFixed(1);
-      var {error:avgErr} = await sb.from('profiles').update({rating:parseFloat(avg)}).eq('id',profileChatReceiverId);
-      if(avgErr){ console.error('submitRating avg update error:', avgErr); logErrorToServer('submitRating avg update: ' + avgErr.message, null); }
-    }
+    // تحديث متوسط التقييم داخل القاعدة (RPC تحسب avg وتحدّث profiles.rating بعملية واحدة)
+    var {error:avgErr} = await sb.rpc('update_provider_rating', { p_provider: profileChatReceiverId });
+    if(avgErr){ console.error('submitRating avg update error:', avgErr); logErrorToServer('submitRating avg rpc: ' + avgErr.message, null); }
     closePModal('ratingModal');
     hToast('✓ شكراً! تم إرسال تقييمك ('+currentRating+' نجوم)');
     // إشعار لصاحب التقييم بوجود تعليق/تقييم جديد
@@ -3936,7 +3959,8 @@ async function loadConversations(){
   var {data} = await sb.from('messages')
     .select('*, sender:profiles!sender_id(id,full_name,username,avatar_color), receiver:profiles!receiver_id(id,full_name,username,avatar_color)')
     .or('sender_id.eq.'+user.id+',receiver_id.eq.'+user.id)
-    .order('created_at',{ascending:false});
+    .order('created_at',{ascending:false})
+    .limit(300); // آخر 300 رسالة تكفي لبناء قائمة المحادثات النشطة — منع جلب غير محدود
   if(!data||!data.length){
     document.getElementById('convItems').innerHTML='<div style="text-align:center;padding:40px;color:#9ca3af;font-size:.84rem">💬 لا توجد رسائل بعد</div>';
     return;
@@ -4222,8 +4246,10 @@ window.openChatWith = async function(uid, name, grad, letter, reqCtx){
     var {data, error:fetchErr}=await sb.from('messages')
       .select('*')
       .or('and(sender_id.eq.'+user.id+',receiver_id.eq.'+uid+'),and(sender_id.eq.'+uid+',receiver_id.eq.'+user.id+')')
-      .order('created_at',{ascending:true});
+      .order('created_at',{ascending:false})
+      .limit(50); // آخر 50 رسالة فقط — نفس منطق نافذة الشات الأخرى
     if(fetchErr){ console.error('openChatWith fetch error:', fetchErr); logErrorToServer('openChatWith fetch: ' + fetchErr.message, null); hToast('⚠️ تعذر تحميل المحادثة'); return; }
+    if(data && data.length) data.reverse(); // إعادة الترتيب تصاعدياً للعرض الصحيح
     var body=document.getElementById('chBody');
     body.innerHTML='<div class="day-lbl">المحادثة</div>';
     (data||[]).forEach(function(m){
