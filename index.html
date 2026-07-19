@@ -116,7 +116,8 @@ button:disabled{opacity:.6;cursor:not-allowed}
 /* منع انضغاط عناصر القائمة حتى يعمل التمرير الداخلي، مع شريط رفيع بدل الافتراضي العريض */
 .sidebar>*{flex-shrink:0}
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
-.cat-grid .si{padding:8px 6px;font-size:.78rem;justify-content:center;text-align:center;gap:5px;line-height:1.25}
+.cat-grid .si{padding:7px 4px;font-size:.72rem;justify-content:center;text-align:center;gap:4px;line-height:1.2}
+.cat-grid .cat-all{grid-column:1/-1;font-size:.76rem;font-weight:700}
 .sidebar{scrollbar-width:none}
 .sidebar::-webkit-scrollbar{display:none}
 /* عند فيضان القائمة عن ارتفاع الشاشة (يُقاس بالجافاسكربت) يظهر شريط واضح بدل إخفاء العناصر بصمت */
@@ -144,6 +145,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .feed{flex:1;margin-right:220px;margin-left:270px;padding:14px 16px 80px;min-width:0}
 .mini-bar{display:flex;align-items:center;gap:10px;background:var(--s1);border:1px solid var(--b);border-radius:var(--r);padding:10px 14px;margin:0 14px 12px;cursor:pointer;transition:.2s}
 .mini-bar:hover{border-color:rgba(127,29,61,.4);background:var(--s2)}
+@media(max-width:680px){.mini-bar{display:none !important}}
 .mini-hint{flex:1;font-size:.86rem;color:var(--t3)}
 .mini-btn{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;padding:5px 13px;border-radius:20px;font-size:.76rem;font-weight:700;white-space:nowrap}
 .feed-tabs{display:flex;border-bottom:1px solid var(--b);margin-bottom:11px;padding:0 14px}
@@ -410,7 +412,7 @@ window.I18N = {
     menu:'القائمة', reviewsSecTitle:'⭐ التقييمات', revAbout:'بخصوص:', chRefHint:'اضغط لفتح الطلب', reqUnit:'طلب', hotTitle:'🔥 الأكثر طلباً', allRegions:'📍 كل المناطق', allTimes:'🕐 كل الأوقات', tWithinDay:'خلال يوم', tLast3Days:'آخر 3 أيام', tLastWeek:'آخر أسبوع', tLastMonth:'آخر شهر', regRiyadh:'الرياض', regMakkah:'مكة المكرمة', regMadinah:'المدينة المنورة', regQassim:'القصيم', regEastern:'الشرقية', regAsir:'عسير', regTabuk:'تبوك', regHail:'حائل', regNBorders:'الحدود الشمالية', regJouf:'الجوف', regJazan:'جازان', regNajran:'نجران', regBaha:'الباحة', home:'🏠 الرئيسية', logout:'🚪 تسجيل الخروج', notifications:'🔔 الإشعارات',
     myMessages:'💬 رسائلي', saved:'⭐ المحفوظات', categories:'الفئات',
     catProgramming:'💻 برمجة', catDesign:'🎨 تصميم', catMaintenance:'🔧 صيانة عامة', catMarketing:'📱 تسويق',
-    catOtherShort:'✨ أخرى', catConsulting:'⚖️ استشارات', catTeaching:'📚 تعليم', catConstruction:'🏗️ مقاولات', catHome:'🏠 منزلية', catHealth:'💆 صحة وجمال', catCars:'🚙 سيارات', catEvents:'🎉 مناسبات وتنظيم', catEventsShort:'🎉 مناسبات', catOther:'✨ خدمات أخرى',
+    catOtherShort:'✨ أخرى', catMaintenanceShort:'🔧 صيانة', catHealthShort:'💆 صحة', catConsulting:'⚖️ استشارات', catTeaching:'📚 تعليم', catConstruction:'🏗️ مقاولات', catHome:'🏠 منزلية', catHealth:'💆 صحة وجمال', catCars:'🚙 سيارات', catEvents:'🎉 مناسبات وتنظيم', catEventsShort:'🎉 مناسبات', catOther:'✨ خدمات أخرى',
     postRequest:'نشر طلب', whatDoYouNeed:'ماذا تحتاج؟', latest:'الأحدث', mostViewed:'الأكثر مشاهدة',
     all:'الكل', searchInRequests:'ابحث في الموقع...',
     budget:'الميزانية', duration:'المدة', serviceType:'نوع الخدمة', offer:'عرض',
@@ -483,7 +485,7 @@ window.I18N = {
     menu:'Menu', reviewsSecTitle:'⭐ Reviews', revAbout:'About:', chRefHint:'Tap to open the request', reqUnit:'requests', hotTitle:'🔥 Most Requested', allRegions:'📍 All Regions', allTimes:'🕐 All Times', tWithinDay:'Past day', tLast3Days:'Last 3 days', tLastWeek:'Last week', tLastMonth:'Last month', regRiyadh:'Riyadh', regMakkah:'Makkah', regMadinah:'Madinah', regQassim:'Qassim', regEastern:'Eastern', regAsir:'Asir', regTabuk:'Tabuk', regHail:'Hail', regNBorders:'N. Borders', regJouf:'Jouf', regJazan:'Jazan', regNajran:'Najran', regBaha:'Baha', home:'🏠 Home', logout:'🚪 Log Out', notifications:'🔔 Notifications',
     myMessages:'💬 My Messages', saved:'⭐ Saved', categories:'Categories',
     catProgramming:'💻 Programming', catDesign:'🎨 Design', catMaintenance:'🔧 General Maintenance', catMarketing:'📱 Marketing',
-    catOtherShort:'✨ Other', catConsulting:'⚖️ Consulting', catTeaching:'📚 Teaching', catConstruction:'🏗️ Contracting', catHome:'🏠 Home Services', catHealth:'💆 Health & Beauty', catCars:'🚙 Cars', catEvents:'🎉 Events & Planning', catEventsShort:'🎉 Events', catOther:'✨ Other Services',
+    catOtherShort:'✨ Other', catMaintenanceShort:'🔧 Maintenance', catHealthShort:'💆 Health', catConsulting:'⚖️ Consulting', catTeaching:'📚 Teaching', catConstruction:'🏗️ Contracting', catHome:'🏠 Home Services', catHealth:'💆 Health & Beauty', catCars:'🚙 Cars', catEvents:'🎉 Events & Planning', catEventsShort:'🎉 Events', catOther:'✨ Other Services',
     postRequest:'Post a Request', whatDoYouNeed:'What do you need?', latest:'Latest', mostViewed:'Most Viewed',
     all:'All', searchInRequests:'Search the site...',
     budget:'Budget', duration:'Duration', serviceType:'Service Type', offer:'offers',
@@ -674,17 +676,18 @@ function logErrorToServer(message, stack){
     <div style="border-top:1px solid var(--b);margin:8px 6px 2px"></div>
     <div class="ss" style="margin-top:6px" data-i18n="categories">الفئات</div>
     <div class="cat-grid">
+    <div class="si cat-si cat-all" data-cat="all" data-i18n="all">الكل</div>
     <div class="si cat-si" data-cat="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</div>
     <div class="si cat-si" data-cat="سيارات" data-i18n="catCars">🚙 سيارات</div>
     <div class="si cat-si" data-cat="استشارات" data-i18n="catConsulting">⚖️ استشارات</div>
     <div class="si cat-si" data-cat="تعليم" data-i18n="catTeaching">📚 تعليم</div>
     <div class="si cat-si" data-cat="تصميم" data-i18n="catDesign">🎨 تصميم</div>
     <div class="si cat-si" data-cat="برمجة" data-i18n="catProgramming">💻 برمجة</div>
-    <div class="si cat-si" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</div>
+    <div class="si cat-si" data-cat="صيانة عامة" data-i18n="catMaintenanceShort">🔧 صيانة</div>
     <div class="si cat-si" data-cat="مناسبات" data-i18n="catEventsShort">🎉 مناسبات</div>
     <div class="si cat-si" data-cat="تسويق" data-i18n="catMarketing">📱 تسويق</div>
     <div class="si cat-si" data-cat="منزلية" data-i18n="catHome">🏠 منزلية</div>
-    <div class="si cat-si" data-cat="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</div>
+    <div class="si cat-si" data-cat="صحة وجمال" data-i18n="catHealthShort">💆 صحة</div>
     <div class="si cat-si" data-cat="أخرى" data-i18n="catOtherShort">✨ أخرى</div>
     </div>
   </div>
