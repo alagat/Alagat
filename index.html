@@ -723,6 +723,12 @@ function logErrorToServer(message, stack){
       <span class="result-count" id="resultCount"></span>
       <button id="catAlertBtn" style="display:none;background:var(--s2);border:1px solid var(--b);color:var(--t2);border-radius:20px;padding:5px 12px;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;margin-right:8px;white-space:nowrap" onclick="toggleCategoryAlert()">🔔 نبّهني بهذي الفئة</button>
     </div>
+    <div id="introBanner" style="display:none;margin:10px 12px 4px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,#7f1d3d,#c9a227);color:#fff;position:relative;box-shadow:0 4px 14px rgba(127,29,61,.25)">
+      <button onclick="hideIntroBanner(true)" aria-label="إخفاء" style="position:absolute;top:8px;left:10px;background:rgba(255,255,255,.18);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.9rem;line-height:1">✕</button>
+      <div style="font-weight:800;font-size:1rem;margin-bottom:6px">علاقات موقع الخدمات السعودي</div>
+      <div style="font-size:.85rem;line-height:1.7;opacity:.95">في علاقات اطلب أي خدمة في أي مجال — تعليم، مقاولات، سيارات، تصميم وغيرها — وستصلك أفضل العروض بأفضل الأسعار، بدون تعب.</div>
+      <div style="font-size:.85rem;line-height:1.7;margin-top:4px;font-weight:700">وإن كنت صاحب خبرة: قدّم عرضك وزد دخلك.</div>
+    </div>
     <div id="feedContent"></div>
   </main>
   <aside class="rpanel">
@@ -1565,7 +1571,7 @@ function makeFooter(){
   + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7f1d3d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>'
   + '<span>supportalagat@gmail.com</span></a>'
   + '</div>'
-  + '<div class="ff-bot"><span class="ff-copy">© '+new Date().getFullYear()+' علاقات</span><span class="ff-copy">كل خبرة عندك تساوي فلوس أكثر</span></div>'
+  + '<div class="ff-bot"><span class="ff-copy">© '+new Date().getFullYear()+' علاقات</span><span class="ff-copy">زد دخلك مع علاقات… ابحث عن طلب يناسب خبرتك وقدّم عرضك</span></div>'
   + '<div style="display:flex;justify-content:center;gap:14px;margin-top:20px;padding-top:14px;border-top:1px solid var(--b)"><a href="about.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">من نحن</a><span style="color:var(--t3);font-size:.74rem">·</span><a href="terms.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">شروط الاستخدام</a><span style="color:var(--t3);font-size:.74rem">·</span><a href="privacy.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">سياسة الخصوصية</a></div>'
   + '</div>';
 }
@@ -2623,6 +2629,7 @@ window.togglePwVis=function(fieldId,iconEl){
   else { el.type='password'; iconEl.textContent='👁️'; }
 };
 function doLoginUI(){
+  try{ hideIntroBanner(false); }catch(e){}
   state.loggedIn=true;
   document.getElementById('authModal').classList.remove('open');
   document.getElementById('navGuest').style.display='none';
@@ -3481,6 +3488,18 @@ window.openImagePreview = function(url){
   overlay.onclick = function(e){ if(e.target===overlay) close(); };
   document.getElementById('imgPreviewCloseBtn').onclick = close;
 };
+// ====== شريط التعريف لغير المسجلين ======
+window.showIntroBanner = function(){
+  try{
+    if(localStorage.getItem('alagat-intro-hide')==='1') return;
+    var b=document.getElementById('introBanner'); if(b) b.style.display='block';
+  }catch(e){}
+};
+window.hideIntroBanner = function(save){
+  var b=document.getElementById('introBanner'); if(b) b.style.display='none';
+  if(save){ try{ localStorage.setItem('alagat-intro-hide','1'); }catch(e){} }
+};
+
 // تحقق من الجلسة عند فتح الصفحة - يحافظ على تسجيل الدخول
 sb.auth.getSession().then(function(res){
   loadHotCategories(); // مستقلة عن باقي التهيئة، حتى لو فشل شي تحت ما تتأثر
@@ -3492,6 +3511,7 @@ sb.auth.getSession().then(function(res){
     try{ loadMyCategoryAlerts(); }catch(e){ console.error('loadMyCategoryAlerts failed:', e); }
     try{ loadSavedRequests().then(function(){ renderFeed(); }); }catch(e){ console.error('loadSavedRequests failed:', e); }
   } else {
+    try{ showIntroBanner(); }catch(e){}
     try{ renderFeed(); }catch(e){ console.error('renderFeed failed:', e); }
   }
 });
