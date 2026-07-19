@@ -44,7 +44,7 @@
 html{scroll-behavior:smooth}
 body{font-family:'Segoe UI','Helvetica Neue',Tahoma,Arial,sans-serif;overflow-x:hidden;background:var(--bg);color:var(--t);-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 button,.bn,.si{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
+::-webkit-scrollbar{width:9px}::-webkit-scrollbar-thumb{background:#b8bdc6;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#8e959f}html{scrollbar-width:auto;scrollbar-color:#b8bdc6 transparent}
 .page{display:none;min-height:100vh}
 .page.active{display:block}
 button:disabled{opacity:.6;cursor:not-allowed}
@@ -115,11 +115,13 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .sidebar{width:220px;min-width:220px;position:fixed;top:56px;bottom:0;right:0;padding:14px 10px;border-left:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--bg)}
 /* منع انضغاط عناصر القائمة حتى يعمل التمرير الداخلي، مع شريط رفيع بدل الافتراضي العريض */
 .sidebar>*{flex-shrink:0}
-.sidebar{scrollbar-width:thin;scrollbar-color:var(--b) transparent}
-.sidebar::-webkit-scrollbar{width:5px}
-.sidebar::-webkit-scrollbar-track{background:transparent}
-.sidebar::-webkit-scrollbar-thumb{background:var(--b);border-radius:3px}
-.sidebar::-webkit-scrollbar-thumb:hover{background:var(--t3)}
+.sidebar{scrollbar-width:none}
+.sidebar::-webkit-scrollbar{display:none}
+/* على الشاشات القصيرة: تصغير تباعد العناصر تلقائياً حتى تظهر كل الفئات بدون تمرير */
+@media(max-height:840px){
+  .sidebar .si{padding:6px 11px;font-size:.8rem}
+  .sidebar .ss{padding:7px 10px 3px}
+}
 .ss{font-size:.65rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;padding:11px 10px 4px}
 .si{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;color:var(--t2);cursor:pointer;transition:.15s;font-size:.85rem;font-weight:500;border:1px solid transparent}
 .si:hover{background:var(--s2);color:var(--t)}
@@ -342,7 +344,7 @@ textarea.fi{resize:vertical;min-height:68px}
 
 /* BOTTOM NAV (profile) */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--s1);border-top:1px solid var(--b);display:flex;align-items:center;height:64px;padding:0 8px;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
-@media(min-width:681px){.bottom-nav{justify-content:center;gap:0}.bottom-nav .bn{flex:0 0 110px}.bottom-nav .bn-center{flex:0 0 64px}}
+@media(min-width:681px){.bottom-nav{display:none !important}}
 .bn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:.63rem;font-weight:600;color:#9ca3af;cursor:pointer;padding:6px 4px;border-radius:12px;transition:.15s;border:none;background:none;font-family:inherit;position:relative}
 .bn:hover{color:var(--ac)}
 .bn.on{color:var(--ac)}
@@ -653,14 +655,14 @@ function logErrorToServer(message, stack){
     <div class="si cat-si" data-cat="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</div>
     <div class="si cat-si" data-cat="سيارات" data-i18n="catCars">🚙 سيارات</div>
     <div class="si cat-si" data-cat="استشارات" data-i18n="catConsulting">⚖️ استشارات</div>
-    <div class="si cat-si" data-cat="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</div>
+    <div class="si cat-si" data-cat="تعليم" data-i18n="catTeaching">📚 تعليم</div>
     <div class="si cat-si" data-cat="تصميم" data-i18n="catDesign">🎨 تصميم</div>
     <div class="si cat-si" data-cat="برمجة" data-i18n="catProgramming">💻 برمجة</div>
+    <div class="si cat-si" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</div>
     <div class="si cat-si" data-cat="مناسبات" data-i18n="catEvents">🎉 مناسبات وتنظيم</div>
     <div class="si cat-si" data-cat="تسويق" data-i18n="catMarketing">📱 تسويق</div>
     <div class="si cat-si" data-cat="منزلية" data-i18n="catHome">🏠 منزلية</div>
-    <div class="si cat-si" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</div>
-    <div class="si cat-si" data-cat="تعليم" data-i18n="catTeaching">📚 تعليم</div>
+    <div class="si cat-si" data-cat="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</div>
     <div class="si cat-si" data-cat="أخرى" data-i18n="catOther">✨ خدمات أخرى</div>
   </div>
   <main class="feed">
@@ -711,14 +713,14 @@ function logErrorToServer(message, stack){
       <button class="fc" data-cat="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</button>
       <button class="fc" data-cat="سيارات" data-i18n="catCars">🚙 سيارات</button>
       <button class="fc" data-cat="استشارات" data-i18n="catConsulting">⚖️ استشارات</button>
-      <button class="fc" data-cat="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</button>
+      <button class="fc" data-cat="تعليم" data-i18n="catTeaching">📚 تعليم</button>
       <button class="fc" data-cat="تصميم" data-i18n="catDesign">🎨 تصميم</button>
       <button class="fc" data-cat="برمجة" data-i18n="catProgramming">💻 برمجة</button>
+      <button class="fc" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</button>
       <button class="fc" data-cat="مناسبات" data-i18n="catEventsShort">🎉 مناسبات</button>
       <button class="fc" data-cat="تسويق" data-i18n="catMarketing">📱 تسويق</button>
       <button class="fc" data-cat="منزلية" data-i18n="catHome">🏠 منزلية</button>
-      <button class="fc" data-cat="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</button>
-      <button class="fc" data-cat="تعليم" data-i18n="catTeaching">📚 تعليم</button>
+      <button class="fc" data-cat="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</button>
       <button class="fc" data-cat="أخرى" data-i18n="catOther">✨ خدمات أخرى</button>
       <span class="result-count" id="resultCount"></span>
       <button id="catAlertBtn" style="display:none;background:var(--s2);border:1px solid var(--b);color:var(--t2);border-radius:20px;padding:5px 12px;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;margin-right:8px;white-space:nowrap" onclick="toggleCategoryAlert()">🔔 نبّهني بهذي الفئة</button>
@@ -919,7 +921,7 @@ function logErrorToServer(message, stack){
 </div>
 
 <div class="h-overlay" id="compModal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</option><option value="سيارات" data-i18n="catCars">🚙 سيارات</option><option value="استشارات" data-i18n="catConsulting">⚖️ استشارات</option><option value="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</option><option value="مناسبات" data-i18n="catEvents">🎉 مناسبات وتنظيم</option><option value="برمجة" data-i18n="catProgramming">💻 برمجة</option><option value="تصميم" data-i18n="catDesign">🎨 تصميم</option><option value="تسويق" data-i18n="catMarketing">📱 تسويق</option><option value="منزلية" data-i18n="catHome">🏠 منزلية</option><option value="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</option><option value="تعليم" data-i18n="catTeaching">📚 تعليم</option><option value="أخرى" data-i18n="catOther">خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option data-i18n="hours24">24 ساعة</option><option data-i18n="days3">3 أيام</option><option data-i18n="week1">أسبوع</option><option data-i18n="weeks2">أسبوعان</option><option data-i18n="flexible">مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option data-i18n="remote">عن بُعد</option><option data-i18n="inPerson">حضوري</option><option data-i18n="both">كلاهما</option></select></div></div><div class="fg"><label class="fgl" data-i18n="regionLbl">المنطقة *</label><select class="fi" id="reqCity"><option value="" data-i18n="selectRegion">اختر المنطقة</option><option value="الرياض" data-i18n="regRiyadh">الرياض</option><option value="مكة المكرمة" data-i18n="regMakkah">مكة المكرمة</option><option value="المدينة المنورة" data-i18n="regMadinah">المدينة المنورة</option><option value="القصيم" data-i18n="regQassim">القصيم</option><option value="الشرقية" data-i18n="regEastern">الشرقية</option><option value="عسير" data-i18n="regAsir">عسير</option><option value="تبوك" data-i18n="regTabuk">تبوك</option><option value="حائل" data-i18n="regHail">حائل</option><option value="الحدود الشمالية" data-i18n="regNBorders">الحدود الشمالية</option><option value="الجوف" data-i18n="regJouf">الجوف</option><option value="جازان" data-i18n="regJazan">جازان</option><option value="نجران" data-i18n="regNajran">نجران</option><option value="الباحة" data-i18n="regBaha">الباحة</option></select></div><div class="fg"><label class="fgl" data-i18n="reqPhoneOptional">رقم جوالك (اختياري) 📞</label><input class="fi" id="reqPhone" type="tel" placeholder="05xxxxxxxx" data-i18n-placeholder="phonePlaceholder"><div style="font-size:.7rem;color:var(--t3);margin-top:4px" data-i18n="reqPhonePublicHint">يظهر للجميع على الإعلان، اتركه فاضي إذا تفضّل التواصل عبر رسائل الموقع فقط</div></div>
+  <div class="modal"><div style="font-size:1rem;font-weight:700;margin-bottom:3px" data-i18n="postYourRequest">✏️ انشر طلبك</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:14px" data-i18n="postHint">اشرح ما تحتاجه وسيصلك عروض خلال دقائق</div><div style="display:flex;gap:10px;margin-bottom:9px"><div class="av" style="flex-shrink:0">أ</div><input class="fi" id="reqTitle" type="text" placeholder="عنوان الطلب — ماذا تحتاج بالضبط؟" data-i18n-placeholder="titlePlaceholder" style="font-weight:600"></div><div class="fg"><textarea class="fi" id="reqDesc" style="min-height:72px" placeholder="اشرح التفاصيل..." data-i18n-placeholder="detailsPlaceholder"></textarea></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="category">الفئة</label><select class="fi" id="reqCat"><option value="مقاولات" data-i18n="catConstruction">🏗️ مقاولات</option><option value="سيارات" data-i18n="catCars">🚙 سيارات</option><option value="استشارات" data-i18n="catConsulting">⚖️ استشارات</option><option value="تعليم" data-i18n="catTeaching">📚 تعليم</option><option value="تصميم" data-i18n="catDesign">🎨 تصميم</option><option value="برمجة" data-i18n="catProgramming">💻 برمجة</option><option value="صيانة عامة" data-i18n="catMaintenance">🔧 صيانة عامة</option><option value="مناسبات" data-i18n="catEvents">🎉 مناسبات وتنظيم</option><option value="تسويق" data-i18n="catMarketing">📱 تسويق</option><option value="منزلية" data-i18n="catHome">🏠 منزلية</option><option value="صحة وجمال" data-i18n="catHealth">💆 صحة وجمال</option><option value="أخرى" data-i18n="catOther">خدمات أخرى</option></select></div><div class="fg"><label class="fgl" data-i18n="durationLbl">المدة</label><select class="fi" id="reqDur"><option data-i18n="hours24">24 ساعة</option><option data-i18n="days3">3 أيام</option><option data-i18n="week1">أسبوع</option><option data-i18n="weeks2">أسبوعان</option><option data-i18n="flexible">مرن</option></select></div></div><div class="frow"><div class="fg"><label class="fgl" data-i18n="budgetLbl">الميزانية (ريال)</label><input class="fi" id="reqBudget" type="number" placeholder="مثال: 500" data-i18n-placeholder="budgetPlaceholder"></div><div class="fg"><label class="fgl" data-i18n="serviceTypeLbl">نوع الخدمة</label><select class="fi" id="reqType"><option data-i18n="remote">عن بُعد</option><option data-i18n="inPerson">حضوري</option><option data-i18n="both">كلاهما</option></select></div></div><div class="fg"><label class="fgl" data-i18n="regionLbl">المنطقة *</label><select class="fi" id="reqCity"><option value="" data-i18n="selectRegion">اختر المنطقة</option><option value="الرياض" data-i18n="regRiyadh">الرياض</option><option value="مكة المكرمة" data-i18n="regMakkah">مكة المكرمة</option><option value="المدينة المنورة" data-i18n="regMadinah">المدينة المنورة</option><option value="القصيم" data-i18n="regQassim">القصيم</option><option value="الشرقية" data-i18n="regEastern">الشرقية</option><option value="عسير" data-i18n="regAsir">عسير</option><option value="تبوك" data-i18n="regTabuk">تبوك</option><option value="حائل" data-i18n="regHail">حائل</option><option value="الحدود الشمالية" data-i18n="regNBorders">الحدود الشمالية</option><option value="الجوف" data-i18n="regJouf">الجوف</option><option value="جازان" data-i18n="regJazan">جازان</option><option value="نجران" data-i18n="regNajran">نجران</option><option value="الباحة" data-i18n="regBaha">الباحة</option></select></div><div class="fg"><label class="fgl" data-i18n="reqPhoneOptional">رقم جوالك (اختياري) 📞</label><input class="fi" id="reqPhone" type="tel" placeholder="05xxxxxxxx" data-i18n-placeholder="phonePlaceholder"><div style="font-size:.7rem;color:var(--t3);margin-top:4px" data-i18n="reqPhonePublicHint">يظهر للجميع على الإعلان، اتركه فاضي إذا تفضّل التواصل عبر رسائل الموقع فقط</div></div>
   <div class="fg">
     <label class="fgl" data-i18n="mediaOptionalLbl">📷 صور وفيديو (اختياري — حتى 10 صور)</label>
     <input type="file" id="reqMediaInput" accept="image/*,video/*" multiple style="display:none" onchange="handleReqMediaSelect(this)">
