@@ -2949,7 +2949,11 @@ document.getElementById('doRegister').onclick=async function(){
     var result = await sbRegister(email, pass, name, username);
     if(result.error){
       var msg = result.error.message || '';
-      if(msg.indexOf('duplicate') > -1 || msg.indexOf('unique') > -1){
+      if(msg === 'EMAIL_ALREADY_REGISTERED'){
+        hToast('❌ هذا البريد مسجّل بالفعل — سجّل الدخول أو استخدم "نسيت كلمة المرور"');
+      } else if(msg.indexOf('already registered') > -1 || msg.indexOf('User already') > -1){
+        hToast('❌ هذا البريد مسجّل بالفعل — سجّل الدخول أو استخدم "نسيت كلمة المرور"');
+      } else if(msg.indexOf('duplicate') > -1 || msg.indexOf('unique') > -1){
         hToast('❌ اسم المستخدم هذا محجوز، جرّب اسماً آخر');
       } else {
         hToast('❌ ' + msg);
@@ -4756,6 +4760,10 @@ async function sbRegister(email, password, fullName, username) {
     email, password,
     options: { data: { full_name: fullName, username } }
   });
+  // حماية تعداد البريد في Supabase ترجع مستخدماً وهمياً بلا identities إذا كان البريد مسجلاً مسبقاً
+  if (!error && data && data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+    return { data: null, error: { message: 'EMAIL_ALREADY_REGISTERED' } };
+  }
   return { data, error };
 }
 
