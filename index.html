@@ -3042,7 +3042,11 @@ document.getElementById('doRequestReset').onclick=async function(){
   try{
     hToast('جاري إرسال رمز التعيين...');
     var result = await sbRequestPasswordReset(email);
-    if(result.error){ hToast('❌ ' + result.error.message); return; }
+    if(result.error){
+      if(result.error.message === 'EMAIL_NOT_FOUND'){ hToast('❌ لا يوجد حساب مسجّل بهذا البريد'); }
+      else { hToast('❌ ' + result.error.message); }
+      return;
+    }
     window.pendingResetEmail = email;
     document.getElementById('forgotPassModal').classList.remove('open');
     openResetPassModal(email);
@@ -3106,7 +3110,11 @@ document.getElementById('resendResetOtp').onclick=async function(){
   try{
     hToast('جاري إعادة إرسال الرمز...');
     var result = await sbRequestPasswordReset(email);
-    if(result.error){ hToast('❌ ' + result.error.message); return; }
+    if(result.error){
+      if(result.error.message === 'EMAIL_NOT_FOUND'){ hToast('❌ لا يوجد حساب مسجّل بهذا البريد'); }
+      else { hToast('❌ ' + result.error.message); }
+      return;
+    }
     hToast('📧 تم إرسال رمز جديد إلى بريدك');
   } catch(e){
     console.error('resendResetOtp error:', e);
@@ -4781,6 +4789,13 @@ async function sbResendOtp(email) {
 // نسيت كلمة المرور
 // =====================
 async function sbRequestPasswordReset(email) {
+  // فحص وجود البريد أولاً — resetPasswordForEmail ترجع نجاحاً دائماً حتى لو لم يكن الحساب موجوداً
+  try{
+    const { data: exists, error: rpcErr } = await sb.rpc('email_exists', { p_email: email });
+    if (!rpcErr && exists === false) {
+      return { data: null, error: { message: 'EMAIL_NOT_FOUND' } };
+    }
+  }catch(e){ console.warn('email_exists check failed:', e); } // عند فشل الفحص نكمل المسار الطبيعي
   const { data, error } = await sb.auth.resetPasswordForEmail(email);
   return { data, error };
 }
