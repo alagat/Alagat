@@ -76,7 +76,7 @@ function requestPage(r){
   const title = stripContacts(r.title || 'طلب خدمة');
   const desc = stripContacts(r.description || '');
   const metaDesc = oneLine(desc || title, 155);
-  const canonical = SITE + '/request/' + r.id;
+  const canonical = SITE + '/request/' + r.ad_number;
   const img = firstImage(r.media_urls);
   const indexable = r.status === 'open';
 
@@ -140,7 +140,7 @@ module.exports = async function handler(req, res){
 
   let rows;
   try{
-    const url = SUPA_URL + '/rest/v1/requests?id=eq.' + id + '&select=' + encodeURIComponent(COLUMNS) + '&limit=1';
+    const url = SUPA_URL + '/rest/v1/requests?ad_number=eq.' + id + '&select=' + encodeURIComponent(COLUMNS) + '&limit=1';
     const resp = await fetch(url, {
       headers:{ apikey:SUPA_KEY, Authorization:'Bearer ' + SUPA_KEY, Accept:'application/json' }
     });
@@ -158,4 +158,4 @@ module.exports = async function handler(req, res){
 
   res.setHeader('Cache-Control','public, s-maxage=600, stale-while-revalidate=86400');
   return res.status(200).send(requestPage(rows[0]));
-    }
+}
