@@ -62,4 +62,100 @@ figure img{width:100%;border-radius:14px;display:block;margin-bottom:10px;border
 `;
 
 function errorPage(title, message){
-  return '<!doctype html><html lang="ar" di
+  return '<!doctype html><html lang="ar" dir="rtl"><head>' + HEAD_COMMON +
+    '<meta name="robots" content="noindex">' +
+    '<title>' + esc(title) + ' | علاقات</title><style>' + CSS + '</style></head><body><main>' +
+    '<a class="brand" href="' + SITE + '/">علاقات</a>' +
+    '<h1>' + esc(title) + '</h1>' +
+    '<p class="desc">' + esc(message) + '</p>' +
+    '<a class="cta" href="' + SITE + '/">تصفّح الطلبات المتاحة</a>' +
+    '</main></body></html>';
+}
+
+function requestPage(r){
+  const title = stripContacts(r.title || 'طلب خدمة');
+  const desc = stripContacts(r.description || '');
+  const metaDesc = oneLine(desc || title, 155);
+  const canonical = SITE + '/request/' + r.id;
+  const img = firstImage(r.media_urls);
+  const indexable = r.status === 'open';
+
+  const facts = [];
+  if(r.category) facts.push({txt:r.category});
+  if(r.city) facts.push({txt:'📍 ' + r.city});
+  if(r.work_type) facts.push({txt:r.work_type});
+  if(r.duration) facts.push({txt:'⏱ ' + r.duration});
+  if(r.budget_text) facts.push({txt:'الميزانية: ' + r.budget_text, cls:'budget'});
+  if(r.is_urgent) facts.push({txt:'🔥 عاجل'});
+  if(r.created_at) facts.push({txt:arDate(r.created_at)});
+  if(r.ad_number) facts.push({txt:'رقم الإعلان: ' + r.ad_number});
+  const offers = Number(r.offers_count || 0);
+  facts.push({txt: offers > 0 ? offers + ' عرض مقدَّم' : 'لا توجد عروض بعد'});
+
+  const ld = {
+    '@context':'https://schema.org','@type':'Service',
+    name: oneLine(title,110), description: oneLine(desc,300),
+    serviceType: r.category || undefined, areaServed: r.city || undefined,
+    url: canonical,
+    provider:{'@type':'Organization', name:'علاقات', url:SITE}
+  };
+
+  return '<!doctype html><html lang="ar" dir="rtl"><head>' + HEAD_COMMON +
+    '<title>' + esc(oneLine(title,60)) + ' | علاقات</title>' +
+    '<meta name="description" content="' + esc(metaDesc) + '">' +
+    '<link rel="canonical" href="' + esc(canonical) + '">' +
+    (indexable ? '' : '<meta name="robots" content="noindex,follow">') +
+    '<meta property="og:type" content="article">' +
+    '<meta property="og:site_name" content="علاقات">' +
+    '<meta property="og:locale" content="ar_SA">' +
+    '<meta property="og:title" content="' + esc(oneLine(title,60)) + '">' +
+    '<meta property="og:description" content="' + esc(metaDesc) + '">' +
+    '<meta property="og:url" content="' + esc(canonical) + '">' +
+    (img ? '<meta property="og:image" content="' + esc(img) + '">' : '') +
+    '<meta name="twitter:card" content="' + (img ? 'summary_large_image' : 'summary') + '">' +
+    '<script type="application/ld+json">' + jsonLd(ld) + '</script>' +
+    '<style>' + CSS + '</style></head><body><main>' +
+    '<a class="brand" href="' + SITE + '/">علاقات</a>' +
+    '<h1>' + esc(title) + '</h1>' +
+    '<ul class="facts">' +
+      facts.map(function(f){
+        return '<li' + (f.cls ? ' class="' + f.cls + '"' : '') + '>' + esc(f.txt) + '</li>';
+      }).join('') +
+    '</ul>' +
+    (desc ? '<p class="desc">' + esc(desc) + '</p>' : '') +
+    (img ? '<figure><img src="' + esc(img) + '" alt="' + esc(oneLine(title,90)) + '" loading="lazy"></figure>' : '') +
+    '<a class="cta" href="' + SITE + '/">قدّم عرضك على هذا الطلب</a>' +
+    '<p class="note">تُعرض تفاصيل التواصل داخل منصة علاقات بعد تسجيل الدخول.</p>' +
+    '</main></body></html>';
+}
+
+module.exports = async function handler(req, res){
+  res.setHeader('Content-Type','text/html; charset=utf-8');
+
+  const id = String(req.query.id || '').trim();
+  if(!/^\d{1,12}$/.test(id)){
+    res.setHeader('Cache-Control','public, s-maxage=3600');
+    return res.status(404).send(errorPage('طلب غير موجود','الرابط الذي فتحته غير صحيح.'));
+  }
+
+  let rows;
+  try{
+    const url = SUPA_URL + '/rest/v1/requests?id=eq.' + id + '&select=' + encodeURIComponent(COLUMNS) + '&limit=1';
+    const resp = await fetch(url, {
+      headers:{ apikey:SUPA_KEY, Authorization:'Bearer ' + SUPA_KEY, Accept:'application/json' }
+    });
+    if(!resp.ok) throw new Error('supabase ' + resp.status);
+    rows = await resp.json();
+  }catch(err){
+    res.setHeader('Cache-Control','no-store');
+    return res.status(503).send(errorPage('تعذّر تحميل الطلب','حدث خطأ مؤقت. حاول تحديث الصفحة بعد قليل.'));
+  }
+
+  if(!Array.isArray(rows) || rows.length === 0){
+    res.setHeader('Cache-Control','public, s-maxage=3600');
+    return res.status(410).send(errorPage('هذا الطلب لم يعد متاحًا','قد يكون صاحبه حذفه أو أُغلق.'));
+  }
+
+  res.setHeader('Cache-Control','public, s-maxage=600, stale-while-revalidate=86400');
+  return res.status(200).send(requestPage(rows[0]));
+    }
