@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/request/:id", "destination": "/api/request/:id" }
+  ]
+}
