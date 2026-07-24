@@ -3,6 +3,8 @@ const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsI
 const SITE = 'https://alagat.com';
 
 const COLUMNS = ['id','title','description','category','budget_text','duration','work_type','city','is_urgent','media_urls','created_at','ad_number','offers_count','status'].join(',');
+const REL_COLUMNS = ['ad_number','title','city','budget_text','category'].join(',');
+const REL_LIMIT = 6;
 
 const D = '[0-9\\u0660-\\u0669\\u06F0-\\u06F9]';
 const SEP = '[\\s\\-\\.\\u060C()\\u2013\\u2014]*';
@@ -56,7 +58,16 @@ h1{font-size:1.55rem;font-weight:800;line-height:1.45;margin:0 0 14px}
 .desc{font-size:1rem;white-space:pre-wrap;margin:0 0 26px}
 figure{margin:0 0 26px}
 figure img{width:100%;border-radius:14px;display:block;margin-bottom:10px;border:1px solid #e7e0da}
+.act{background:#fff;border:1px solid #e7e0da;border-radius:16px;padding:20px;margin:0 0 34px}
+.act .ref{font-size:.8rem;color:#6d6469;margin:0 0 12px}
 .cta{display:inline-block;background:linear-gradient(135deg,#c9a227,#7f1d3d);color:#fff;text-decoration:none;font-weight:700;padding:13px 30px;border-radius:11px}
+.cta.alt{background:none;color:#7f1d3d;border:1px solid #d9c9ce;padding:12px 22px;margin-right:8px}
+.rel{border-top:1px solid #e7e0da;padding-top:26px}
+.rel h2{font-size:1.05rem;font-weight:800;margin:0 0 16px}
+.rel ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.rel a{display:block;background:#fff;border:1px solid #e7e0da;border-radius:12px;padding:13px 16px;text-decoration:none;color:#1d1a1d;font-weight:600;font-size:.92rem;line-height:1.5}
+.rel a:hover{border-color:#c9a227}
+.rel .m{display:block;font-weight:400;font-size:.78rem;color:#6d6469;margin-top:3px}
 .note{font-size:.8rem;color:#6d6469;margin-top:26px;border-top:1px solid #e7e0da;padding-top:16px}
 :focus-visible{outline:2px solid #7f1d3d;outline-offset:3px}
 `;
@@ -72,11 +83,26 @@ function errorPage(title, message){
     '</main></body></html>';
 }
 
-function requestPage(r){
+function relatedBlock(related, category){
+  if(!Array.isArray(related) || !related.length) return '';
+  const items = related.map(function(x){
+    const meta = [x.city, x.budget_text].filter(Boolean).join(' · ');
+    return '<li><a href="' + SITE + '/request/' + Number(x.ad_number) + '">' +
+      esc(oneLine(stripContacts(x.title || 'طلب خدمة'), 90)) +
+      (meta ? '<span class="m">' + esc(meta) + '</span>' : '') +
+    '</a></li>';
+  }).join('');
+  return '<section class="rel"><h2>' +
+    esc(category ? ('طلبات أخرى في ' + category) : 'طلبات مشابهة') +
+    '</h2><ul>' + items + '</ul></section>';
+}
+
+function requestPage(r, related){
   const title = stripContacts(r.title || 'طلب خدمة');
   const desc = stripContacts(r.description || '');
   const metaDesc = oneLine(desc || title, 155);
-  const canonical = SITE + '/request/' + r.ad_number;
+  const adNo = Number(r.ad_number);
+  const canonical = SITE + '/request/' + adNo;
   const img = firstImage(r.media_urls);
   const indexable = r.status === 'open';
 
@@ -88,7 +114,6 @@ function requestPage(r){
   if(r.budget_text) facts.push({txt:'الميزانية: ' + r.budget_text, cls:'budget'});
   if(r.is_urgent) facts.push({txt:'🔥 عاجل'});
   if(r.created_at) facts.push({txt:arDate(r.created_at)});
-  if(r.ad_number) facts.push({txt:'رقم الإعلان: ' + r.ad_number});
   const offers = Number(r.offers_count || 0);
   facts.push({txt: offers > 0 ? offers + ' عرض مقدَّم' : 'لا توجد عروض بعد'});
 
@@ -124,9 +149,22 @@ function requestPage(r){
     '</ul>' +
     (desc ? '<p class="desc">' + esc(desc) + '</p>' : '') +
     (img ? '<figure><img src="' + esc(img) + '" alt="' + esc(oneLine(title,90)) + '" loading="lazy"></figure>' : '') +
-    '<a class="cta" href="' + SITE + '/">قدّم عرضك على هذا الطلب</a>' +
+    '<div class="act">' +
+      '<p class="ref">رقم الإعلان <strong>#' + adNo + '</strong> — اذكره عند التواصل.</p>' +
+      '<a class="cta" href="' + SITE + '/?r=' + adNo + '">قدّم عرضك على هذا الطلب</a>' +
+      '<a class="cta alt" href="' + SITE + '/">تصفّح كل الطلبات</a>' +
+    '</div>' +
+    relatedBlock(related, r.category) +
     '<p class="note">تُعرض تفاصيل التواصل داخل منصة علاقات بعد تسجيل الدخول.</p>' +
     '</main></body></html>';
+}
+
+async function sbGet(path){
+  const resp = await fetch(SUPA_URL + '/rest/v1/' + path, {
+    headers:{ apikey:SUPA_KEY, Authorization:'Bearer ' + SUPA_KEY, Accept:'application/json' }
+  });
+  if(!resp.ok) throw new Error('supabase ' + resp.status);
+  return resp.json();
 }
 
 module.exports = async function handler(req, res){
@@ -140,12 +178,7 @@ module.exports = async function handler(req, res){
 
   let rows;
   try{
-    const url = SUPA_URL + '/rest/v1/requests?ad_number=eq.' + id + '&select=' + encodeURIComponent(COLUMNS) + '&limit=1';
-    const resp = await fetch(url, {
-      headers:{ apikey:SUPA_KEY, Authorization:'Bearer ' + SUPA_KEY, Accept:'application/json' }
-    });
-    if(!resp.ok) throw new Error('supabase ' + resp.status);
-    rows = await resp.json();
+    rows = await sbGet('requests?ad_number=eq.' + id + '&select=' + encodeURIComponent(COLUMNS) + '&limit=1');
   }catch(err){
     res.setHeader('Cache-Control','no-store');
     return res.status(503).send(errorPage('تعذّر تحميل الطلب','حدث خطأ مؤقت. حاول تحديث الصفحة بعد قليل.'));
@@ -156,6 +189,22 @@ module.exports = async function handler(req, res){
     return res.status(410).send(errorPage('هذا الطلب لم يعد متاحًا','قد يكون صاحبه حذفه أو أُغلق.'));
   }
 
+  const r = rows[0];
+
+  let related = [];
+  try{
+    if(r.category){
+      related = await sbGet('requests?status=eq.open'
+        + '&category=eq.' + encodeURIComponent(r.category)
+        + '&ad_number=neq.' + id
+        + '&ad_number=not.is.null'
+        + '&select=' + encodeURIComponent(REL_COLUMNS)
+        + '&order=created_at.desc&limit=' + REL_LIMIT);
+    }
+  }catch(err){
+    related = [];
+  }
+
   res.setHeader('Cache-Control','public, s-maxage=600, stale-while-revalidate=86400');
-  return res.status(200).send(requestPage(rows[0]));
-}
+  return res.status(200).send(requestPage(r, related));
+      }
