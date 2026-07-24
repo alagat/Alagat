@@ -5018,7 +5018,31 @@ window.closeAccountMenu = function(){
   setTimeout(function(){ document.getElementById('accountMenuOverlay').style.display = 'none'; }, 280);
 };
 </script>
+<script>
+async function openDetailByAdNumber(adNumber){
+  var existing = reqs.find(function(x){ return String(x.adNumber)===String(adNumber); });
+  if(existing){ openDetail(existing.id); return; }
+  try{
+    var {data, error} = await sb.from('requests')
+      .select('*, profiles(full_name,username,avatar_color,avatar_letter)')
+      .eq('ad_number', adNumber).single();
+    if(error || !data){ hToast('⚠️ الطلب غير موجود أو تم حذفه'); return; }
+    var mapped = mapRequestRow(data);
+    reqs.push(mapped);
+    openDetail(mapped.id);
+  }catch(e){
+    console.error('openDetailByAdNumber error:', e);
+    logErrorToServer('openDetailByAdNumber: ' + (e && e.message), e && e.stack);
+  }
+}
 
+document.addEventListener('DOMContentLoaded', function(){
+  var m = String(location.search||'').match(/[?&]r=(\d{1,12})\b/);
+  if(!m) return;
+  history.replaceState(null, '', location.pathname);
+  openDetailByAdNumber(m[1]);
+});
+</script>
 
 </body>
 </html>
