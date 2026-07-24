@@ -4747,7 +4747,31 @@ window.openUserProfile = async function(userId){
  }
 };
 
+// ====== فتح طلب مباشرة من رابط خارجي: /?r=83817 ======
+async function openDetailByAdNumber(adNumber){
+  try{
+    var existing = reqs.find(function(x){ return String(x.adNumber)===String(adNumber); });
+    if(existing){ openDetail(existing.id); return; }
+    var {data, error} = await sb.from('requests')
+      .select('*, profiles(full_name,username,avatar_color,avatar_letter)')
+      .eq('ad_number', adNumber).single();
+    if(error || !data){ hToast('⚠️ الطلب غير موجود أو تم حذفه'); return; }
+    var mapped = mapRequestRow(data);
+    reqs.push(mapped);
+    openDetail(mapped.id);
+  }catch(e){
+    console.error('openDetailByAdNumber error:', e);
+    logErrorToServer('openDetailByAdNumber: ' + (e && e.message), e && e.stack);
+    hToast('❌ تعذر فتح الطلب');
+  }
+}
 
+document.addEventListener('DOMContentLoaded', function(){
+  var m = String(location.search||'').match(/[?&]r=(\d{1,12})\b/);
+  if(!m) return;
+  history.replaceState(null, '', location.pathname);
+  openDetailByAdNumber(m[1]);
+});
 })();
 </script>
 
@@ -5018,33 +5042,6 @@ window.closeAccountMenu = function(){
   setTimeout(function(){ document.getElementById('accountMenuOverlay').style.display = 'none'; }, 280);
 };
 </script>
-<script>
-async function openDetailByAdNumber(adNumber){
-  try{
-    alert('1: بدأنا — الرقم ' + adNumber);
-    var existing = reqs.find(function(x){ return String(x.adNumber)===String(adNumber); });
-    if(existing){ alert('2: موجود بالذاكرة'); openDetail(existing.id); return; }
-    alert('3: نجلب من القاعدة');
-    var {data, error} = await sb.from('requests')
-      .select('*, profiles(full_name,username,avatar_color,avatar_letter)')
-      .eq('ad_number', adNumber).single();
-    if(error){ alert('4: خطأ من Supabase — ' + error.message); return; }
-    if(!data){ alert('5: لا توجد بيانات'); return; }
-    alert('6: وصلت البيانات — نفتح الآن');
-    var mapped = mapRequestRow(data);
-    reqs.push(mapped);
-    openDetail(mapped.id);
-    alert('7: تم استدعاء الفتح');
-  }catch(e){
-    alert('خطأ: ' + (e && e.message));
-  }
-}
 
-document.addEventListener('DOMContentLoaded', function(){
-  var m = String(location.search||'').match(/[?&]r=(\d{1,12})\b/);
-  if(!m){ alert('0: الرابط لا يحوي r — ' + location.search); return; }
-  openDetailByAdNumber(m[1]);
-});
-</script>
 </body>
 </html>
