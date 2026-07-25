@@ -857,8 +857,9 @@ function logErrorToServer(message, stack){
   </div>
 </div>
 <!-- زر قدّم عرضك في الأسفل -->
-<div style="position:fixed;bottom:64px;left:0;right:0;padding:12px 16px;background:var(--bg);border-top:1px solid var(--b);display:flex;justify-content:center;z-index:99">
-  <button class="btn-b" id="detOfferBtn" style="width:100%;max-width:680px;padding:13px;font-size:.9rem;border-radius:12px" data-i18n="submitOfferOnRequest">قدّم عرضك على هذا الطلب ←</button>
+<div style="position:fixed;bottom:64px;left:0;right:0;padding:12px 16px;background:var(--bg);border-top:1px solid var(--b);display:flex;justify-content:center;gap:8px;z-index:99">
+  <button class="btn-b" id="detOfferBtn" style="flex:1;max-width:620px;padding:13px;font-size:.9rem;border-radius:12px" data-i18n="submitOfferOnRequest">قدّم عرضك على هذا الطلب ←</button>
+  <button id="detShareBtn" aria-label="مشاركة الطلب" title="مشاركة الطلب" style="flex:0 0 auto;width:50px;padding:13px 0;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:12px;font-size:1.1rem;cursor:pointer">⤴</button>
 </div>
 </div>
 <div class="h-overlay" id="authModal" onclick="if(event.target===this)this.classList.remove('open')">
@@ -1588,7 +1589,7 @@ window.applyPopularSearch = function(term){
   filterFeed(term);
   logSearchTerm(term);
 };
-function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+escH(r.name)+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+escH(r.handle)+'</div></div>'+'<div class="rct">'+timeAgo(r.created_at)+'</div></div>'+'<div class="rtitle">'+escH(r.title)+'</div>'+'<div class="rdesc">'+escH(r.desc)+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+escH(trVal(tg))+'</span>';}).join('')+'<span class="rtag g">⏱ '+escH(trVal(r.dur))+'</span><span class="rtag">'+escH(trVal(r.type))+'</span>'+(r.city?'<span class="rtag">📍 '+escH(trVal(r.city))+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+escH(r.budget)+'</div></div>'+'<div class="rcf-r">'+(r.views>0?'<span class="vcount" style="color:var(--t3);font-size:.72rem">👁 '+r.views+'</span>':'')+'<span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation();window.toggleSaveCard('+r.id+',this)">'+(isSaved?t('savedBadge'):'🔖 '+t('saveAction'))+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation();window.offerFromCard('+r.id+')">'+t('submitOffer')+'</button>'+'</div></div></div>';}
+function makeCard(r){var isSaved=state.saved.indexOf(r.id)>-1;var mediaHtml='';if(r.media&&r.media.length>0){var firstItem=r.media[0];var isVid=firstItem.type==='video';mediaHtml='<div class="rmedia" style="position:relative;width:100%;height:160px;border-radius:12px;overflow:hidden;margin:8px 0;background:var(--s2)">'+(isVid?'<video src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" muted></video><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);font-size:2rem">▶️</div>':'<img src="'+firstItem.url+'" style="width:100%;height:100%;object-fit:cover" loading="lazy">')+(r.media.length>1?'<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px">📷 '+r.media.length+'</div>':'')+'</div>';}return'<div class="rcard" data-id="'+r.id+'" onclick="openDetail('+r.id+')">'+'<div class="rch"><div class="av sm" style="background:'+r.grad+';cursor:pointer" onclick="event.stopPropagation();goProfile('+r.id+')">'+r.av+'</div>'+'<div class="rcm"><div class="rcn"><span style="cursor:pointer;text-underline-offset:2px" onmouseover="this.style.textDecoration=\'underline\'" onmouseout="this.style.textDecoration=\'none\'" onclick="event.stopPropagation();goProfile('+r.id+')">'+escH(r.name)+'</span>'+(r.isNew?'<span class="nbadge">'+t('newBadge')+'</span>':'')+'</div><div class="rck">'+escH(r.handle)+'</div></div>'+'<div class="rct">'+timeAgo(r.created_at)+'</div></div>'+'<div class="rtitle">'+(r.adNumber?'<a href="/request/'+Number(r.adNumber)+'" onclick="if(event.ctrlKey||event.metaKey||event.shiftKey)return true;event.preventDefault();event.stopPropagation();openDetail('+r.id+');return false;" style="color:inherit;text-decoration:none">'+escH(r.title)+'</a>':escH(r.title))+'</div>'+'<div class="rdesc">'+escH(r.desc)+'</div>'+mediaHtml+'<div class="rtags">'+r.tags.map(function(tg){return'<span class="rtag '+r.tc+'">'+escH(trVal(tg))+'</span>';}).join('')+'<span class="rtag g">⏱ '+escH(trVal(r.dur))+'</span><span class="rtag">'+escH(trVal(r.type))+'</span>'+(r.city?'<span class="rtag">📍 '+escH(trVal(r.city))+'</span>':'')+'</div>'+'<div class="rcf"><div><div class="bl2">'+t('budget')+'</div><div class="bv">'+escH(r.budget)+'</div></div>'+'<div class="rcf-r">'+(r.views>0?'<span class="vcount" style="color:var(--t3);font-size:.72rem">👁 '+r.views+'</span>':'')+'<span class="ocount">🙋 '+(r.offers>0?r.offers+' '+t('offer'):t('noOffersBadge'))+'</span>'+'<button class="ab'+(isSaved?' saved':'')+' btn-save" data-id="'+r.id+'" onclick="event.stopPropagation();window.toggleSaveCard('+r.id+',this)">'+(isSaved?t('savedBadge'):'🔖 '+t('saveAction'))+'</button>'+'<button class="ab p btn-offer" data-id="'+r.id+'" onclick="event.stopPropagation();window.offerFromCard('+r.id+')">'+t('submitOffer')+'</button>'+'</div></div></div>';}
 function makeFooter(){
   return (state.loggedIn ? '' : '<div class="bcta"><h3>'+t('readyToStart')+'</h3><p>'+t('ctaSubtitle')+'</p><div class="bcta-btns"><button class="btn-b" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openComp()">'+t('postFree')+'</button><button class="btn-p" style="padding:10px 22px;font-size:.84rem;border-radius:9px" onclick="openAuth(\'register\')">'+t('startEarning')+'</button></div></div>')
   + '<div class="feed-footer">'
@@ -1955,7 +1956,7 @@ function bindCardEvents(){
 function setupOwnerControls(requestId, r){
   // ====== مشاركة الإعلان (نربطها أولاً قبل أي شيء، لضمان عملها حتى لو فشل جزء آخر من هذي الدالة) ======
   document.getElementById('ownerShareBtn').onclick = function(){
-    var url = window.location.origin + '/?req=' + requestId;
+    var url = window.location.origin + '/request/' + (r.adNumber || requestId);
     var text = '📋 ' + r.title + '\n💰 ' + r.budget + '\n\nعبر علاقات: ' + url;
     if(navigator.share){
       navigator.share({ title: r.title, text: text, url: url }).catch(function(){});
@@ -4772,6 +4773,26 @@ document.addEventListener('DOMContentLoaded', function(){
   history.replaceState(null, '', location.pathname);
   openDetailByAdNumber(m[1]);
 });
+
+// ====== مشاركة الطلب للزائر (رابط صفحة السيرفر مع معاينة) ======
+function shareCurrentRequest(){
+  var adNo = window._currentAdNumber;
+  var titleEl = document.getElementById('detTitle');
+  var title = titleEl ? titleEl.textContent : 'طلب على علاقات';
+  if(!adNo){ hToast('⚠️ تعذر تجهيز رابط المشاركة'); return; }
+  var url = window.location.origin + '/request/' + adNo;
+  var text = '📋 ' + title + '\\n\\nعبر علاقات: ' + url;
+  if(navigator.share){
+    navigator.share({ title: title, text: text, url: url }).catch(function(){});
+  } else {
+    navigator.clipboard.writeText(url).then(function(){ hToast('✓ تم نسخ رابط الطلب'); }).catch(function(){ hToast(url); });
+  }
+}
+document.addEventListener('DOMContentLoaded', function(){
+  var b = document.getElementById('detShareBtn');
+  if(b) b.addEventListener('click', shareCurrentRequest);
+});
+
 })();
 </script>
 
