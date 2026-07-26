@@ -1503,6 +1503,12 @@ function populateProfile(r){
 window.showPage = function showPage(id){
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
+  // نظّف رابط الطلب من العنوان عند مغادرة صفحة التفاصيل
+  try{
+    if(id !== 'detailPage' && /^\/request\//.test(location.pathname)){
+      history.replaceState(null, '', '/');
+    }
+  }catch(e){}
   // تأكد البوتم نافبار ظاهر دائماً
   var bn = document.querySelector('.bottom-nav');
   if(bn) bn.style.display='flex';
@@ -2441,12 +2447,12 @@ window.openDetail=async function(id){
 
   window.showPage('detailPage');
 
-  // كتابة رابط الطلب في شريط العنوان حتى يعمل التحديث والمشاركة وزر الرجوع
+  // تحديث شريط العنوان لرابط الطلب (replaceState: لا يلمس زر الرجوع) — للنسخ والتحديث والمشاركة
   try{
     if(r.adNumber){
       var _wanted = '/request/' + r.adNumber;
       if(location.pathname !== _wanted){
-        history.pushState({ detail: r.adNumber }, '', _wanted);
+        history.replaceState(null, '', _wanted);
       }
     }
   }catch(e){}
@@ -4794,15 +4800,7 @@ document.addEventListener('DOMContentLoaded', function(){
   }
   openDetailByAdNumber(adNo);
 });
-window.addEventListener('popstate', function(){
-  var adNo = _readRequestFromUrl();
-  if(adNo){
-    openDetailByAdNumber(adNo);
-  } else {
-    // رجع المستخدم للخلف من الطلب → أعد الفيد بدل مغادرة الموقع
-    try{ if(typeof showPage==='function') showPage('home'); }catch(e){}
-  }
-});
+
 
 // ====== مشاركة الطلب للزائر (رابط صفحة السيرفر مع معاينة) ======
 function shareCurrentRequest(){
