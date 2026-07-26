@@ -2441,6 +2441,16 @@ window.openDetail=async function(id){
 
   window.showPage('detailPage');
 
+  // كتابة رابط الطلب في شريط العنوان حتى يعمل التحديث والمشاركة وزر الرجوع
+  try{
+    if(r.adNumber){
+      var _wanted = '/request/' + r.adNumber;
+      if(location.pathname !== _wanted){
+        history.pushState({ detail: r.adNumber }, '', _wanted);
+      }
+    }
+  }catch(e){}
+
   // إظهار لوحة تحكم صاحب الطلب إذا كان المستخدم الحالي هو المالك
   (async function(){
     try{
@@ -4768,11 +4778,30 @@ async function openDetailByAdNumber(adNumber){
   }
 }
 
+function _readRequestFromUrl(){
+  var mp = String(location.pathname||'').match(/^\/request\/(\d{1,12})\b/);
+  if(mp) return mp[1];
+  var mq = String(location.search||'').match(/[?&]r=(\d{1,12})\b/);
+  if(mq) return mq[1];
+  return null;
+}
 document.addEventListener('DOMContentLoaded', function(){
-  var m = String(location.search||'').match(/[?&]r=(\d{1,12})\b/);
-  if(!m) return;
-  history.replaceState(null, '', location.pathname);
-  openDetailByAdNumber(m[1]);
+  var adNo = _readRequestFromUrl();
+  if(!adNo) return;
+  // إن كان الرابط بصيغة ?r= القديمة، حوّله لصيغة المسار النظيفة
+  if(location.pathname !== '/request/' + adNo){
+    try{ history.replaceState({ detail: adNo }, '', '/request/' + adNo); }catch(e){}
+  }
+  openDetailByAdNumber(adNo);
+});
+window.addEventListener('popstate', function(){
+  var adNo = _readRequestFromUrl();
+  if(adNo){
+    openDetailByAdNumber(adNo);
+  } else {
+    // رجع المستخدم للخلف من الطلب → أعد الفيد بدل مغادرة الموقع
+    try{ if(typeof showPage==='function') showPage('home'); }catch(e){}
+  }
 });
 
 // ====== مشاركة الطلب للزائر (رابط صفحة السيرفر مع معاينة) ======
