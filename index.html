@@ -1503,10 +1503,11 @@ function populateProfile(r){
 window.showPage = function showPage(id){
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
-  // نظّف رابط الطلب من العنوان عند مغادرة صفحة التفاصيل
+  // نظّف هاش الطلب من العنوان عند مغادرة صفحة التفاصيل
   try{
-    if(id !== 'detailPage' && /^\/request\//.test(location.pathname)){
-      history.replaceState(null, '', '/');
+    if(id !== 'detailPage' && /^#request\//.test(location.hash)){
+      window._suppressHashOpen = true;
+      history.replaceState(null, '', location.pathname + location.search);
     }
   }catch(e){}
   // تأكد البوتم نافبار ظاهر دائماً
@@ -2447,12 +2448,13 @@ window.openDetail=async function(id){
 
   window.showPage('detailPage');
 
-  // تحديث شريط العنوان لرابط الطلب (replaceState: لا يلمس زر الرجوع) — للنسخ والتحديث والمشاركة
+  // تحديث شريط العنوان لرابط الطلب عبر الهاش (#request/رقم) — التحديث يبقيك داخل التطبيق وزر الرجوع طبيعي
   try{
     if(r.adNumber){
-      var _wanted = '/request/' + r.adNumber;
-      if(location.pathname !== _wanted){
-        history.replaceState(null, '', _wanted);
+      var _wantedHash = '#request/' + r.adNumber;
+      if(location.hash !== _wantedHash){
+        window._suppressHashOpen = true;
+        location.hash = _wantedHash;
       }
     }
   }catch(e){}
@@ -4785,6 +4787,8 @@ async function openDetailByAdNumber(adNumber){
 }
 
 function _readRequestFromUrl(){
+  var mh = String(location.hash||'').match(/^#request\/(\d{1,12})\b/);
+  if(mh) return mh[1];
   var mp = String(location.pathname||'').match(/^\/request\/(\d{1,12})\b/);
   if(mp) return mp[1];
   var mq = String(location.search||'').match(/[?&]r=(\d{1,12})\b/);
@@ -4794,11 +4798,18 @@ function _readRequestFromUrl(){
 document.addEventListener('DOMContentLoaded', function(){
   var adNo = _readRequestFromUrl();
   if(!adNo) return;
-  // إن كان الرابط بصيغة ?r= القديمة، حوّله لصيغة المسار النظيفة
-  if(location.pathname !== '/request/' + adNo){
-    try{ history.replaceState({ detail: adNo }, '', '/request/' + adNo); }catch(e){}
+  // روابط خارجية (/request/ أو ?r=) → حوّلها لهاش نظيف داخل التطبيق
+  if(!/^#request\//.test(location.hash)){
+    try{ history.replaceState(null, '', location.pathname.replace(/^\/request\/\d+.*/, '/') ); }catch(e){}
+    location.hash = '#request/' + adNo;
   }
   openDetailByAdNumber(adNo);
+});
+// زر الرجوع/التقدّم يغيّر الهاش → افتح الطلب أو ارجع للفيد، بلا لمس تاريخ المتصفح
+window.addEventListener('hashchange', function(){
+  if(window._suppressHashOpen){ window._suppressHashOpen = false; return; }
+  var adNo = _readRequestFromUrl();
+  if(adNo){ openDetailByAdNumber(adNo); }
 });
 
 
