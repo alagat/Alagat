@@ -424,7 +424,7 @@ window.I18N = {
     statusAccepted:'مقبول', statusPending:'انتظار', yourOffer:'عرضك *', enterPrice:'أدخل سعرك',
     chooseRating:'اختر تقييمك', shareProfileTitle:'مشاركة الملف',
     ratingBad:'سيء', ratingOk:'مقبول', ratingGood:'جيد', ratingVeryGood:'جيد جداً', ratingExcellent:'ممتاز ⭐',
-    submitOfferOnRequest:'قدّم عرضك على هذا الطلب ←',
+    submitOfferOnRequest:'قدّم عرضك على هذا الطلب ←', shareRequestBtn:'⤴ مشاركة',
     messagesTitle:'الرسائل', searchInMessages:'🔍  ابحث في الرسائل...',
     onlineNow:'متصل الآن', typeYourMessage:'اكتب رسالتك...',
     noConvsYet:'لا توجد محادثات', unknownUser:'مجهول', newBadgeShort:'جديد',
@@ -485,7 +485,7 @@ window.I18N = {
     menu:'Menu', reviewsSecTitle:'⭐ Reviews', revAbout:'About:', chRefHint:'Tap to open the request', reqUnit:'requests', hotTitle:'🔥 Most Requested', allRegions:'📍 All Regions', allTimes:'🕐 All Times', tWithinDay:'Past day', tLast3Days:'Last 3 days', tLastWeek:'Last week', tLastMonth:'Last month', regRiyadh:'Riyadh', regMakkah:'Makkah', regMadinah:'Madinah', regQassim:'Qassim', regEastern:'Eastern', regAsir:'Asir', regTabuk:'Tabuk', regHail:'Hail', regNBorders:'N. Borders', regJouf:'Jouf', regJazan:'Jazan', regNajran:'Najran', regBaha:'Baha', home:'🏠 Home', logout:'🚪 Log Out', notifications:'🔔 Notifications',
     myMessages:'💬 My Messages', saved:'⭐ Saved', categories:'Categories',
     catProgramming:'💻 Programming', catDesign:'🎨 Design', catMaintenance:'🔧 General Maintenance', catMarketing:'📱 Marketing',
-    catOtherShort:'✨ Other', catMaintenanceShort:'🔧 Maintenance', catHealthShort:'💆 Health', catConsulting:'⚖️ Consulting', catTeaching:'📚 Teaching', catConstruction:'🏗️ Contracting', catHome:'🏠 Home Services', catHealth:'💆 Health & Beauty', catCars:'🚙 Cars', catEvents:'🎉 Events & Planning', catEventsShort:'🎉 Events', catOther:'✨ Other Services',
+    catOtherShort:'✨ Other', catMaintenanceShort:'🔧 Maintenance', catHealthShort:'💆 Health', catConsulting:'⚖️ Consulting', catTeaching:'📚 Teaching', catConstruction:'🏗️ Contracting', catHome:'🏠 Home Services', catHealth:'💆 Health & Beauty', catCars:'🚙 Cars', catEvents:'🚗 Ride', catEventsShort:'🚗 Ride', catOther:'✨ Other Services',
     postRequest:'Post a Request', whatDoYouNeed:'What do you need?', latest:'Latest', mostViewed:'Most Viewed',
     all:'All', searchInRequests:'Search the site...',
     budget:'Budget', duration:'Duration', serviceType:'Service Type', offer:'offers',
@@ -497,7 +497,7 @@ window.I18N = {
     statusAccepted:'Accepted', statusPending:'Pending', yourOffer:'Your Offer *', enterPrice:'Enter your price',
     chooseRating:'Choose your rating', shareProfileTitle:'Share Profile',
     ratingBad:'Bad', ratingOk:'Okay', ratingGood:'Good', ratingVeryGood:'Very Good', ratingExcellent:'Excellent ⭐',
-    submitOfferOnRequest:'Submit your offer on this request ←',
+    submitOfferOnRequest:'Submit your offer on this request ←', shareRequestBtn:'⤴ Share',
     messagesTitle:'Messages', searchInMessages:'🔍  Search messages...',
     onlineNow:'Online now', typeYourMessage:'Type your message...',
     noConvsYet:'No conversations yet', unknownUser:'Unknown', newBadgeShort:'New',
@@ -859,7 +859,7 @@ function logErrorToServer(message, stack){
 <!-- زر قدّم عرضك في الأسفل -->
 <div style="position:fixed;bottom:64px;left:0;right:0;padding:12px 16px;background:var(--bg);border-top:1px solid var(--b);display:flex;justify-content:center;gap:8px;z-index:99">
   <button class="btn-b" id="detOfferBtn" style="flex:1;max-width:620px;padding:13px;font-size:.9rem;border-radius:12px" data-i18n="submitOfferOnRequest">قدّم عرضك على هذا الطلب ←</button>
-  <button id="detShareBtn" style="flex:0 0 auto;padding:13px 20px;background:linear-gradient(135deg,var(--ac2),var(--ac));color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;white-space:nowrap">⤴ مشاركة</button>
+  <button id="detShareBtn" data-i18n="shareRequestBtn" style="flex:0 0 auto;padding:13px 20px;background:linear-gradient(135deg,var(--ac2),var(--ac));color:#fff;border:none;border-radius:12px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;white-space:nowrap">⤴ مشاركة</button>
 </div>
 </div>
 <div class="h-overlay" id="authModal" onclick="if(event.target===this)this.classList.remove('open')">
@@ -4782,10 +4782,12 @@ function shareCurrentRequest(){
   var title = titleEl ? titleEl.textContent : 'طلب على علاقات';
   if(!adNo){ hToast('⚠️ تعذر تجهيز رابط المشاركة'); return; }
   var url = window.location.origin + '/request/' + adNo;
+  var intro = (window.currentLang === 'en') ? 'Check out this request on Alagat:' : 'شاهد هذا الطلب على علاقات:';
+  var text = intro + '\n' + title;
   if(navigator.share){
-    navigator.share({ title: title, text: title, url: url }).catch(function(){});
+    navigator.share({ title: title, text: text, url: url }).catch(function(){});
   } else {
-    navigator.clipboard.writeText(url).then(function(){ hToast('✓ تم نسخ رابط الطلب'); }).catch(function(){ hToast(url); });
+    navigator.clipboard.writeText(url).then(function(){ hToast(window.currentLang === 'en' ? '\u2713 Link copied' : '\u2713 تم نسخ رابط الطلب'); }).catch(function(){ hToast(url); });
   }
 }
 document.addEventListener('DOMContentLoaded', function(){
