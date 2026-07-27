@@ -1,5 +1,13 @@
 {
   "rewrites": [
-    { "source": "/request/:id", "destination": "/api/request/:id" }
-  ]
+    { "source": "/request/:id", "destination": "/api/request/:id" },
+    { "source": "/profile/:id", "destination": "/index.html" },
+    { "source": "/messages", "destination": "/index.html" },
+    { "source": "/notifications", "destination": "/index.html" }
+  ],
+  "functions": {
+    "api/request/[id].js": {
+      "includeFiles": "index.html"
+    }
+  }
 }
