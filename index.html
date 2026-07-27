@@ -784,8 +784,8 @@ function logErrorToServer(message, stack){
 <!-- DETAIL PAGE -->
 <div id="detailPage" class="page" style="background:var(--bg);min-height:100vh;padding-bottom:140px">
 <nav style="background:#7f1d3d;padding:0 16px;display:flex;align-items:center;gap:10px;height:54px;position:sticky;top:0;z-index:100">
-  <button onclick="window.showPage('home')" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;width:36px">→</button>
-  <div onclick="window.showPage('home')" style="font-size:1.05rem;font-weight:900;color:#fff;cursor:pointer;white-space:nowrap">علاقات</div>
+  <button onclick="history.back()" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;width:36px">→</button>
+  <div onclick="history.back()" style="font-size:1.05rem;font-weight:900;color:#fff;cursor:pointer;white-space:nowrap">علاقات</div>
   <div style="flex:1"></div>
   <button id="langBtnDetail" onclick="setLang(window.currentLang==='ar'?'en':'ar')" title="Language" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;color:#fff">EN</button>
   <button id="themeBtnDetail" onclick="toggleTheme()" title="تبديل الثيم" data-i18n-title="toggleTheme" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s">🌙</button>
@@ -970,7 +970,7 @@ function logErrorToServer(message, stack){
 <nav>
   <div class="p-nav-av" id="pNavAv" onclick="openAccountMenu()" style="cursor:pointer">أ</div>
   <input class="p-nav-search" placeholder="ابحث عن خدمة.." data-i18n-placeholder="searchServicePlaceholder">
-  <div class="p-nav-logo" onclick="goHome()" style="cursor:pointer">علاقات</div>
+  <div class="p-nav-logo" onclick="history.back()" style="cursor:pointer">علاقات</div>
 </nav>
 <div class="p-cover"><div class="p-cover-dots"></div></div>
 <div class="profile-section">
@@ -1209,7 +1209,7 @@ function logErrorToServer(message, stack){
 </style>
 
 <nav>
-  <button class="n-back" onclick="goHome()">←</button>
+  <button class="n-back" onclick="history.back()">←</button>
   <div class="n-title" data-i18n="notificationsTitle">الإشعارات</div>
   <button class="n-mark" id="markAllBtn" onclick="markAllRead()" data-i18n="markAllRead">قراءة الكل</button>
 </nav>
@@ -1232,9 +1232,10 @@ function logErrorToServer(message, stack){
 
 /* ===== NAV BETWEEN PAGES ===== */
 window.goHome = function(){ stopChatListener(); showPage('home'); var bn=document.querySelector('.bottom-nav'); if(bn) bn.style.display='flex'; };
-window.goProfile = async function(reqId){
+window.goProfile = async function(reqId, _fromRouter){
  try{
   showPage('profile');
+  if(!_fromRouter){ navigateTo('/profile/me'); }
   profileChatReceiverId = null;
   // إخفاء كل الأزرار أولاً
   document.getElementById('topActionsOther').style.display='none';
@@ -1503,12 +1504,6 @@ function populateProfile(r){
 window.showPage = function showPage(id){
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
   document.getElementById(id).classList.add('active');
-  // نظّف هاش الطلب من العنوان عند مغادرة صفحة التفاصيل
-  try{
-    if(id !== 'detailPage' && /^#request\//.test(location.hash)){
-      history.replaceState(null, '', location.pathname + location.search);
-    }
-  }catch(e){}
   // تأكد البوتم نافبار ظاهر دائماً
   var bn = document.querySelector('.bottom-nav');
   if(bn) bn.style.display='flex';
@@ -2446,17 +2441,7 @@ window.openDetail=async function(id){
   }
 
   window.showPage('detailPage');
-
-  // تحديث شريط العنوان لرابط الطلب عبر الهاش (#request/رقم) — التحديث يبقيك داخل التطبيق وزر الرجوع طبيعي
-  try{
-    if(r.adNumber){
-      var _wantedHash = '#request/' + r.adNumber;
-      if(location.hash !== _wantedHash){
-        // replaceState: يحدّث الرابط بلا إضافة حالة لتاريخ المتصفح، فيبقى زر الرجوع كما كان قبل أي تعديل
-        history.replaceState(null, '', location.pathname + location.search + _wantedHash);
-      }
-    }
-  }catch(e){}
+  if(!arguments[1] && r.adNumber){ navigateTo('/request/' + r.adNumber); }
 
   // إظهار لوحة تحكم صاحب الطلب إذا كان المستخدم الحالي هو المالك
   (async function(){
@@ -4032,9 +4017,10 @@ window.openProfileChat = async function openProfileChat(receiverId, name){
 /* ===== MESSAGES LOGIC - SUPABASE ===== */
 var currentReceiverId = null;
 
-window.goMessages = function(){
+window.goMessages = function(_fromRouter){
   if(!state.loggedIn){openAuth('login');return;}
   showPage('messages');
+  if(!_fromRouter){ navigateTo('/messages'); }
   document.getElementById('convList').style.display = 'block';
   document.getElementById('chatView').style.display = 'none';
   document.getElementById('mNavTitle').textContent = 'الرسائل';
@@ -4501,9 +4487,9 @@ window.msgsBack = function(){
   if(cv.style.display!=='none'){
     cv.style.display='none'; cl.style.display='block';
     document.getElementById('mNavTitle').textContent='الرسائل';
-    document.getElementById('mNavBack').onclick=goHome;
+    document.getElementById('mNavBack').onclick=function(){ history.back(); };
     loadConversations();
-  } else { goHome(); }
+  } else { history.back(); }
 };
 
 window.filterConvs=function(q){
@@ -4728,14 +4714,15 @@ async function updateMsgsBadge(){
 }
 
 // offer-contact-btn handler defined above
-window.goNotifs=function(){if(!state.loggedIn){openAuth('login');return;}showPage('notifs');var bn=document.querySelector('.bottom-nav');if(bn)bn.style.display='none';loadNotifications();};
+window.goNotifs=function(_fromRouter){if(!state.loggedIn){openAuth('login');return;}showPage('notifs');if(!_fromRouter){ navigateTo('/notifications'); }var bn=document.querySelector('.bottom-nav');if(bn)bn.style.display='none';loadNotifications();};
 document.getElementById('si-notif').onclick=function(){ if(!state.loggedIn){openAuth('login');return;} goNotifs(); };
 
 // فتح ملف شخصي بواسطة UUID المستخدم (من عروض أو رسائل)
-window.openUserProfile = async function(userId){
+window.openUserProfile = async function(userId, _fromRouter){
  if(!userId) return;
  try{
   showPage('profile');
+  if(!_fromRouter){ navigateTo('/profile/' + encodeURIComponent(userId)); }
   // إخفاء أزرار المالك وإظهار أزرار الزائر
   document.getElementById('topActionsOwn').style.display = 'none';
   document.getElementById('topActionsOther').style.display = 'flex';
@@ -4767,17 +4754,17 @@ window.openUserProfile = async function(userId){
 };
 
 // ====== فتح طلب مباشرة من رابط خارجي: /?r=83817 ======
-async function openDetailByAdNumber(adNumber){
+async function openDetailByAdNumber(adNumber, _fromRouter){
   try{
     var existing = reqs.find(function(x){ return String(x.adNumber)===String(adNumber); });
-    if(existing){ openDetail(existing.id); return; }
+    if(existing){ openDetail(existing.id, _fromRouter); return; }
     var {data, error} = await sb.from('requests')
       .select('*, profiles(full_name,username,avatar_color,avatar_letter)')
       .eq('ad_number', adNumber).single();
     if(error || !data){ hToast('⚠️ الطلب غير موجود أو تم حذفه'); return; }
     var mapped = mapRequestRow(data);
     reqs.push(mapped);
-    openDetail(mapped.id);
+    openDetail(mapped.id, _fromRouter);
   }catch(e){
     console.error('openDetailByAdNumber error:', e);
     logErrorToServer('openDetailByAdNumber: ' + (e && e.message), e && e.stack);
@@ -4795,19 +4782,50 @@ function _readRequestFromUrl(){
   return null;
 }
 document.addEventListener('DOMContentLoaded', function(){
-  var adNo = _readRequestFromUrl();
-  if(!adNo) return;
-  // روابط خارجية (/request/ أو ?r=) → حوّلها لهاش نظيف داخل التطبيق
-  if(!/^#request\//.test(location.hash)){
-    try{ history.replaceState(null, '', '/#request/' + adNo); }catch(e){}
+  var path = location.pathname;
+  if(_matchRoute(path)){
+    history.replaceState({ alagatPath: path }, '', path);
+    renderRoute(path);
+    return;
   }
-  openDetailByAdNumber(adNo);
+  // توافق مع الروابط القديمة: ?r=123 أو #request/123 → حوّلها للمسار الجديد /request/123
+  var legacy = _readRequestFromUrl();
+  if(legacy){
+    var newPath = '/request/' + legacy;
+    history.replaceState({ alagatPath: newPath }, '', newPath);
+    renderRoute(newPath);
+  }
 });
-// زر الرجوع/التقدّم يغيّر الهاش → افتح الطلب أو ارجع للفيد، بلا لمس تاريخ المتصفح
-window.addEventListener('hashchange', function(){
-  if(window._suppressHashOpen){ window._suppressHashOpen = false; return; }
-  var adNo = _readRequestFromUrl();
-  if(adNo){ openDetailByAdNumber(adNo); }
+// زر الرجوع/التقدّم في المتصفح
+// ============================================================
+// موجّه موحّد — روابط حقيقية بلا هاش، مثل المواقع الكبيرة
+// كل شاشة فرعية = رابط واحد. الرجوع = history.back() في كل مكان، بلا استثناء
+// ============================================================
+function _matchRoute(path){
+  var m;
+  if((m = path.match(/^\/request\/(\d{1,12})\/?$/))) return { name:'request', param:m[1] };
+  if((m = path.match(/^\/profile\/([^\/]+)\/?$/))) return { name:'profile', param:decodeURIComponent(m[1]) };
+  if(path === '/messages') return { name:'messages' };
+  if(path === '/notifications') return { name:'notifications' };
+  return null;
+}
+function renderRoute(path){
+  var r = _matchRoute(path);
+  if(!r){ showPage('home'); return; }
+  if(r.name === 'request'){ openDetailByAdNumber(r.param, true); }
+  else if(r.name === 'profile'){
+    if(r.param === 'me'){ goProfile(undefined, true); } else { openUserProfile(r.param, true); }
+  }
+  else if(r.name === 'messages'){ goMessages(true); }
+  else if(r.name === 'notifications'){ goNotifs(true); }
+}
+function navigateTo(path){
+  if(location.pathname !== path){
+    history.pushState({ alagatPath: path }, '', path);
+  }
+}
+window.addEventListener('popstate', function(){
+  renderRoute(location.pathname);
 });
 
 
