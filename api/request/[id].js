@@ -2,6 +2,23 @@ const SUPA_URL = 'https://ohkgmzwpzijxcttqytrq.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oa2dtendwemlqeGN0dHF5dHJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNzA1ODgsImV4cCI6MjA5Njc0NjU4OH0.Qx2paUh-d7LTTHFSljt7cnoenOdzOdcno9PGobtRb_g';
 const SITE = 'https://alagat.com';
 
+// كاشف الروبوتات — قوقل ومعاينات المشاركة تحصل على الصفحة المبسّطة أدناه؛
+// أي متصفح حقيقي يحصل على التطبيق الكامل نفسه، الذي يقرأ الرابط ويفتح الطلب مباشرة
+const BOT_UA = /googlebot|bingbot|yandex|baiduspider|duckduckbot|slurp|facebookexternalhit|facebot|twitterbot|linkedinbot|whatsapp|telegrambot|slackbot|discordbot|pinterest|embedly|quora link preview|redditbot|applebot|ia_archiver|semrushbot|ahrefsbot|mj12bot|dotbot|petalbot/i;
+
+const fs = require('fs');
+const path = require('path');
+let _appHtmlCache = null;
+function loadAppHtml(){
+  if(_appHtmlCache) return _appHtmlCache;
+  try{
+    _appHtmlCache = fs.readFileSync(path.join(process.cwd(), 'index.html'), 'utf8');
+  }catch(e){
+    _appHtmlCache = null;
+  }
+  return _appHtmlCache;
+}
+
 const COLUMNS = ['id','title','description','category','budget_text','duration','work_type','city','is_urgent','media_urls','created_at','ad_number','offers_count','status'].join(',');
 const REL_COLUMNS = ['ad_number','title','city','budget_text','category'].join(',');
 const REL_LIMIT = 6;
@@ -168,6 +185,18 @@ async function sbGet(path){
 }
 
 module.exports = async function handler(req, res){
+  const ua = String((req.headers && req.headers['user-agent']) || '');
+  const isBot = BOT_UA.test(ua);
+
+  if(!isBot){
+    const appHtml = loadAppHtml();
+    if(appHtml){
+      res.setHeader('Content-Type','text/html; charset=utf-8');
+      res.setHeader('Cache-Control','no-store');
+      return res.status(200).send(appHtml);
+    }
+  }
+
   res.setHeader('Content-Type','text/html; charset=utf-8');
 
   const id = String(req.query.id || '').trim();
@@ -207,4 +236,4 @@ module.exports = async function handler(req, res){
 
   res.setHeader('Cache-Control','public, s-maxage=600, stale-while-revalidate=86400');
   return res.status(200).send(requestPage(r, related));
-      }
+                  }
