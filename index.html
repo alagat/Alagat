@@ -2677,7 +2677,7 @@ window.submitOfferReply = async function(offerId){
     input.dataset.busy = 'false';
   }
 };
-function openAuth(tab){switchAuthTab(tab||'login');var lp=document.getElementById('loginPass');if(lp)lp.type='password';var rp=document.getElementById('regPassword');if(rp)rp.type='password';document.getElementById('authModal').classList.add('open');}
+function openAuth(tab){switchAuthTab(tab||'login');var lp=document.getElementById('loginPass');if(lp)lp.type='password';var rp=document.getElementById('regPassword');if(rp)rp.type='password';document.getElementById('authModal').classList.add('open');try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); }catch(e){}}
 function switchAuthTab(tab){['login','register'].forEach(function(t){document.getElementById('f-'+t).style.display=t===tab?'block':'none';var b=document.getElementById('at-'+t);b.className='at'+(t===tab?' on':'');});}
 window.togglePwVis=function(fieldId,iconEl){
   var el=document.getElementById(fieldId);
@@ -3016,6 +3016,7 @@ function openOtpModal(email){
   var codeEl = document.getElementById('otpCode');
   if(codeEl) codeEl.value = '';
   document.getElementById('otpModal').classList.add('open');
+  try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); }catch(e){}
 }
 document.getElementById('doVerifyOtp').onclick=async function(){
   var code = document.getElementById('otpCode').value.trim();
@@ -3712,7 +3713,7 @@ async function loadProfileData(userId){
   document.getElementById('p-offers').innerHTML=offHtml;
 }
 
-window.openPModal = function(id){document.getElementById(id).classList.add('open');};
+window.openPModal = function(id){document.getElementById(id).classList.add('open');try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); }catch(e){}};
 
 // ====== التحقق من وجود صفقة مكتملة قبل السماح بالتقييم (يمنع تقييمات بلا تعامل حقيقي) ======
 window.openRatingModalChecked = async function(){
@@ -4860,57 +4861,15 @@ function navigateTo(path){
   }
 }
 // ============================================================
-// مراقبة عامة لكل المودالات (نافذة الدخول، الشات، التقييم، المشاركة...)
-// بلا حاجة لتعديل كل نقطة فتح/إغلاق يدويًا — أي مودال يفتح أو يغلق، من أي مكان
-// في الكود، يُكتشف تلقائيًا هنا ويُزامَن مع تاريخ المتصفح
+// إغلاق المودالات عبر زر الرجوع — فحص مباشر لحالة الصفحة الفعلية،
+// بلا مكدس JS منفصل ولا أعلام كبت (تبسيط بعد ثبوت هشاشة النسخة السابقة)
 // ============================================================
-window._openModalStack = [];
-window._modalObserverSuppressed = false;
-(function(){
-  var SEL = '.p-overlay, .h-overlay';
-  function handleMutation(el){
-    if(!el.id) return;
-    var isOpen = el.classList.contains('open');
-    var idx = window._openModalStack.indexOf(el.id);
-    if(isOpen && idx === -1){
-      window._openModalStack.push(el.id);
-      hToast('🟢 فتح: '+el.id+' | مكدس: '+JSON.stringify(window._openModalStack)+' | مُكبَت: '+window._modalObserverSuppressed);
-      if(!window._modalObserverSuppressed){
-        try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); }catch(e){}
-      }
-    } else if(!isOpen && idx !== -1){
-      window._openModalStack.splice(idx,1);
-      hToast('🔴 إغلاق: '+el.id+' | مكدس: '+JSON.stringify(window._openModalStack)+' | مُكبَت: '+window._modalObserverSuppressed+' | state.alagatModal: '+(history.state&&history.state.alagatModal));
-      if(!window._modalObserverSuppressed && history.state && history.state.alagatModal){
-        try{ history.back(); }catch(e){}
-      }
-    }
-  }
-  var observer = new MutationObserver(function(mutList){
-    mutList.forEach(function(m){
-      if(m.attributeName === 'class' && m.target && m.target.matches && m.target.matches(SEL)){
-        handleMutation(m.target);
-      }
-    });
-  });
-  document.querySelectorAll(SEL).forEach(function(el){
-    observer.observe(el, { attributes:true, attributeFilter:['class'] });
-  });
-})();
-
 window.addEventListener('popstate', function(){
-  hToast('⬅️ popstate | مكدس: '+JSON.stringify(window._openModalStack)+' | المسار الجديد: '+location.pathname+' | state: '+JSON.stringify(history.state));
-  // إذا كان هناك مودال مفتوح، الرجوع يغلقه فقط ولا يغيّر الصفحة تحته
-  if(window._openModalStack && window._openModalStack.length){
-    var mid = window._openModalStack[window._openModalStack.length-1];
-    window._modalObserverSuppressed = true;
-    var el = document.getElementById(mid);
-    if(el){
-      el.classList.remove('open');
-      el.style.display='';el.style.opacity='';el.style.pointerEvents='';el.style.position='';el.style.inset='';el.style.zIndex='';el.style.alignItems='';
-      var sh = el.querySelector('.sheet'); if(sh) sh.style.transform='';
-    }
-    setTimeout(function(){ window._modalObserverSuppressed = false; }, 0);
+  var openModal = document.querySelector('.p-overlay.open, .h-overlay.open');
+  if(openModal){
+    openModal.classList.remove('open');
+    openModal.style.display='';openModal.style.opacity='';openModal.style.pointerEvents='';openModal.style.position='';openModal.style.inset='';openModal.style.zIndex='';openModal.style.alignItems='';
+    var sh = openModal.querySelector('.sheet'); if(sh) sh.style.transform='';
     return;
   }
   renderRoute(location.pathname);
