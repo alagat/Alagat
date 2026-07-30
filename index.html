@@ -4709,11 +4709,8 @@ function renderNotifs(tab){
   }
   var el=document.getElementById('nList');
   if(!list.length){ el.innerHTML='<div class="n-empty"><div class="n-empty-icon">🔔</div><div>'+t('noNotifsYet')+'</div></div>'; return; }
-  var today=list.filter(function(n){return (Date.now()-new Date(n.created_at))<86400000;});
-  var older=list.filter(function(n){return (Date.now()-new Date(n.created_at))>=86400000;});
   var html='';
-  if(today.length){ html+='<div class="n-section">اليوم</div>'; today.forEach(function(n){html+=makeNotif(n);}); }
-  if(older.length){ html+='<div class="n-section">سابقاً</div>'; older.forEach(function(n){html+=makeNotif(n);}); }
+  list.forEach(function(n){html+=makeNotif(n);});
   el.innerHTML=html;
 }
 
