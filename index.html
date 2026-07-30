@@ -478,6 +478,9 @@ window.I18N = {
     offerModalTitle:'تقديم عرض', offerDescPlaceholder:'اشرح كيف يمكنك تنفيذ هذا الطلب...',
     offerPriceLbl:'السعر المعروض (ريال)', offerDurLbl:'مدة التنفيذ',
     submitOfferBtn:'إرسال العرض ←', noSavedYet:'لا توجد طلبات في المفضلة بعد', backToFeed:'← العودة',
+    introBannerTitle:'علاقات — انشر طلبك، والعروض تتسابق إليك',
+    introBannerDesc:'مع علاقات انشر طلبك في أي مجال — تعليم، مقاولات، سيارات، تصميم وغيرها — والعروض تتسابق إليك بأفضل الأسعار، بدون تعب.',
+    introBannerProviderLine:'وإن كنت تقدر تنفّذ الطلب: قدّم عرضك ونافس عليه.',
   },
   en: {
     appName:'Alagat', requests:'Requests', toggleTheme:'Toggle theme',
@@ -552,6 +555,9 @@ window.I18N = {
     offerModalTitle:'Submit an Offer', offerDescPlaceholder:'Explain how you can fulfill this request...',
     offerPriceLbl:'Offered Price (SAR)', offerDurLbl:'Completion Time',
     submitOfferBtn:'Send Offer ←', noSavedYet:'No favorite requests yet', backToFeed:'← Back',
+    introBannerTitle:'Alagat — Post your request, offers race to you',
+    introBannerDesc:'With Alagat, post a request in any field — teaching, contracting, cars, design, and more — and offers race to you at the best prices, hassle-free.',
+    introBannerProviderLine:'Can get the job done? Submit your offer and compete for it.',
   }
 };
 window.currentLang = localStorage.getItem('alagat_lang') || 'ar';
@@ -782,9 +788,9 @@ function logErrorToServer(message, stack){
     </div>
     <div id="introBanner" style="display:none;margin:10px 12px 4px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,#7f1d3d,#c9a227);color:#fff;position:relative;box-shadow:0 4px 14px rgba(127,29,61,.25)">
       <button onclick="hideIntroBanner(true)" aria-label="إخفاء" style="position:absolute;top:8px;left:10px;background:rgba(255,255,255,.18);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.9rem;line-height:1">✕</button>
-      <div style="font-weight:800;font-size:1rem;margin-bottom:6px">علاقات موقع الخدمات السعودي</div>
-      <div style="font-size:.85rem;line-height:1.7;opacity:.95">في علاقات اطلب أي خدمة في أي مجال — تعليم، مقاولات، سيارات، تصميم وغيرها — وستصلك أفضل العروض بأفضل الأسعار، بدون تعب.</div>
-      <div style="font-size:.85rem;line-height:1.7;margin-top:4px;font-weight:700">وإن كنت صاحب خبرة: قدّم عرضك وزد دخلك.</div>
+      <div data-i18n="introBannerTitle" style="font-weight:800;font-size:1rem;margin-bottom:6px">علاقات — انشر طلبك، والعروض تتسابق إليك</div>
+      <div data-i18n="introBannerDesc" style="font-size:.85rem;line-height:1.7;opacity:.95">مع علاقات انشر طلبك في أي مجال — تعليم، مقاولات، سيارات، تصميم وغيرها — والعروض تتسابق إليك بأفضل الأسعار، بدون تعب.</div>
+      <div data-i18n="introBannerProviderLine" style="font-size:.85rem;line-height:1.7;margin-top:4px;font-weight:700">وإن كنت تقدر تنفّذ الطلب: قدّم عرضك ونافس عليه.</div>
     </div>
     <div id="feedContent"></div>
   </main>
@@ -1283,6 +1289,7 @@ window.goProfile = async function(reqId, _fromRouter){
       if(req&&req.user_id){
         var targetUserId = req.user_id;
         profileChatReceiverId = targetUserId;
+        window._profilePageOwnerId = targetUserId;
         var {data:prof} = await sb.from('profiles').select('*').eq('id',targetUserId).single();
         if(prof) populateProfileFromDB(prof);
         loadProfileData(targetUserId);
@@ -1339,6 +1346,8 @@ window.goProfile = async function(reqId, _fromRouter){
   } else {
     // فتح ملفك أنت مباشرة
     if(currentUser){
+      window._profilePageOwnerId = currentUser.id;
+      _paintProfileHeaderInstant(currentUser.id); // رسم فوري من الكاش المحلي، قبل انتظار الشبكة
       var {data:prof} = await sb.from('profiles').select('*').eq('id',currentUser.id).single();
       if(prof) populateProfileFromDB(prof);
       loadProfileData(currentUser.id);
@@ -1399,6 +1408,37 @@ window.toggleFollow = async function(){
   }
 };
 
+function _profileCacheKey(uid){ return 'alagat_pcache_' + uid; }
+function _getCachedProfile(uid){
+  try{ var raw = localStorage.getItem(_profileCacheKey(uid)); return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
+}
+function _setCachedProfile(uid, p){
+  if(!uid || !p) return;
+  try{
+    localStorage.setItem(_profileCacheKey(uid), JSON.stringify({
+      full_name: p.full_name, username: p.username, avatar_color: p.avatar_color, rating: p.rating
+    }));
+  }catch(e){}
+}
+// رسم فوري لرأس صفحة البروفايل من آخر بيانات محفوظة محليًا (لو موجودة) — قبل انتظار الشبكة،
+// لمنع ظهور "الرجوع للصفر ثم التحديث" اللي يحس الموقع فيه بطيء/ابتدائي عند تحديث الصفحة
+function _paintProfileHeaderInstant(uid){
+  var c = _getCachedProfile(uid);
+  if(!c) return false;
+  var letter = (c.full_name||'م')[0];
+  var avEl = document.querySelector('#profile .p-av');
+  if(avEl){ avEl.textContent = letter; avEl.style.background = c.avatar_color||'linear-gradient(135deg,#7f1d3d,#c9a227)'; }
+  var navAv = document.querySelector('#profile .p-nav-av');
+  if(navAv){ navAv.textContent = letter; if(c.avatar_color){ navAv.style.background = c.avatar_color; navAv.style.color = '#fff'; } }
+  var nameEl = document.querySelector('#profile .profile-name');
+  if(nameEl) nameEl.innerHTML = escH(c.full_name||'مستخدم') + ' <span class="p-verified">✓</span>';
+  var handleEl = document.querySelector('#profile .profile-handle');
+  if(handleEl) handleEl.textContent = '@' + (c.username||'user');
+  var ratingEl = document.getElementById('profileRating');
+  if(ratingEl) ratingEl.textContent = (c.rating||'0.0') + ' ⭐';
+  return true;
+}
+
 function populateProfileFromDB(p){
   // Update share URL with real username
   var shareUrlEl = document.getElementById('shareUrl');
@@ -1438,6 +1478,7 @@ function populateProfileFromDB(p){
   if(rTitle) rTitle.textContent='⭐ تقييم '+(p.full_name||'المستخدم');
   // نحفظ بيانات الملف الحالي للاستخدام عند التعديل
   window._currentProfileData = p;
+  if(p && p.id) _setCachedProfile(p.id, p);
 }
 
 // =====================
@@ -1814,11 +1855,55 @@ async function loadHotCategories(){
   }catch(e){ console.error('loadHotCategories failed:', e); document.getElementById('hotCatsContainer').innerHTML='<div style="text-align:center;padding:16px;color:var(--t2);font-size:.8rem">تعذّر تحميل البيانات</div>'; }
 }
 
+// كاش محلي لآخر 3 تركيبات فلاتر استُخدمت — يرسم فورًا آخر نسخة معروفة بدل هيكل التحميل، لتفادي "ومضة" التحميل في كل فتح/تحديث
+var FEED_CACHE_KEY = 'alagat_feed_cache_v2';
+var FEED_CACHE_MAX_AGE_MS = 6 * 3600 * 1000; // 6 ساعات — بعدها يُعتبر الكاش قديم جداً ويُتجاهل
+var FEED_CACHE_MAX_ENTRIES = 3;
+// البحث النصي الحر يُستثنى من الكاش (تركيبات غير محدودة عمليًا، تخزينها بلا فايدة)
+function _feedCacheKeyFor(){
+  if(state.search) return null;
+  return [state.activeTab, state.activeFilter, state.activeCity, state.activeTime].join('|');
+}
+function _getCachedFeed(key){
+  if(!key) return null;
+  try{
+    var raw = localStorage.getItem(FEED_CACHE_KEY);
+    if(!raw) return null;
+    var entries = JSON.parse(raw) || [];
+    var found = entries.find(function(e){ return e.key===key; });
+    if(!found || (Date.now() - (found.ts||0)) > FEED_CACHE_MAX_AGE_MS) return null;
+    return found;
+  }catch(e){ return null; }
+}
+function _setCachedFeed(key, html, countText){
+  if(!key) return;
+  try{
+    var raw = localStorage.getItem(FEED_CACHE_KEY);
+    var entries = raw ? (JSON.parse(raw) || []) : [];
+    entries = entries.filter(function(e){ return e.key!==key; }); // شيل النسخة القديمة لنفس التركيبة (لو موجودة)
+    entries.unshift({key:key, html:html, count:countText, ts:Date.now()}); // الأحدث دايمًا بالأول
+    if(entries.length > FEED_CACHE_MAX_ENTRIES) entries = entries.slice(0, FEED_CACHE_MAX_ENTRIES); // نحتفظ بآخر 3 فقط (LRU)
+    localStorage.setItem(FEED_CACHE_KEY, JSON.stringify(entries));
+  }catch(e){}
+}
+
 function renderFeed(){
   currentPage=0;
   hasMoreFromServer=true;
   var el=document.getElementById('feedContent');
-  el.innerHTML='<div id="feedSkeleton" style="padding:14px">'+makeSkeleton(6)+'</div>';
+  var _paintedFromCache = false;
+  var _cacheKey = _feedCacheKeyFor();
+  if(_cacheKey){
+    var _cached = _getCachedFeed(_cacheKey);
+    if(_cached){
+      el.innerHTML = _cached.html;
+      var _rc = document.getElementById('resultCount'); if(_rc && _cached.count) _rc.textContent = _cached.count;
+      _paintedFromCache = true;
+    }
+  }
+  if(!_paintedFromCache){
+    el.innerHTML='<div id="feedSkeleton" style="padding:14px">'+makeSkeleton(6)+'</div>';
+  }
 
   function attemptFetch(retriesLeft){
     buildFeedQuery()
@@ -1859,6 +1944,10 @@ function renderFeed(){
         el.innerHTML=html;
         bindCardEvents();
         setupInfiniteScroll();
+        if(_cacheKey){
+          var _rcEl = document.getElementById('resultCount');
+          _setCachedFeed(_cacheKey, html, _rcEl ? _rcEl.textContent : '');
+        }
       })
       .catch(function(e){
         console.error('renderFeed network error:', e);
@@ -2708,7 +2797,7 @@ window.togglePwVis=function(fieldId,iconEl){
   if(el.type==='password'){ el.type='text'; iconEl.textContent='🙈'; }
   else { el.type='password'; iconEl.textContent='👁️'; }
 };
-function doLoginUI(){
+function doLoginUI(showWelcome){
   try{ hideIntroBanner(false); }catch(e){}
   state.loggedIn=true;
   document.getElementById('authModal').classList.remove('open');
@@ -2732,17 +2821,19 @@ function doLoginUI(){
       var p = r.data;
       var letter = (p.full_name||'م')[0];
       document.querySelectorAll('.nav-av,#userAvatar,#pNavAv,#amAvatar').forEach(function(el){ el.textContent=letter; });
-      // تحديث صفحة الملف الشخصي
-      var avEl=document.querySelector('#profile .p-av');
-      if(avEl){avEl.textContent=letter;}
-      var nameEl=document.querySelector('#profile .profile-name');
-      if(nameEl) nameEl.innerHTML=escH(p.full_name||'مستخدم')+' <span class="p-verified">✓</span>';
-      var handleEl=document.querySelector('#profile .profile-handle');
-      if(handleEl) handleEl.textContent='@'+(p.username||'user');
-      var metaVals=document.querySelectorAll('#profile .meta-val');
-      if(metaVals[0]) metaVals[0].textContent=p.deals_count||0;
-      if(metaVals[1]) metaVals[1].textContent=(p.rating||'0.0')+' ⭐';
-      if(metaVals[2]) metaVals[2].textContent=p.followers_count||0;
+      // تحديث صفحة الملف الشخصي — فقط لو المفتوح حاليًا هو بروفايلك أنت، وليس بروفايل شخص آخر
+      if(window._profilePageOwnerId === uid){
+        var avEl=document.querySelector('#profile .p-av');
+        if(avEl){avEl.textContent=letter;}
+        var nameEl=document.querySelector('#profile .profile-name');
+        if(nameEl) nameEl.innerHTML=escH(p.full_name||'مستخدم')+' <span class="p-verified">✓</span>';
+        var handleEl=document.querySelector('#profile .profile-handle');
+        if(handleEl) handleEl.textContent='@'+(p.username||'user');
+        var metaVals=document.querySelectorAll('#profile .meta-val');
+        if(metaVals[0]) metaVals[0].textContent=p.deals_count||0;
+        if(metaVals[1]) metaVals[1].textContent=(p.rating||'0.0')+' ⭐';
+        if(metaVals[2]) metaVals[2].textContent=p.followers_count||0;
+      }
     });
   });
   // كل خطوة معزولة: فشل واحدة لا يمنع البقية، وأي فشل يُسجل باسمه في error_logs
@@ -2750,7 +2841,7 @@ function doLoginUI(){
     try{ var r=step[1](); if(r&&r.catch) r.catch(function(e){ logErrorToServer('init:'+step[0]+': '+(e&&e.message), e&&e.stack); }); }
     catch(e){ console.error('init:'+step[0], e); logErrorToServer('init:'+step[0]+': '+(e&&e.message), e&&e.stack); }
   });
-  hToast('👋 أهلاً بك في علاقات!');
+  if(showWelcome){ hToast('👋 أهلاً بك في علاقات!'); }
 }
 function doLogin(){doLoginUI();}
 async function doLogout(){if(!confirm('هل تريد تسجيل الخروج؟'))return;await sb.auth.signOut();state.loggedIn=false;document.getElementById('navGuest').style.display='flex';document.getElementById('navUser').style.display='none';document.getElementById('navUserLinks').style.display='none';document.getElementById('miniBar').style.display='none';document.getElementById('rpGuest').style.display='block';document.getElementById('rpUser').style.display='none';['si-logout','si-notif','si-msgs','si-saved'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});renderFeed();hToast('تم تسجيل الخروج');}
@@ -2811,8 +2902,7 @@ document.getElementById('doLogin').onclick=async function(){
       }
       hToast('❌ ' + result.error.message); return;
     }
-    doLoginUI();
-    // اطلب من المتصفح يعرض نافذة "حفظ كلمة المرور؟" الأصلية (يشتغل بمعظم المتصفحات الحديثة)
+    doLoginUI(true);
     if(window.PasswordCredential){
       try{
         var cred = new PasswordCredential({ id: email, password: pass, name: email });
@@ -3672,12 +3762,11 @@ window.switchPTab = function(el,id){
 async function loadProfileReviews(userId){
   var sec=document.getElementById('pReviewsSec'), list=document.getElementById('pReviewsList');
   if(!sec||!list) return;
-  sec.style.display='none'; list.innerHTML='';
   try{
     var {data:revs,error}=await sb.from('reviews')
       .select('rating,comment,created_at,reviewer_id,request_id')
       .eq('provider_id',userId).order('created_at',{ascending:false}).limit(20);
-    if(error||!revs||!revs.length) return;
+    if(error||!revs||!revs.length){ sec.style.display='none'; list.innerHTML=''; return; }
     var rids=[]; var qids=[];
     revs.forEach(function(r){ if(r.reviewer_id&&rids.indexOf(r.reviewer_id)<0)rids.push(r.reviewer_id); if(r.request_id&&qids.indexOf(r.request_id)<0)qids.push(r.request_id); });
     var profs={}, reqs={};
@@ -4790,9 +4879,12 @@ window.openUserProfile = async function(userId, _fromRouter){
   document.getElementById('topActionsOwn').style.display = 'none';
   document.getElementById('topActionsOther').style.display = 'flex';
   document.getElementById('followBtn').style.display = 'block';
+  window._profilePageOwnerId = userId;
+  _paintProfileHeaderInstant(userId); // رسم فوري من الكاش المحلي، قبل انتظار الشبكة — يمنع ظهور "رجوع للصفر"
   // تحميل بيانات الملف
   var {data:p} = await sb.from('profiles').select('*').eq('id', userId).maybeSingle();
   if(!p) return;
+  _setCachedProfile(userId, p);
   var letter = (p.full_name||'م')[0];
   var avEl = document.querySelector('#profile .p-av');
   if(avEl){ avEl.textContent = letter; avEl.style.background = p.avatar_color||'linear-gradient(135deg,#7f1d3d,#c9a227)'; }
