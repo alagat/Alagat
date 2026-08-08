@@ -834,8 +834,8 @@ function logErrorToServer(message, stack){
 <!-- DETAIL PAGE -->
 <div id="detailPage" class="page" style="background:var(--bg);min-height:100vh;padding-bottom:140px">
 <nav style="background:#7f1d3d;padding:0 16px;display:flex;align-items:center;gap:10px;height:54px;position:sticky;top:0;z-index:100">
-  <button onclick="history.back()" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;width:36px">→</button>
-  <div onclick="history.back()" style="font-size:1.05rem;font-weight:900;color:#fff;cursor:pointer;white-space:nowrap">علاقات</div>
+  <button onclick="smartBack()" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;width:36px">→</button>
+  <div onclick="smartBack()" style="font-size:1.05rem;font-weight:900;color:#fff;cursor:pointer;white-space:nowrap">علاقات</div>
   <div style="flex:1"></div>
   <button id="langBtnDetail" onclick="setLang(window.currentLang==='ar'?'en':'ar')" title="Language" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;color:#fff">EN</button>
   <button id="themeBtnDetail" onclick="toggleTheme()" title="تبديل الثيم" data-i18n-title="toggleTheme" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s">🌙</button>
@@ -1022,7 +1022,7 @@ function logErrorToServer(message, stack){
 <nav>
   <div class="p-nav-av" id="pNavAv" onclick="openAccountMenu()" style="cursor:pointer">أ</div>
   <input class="p-nav-search" placeholder="ابحث عن خدمة.." data-i18n-placeholder="searchServicePlaceholder">
-  <div class="p-nav-logo" onclick="history.back()" style="cursor:pointer">علاقات</div>
+  <div class="p-nav-logo" onclick="smartBack()" style="cursor:pointer">علاقات</div>
 </nav>
 <div class="p-cover"><div class="p-cover-dots"></div></div>
 <div class="profile-section">
@@ -1261,7 +1261,7 @@ function logErrorToServer(message, stack){
 </style>
 
 <nav>
-  <button class="n-back" onclick="history.back()">←</button>
+  <button class="n-back" onclick="smartBack()">←</button>
   <div class="n-title" data-i18n="notificationsTitle">الإشعارات</div>
   <button class="n-mark" id="markAllBtn" onclick="markAllRead()" data-i18n="markAllRead">قراءة الكل</button>
 </nav>
@@ -2519,7 +2519,7 @@ window.openDetail=async function(id){
   if(bc){
     var arrow = '<span style="color:var(--t3)">‹</span>';
     bc.innerHTML =
-      '<span onclick="window.showPage(\'home\')" style="color:var(--ac);cursor:pointer;font-weight:600">'+t('appName')+'</span>' +
+      '<span onclick="navigateTo(\'/\');window.showPage(\'home\')" style="color:var(--ac);cursor:pointer;font-weight:600">'+t('appName')+'</span>' +
       arrow +
       '<span onclick="goHomeFilteredByCategory(\''+escH(r.cat)+'\')" style="color:var(--ac);cursor:pointer;font-weight:600">'+escH(trVal(r.cat))+'</span>' +
       arrow +
@@ -2806,7 +2806,7 @@ window.submitOfferReply = async function(offerId){
     input.dataset.busy = 'false';
   }
 };
-function openAuth(tab){switchAuthTab(tab||'login');var lp=document.getElementById('loginPass');if(lp)lp.type='password';var rp=document.getElementById('regPassword');if(rp)rp.type='password';document.getElementById('authModal').classList.add('open');try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); }catch(e){}}
+function openAuth(tab){switchAuthTab(tab||'login');var lp=document.getElementById('loginPass');if(lp)lp.type='password';var rp=document.getElementById('regPassword');if(rp)rp.type='password';document.getElementById('authModal').classList.add('open');try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); window._appHistoryDepth = (window._appHistoryDepth||0) + 1; }catch(e){}}
 function switchAuthTab(tab){['login','register'].forEach(function(t){document.getElementById('f-'+t).style.display=t===tab?'block':'none';var b=document.getElementById('at-'+t);b.className='at'+(t===tab?' on':'');});}
 window.togglePwVis=function(fieldId,iconEl){
   var el=document.getElementById(fieldId);
@@ -3146,7 +3146,7 @@ function openOtpModal(email){
   var codeEl = document.getElementById('otpCode');
   if(codeEl) codeEl.value = '';
   document.getElementById('otpModal').classList.add('open');
-  try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); }catch(e){}
+  try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); window._appHistoryDepth = (window._appHistoryDepth||0) + 1; }catch(e){}
 }
 document.getElementById('doVerifyOtp').onclick=async function(){
   var code = document.getElementById('otpCode').value.trim();
@@ -3852,7 +3852,7 @@ async function loadProfileData(userId){
   document.getElementById('p-offers').innerHTML=offHtml;
 }
 
-window.openPModal = function(id){document.getElementById(id).classList.add('open');try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); }catch(e){}};
+window.openPModal = function(id){document.getElementById(id).classList.add('open');try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); window._appHistoryDepth = (window._appHistoryDepth||0) + 1; }catch(e){}};
 
 // ====== التحقق من وجود صفقة مكتملة قبل السماح بالتقييم (يمنع تقييمات بلا تعامل حقيقي) ======
 window.openRatingModalChecked = async function(){
@@ -5002,6 +5002,7 @@ function renderRoute(path){
 function navigateTo(path){
   if(location.pathname !== path){
     history.pushState({ alagatPath: path }, '', path);
+    window._appHistoryDepth = (window._appHistoryDepth||0) + 1;
   }
 }
 // ============================================================
@@ -5009,6 +5010,7 @@ function navigateTo(path){
 // بلا مكدس JS منفصل ولا أعلام كبت (تبسيط بعد ثبوت هشاشة النسخة السابقة)
 // ============================================================
 window.addEventListener('popstate', function(){
+  window._appHistoryDepth = Math.max(0, (window._appHistoryDepth||0) - 1);
   var openModal = document.querySelector('.p-overlay.open, .h-overlay.open');
   if(openModal){
     openModal.classList.remove('open');
@@ -5018,6 +5020,18 @@ window.addEventListener('popstate', function(){
   }
   renderRoute(location.pathname);
 });
+
+// زر الرجوع الذكي — لو ما فيه سجل تصفح حقيقي داخل الموقع (مثلاً دخل المستخدم برابط مباشر
+// لطلب معيّن بدون المرور بالرئيسية)، ما نستخدم history.back() لأنها قد تُخرجه من الموقع
+// كليًا؛ بدلها نوديه للرئيسية مباشرة
+window.smartBack = function(){
+  if((window._appHistoryDepth||0) > 0){
+    history.back();
+  } else {
+    navigateTo('/');
+    showPage('home');
+  }
+};
 
 
 // ====== مشاركة الطلب للزائر (رابط صفحة السيرفر مع معاينة) ======
