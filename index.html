@@ -2806,7 +2806,7 @@ window.submitOfferReply = async function(offerId){
     input.dataset.busy = 'false';
   }
 };
-function openAuth(tab){switchAuthTab(tab||'login');var lp=document.getElementById('loginPass');if(lp)lp.type='password';var rp=document.getElementById('regPassword');if(rp)rp.type='password';document.getElementById('authModal').classList.add('open');try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); window._appHistoryDepth = (window._appHistoryDepth||0) + 1; }catch(e){}}
+function openAuth(tab){switchAuthTab(tab||'login');var lp=document.getElementById('loginPass');if(lp)lp.type='password';var rp=document.getElementById('regPassword');if(rp)rp.type='password';document.getElementById('authModal').classList.add('open');try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); _bumpHistoryDepth(1); }catch(e){}}
 function switchAuthTab(tab){['login','register'].forEach(function(t){document.getElementById('f-'+t).style.display=t===tab?'block':'none';var b=document.getElementById('at-'+t);b.className='at'+(t===tab?' on':'');});}
 window.togglePwVis=function(fieldId,iconEl){
   var el=document.getElementById(fieldId);
@@ -3146,7 +3146,7 @@ function openOtpModal(email){
   var codeEl = document.getElementById('otpCode');
   if(codeEl) codeEl.value = '';
   document.getElementById('otpModal').classList.add('open');
-  try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); window._appHistoryDepth = (window._appHistoryDepth||0) + 1; }catch(e){}
+  try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); _bumpHistoryDepth(1); }catch(e){}
 }
 document.getElementById('doVerifyOtp').onclick=async function(){
   var code = document.getElementById('otpCode').value.trim();
@@ -3852,7 +3852,7 @@ async function loadProfileData(userId){
   document.getElementById('p-offers').innerHTML=offHtml;
 }
 
-window.openPModal = function(id){document.getElementById(id).classList.add('open');try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); window._appHistoryDepth = (window._appHistoryDepth||0) + 1; }catch(e){}};
+window.openPModal = function(id){document.getElementById(id).classList.add('open');try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); _bumpHistoryDepth(1); }catch(e){}};
 
 // ====== التحقق من وجود صفقة مكتملة قبل السماح بالتقييم (يمنع تقييمات بلا تعامل حقيقي) ======
 window.openRatingModalChecked = async function(){
@@ -4039,8 +4039,7 @@ window.submitRating=async function(){
       type: 'review',
       title: 'تقييم جديد',
       body: comment ? ('علّق شخص على ملفك: «'+comment+'»') : ('قيّمك شخص بـ '+currentRating+' نجوم'),
-      is_read: false,
-      related_id: user.id
+      is_read: false
     });
     Promise.all([_avgPromise, _notifPromise]).then(function(results){
       if(results[0].error){ console.error('submitRating avg update error:', results[0].error); logErrorToServer('submitRating avg rpc: ' + results[0].error.message, null); }
@@ -4113,7 +4112,7 @@ window.sendProfileMsg = async function(){
     msgs.scrollTop = msgs.scrollHeight;
     hToast('✓ تم إرسال الرسالة');
     // إشعار للمستلم — لا داعي لانتظاره، الرسالة نفسها وصلت أصلاً
-    sb.from('notifications').insert({user_id:profileChatReceiverId, type:'msgs', title:'رسالة جديدة', body:'أرسل لك شخص رسالة جديدة', is_read:false, related_id:user.id}).then(function(res){
+    sb.from('notifications').insert({user_id:profileChatReceiverId, type:'msgs', title:'رسالة جديدة', body:'أرسل لك شخص رسالة جديدة', is_read:false}).then(function(res){
       if(res.error){ console.error('sendProfileMsg notification error:', res.error); logErrorToServer('sendProfileMsg notification: ' + res.error.message, null); }
     });
   } catch(e){
@@ -4614,7 +4613,7 @@ window.handleChatFileSelect = async function(input){
     hToast('✓ تم إرسال الملف');
     input.value='';
 
-    var {error:notifErr5} = await sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص ملفاً',is_read:false,related_id:user.id});
+    var {error:notifErr5} = await sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص ملفاً',is_read:false});
     if(notifErr5){ console.error('handleChatFileSelect notification error:', notifErr5); logErrorToServer('handleChatFileSelect notification: ' + notifErr5.message, null); }
   } catch(e){
     console.error('handleChatFileSelect error:', e);
@@ -4640,7 +4639,7 @@ window.sendChatMsg = async function(){
     var d=document.createElement('div'); d.className='bbl me';
     d.innerHTML='<div class="bbl-txt">'+escH(txt)+'</div><div class="bbl-meta">'+time+' <span style="color:#e0b83a">✓</span></div>';
     body.appendChild(d); body.scrollTop=body.scrollHeight; if(body.lastElementChild) body.lastElementChild.scrollIntoView({block:'end'});
-    var {error:notifErr6} = await sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص رسالة جديدة',is_read:false,related_id:user.id});
+    var {error:notifErr6} = await sb.from('notifications').insert({user_id:currentReceiverId,type:'msgs',title:'رسالة جديدة',body:'أرسل لك شخص رسالة جديدة',is_read:false});
     if(notifErr6){ console.error('sendChatMsg notification error:', notifErr6); logErrorToServer('sendChatMsg notification: ' + notifErr6.message, null); }
   } catch(e){
     console.error('sendChatMsg error:', e);
@@ -4999,10 +4998,19 @@ function renderRoute(path){
   else if(r.name === 'messages'){ goMessages(true); }
   else if(r.name === 'notifications'){ goNotifs(true); }
 }
+function _getHistoryDepth(){
+  try{ return parseInt(sessionStorage.getItem('alagatHistoryDepth')||'0', 10) || 0; }catch(e){ return window._appHistoryDepth||0; }
+}
+function _bumpHistoryDepth(delta){
+  var d = Math.max(0, _getHistoryDepth() + delta);
+  try{ sessionStorage.setItem('alagatHistoryDepth', String(d)); }catch(e){ window._appHistoryDepth = d; }
+  return d;
+}
+
 function navigateTo(path){
   if(location.pathname !== path){
     history.pushState({ alagatPath: path }, '', path);
-    window._appHistoryDepth = (window._appHistoryDepth||0) + 1;
+    _bumpHistoryDepth(1);
   }
 }
 // ============================================================
@@ -5010,7 +5018,7 @@ function navigateTo(path){
 // بلا مكدس JS منفصل ولا أعلام كبت (تبسيط بعد ثبوت هشاشة النسخة السابقة)
 // ============================================================
 window.addEventListener('popstate', function(){
-  window._appHistoryDepth = Math.max(0, (window._appHistoryDepth||0) - 1);
+  _bumpHistoryDepth(-1);
   var openModal = document.querySelector('.p-overlay.open, .h-overlay.open');
   if(openModal){
     openModal.classList.remove('open');
@@ -5025,7 +5033,7 @@ window.addEventListener('popstate', function(){
 // لطلب معيّن بدون المرور بالرئيسية)، ما نستخدم history.back() لأنها قد تُخرجه من الموقع
 // كليًا؛ بدلها نوديه للرئيسية مباشرة
 window.smartBack = function(){
-  if((window._appHistoryDepth||0) > 0){
+  if(_getHistoryDepth() > 0){
     history.back();
   } else {
     navigateTo('/');
