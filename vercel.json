@@ -1,6 +1,6 @@
 {
   "redirects": [
-    { "source": "/https:(.*)", "destination": "/", "permanent": true }
+    { "source": "/https\\:(.*)", "destination": "/", "permanent": true }
   ],
   "rewrites": [
     { "source": "/request/:id", "destination": "/api/request/:id" },
