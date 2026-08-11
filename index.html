@@ -1279,6 +1279,24 @@ function logErrorToServer(message, stack){
 (function(){
 'use strict';
 
+// ربط أزرار "تسجيل الدخول" و"إنشاء حساب" فورًا وبمعزل تام — أهم عنصرين بالصفحة،
+// نضمن اشتغالهم حتى لو أي كود لاحق بهذا الملف تعثّر لأي سبب (شبكة، تحميل مكتبة خارجية، إلخ)
+try{
+  var _bl = document.getElementById('btnLogin');
+  var _br = document.getElementById('btnRegister');
+  if(_bl) _bl.onclick = function(){ if(typeof openAuth==='function') openAuth('login'); };
+  if(_br) _br.onclick = function(){ if(typeof openAuth==='function') openAuth('register'); };
+}catch(e){ console.error('critical nav button wiring failed:', e); }
+
+// دالة ربط آمنة: تحيط كل ربط زر بـ try-catch منفصل — لو ربط زر معيّن فشل لأي سبب،
+// باقي الأزرار تكمل تتربط عادي بدل ما يتوقف كل شي بعده بالسلسلة
+function _wireClick(id, handler){
+  try{
+    var el = document.getElementById(id);
+    if(el) el.onclick = handler;
+  }catch(e){ console.error('wiring failed for #'+id+':', e); }
+}
+
 /* ===== NAV BETWEEN PAGES ===== */
 window.goHome = function(){ stopChatListener(); showPage('home'); var bn=document.querySelector('.bottom-nav'); if(bn) bn.style.display='flex'; };
 window.goProfile = async function(reqId, _fromRouter){
@@ -2878,8 +2896,8 @@ window.openAuth=openAuth; window.doLogout=doLogout;
 // تسجيل الخروج من السايدبار
 var siLogout = document.getElementById('si-logout');
 if(siLogout) siLogout.onclick = function(){ doLogout(); };
-document.getElementById('at-login').onclick=function(){switchAuthTab('login');};
-document.getElementById('at-register').onclick=function(){switchAuthTab('register');};
+_wireClick('at-login', function(){switchAuthTab('login');});
+_wireClick('at-register', function(){switchAuthTab('register');});
 // ====== تسجيل الدخول عبر جوجل/آبل (OAuth) ======
 window.signInWithProvider = async function(provider){
   try{
@@ -2898,7 +2916,7 @@ window.signInWithProvider = async function(provider){
   }
 };
 
-document.getElementById('doLogin').onclick=async function(){
+_wireClick('doLogin', async function(){
   var email = document.getElementById('loginEmail') ? document.getElementById('loginEmail').value.trim() : '';
   var pass  = document.getElementById('loginPass')  ? document.getElementById('loginPass').value.trim()  : '';
   if(!email||!pass){ hToast('⚠️ أدخل البريد وكلمة المرور'); return; }
@@ -2930,7 +2948,7 @@ document.getElementById('doLogin').onclick=async function(){
   } finally {
     btn.disabled = false; btn.textContent = origText;
   }
-};
+});
 
 // ====== فلتر الكلمات البذيئة (للعنوان والوصف في الطلبات) ======
 // قائمة قابلة للتوسعة — تُستبدل أي كلمة مطابقة بنجوم بنفس عدد حروفها
@@ -3078,7 +3096,7 @@ function sanitizeUsernameInput(str){
   });
 });
 
-document.getElementById('doRegister').onclick=async function(){
+_wireClick('doRegister', async function(){
   var nameEl  = document.getElementById('regFullName');
   var userEl  = document.getElementById('regUsername');
   var emailEl = document.getElementById('regEmail');
@@ -3131,7 +3149,7 @@ document.getElementById('doRegister').onclick=async function(){
   } finally {
     btn.disabled = false; btn.textContent = origText;
   }
-};
+});
 
 // =====================
 // OTP — تفعيل البريد الإلكتروني
@@ -3145,7 +3163,7 @@ function openOtpModal(email){
   document.getElementById('otpModal').classList.add('open');
   try{ history.pushState({ alagatModal:true }, '', location.pathname + location.search); _bumpHistoryDepth(1); }catch(e){}
 }
-document.getElementById('doVerifyOtp').onclick=async function(){
+_wireClick('doVerifyOtp', async function(){
   var code = document.getElementById('otpCode').value.trim();
   var email = window.pendingOtpEmail;
   if(!email){ hToast('⚠️ حدث خطأ، حاول التسجيل من جديد'); return; }
@@ -3165,8 +3183,8 @@ document.getElementById('doVerifyOtp').onclick=async function(){
     logErrorToServer('doVerifyOtp: ' + (e && e.message), e && e.stack);
     hToast('❌ حدث خطأ، حاول مرة أخرى');
   }
-};
-document.getElementById('resendOtp').onclick=async function(){
+});
+_wireClick('resendOtp', async function(){
   var email = window.pendingOtpEmail;
   if(!email){ return; }
   try{
@@ -3179,19 +3197,19 @@ document.getElementById('resendOtp').onclick=async function(){
     logErrorToServer('resendOtp: ' + (e && e.message), e && e.stack);
     hToast('❌ تعذر إرسال الرمز، حاول مرة أخرى');
   }
-};
+});
 
 // =====================
 // نسيت كلمة المرور
 // =====================
-document.getElementById('forgotPassBtn').onclick=function(){
+_wireClick('forgotPassBtn', function(){
   document.getElementById('authModal').classList.remove('open');
   var emailEl = document.getElementById('forgotPassEmail');
   var loginEmailVal = document.getElementById('loginEmail') ? document.getElementById('loginEmail').value.trim() : '';
   if(emailEl) emailEl.value = loginEmailVal;
   document.getElementById('forgotPassModal').classList.add('open');
-};
-document.getElementById('doRequestReset').onclick=async function(){
+});
+_wireClick('doRequestReset', async function(){
   var email = document.getElementById('forgotPassEmail').value.trim();
   if(!email || !email.includes('@')){ hToast('⚠️ أدخل بريداً إلكترونياً صحيحاً'); return; }
   try{
@@ -3211,7 +3229,7 @@ document.getElementById('doRequestReset').onclick=async function(){
     logErrorToServer('doRequestReset: ' + (e && e.message), e && e.stack);
     hToast('❌ حدث خطأ، حاول مرة أخرى');
   }
-};
+});
 function openResetPassModal(email){
   window.pendingResetEmail = email;
   var disp = document.getElementById('resetEmailDisplay');
@@ -3229,7 +3247,7 @@ function openResetPassModal(email){
   }, 60000);
   document.getElementById('resetPassModal').classList.add('open');
 }
-document.getElementById('doResetPassword').onclick=async function(){
+_wireClick('doResetPassword', async function(){
   var email = window.pendingResetEmail;
   var code = document.getElementById('resetOtpCode').value.trim();
   var newPass = document.getElementById('newPassword').value.trim();
@@ -3258,8 +3276,8 @@ document.getElementById('doResetPassword').onclick=async function(){
     logErrorToServer('doResetPassword: ' + (e && e.message), e && e.stack);
     hToast('❌ حدث خطأ، حاول مرة أخرى');
   }
-};
-document.getElementById('resendResetOtp').onclick=async function(){
+});
+_wireClick('resendResetOtp', async function(){
   var email = window.pendingResetEmail;
   if(!email){ return; }
   try{
@@ -3276,21 +3294,19 @@ document.getElementById('resendResetOtp').onclick=async function(){
     logErrorToServer('resendResetOtp: ' + (e && e.message), e && e.stack);
     hToast('❌ تعذر إرسال الرمز، حاول مرة أخرى');
   }
-};
-document.getElementById('goRegister').onclick=function(){switchAuthTab('register');};
-document.getElementById('btnLogin').onclick=function(){openAuth('login');};
-document.getElementById('btnRegister').onclick=function(){openAuth('register');};
-document.getElementById('rpLogin').onclick=function(){openAuth('login');};
-document.getElementById('rpRegister').onclick=function(){openAuth('register');};
+});
+_wireClick('goRegister', function(){switchAuthTab('register');});
+// (ربط تسجيل الدخول/إنشاء حساب صار بأول الملف بمعزل — راجع الأعلى)
+_wireClick('rpLogin', function(){openAuth('login');});
+_wireClick('rpRegister', function(){openAuth('register');});
 var btnProviderEl = document.getElementById('btnProvider');
 if(btnProviderEl) btnProviderEl.onclick=function(){openAuth('register');};
-document.getElementById('btnNewReq').onclick=window.openComp;
-document.getElementById('miniBar').onclick=window.openComp;
-
-document.getElementById('cancelComp').onclick=function(){document.getElementById('compModal').classList.remove('open');};
-document.getElementById('cancelOffer').onclick=function(){document.getElementById('offerModal').classList.remove('open');};
-document.getElementById('typeClient').onclick=function(){this.classList.add('sel');document.getElementById('typeBoth').classList.remove('sel');};
-document.getElementById('typeBoth').onclick=function(){this.classList.add('sel');document.getElementById('typeClient').classList.remove('sel');};
+_wireClick('btnNewReq', window.openComp);
+_wireClick('miniBar', window.openComp);
+_wireClick('cancelComp', function(){document.getElementById('compModal').classList.remove('open');});
+_wireClick('cancelOffer', function(){document.getElementById('offerModal').classList.remove('open');});
+_wireClick('typeClient', function(){this.classList.add('sel');document.getElementById('typeBoth').classList.remove('sel');});
+_wireClick('typeBoth', function(){this.classList.add('sel');document.getElementById('typeClient').classList.remove('sel');});
 document.querySelectorAll('.sk-grid .sko').forEach(function(s){s.onclick=function(){this.classList.toggle('sel');};});
 document.querySelectorAll('.ftab').forEach(function(t){t.onclick=function(){document.querySelectorAll('.ftab').forEach(function(x){x.classList.remove('on');});t.classList.add('on');state.activeTab=t.getAttribute('data-tab');renderFeed();};});
 document.querySelectorAll('.fc').forEach(function(b){b.onclick=function(){document.querySelectorAll('.fc').forEach(function(x){x.classList.remove('on');});b.classList.add('on');state.activeFilter=b.getAttribute('data-cat');saveFiltersToStorage();renderFeed();updateCatAlertBtn();};});
@@ -3317,8 +3333,7 @@ window.filterByCategory=function(cat){
   window.scrollTo({top:0,behavior:'smooth'});
 };
 // search handled inline on input
-document.getElementById('si-home').onclick=function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.activeCity='all';state.activeTime='all';state.search='';try{localStorage.removeItem('alagat-filters');}catch(e){}var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';var fc=document.getElementById('filterCity');if(fc)fc.value='all';var ft=document.getElementById('filterTime');if(ft)ft.value='all';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();updateCatAlertBtn();};
-
+_wireClick('si-home', function(){document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');state.activeFilter='all';state.activeTab='latest';state.activeCity='all';state.activeTime='all';state.search='';try{localStorage.removeItem('alagat-filters');}catch(e){}var si=document.getElementById('searchInput');if(si)si.value='';var si2=document.getElementById('searchInput2');if(si2)si2.value='';var fc=document.getElementById('filterCity');if(fc)fc.value='all';var ft=document.getElementById('filterTime');if(ft)ft.value='all';document.querySelectorAll('.fc').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-cat')==='all');});document.querySelectorAll('.ftab').forEach(function(t){t.classList.toggle('on',t.getAttribute('data-tab')==='latest');});renderFeed();updateCatAlertBtn();});
 // فتح الرئيسية مفلترة على فئة معيّنة — تُستخدم من مسار التنقل (breadcrumb) بصفحة تفاصيل الطلب
 window.goHomeFilteredByCategory = function(cat){
   navigateTo('/');
@@ -3329,7 +3344,7 @@ window.goHomeFilteredByCategory = function(cat){
   renderFeed();
   updateCatAlertBtn();
 };
-document.getElementById('si-saved').onclick=async function(){if(!state.loggedIn){openAuth('login');return;}document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');if(!state.saved.length){hToast(t('noSavedYet'));return;}
+_wireClick('si-saved', async function(){if(!state.loggedIn){openAuth('login');return;}document.querySelectorAll('.si').forEach(function(s){s.classList.remove('on');});this.classList.add('on');if(!state.saved.length){hToast(t('noSavedYet'));return;}
   // جلب المحفوظات من القاعدة مباشرة — فلترة الفيد المحمّل كانت تُخفي أي محفوظ خارج الصفحة الحالية
   try{
     var savedRes = await sb.from('requests')
@@ -3344,7 +3359,7 @@ document.getElementById('si-saved').onclick=async function(){if(!state.loggedIn)
     html+='<div style="margin:10px 14px"><button class="btn-g" style="width:100%;padding:9px;border-radius:9px" id="backToFeed">'+t('backToFeed')+'</button></div>';
     document.getElementById('feedContent').innerHTML='<div id="cardsContainer">'+html+'</div>';bindCardEvents();document.getElementById('backToFeed').onclick=renderFeed;
   }catch(e){console.error('saved list load error:',e);logErrorToServer('savedList: '+(e&&e.message||e),null);hToast('⚠️ تعذر تحميل المفضلة');}
-};
+});
 var reqMediaFiles = []; // الملفات المختارة لإرفاقها بالطلب الجديد
 var REQ_MEDIA_MAX = 10;
 
@@ -3471,7 +3486,7 @@ async function uploadReqMediaFiles(){
   return await uploadMediaFilesParallel(reqMediaFiles);
 }
 
-document.getElementById('submitReq').onclick=function(){
+_wireClick('submitReq', function(){
   var title=document.getElementById('reqTitle').value.trim();
   if(!title){hToast('⚠️ اكتب عنوان الطلب أولاً');return;}
   var desc=document.getElementById('reqDesc').value.trim();
@@ -3487,7 +3502,7 @@ document.getElementById('submitReq').onclick=function(){
   document.getElementById('termsContinue').style.opacity='.5';
   document.getElementById('termsContinue').style.pointerEvents='none';
   document.getElementById('termsModal').classList.add('open');
-};
+});
 
 window.toggleTermsCheck = function(){
   var chk = document.getElementById('termsCheck');
@@ -3612,7 +3627,7 @@ async function notifyCategoryAlertSubscribers(category, title, requestId){
     // لا نُظهر خطأ للمستخدم هنا — فشل الإشعار لا يجب أن يفسد تجربة نشر الطلب نفسه
   }
 }
-document.getElementById('submitOffer').onclick=async function(){
+_wireClick('submitOffer', async function(){
   var txt=document.getElementById('offerText').value.trim();
   var price=document.getElementById('offerPrice').value.trim();
   var dur=document.getElementById('offerDur').value;
@@ -3654,7 +3669,7 @@ document.getElementById('submitOffer').onclick=async function(){
     logErrorToServer('submitOffer: ' + (e && e.message), e && e.stack);
     hToast('❌ حدث خطأ أثناء إرسال العرض، حاول مرة أخرى');
   }
-};
+});
 function hToast(msg){var t=document.createElement('div');t.textContent=msg;Object.assign(t.style,{position:'fixed',bottom:'30px',left:'50%',transform:'translateX(-50%) translateY(8px)',background:'var(--s2)',border:'1px solid var(--b)',color:'var(--t)',padding:'10px 22px',borderRadius:'11px',fontSize:'.83rem',zIndex:'9999',opacity:'0',transition:'all .22s',boxShadow:'0 8px 28px rgba(0,0,0,.5)',whiteSpace:'nowrap'});document.body.appendChild(t);requestAnimationFrame(function(){t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';});setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.remove();},250);},2500);}
 // ===== THEME TOGGLE =====
 var currentTheme = localStorage.getItem('alagat-theme') || 'light';
@@ -4664,8 +4679,7 @@ window.filterConvs=function(q){
   });
 };
 
-document.getElementById('si-msgs').onclick=function(){ if(!state.loggedIn){openAuth('login');return;} goMessages(); };
-
+_wireClick('si-msgs', function(){ if(!state.loggedIn){openAuth('login');return;} goMessages(); });
 /* ===== NOTIFICATIONS - SUPABASE ===== */
 var currentNTab='all', NOTIFS_DATA=[];
 
@@ -4877,8 +4891,7 @@ async function updateMsgsBadge(){
 
 // offer-contact-btn handler defined above
 window.goNotifs=function(_fromRouter){if(!state.loggedIn){openAuth('login');return;}showPage('notifs');if(!_fromRouter){ navigateTo('/notifications'); }var bn=document.querySelector('.bottom-nav');if(bn)bn.style.display='none';loadNotifications();};
-document.getElementById('si-notif').onclick=function(){ if(!state.loggedIn){openAuth('login');return;} goNotifs(); };
-
+_wireClick('si-notif', function(){ if(!state.loggedIn){openAuth('login');return;} goNotifs(); });
 // فتح ملف شخصي بواسطة UUID المستخدم (من عروض أو رسائل)
 window.openUserProfile = async function(userId, _fromRouter){
  if(!userId) return;
