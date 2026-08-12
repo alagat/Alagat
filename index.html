@@ -858,7 +858,8 @@ function logErrorToServer(message, stack){
   </div>
   <!-- عنوان ووصف -->
   <div id="detTitle" style="font-size:1.15rem;font-weight:800;color:var(--t);margin-bottom:8px;line-height:1.4"></div>
-  <div id="detDesc" style="font-size:.86rem;color:var(--t2);line-height:1.7;margin-bottom:12px"></div>
+  <div id="detDesc" style="font-size:.86rem;color:var(--t2);line-height:1.7;margin-bottom:8px"></div>
+  <button id="detTranslateBtn" onclick="window.toggleTranslateRequest()" style="background:transparent;border:1px solid var(--b);color:var(--t2);border-radius:8px;padding:6px 12px;font-family:inherit;font-size:.76rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;margin-bottom:12px">🌐 Translate to English</button>
   <div id="detTags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px"></div>
   <!-- شريط التفاصيل السريعة (ميزانية / مدة / نوع / موقع) -->
   <div id="detQuickInfo" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:10px 12px;background:var(--s2);border:1px solid var(--b);border-radius:10px;margin-bottom:14px;font-size:.8rem">
@@ -2517,6 +2518,12 @@ window.openDetail=async function(id){
   window._currentAdNumber = r.adNumber||null;
   document.getElementById('detTitle').textContent=r.title;
   document.getElementById('detDesc').textContent=r.desc;
+  window._currentDetailId = r.id;
+  window._detOriginalTitle = r.title;
+  window._detOriginalDesc = r.desc;
+  window._detTranslated = null;
+  var _trBtnReset = document.getElementById('detTranslateBtn');
+  if(_trBtnReset){ _trBtnReset.textContent = '🌐 Translate to English'; _trBtnReset.disabled = false; }
   var bc = document.getElementById('detBreadcrumb');
   if(bc){
     var arrow = '<span style="color:var(--t3)">‹</span>';
@@ -2568,10 +2575,10 @@ window.openDetail=async function(id){
   // إعادة تعيين افتراضية آمنة: الزر ظاهر ولوحة الإدارة مخفية، لحد ما يتأكد فحص الملكية (يمنع بقاء حالة قديمة من طلب سابق)
   var _offerBtnBarEarly = document.getElementById('detOfferBtn').parentElement;
   var _ownerPanelEarly = document.getElementById('ownerControls');
-  var _msgBtnEarly = document.getElementById('detMsgBtn');
+  var _actionGridEarly = document.getElementById('detActionGrid');
   if(_offerBtnBarEarly) _offerBtnBarEarly.style.display = 'block';
   if(_ownerPanelEarly) _ownerPanelEarly.style.display = 'none';
-  if(_msgBtnEarly) _msgBtnEarly.style.display = 'flex';
+  if(_actionGridEarly) _actionGridEarly.style.display = 'grid';
 
   // عرض معرض الصور/الفيديو إن وجد
   var galleryEl = document.getElementById('detGallery');
@@ -2604,17 +2611,17 @@ window.openDetail=async function(id){
     try{
       var ownerPanel = document.getElementById('ownerControls');
       var offerBtnBar = document.getElementById('detOfferBtn').parentElement;
-      var msgBtn = document.getElementById('detMsgBtn');
+      var actionGrid = document.getElementById('detActionGrid');
       var user = await _curUserPromise;
       if(user && r.userId && user.id === r.userId){
         ownerPanel.style.display = 'block';
         setupOwnerControls(id, r);
         if(offerBtnBar) offerBtnBar.style.display = 'none';
-        if(msgBtn) msgBtn.style.display = 'none';
+        if(actionGrid) actionGrid.style.display = 'none';
       } else {
         ownerPanel.style.display = 'none';
         if(offerBtnBar) offerBtnBar.style.display = 'block';
-        if(msgBtn) msgBtn.style.display = 'flex';
+        if(actionGrid) actionGrid.style.display = 'grid';
       }
     } catch(e){
       console.error('owner controls setup error:', e);
@@ -4461,6 +4468,49 @@ function escJ(s){ return String(s).replace(/['"\\/]/g,''); }
 function escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // مراسلة صاحب الطلب من شبكة الإجراءات في صفحة التفاصيل
+// ترجمة الطلب للإنجليزية (مع كاش من السيرفر) — تبديل بين الأصل والمترجم
+window.toggleTranslateRequest = async function(){
+  var btn = document.getElementById('detTranslateBtn');
+  var titleEl = document.getElementById('detTitle');
+  var descEl = document.getElementById('detDesc');
+  if(!btn || !titleEl || !descEl) return;
+
+  // إذا مترجم حالياً، ارجع للأصل
+  if(window._detTranslated){
+    titleEl.textContent = window._detOriginalTitle;
+    descEl.textContent = window._detOriginalDesc;
+    window._detTranslated = null;
+    btn.textContent = '🌐 Translate to English';
+    return;
+  }
+
+  var reqId = window._currentDetailId;
+  if(!reqId) return;
+  var originalLabel = btn.textContent;
+  btn.textContent = '⏳ Translating...';
+  btn.disabled = true;
+  try{
+    var res = await fetch('/api/translate', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ requestId: reqId })
+    });
+    if(!res.ok) throw new Error('translate request failed');
+    var data = await res.json();
+    if(!data || (!data.title_en && !data.description_en)) throw new Error('empty translation');
+    titleEl.textContent = data.title_en || window._detOriginalTitle;
+    descEl.textContent = data.description_en || window._detOriginalDesc;
+    window._detTranslated = data;
+    btn.textContent = '↩ Show original';
+    btn.disabled = false;
+  } catch(e){
+    console.error('translate failed:', e);
+    hToast('⚠️ Translation unavailable right now');
+    btn.textContent = originalLabel;
+    btn.disabled = false;
+  }
+};
+
 window.messageRequestOwner = async function(){
   var d = window._currentDetailOwner;
   if(!d || !d.id) return;
