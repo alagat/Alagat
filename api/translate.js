@@ -4,9 +4,7 @@
 
 const SUPABASE_URL = 'https://ohkgmzwpzijxcttqytrq.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oa2dtendwemlqeGN0dHF5dHJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNzA1ODgsImV4cCI6MjA5Njc0NjU4OH0.Qx2paUh-d7LTTHFSljt7cnoenOdzOdcno9PGobtRb_g';
-// مفتاح Service Role — يُضاف كمتغيّر بيئة بـ Vercel (Settings → Environment Variables) باسم
-// SUPABASE_SERVICE_ROLE_KEY، تجيبه من Supabase: Project Settings → API → service_role key
-// بدونه: الترجمة تشتغل لكن بدون حفظ بالكاش (تترجم من جديد كل مرة)
+// مفتاح Service Role — مُضاف كمتغيّر بيئة بـ Vercel باسم SUPABASE_SERVICE_ROLE_KEY
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || null;
 
 module.exports = async (req, res) => {
@@ -14,11 +12,11 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') { res.status(200).end(); return; }
-  if (req.method !== 'POST' && req.method !== 'GET') { res.status(405).json({ error: 'Method not allowed' }); return; }
+  if (req.method !== 'POST') { res.status(405).json({ error: 'Method not allowed' }); return; }
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-    const requestId = body.requestId || (req.query && req.query.requestId);
+    const requestId = body.requestId;
     if (!requestId) { res.status(400).json({ error: 'requestId required' }); return; }
 
     // 1) اقرأ الصف — لو الترجمة موجودة بالكاش أصلاً، رجّعها فوراً بدون أي استدعاء خارجي
@@ -41,8 +39,7 @@ module.exports = async (req, res) => {
       translateText(row.description || '')
     ]);
 
-    // 3) احفظ بالكاش (لو متوفر مفتاح service role) — لو غير متوفر، نرجّع الترجمة بدون حفظ
-    var cacheDebug = null;
+    // 3) احفظ بالكاش (لو متوفر مفتاح service role)
     if (SERVICE_KEY) {
       try {
         const writeRes = await fetch(`${SUPABASE_URL}/rest/v1/requests?id=eq.${encodeURIComponent(requestId)}`, {
@@ -56,32 +53,14 @@ module.exports = async (req, res) => {
           body: JSON.stringify({ title_en, description_en })
         });
         if (!writeRes.ok) {
-          const errBody = await writeRes.text();
-          cacheDebug = { status: writeRes.status, body: errBody };
-          console.error('translate cache write failed with status:', writeRes.status, errBody);
-        } else {
-          const contentRange = writeRes.headers.get('content-range');
-          // نتحقق فوراً هل فعلاً انحفظت القيمة بقراءة الصف من جديد
-          const verifyRes = await fetch(
-            `${SUPABASE_URL}/rest/v1/requests?id=eq.${encodeURIComponent(requestId)}&select=title_en,description_en`,
-            { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
-          );
-          const verifyRows = await verifyRes.json();
-          cacheDebug = {
-            writeStatus: writeRes.status,
-            contentRange: contentRange,
-            afterWrite: verifyRows && verifyRows[0]
-          };
+          console.error('translate cache write failed with status:', writeRes.status, await writeRes.text());
         }
       } catch (cacheErr) {
-        cacheDebug = { error: String(cacheErr && cacheErr.message) };
         console.error('translate cache write failed:', cacheErr);
       }
-    } else {
-      cacheDebug = { note: 'SERVICE_KEY not set' };
     }
 
-    res.status(200).json({ title_en, description_en, cached: false, _debug_cache: cacheDebug });
+    res.status(200).json({ title_en, description_en, cached: false });
   } catch (e) {
     console.error('translate handler error:', e);
     res.status(500).json({ error: 'translation failed' });
