@@ -42,9 +42,10 @@ module.exports = async (req, res) => {
     ]);
 
     // 3) احفظ بالكاش (لو متوفر مفتاح service role) — لو غير متوفر، نرجّع الترجمة بدون حفظ
+    var cacheDebug = null;
     if (SERVICE_KEY) {
       try {
-        await fetch(`${SUPABASE_URL}/rest/v1/requests?id=eq.${encodeURIComponent(requestId)}`, {
+        const writeRes = await fetch(`${SUPABASE_URL}/rest/v1/requests?id=eq.${encodeURIComponent(requestId)}`, {
           method: 'PATCH',
           headers: {
             apikey: SERVICE_KEY,
@@ -54,12 +55,20 @@ module.exports = async (req, res) => {
           },
           body: JSON.stringify({ title_en, description_en })
         });
+        if (!writeRes.ok) {
+          const errBody = await writeRes.text();
+          cacheDebug = { status: writeRes.status, body: errBody };
+          console.error('translate cache write failed with status:', writeRes.status, errBody);
+        }
       } catch (cacheErr) {
+        cacheDebug = { error: String(cacheErr && cacheErr.message) };
         console.error('translate cache write failed:', cacheErr);
       }
+    } else {
+      cacheDebug = { note: 'SERVICE_KEY not set' };
     }
 
-    res.status(200).json({ title_en, description_en, cached: false });
+    res.status(200).json({ title_en, description_en, cached: false, _debug_cache: cacheDebug });
   } catch (e) {
     console.error('translate handler error:', e);
     res.status(500).json({ error: 'translation failed' });
