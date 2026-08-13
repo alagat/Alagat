@@ -14,11 +14,11 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') { res.status(200).end(); return; }
-  if (req.method !== 'POST') { res.status(405).json({ error: 'Method not allowed' }); return; }
+  if (req.method !== 'POST' && req.method !== 'GET') { res.status(405).json({ error: 'Method not allowed' }); return; }
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-    const requestId = body.requestId;
+    const requestId = body.requestId || (req.query && req.query.requestId);
     if (!requestId) { res.status(400).json({ error: 'requestId required' }); return; }
 
     // 1) اقرأ الصف — لو الترجمة موجودة بالكاش أصلاً، رجّعها فوراً بدون أي استدعاء خارجي
