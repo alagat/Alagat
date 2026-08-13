@@ -59,6 +59,19 @@ module.exports = async (req, res) => {
           const errBody = await writeRes.text();
           cacheDebug = { status: writeRes.status, body: errBody };
           console.error('translate cache write failed with status:', writeRes.status, errBody);
+        } else {
+          const contentRange = writeRes.headers.get('content-range');
+          // نتحقق فوراً هل فعلاً انحفظت القيمة بقراءة الصف من جديد
+          const verifyRes = await fetch(
+            `${SUPABASE_URL}/rest/v1/requests?id=eq.${encodeURIComponent(requestId)}&select=title_en,description_en`,
+            { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
+          );
+          const verifyRows = await verifyRes.json();
+          cacheDebug = {
+            writeStatus: writeRes.status,
+            contentRange: contentRange,
+            afterWrite: verifyRows && verifyRows[0]
+          };
         }
       } catch (cacheErr) {
         cacheDebug = { error: String(cacheErr && cacheErr.message) };
