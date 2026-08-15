@@ -302,6 +302,11 @@ tr:hover td{background:rgba(255,255,255,.015)}
         <div class="stat-card"><div class="stat-top"><span class="stat-ic">📋</span></div><div class="stat-num g" id="sRequests">-</div><div class="stat-lbl">إجمالي الطلبات</div></div>
         <div class="stat-card"><div class="stat-top"><span class="stat-ic">💼</span></div><div class="stat-num o" id="sOffers">-</div><div class="stat-lbl">إجمالي العروض</div></div>
         <div class="stat-card"><div class="stat-top"><span class="stat-ic">💬</span></div><div class="stat-num r" id="sMsgs">-</div><div class="stat-lbl">إجمالي الرسائل</div></div>
+        <div class="stat-card"><div class="stat-top"><span class="stat-ic">📅</span></div><div class="stat-num" id="sToday">-</div><div class="stat-lbl">طلبات اليوم</div></div>
+        <div class="stat-card"><div class="stat-top"><span class="stat-ic">🗓</span></div><div class="stat-num g" id="sWeek">-</div><div class="stat-lbl">طلبات هذا الأسبوع</div></div>
+        <div class="stat-card"><div class="stat-top"><span class="stat-ic">👁</span></div><div class="stat-num o" id="sViews">-</div><div class="stat-lbl">إجمالي المشاهدات</div></div>
+        <div class="stat-card"><div class="stat-top"><span class="stat-ic">🎯</span></div><div class="stat-num r" id="sConversion">-</div><div class="stat-lbl">معدل التحويل (طلبات فيها عرض)</div></div>
+        <div class="stat-card"><div class="stat-top"><span class="stat-ic">🏆</span></div><div class="stat-num" id="sTopCat" style="font-size:1.1rem">-</div><div class="stat-lbl">الفئة الأكثر نشاطاً</div></div>
       </div>
 
       <!-- TABS (mobile bottom nav) -->
@@ -521,20 +526,58 @@ async function loadErrorsBadgeOnly(){
 
 // ===== STATS =====
 async function loadStats(){
-  var [u,r,o,m] = await Promise.all([
+  var [u,r,o,m,reqRows] = await Promise.all([
     sb.from('profiles').select('id',{count:'exact',head:true}),
     sb.from('requests').select('id',{count:'exact',head:true}),
     sb.from('offers').select('id',{count:'exact',head:true}),
-    sb.from('messages').select('id',{count:'exact',head:true})
+    sb.from('messages').select('id',{count:'exact',head:true}),
+    sb.from('requests').select('views_count,category,offers_count,created_at')
   ]);
   document.getElementById('sUsers').textContent    = u.count||0;
   document.getElementById('sRequests').textContent = r.count||0;
   document.getElementById('sOffers').textContent   = o.count||0;
   document.getElementById('sMsgs').textContent     = m.count||0;
-  var onlineTxt = '● '+((u.count||0)+' عضو');
+
+  var rows = reqRows.data || [];
+  var now = Date.now();
+  var startOfToday = new Date(); startOfToday.setHours(0,0,0,0);
+  var weekAgo = now - 7*24*60*60*1000;
+
+  var todayCount = 0, weekCount = 0, totalViews = 0, withOffer = 0;
+  var catCounts = {};
+  rows.forEach(function(row){
+    var created = new Date(row.created_at).getTime();
+    if(created >= startOfToday.getTime()) todayCount++;
+    if(created >= weekAgo) weekCount++;
+    totalViews += row.views_count || 0;
+    if((row.offers_count||0) > 0) withOffer++;
+    if(row.category){ catCounts[row.category] = (catCounts[row.category]||0) + 1; }
+  });
+
+  document.getElementById('sToday').textContent = todayCount;
+  document.getElementById('sWeek').textContent = weekCount;
+  document.getElementById('sViews').textContent = totalViews;
+  var conversionPct = rows.length ? Math.round((withOffer / rows.length) * 100) : 0;
+  document.getElementById('sConversion').textContent = conversionPct + '%';
+
+  var topCat = '-', topCount = 0;
+  Object.keys(catCounts).forEach(function(cat){
+    if(catCounts[cat] > topCount){ topCount = catCounts[cat]; topCat = cat; }
+  });
+  document.getElementById('sTopCat').textContent = topCat === '-' ? '-' : (topCat + ' (' + topCount + ')');
+
+  await refreshOnlineNow();
+}
+
+// عدد المستخدمين المتصلين فعلياً الآن (last_seen خلال آخر 5 دقائق) — يُحدَّث كل 15 ثانية تلقائياً
+async function refreshOnlineNow(){
+  var fiveMinAgo = new Date(Date.now() - 5*60*1000).toISOString();
+  var res = await sb.from('profiles').select('id',{count:'exact',head:true}).gte('last_seen', fiveMinAgo);
+  var onlineTxt = '🟢 ' + (res.count||0) + ' متصل الآن';
   var b1 = document.getElementById('onlineBadge'); if(b1) b1.textContent = onlineTxt;
   var b2 = document.getElementById('onlineBadgeDesktop'); if(b2) b2.textContent = onlineTxt;
 }
+setInterval(refreshOnlineNow, 15000);
 
 // ===== USERS =====
 async function loadUsers(){
