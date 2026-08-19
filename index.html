@@ -7,7 +7,7 @@
 <meta name="description" content="لتسهيل الخدمات تحتاج علاقات. تربطك بمزوّدي الخدمات في جميع مناطق المملكة. اطلب أي خدمة أو قدّم عرضك بسهولة.">
 <meta name="keywords" content="علاقات, خدمات السعودية, طلب خدمة, مزود خدمة, فريلانس السعودية, خدمات حرة">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://alagat.com/">
+<link rel="canonical" href="https://alagat.com/" id="canonicalLink">
 
 <!-- بيانات منظّمة (Schema.org) — تربط اسم العلامة عربي/إنجليزي رسميًا لمحركات البحث -->
 <script type="application/ld+json">
@@ -979,15 +979,13 @@ function logErrorToServer(message, stack){
   <div class="modal" style="max-width:420px;text-align:right">
     <div style="font-size:1rem;font-weight:800;margin-bottom:4px;color:var(--t)" data-i18n="feesAgreementTitle">« الإقرار بالرسوم</div>
     <div style="height:1px;background:var(--b);margin:10px 0"></div>
+    <div id="feesWaivedBanner" style="display:none;background:rgba(0,212,160,.1);border:1px solid rgba(0,212,160,.25);border-radius:10px;padding:10px 12px;margin-bottom:14px;text-align:center;font-size:.82rem;font-weight:700;color:var(--green)">🎉 بمناسبة إطلاق منصة علاقات، الاستخدام مجاني بالكامل حالياً — بدون أي عمولة.</div>
     <div style="font-size:.82rem;color:var(--t2);line-height:1.9;margin-bottom:14px">
-      <div style="text-align:center;margin-bottom:10px;color:var(--t3);font-size:.78rem">أعوذ بالله من الشيطان الرجيم</div>
-      <div style="text-align:center;margin-bottom:12px;font-size:.8rem;color:var(--t2);font-style:italic">قال الله تعالى: " وَأَوْفُوا بِعَهْدِ اللَّهِ إِذَا عَاهَدتُّمْ وَلَا تَنقُضُوا الْأَيْمَانَ بَعْدَ تَوْكِيدِهَا وَقَدْ جَعَلْتُمُ اللَّهَ عَلَيْكُمْ كَفِيلًا "</div>
-      <div style="height:1px;background:var(--b);margin:10px 0"></div>
       <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:10px">
         <div style="width:8px;height:8px;border-radius:50%;background:var(--ac);margin-top:9px;flex-shrink:0"></div>
-        <div style="flex:1"><span data-i18n="feesPledge1Pre">بصفتي طالب الخدمة، اتعهد امام الله بسداد رسوم استخدام منصة علاقات، والمقدّرة بنسبة</span> <b style="color:var(--ac2)">1%</b> <span data-i18n="feesPledge1Post">من إجمالي المبلغ المتفَق عليه، سواء تم التوافق عبر المنصة أو نتيجة له.</span></div>
+        <div style="flex:1" id="feesPledge1Wrap"><span data-i18n="feesPledge1Pre">بصفتي طالب الخدمة، اتعهد امام الله بسداد رسوم استخدام منصة علاقات، والمقدّرة بنسبة</span> <b style="color:var(--ac2)">1%</b> <span data-i18n="feesPledge1Post">من إجمالي المبلغ المتفَق عليه، سواء تم التوافق عبر المنصة أو نتيجة له.</span></div>
       </div>
-      <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:14px">
+      <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:14px" id="feesPledge2Row">
         <div style="width:8px;height:8px;border-radius:50%;background:var(--ac);margin-top:9px;flex-shrink:0"></div>
         <div style="flex:1"><span data-i18n="feesPledge2Pre">وألتزم بسداد هذه الرسوم خلال مدة أقصاها</span> <b style="color:var(--ac2)">15 يوماً</b> <span data-i18n="feesPledge2Post">من تاريخ اكتمال الخدمة المطلوبة.</span></div>
       </div>
@@ -1284,6 +1282,9 @@ function logErrorToServer(message, stack){
 <script>
 (function(){
 'use strict';
+
+// عند الرغبة بتفعيل عمولة 1% لاحقاً، بدّل هذا لـ false — يتحكم بنافذة الإقرار ونافذة دفع الرسوم معاً
+var FEES_WAIVED = true;
 
 /* ===== NAV BETWEEN PAGES ===== */
 window.goHome = function(){ stopChatListener(); showPage('home'); var bn=document.querySelector('.bottom-nav'); if(bn) bn.style.display='flex'; };
@@ -2355,24 +2356,33 @@ window.openFeatureRequest = function(requestId){
 // نافذة بيانات الحساب البنكي لدفع الرسوم
 window.openPaymentInfo = function(requestBudget){
   var FEE_RATE = 0.01; // 1%
+  var isEn = window.currentLang === 'en';
+  var waivedBannerHtml = FEES_WAIVED
+    ? '<div style="background:rgba(0,212,160,.1);border:1px solid rgba(0,212,160,.25);border-radius:10px;padding:10px 12px;margin-bottom:14px;text-align:center;font-size:.82rem;font-weight:700;color:var(--green)">'
+      + (isEn ? '🎉 Fees are fully waived right now to celebrate the platform\'s launch.' : '🎉 الرسوم معفاة بالكامل حالياً بمناسبة إطلاق المنصة.')
+      + '</div>'
+    : '';
 
   var sheet = document.createElement('div');
   sheet.className = 'h-overlay open';
   sheet.innerHTML = '<div class="sheet" style="padding-bottom:24px">'
     +'<div class="sheet-handle"></div>'
     +'<div class="sheet-title">💳 دفع الرسوم</div>'
+    + waivedBannerHtml
 
     +'<div style="background:var(--glow);border:1px solid rgba(201,162,39,.2);border-radius:12px;padding:14px;margin-bottom:14px">'
       +'<div style="font-size:.78rem;font-weight:700;color:var(--t);margin-bottom:10px">🧮 حاسبة الرسوم (1%)</div>'
       +'<div style="font-size:.72rem;color:var(--t2);margin-bottom:6px">أدخل المبلغ (ريال)</div>'
-      +'<input id="feeAmountInput" type="number" inputmode="decimal" placeholder="مثال: 5000" style="width:100%;background:var(--s1);border:1px solid var(--b);border-radius:10px;padding:10px 14px;font-family:inherit;font-size:.9rem;color:var(--t);outline:none;margin-bottom:12px">'
+      +'<input id="feeAmountInput" type="number" inputmode="decimal" placeholder="مثال: 5000"'+(FEES_WAIVED?' disabled':'')+' style="width:100%;background:var(--s1);border:1px solid var(--b);border-radius:10px;padding:10px 14px;font-family:inherit;font-size:.9rem;color:var(--t);outline:none;margin-bottom:12px'+(FEES_WAIVED?';opacity:.5':'')+'">'
       +'<div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(201,162,39,.15)">'
         +'<span style="font-size:.8rem;color:var(--t2)">الرسوم المستحقة (1%)</span>'
-        +'<span id="feeResultText" style="font-size:1.05rem;font-weight:800;color:var(--ac)">0 ريال</span>'
+        +'<span id="feeResultText" style="font-size:1.05rem;font-weight:800;color:var(--ac)">'+(FEES_WAIVED ? (isEn?'Free':'مجاناً') : '0 ريال')+'</span>'
       +'</div>'
     +'</div>'
 
-    +'<button id="payOnlineBtn" style="width:100%;background:linear-gradient(135deg,var(--ac),var(--ac2));border:none;color:#fff;border-radius:10px;padding:12px;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:6px">💳 ادفع الآن (مدى / Apple Pay / فيزا)</button>'
+    +(FEES_WAIVED
+      ? '<button disabled style="width:100%;background:var(--s2);border:1px solid var(--b);color:var(--t3);border-radius:10px;padding:12px;font-family:inherit;font-size:.85rem;font-weight:700;cursor:not-allowed;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:6px">💳 '+(isEn?'Waived right now':'معفى حالياً')+'</button>'
+      : '<button id="payOnlineBtn" style="width:100%;background:linear-gradient(135deg,var(--ac),var(--ac2));border:none;color:#fff;border-radius:10px;padding:12px;font-family:inherit;font-size:.85rem;font-weight:700;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:6px">💳 ادفع الآن (مدى / Apple Pay / فيزا)</button>')
     +'<div id="moyasarFormContainer" style="display:none;margin-bottom:14px"></div>'
 
     +'<div style="display:flex;align-items:center;gap:10px;margin:16px 0"><div style="flex:1;height:1px;background:var(--b)"></div><span style="font-size:.72rem;color:var(--t3)">أو حوّل يدوياً</span><div style="flex:1;height:1px;background:var(--b)"></div></div>'
@@ -2386,7 +2396,7 @@ window.openPaymentInfo = function(requestBudget){
       +'<div style="font-size:.88rem;font-weight:700;color:var(--t);direction:ltr;text-align:right" id="ibanText">—</div>'
     +'</div>'
     +'<button id="copyIbanBtn" class="submit-btn" style="background:var(--s2);color:var(--t);border:1px solid var(--b)">نسخ رقم الآيبان</button>'
-    +'<p style="font-size:.76rem;color:var(--t3);text-align:center;margin-top:10px">بعد التحويل تواصل معنا لتأكيد الدفع وتفعيل الإعلان</p>'
+    +'<p style="font-size:.76rem;color:var(--t3);text-align:center;margin-top:10px">'+(FEES_WAIVED ? (isEn?'For future use once fees are activated — nothing to pay right now.':'لأغراض مستقبلية عند تفعيل الرسوم — لا يوجد شيء لدفعه حالياً.') : 'بعد التحويل تواصل معنا لتأكيد الدفع وتفعيل الإعلان')+'</p>'
   +'</div>';
   document.body.appendChild(sheet);
   sheet.onclick = function(e){ if(e.target===sheet){ sheet.remove(); } };
@@ -2394,6 +2404,7 @@ window.openPaymentInfo = function(requestBudget){
   var feeInput = document.getElementById('feeAmountInput');
   var feeResult = document.getElementById('feeResultText');
   function recalcFee(){
+    if(FEES_WAIVED) return;
     var val = parseFloat(feeInput.value) || 0;
     var fee = val * FEE_RATE;
     feeResult.textContent = fee.toLocaleString('en-US',{maximumFractionDigits:2}) + ' ريال';
@@ -2408,7 +2419,8 @@ window.openPaymentInfo = function(requestBudget){
   };
 
   // ===== الدفع الإلكتروني عبر Moyasar (مدى / فيزا / Apple Pay) =====
-  document.getElementById('payOnlineBtn').onclick = function(){
+  var payOnlineBtn = document.getElementById('payOnlineBtn');
+  if(payOnlineBtn) payOnlineBtn.onclick = function(){
     var amount = parseFloat(feeInput.value) || 0;
     if(amount <= 0){ hToast('⚠️ أدخل المبلغ بالحاسبة أعلاه أول'); return; }
 
@@ -3506,6 +3518,23 @@ document.getElementById('submitReq').onclick=function(){
   document.getElementById('termsCheck').innerHTML='';
   document.getElementById('termsContinue').style.opacity='.5';
   document.getElementById('termsContinue').style.pointerEvents='none';
+  var feesBanner = document.getElementById('feesWaivedBanner');
+  var pledge1Wrap = document.getElementById('feesPledge1Wrap');
+  var pledge2Row = document.getElementById('feesPledge2Row');
+  if(FEES_WAIVED){
+    var isEn = window.currentLang === 'en';
+    feesBanner.textContent = isEn
+      ? '🎉 To celebrate the launch of Alagat, usage is completely free right now — no commission at all.'
+      : '🎉 بمناسبة إطلاق منصة علاقات، الاستخدام مجاني بالكامل حالياً — بدون أي عمولة.';
+    feesBanner.style.display = 'block';
+    pledge1Wrap.innerHTML = isEn
+      ? 'As the party requesting the service, I acknowledge that Alagat charges a usage fee of <b style="color:var(--ac2)">1%</b> of the total agreed amount, and that this fee is <b style="color:var(--green)">fully waived during the current period</b> to celebrate the platform\'s launch.'
+      : 'بصفتي طالب الخدمة، أُقرّ بعلمي أن منصة علاقات تفرض رسوم استخدام بنسبة <b style="color:var(--ac2)">1%</b> من إجمالي المبلغ المتفَق عليه، وأن هذه الرسوم <b style="color:var(--green)">معفاة بالكامل خلال الفترة الحالية</b> بمناسبة إطلاق المنصة.';
+    pledge2Row.style.display = 'none';
+  } else {
+    feesBanner.style.display = 'none';
+    pledge2Row.style.display = 'flex';
+  }
   document.getElementById('termsModal').classList.add('open');
 };
 
@@ -5046,7 +5075,12 @@ function _matchRoute(path){
   if(path === '/notifications') return { name:'notifications' };
   return null;
 }
+function _updateCanonical(path){
+  var link = document.getElementById('canonicalLink');
+  if(link) link.href = 'https://alagat.com' + (path === '/' ? '/' : path);
+}
 function renderRoute(path){
+  _updateCanonical(path);
   var r = _matchRoute(path);
   if(!r){ showPage('home'); return; }
   // ضيف غير مسجّل يفتح رابطًا يتطلب تسجيل دخول مباشرة (بروفايلي، الرسائل، الإشعارات) → وجّهه لتسجيل الدخول بدل صفحة فارغة صامتة
@@ -5081,6 +5115,7 @@ function navigateTo(path){
     history.pushState({ alagatPath: path }, '', path);
     _bumpHistoryDepth(1);
   }
+  _updateCanonical(path);
 }
 // ============================================================
 // إغلاق المودالات عبر زر الرجوع — فحص مباشر لحالة الصفحة الفعلية،
