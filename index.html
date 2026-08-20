@@ -265,7 +265,7 @@ textarea.fi{resize:vertical;min-height:68px}
 .offer-contact{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;padding:6px 14px;border-radius:7px;font-family:inherit;font-size:.76rem;font-weight:600;cursor:pointer;transition:.2s}
 .offer-contact:hover{opacity:.88}
 .empty-state{text-align:center;padding:40px 20px;color:var(--t2)}
-@media(max-width:1050px){.rpanel{display:none}.feed{margin-left:0}.logo-t{font-size:1.4rem}}
+@media(max-width:1050px){.rpanel{display:none}.feed{margin-left:0}.logo-t{font-size:1.75rem;font-weight:900}}
 /* ===== DESKTOP ONLY (computer) — bigger, bolder, Haraj-style. Mobile is untouched below 1051px ===== */
 @media(min-width:1051px){
   html{font-size:19px}
@@ -495,9 +495,10 @@ window.I18N = {
     offerModalTitle:'تقديم عرض', offerDescPlaceholder:'اشرح كيف يمكنك تنفيذ هذا الطلب...',
     offerPriceLbl:'السعر المعروض (ريال)', offerDurLbl:'مدة التنفيذ',
     submitOfferBtn:'إرسال العرض ←', noSavedYet:'لا توجد طلبات في المفضلة بعد', backToFeed:'← العودة',
-    introBannerTitle:'علاقات — انشر طلبك، والعروض تتسابق إليك',
-    introBannerDesc:'مع علاقات انشر طلبك في أي مجال — تعليم، مقاولات، سيارات، تصميم وغيرها — والعروض تتسابق إليك بأفضل الأسعار، بدون تعب.',
-    introBannerProviderLine:'وإن كنت تقدر تنفّذ الطلب: قدّم عرضك ونافس عليه.',
+    introBannerTitle:'اطلب أي خدمة، والعروض تتسابق إليك',
+    introBannerDesc:'منصة سعودية تربطك بأفضل المنفّذين — تصميم، صيانة، برمجة، ترميم وأكثر. انشر طلبك مجاناً وقارن العروض واختر الأنسب لك.',
+    introBannerProviderLine:'تقدر تنفّذ خدمة؟ قدّم عرضك',
+    introBannerCta:'🚀 انشر طلبك الآن',
   },
   en: {
     appName:'Alagat', requests:'Requests', toggleTheme:'Toggle theme',
@@ -572,9 +573,10 @@ window.I18N = {
     offerModalTitle:'Submit an Offer', offerDescPlaceholder:'Explain how you can fulfill this request...',
     offerPriceLbl:'Offered Price (SAR)', offerDurLbl:'Completion Time',
     submitOfferBtn:'Send Offer ←', noSavedYet:'No favorite requests yet', backToFeed:'← Back',
-    introBannerTitle:'Alagat — Post your request, offers race to you',
-    introBannerDesc:'With Alagat, post a request in any field — teaching, contracting, cars, design, and more — and offers race to you at the best prices, hassle-free.',
-    introBannerProviderLine:'Can get the job done? Submit your offer and compete for it.',
+    introBannerTitle:'Post any request, and offers race to you',
+    introBannerDesc:'A Saudi platform connecting you with top service providers — design, maintenance, development, renovation and more. Post your request for free and pick the best offer.',
+    introBannerProviderLine:'Can you deliver a service? Submit your offer',
+    introBannerCta:'🚀 Post your request now',
   }
 };
 window.currentLang = localStorage.getItem('alagat_lang') || 'ar';
@@ -697,9 +699,9 @@ function logErrorToServer(message, stack){
   <div class="nav-r" style="display:flex;align-items:center;gap:7px">
     <button id="langBtn" onclick="setLang(window.currentLang==='ar'?'en':'ar')" title="Language" style="background:var(--s2);border:1px solid var(--b);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;color:var(--t)">EN</button>
     <button id="themeBtn" onclick="toggleTheme()" title="تبديل الثيم" data-i18n-title="toggleTheme" style="background:rgba(255,255,255,.15);border:none;border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s">🌙</button>
-    <div id="navGuest" style="display:flex;gap:7px">
-      <button class="btn-g" id="btnLogin" data-i18n="login">تسجيل الدخول</button>
-      <button class="btn-b" id="btnRegister" data-i18n="register">إنشاء حساب</button>
+    <div id="navGuest" style="display:flex;gap:6px">
+      <button class="btn-g" id="btnLogin" data-i18n="login" style="padding:6px 9px;font-size:.72rem">تسجيل الدخول</button>
+      <button class="btn-b" id="btnRegister" data-i18n="register" style="padding:7px 11px;font-size:.72rem">إنشاء حساب</button>
     </div>
     <div id="navUser" style="display:none;gap:7px;align-items:center" class="nav-r">
       <button class="btn-b" id="btnNewReq" data-i18n="newRequest">+ طلب جديد</button>
@@ -803,11 +805,15 @@ function logErrorToServer(message, stack){
       <button id="catAlertBtn" style="display:none;background:var(--s2);border:1px solid var(--b);color:var(--t2);border-radius:20px;padding:5px 12px;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;margin-right:8px;white-space:nowrap" onclick="toggleCategoryAlert()">🔔 نبّهني بهذي الفئة</button>
       </div>
     </div>
-    <div id="introBanner" style="display:none;margin:10px 12px 4px;padding:14px 16px;border-radius:14px;background:linear-gradient(135deg,#7f1d3d,#c9a227);color:#fff;position:relative;box-shadow:0 4px 14px rgba(127,29,61,.25)">
-      <button onclick="hideIntroBanner(true)" aria-label="إخفاء" style="position:absolute;top:8px;left:10px;background:rgba(255,255,255,.18);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.9rem;line-height:1">✕</button>
-      <div data-i18n="introBannerTitle" style="font-weight:800;font-size:1rem;margin-bottom:6px">علاقات — انشر طلبك، والعروض تتسابق إليك</div>
-      <div data-i18n="introBannerDesc" style="font-size:.85rem;line-height:1.7;opacity:.95">مع علاقات انشر طلبك في أي مجال — تعليم، مقاولات، سيارات، تصميم وغيرها — والعروض تتسابق إليك بأفضل الأسعار، بدون تعب.</div>
-      <div data-i18n="introBannerProviderLine" style="font-size:.85rem;line-height:1.7;margin-top:4px;font-weight:700">وإن كنت تقدر تنفّذ الطلب: قدّم عرضك ونافس عليه.</div>
+    <div id="introBanner" style="display:none;margin:10px 12px 4px;border-radius:14px;overflow:hidden;position:relative;box-shadow:0 4px 14px rgba(0,0,0,.25);min-height:360px;background:url('hero-bg.jpg') center/cover no-repeat">
+      <div style="position:absolute;inset:0;background:linear-gradient(0deg, rgba(10,8,6,.88), rgba(10,8,6,.35) 65%, rgba(10,8,6,.15))"></div>
+      <button onclick="hideIntroBanner(true)" aria-label="إخفاء" style="position:absolute;top:10px;left:10px;z-index:2;background:rgba(255,255,255,.18);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:.9rem;line-height:1">✕</button>
+      <div style="position:relative;z-index:1;padding:22px 18px 18px;display:flex;flex-direction:column;justify-content:flex-end;min-height:360px">
+        <div data-i18n="introBannerTitle" style="font-weight:800;font-size:1.35rem;line-height:1.4;color:#fff;margin-bottom:10px">اطلب أي خدمة، والعروض تتسابق إليك</div>
+        <div data-i18n="introBannerDesc" style="font-size:.85rem;line-height:1.7;color:#f0ece4;margin-bottom:16px">منصة سعودية تربطك بأفضل المنفّذين — تصميم، صيانة، برمجة، ترميم وأكثر. انشر طلبك مجاناً وقارن العروض واختر الأنسب لك.</div>
+        <button onclick="openComp()" data-i18n="introBannerCta" style="width:100%;padding:13px;border-radius:10px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:none;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;margin-bottom:10px">🚀 انشر طلبك الآن</button>
+        <div data-i18n="introBannerProviderLine" style="text-align:center;font-size:.8rem;color:#e2ddd2">تقدر تنفّذ خدمة؟ قدّم عرضك</div>
+      </div>
     </div>
     <div id="feedContent"></div>
   </main>
