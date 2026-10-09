@@ -219,7 +219,9 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .bcta h3{font-size:1rem;font-weight:800;margin-bottom:7px}
 .bcta p{font-size:.79rem;color:var(--t2);margin-bottom:14px;line-height:1.6}
 .bcta-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-.feed-footer{margin:16px 14px 90px;padding:16px;background:var(--s1);border:1px solid var(--b);border-radius:12px}
+.feed-footer{margin:16px 14px 16px;padding:16px;background:var(--s1);border:1px solid var(--b);border-radius:12px}
+#sbcSealBox{display:flex;justify-content:center;align-items:center;margin:0 14px 90px;min-height:56px}
+#sbcSealBox .sbc-verify-seal,#sbcSealBox .sbc-verify-seal>*{position:static !important;top:auto !important;bottom:auto !important;left:auto !important;right:auto !important;margin-left:auto !important;margin-right:auto !important}
 .ff-bot{border-top:1px solid var(--b);padding-top:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:5px}
 .ff-copy{font-size:.68rem;color:var(--t3)}
 .rpanel{width:270px;min-width:270px;position:fixed;top:56px;bottom:0;left:0;padding:14px 12px;border-right:1px solid var(--b);overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
@@ -1706,7 +1708,20 @@ function makeFooter(){
   + '</div>'
   + '<div class="ff-bot"><span class="ff-copy">© '+new Date().getFullYear()+' علاقات</span><span class="ff-copy">زد دخلك مع علاقات… ابحث عن طلب يناسب خبرتك وقدّم عرضك</span></div>'
   + '<div style="display:flex;justify-content:center;gap:14px;margin-top:20px;padding-top:14px;border-top:1px solid var(--b)"><a href="about.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">من نحن</a><span style="color:var(--t3);font-size:.74rem">·</span><a href="terms.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">شروط الاستخدام</a><span style="color:var(--t3);font-size:.74rem">·</span><a href="privacy.html" target="_blank" style="font-size:.74rem;color:var(--t3);text-decoration:none">سياسة الخصوصية</a></div>'
-  + '</div>';
+  + '</div>'
+  + '<div id="sbcSealBox"><div class="sbc-verify-seal" data-token="ZWNKSmtzc2diRmZQeUpDbDI4SGt1Zz09" data-position="bottom-left"></div></div>';
+}
+function sbcReloadSeal(){
+  try{
+    if(!document.querySelector('#sbcSealBox .sbc-verify-seal')) return;
+    var old=document.getElementById('sbcSealScript');
+    if(old) old.remove();
+    var sc=document.createElement('script');
+    sc.id='sbcSealScript';
+    sc.src='https://eauthenticate.saudibusiness.gov.sa/EAuthSealApi/seal.js';
+    sc.async=true;
+    document.body.appendChild(sc);
+  }catch(e){}
 }
 function timeAgo(d){var s=Math.floor((Date.now()-new Date(d))/1000);if(window.currentLang==='en'){if(s<60)return'now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';}if(s<60)return'الآن';if(s<3600)return'منذ '+Math.floor(s/60)+' دقيقة';if(s<86400)return'منذ '+Math.floor(s/3600)+' ساعة';return'منذ '+Math.floor(s/86400)+' يوم';}
 function isProviderOnline(lastSeen){
@@ -1970,6 +1985,7 @@ function renderFeed(){
         }
         html+='<div id="feedFooter">'+makeFooter()+'</div>';
         el.innerHTML=html;
+        sbcReloadSeal();
         bindCardEvents();
         setupInfiniteScroll();
         if(_cacheKey){
@@ -5444,7 +5460,6 @@ window.closeAccountMenu = function(){
 };
 </script>
 
-<div class="sbc-verify-seal" data-token="ZWNKSmtzc2diRmZQeUpDbDI4SGt1Zz09" data-position="bottom-left"></div>
 <script src="https://eauthenticate.saudibusiness.gov.sa/EAuthSealApi/seal.js" async></script>
 
 </body>
