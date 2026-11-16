@@ -1,13 +1,10 @@
-// يولّد sitemap.xml تلقائياً من الطلبات الموجودة في Supabase (open / accepted فقط)
-// ملف مستقل: لا يستدعيه إلا Google عبر /sitemap.xml ولا يمر به أي مستخدم عادي
 const SITE = 'https://alagat.com';
 const SUPA_URL = process.env.SUPABASE_URL || 'https://ohkgmzwpzijxcttqytrq.supabase.co';
-// مفتاح anon عام (نفسه المستخدم في الواجهة)، ويمكن تجاوزه بمتغير بيئة SUPABASE_ANON_KEY
 const SUPA_KEY = process.env.SUPABASE_ANON_KEY ||
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9oa2dtendwemlqeGN0dHF5dHJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNzA1ODgsImV4cCI6MjA5Njc0NjU4OH0.Qx2paUh-d7LTTHFSljt7cnoenOdzOdcno9PGobtRb_g';
 
-const PAGE = 1000;       // حد Supabase لكل طلب
-const MAX_PAGES = 40;    // سقف أمان: 40,000 رابط (حد الـ sitemap الواحد 50,000)
+const PAGE = 1000;
+const MAX_PAGES = 40;
 
 async function fetchPage(offset) {
   const url = SUPA_URL + '/rest/v1/requests' +
@@ -31,3 +28,16 @@ module.exports = async (req, res) => {
       const n = String(r.ad_number || '');
       if (!/^\d{1,12}$/.test(n)) continue;
       const d = r.created_at ? new Date(r.created_at) : null;
+      const last = d && !isNaN(d) ? '<lastmod>' + d.toISOString().slice(0, 10) + '</lastmod>' : '';
+      urls.push('  <url><loc>' + SITE + '/request/' + n + '</loc>' + last + '</url>');
+    }
+    const xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls.join('\n') + '\n</urlset>\n';
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+    res.status(200).send(xml);
+  } catch (e) {
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.status(500).send('sitemap temporarily unavailable');
+  }
+};
